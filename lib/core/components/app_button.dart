@@ -1,0 +1,161 @@
+import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
+import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+
+enum _CustomButtonStyle {
+  primary,
+  primaryFull,
+  primaryOutline,
+}
+
+extension _CustomButtonStyleExtension on _CustomButtonStyle {
+  ButtonStyle get style {
+    switch (this) {
+      case _CustomButtonStyle.primary:
+        return ButtonStyle(
+          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor: MaterialStateProperty.all(AppColor.primary),
+          backgroundColor: MaterialStateProperty.all(AppColor.primary),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          ),
+          elevation: MaterialStateProperty.all(0),
+        );
+      case _CustomButtonStyle.primaryFull:
+        return ButtonStyle(
+          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor: MaterialStateProperty.all(AppColor.primary),
+          backgroundColor: MaterialStateProperty.all(AppColor.primary),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+          ),
+          elevation: MaterialStateProperty.all(0),
+        );
+      case _CustomButtonStyle.primaryOutline:
+        return ButtonStyle(
+          padding: MaterialStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor: MaterialStateProperty.all(AppColor.primary),
+          backgroundColor: MaterialStateProperty.all(Colors.transparent),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(6),
+              side: const BorderSide(color: AppColor.primary),
+            ),
+          ),
+          elevation: MaterialStateProperty.all(0),
+        );
+    }
+  }
+}
+
+class _CustomButton extends StatelessWidget {
+  final Widget child;
+  final Function() onPressed;
+  final _CustomButtonStyle buttonStyle;
+  final bool isFull;
+  final double? customWidth;
+  final double height;
+
+  const _CustomButton(
+    this.child,
+    this.onPressed, {
+    this.buttonStyle = _CustomButtonStyle.primary,
+    this.isFull = false,
+    this.customWidth,
+    this.height = 48.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: isFull ? double.infinity : customWidth,
+      height: height,
+      child: ElevatedButton(
+        style: buttonStyle.style,
+        onPressed: onPressed,
+        child: child,
+      ),
+    );
+  }
+
+  _CustomButton copyWith({
+    Widget? child,
+    Function()? onPressed,
+    _CustomButtonStyle? buttonStyle,
+  }) {
+    return _CustomButton(
+      child ?? this.child,
+      onPressed ?? this.onPressed,
+      buttonStyle: buttonStyle ?? this.buttonStyle,
+    );
+  }
+}
+
+class AppPrimaryButton extends _CustomButton {
+  AppPrimaryButton(
+    String text,
+    Function() onPressed,
+  ) : super(
+          Text(text, style: AppTextStyle.whiteSmallBoldText),
+          onPressed,
+          buttonStyle: _CustomButtonStyle.primary,
+        );
+}
+
+class AppPrimaryFullButton extends _CustomButton {
+  AppPrimaryFullButton(
+    String text,
+    Function() onPressed, {
+    Widget? prefixIcon,
+  }) : super(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              prefixIcon != null
+                  ? Container(
+                      margin: const EdgeInsets.only(right: 8.0),
+                      child: prefixIcon,
+                    )
+                  : const SizedBox(),
+              Text(
+                text,
+                style: AppTextStyle.whiteSmallBoldText,
+              ),
+            ],
+          ),
+          onPressed,
+          buttonStyle: _CustomButtonStyle.primary,
+          isFull: true,
+        );
+}
+
+class AppPrimaryOutlineButton extends _CustomButton {
+  AppPrimaryOutlineButton(
+    String text,
+    Function() onPressed, {
+    double height = 48.0,
+  }) : super(
+          Text(
+            text,
+            style: AppTextStyle.whiteSmallBoldText,
+          ),
+          onPressed,
+          buttonStyle: _CustomButtonStyle.primaryOutline,
+          height: height,
+        );
+}
+
+class AppPrimaryOutlineFullButton extends _CustomButton {
+  AppPrimaryOutlineFullButton(
+    String text,
+    Function() onPressed,
+  ) : super(
+          Text(
+            text,
+            style: AppTextStyle.whiteSmallBoldText,
+          ),
+          onPressed,
+          buttonStyle: _CustomButtonStyle.primaryOutline,
+          isFull: true,
+        );
+}
