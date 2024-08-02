@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/injection.dart';
+import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 
 const defaultFontFamily = Injection.fontFamily;
 
@@ -114,6 +114,35 @@ extension _CustomTextAlignmentTypeExt on _CustomTextAlignmentType {
 }
 
 class AppTextStyle {
+  static final TextTheme lightTextTheme = TextTheme(
+    displayMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 36.0,
+      fontWeight: FontWeight.w700,
+    ),
+    displaySmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 28.0,
+      fontWeight: FontWeight.w700,
+    ),
+  );
+  static final TextTheme darkTextTheme = TextTheme(
+    displayMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 36.0,
+      fontWeight: FontWeight.w700,
+    ),
+    displaySmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 28.0,
+      fontWeight: FontWeight.w700,
+    ),
+  );
+
   static final blackSmallText = TextStyle(
     fontFamily: defaultFontFamily,
     color: _CustomColorType.black.color,

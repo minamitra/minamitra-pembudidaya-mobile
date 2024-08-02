@@ -46,4 +46,4 @@ app.*.map.json
 .fvm
 
 # vs code config
-.vscode
+# .vscode
