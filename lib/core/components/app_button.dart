@@ -17,7 +17,7 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           foregroundColor: MaterialStateProperty.all(AppColor.primary),
           backgroundColor: MaterialStateProperty.all(AppColor.primary),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           elevation: MaterialStateProperty.all(0),
         );
@@ -27,7 +27,7 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           foregroundColor: MaterialStateProperty.all(AppColor.primary),
           backgroundColor: MaterialStateProperty.all(AppColor.primary),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           elevation: MaterialStateProperty.all(0),
         );
@@ -38,7 +38,7 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           backgroundColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(10),
               side: const BorderSide(color: AppColor.primary),
             ),
           ),
@@ -62,7 +62,7 @@ class _CustomButton extends StatelessWidget {
     this.buttonStyle = _CustomButtonStyle.primary,
     this.isFull = false,
     this.customWidth,
-    this.height = 48.0,
+    this.height = 53.0,
   });
 
   @override
@@ -119,7 +119,7 @@ class AppPrimaryFullButton extends _CustomButton {
                   : const SizedBox(),
               Text(
                 text,
-                style: AppTextStyle.whiteSmallBoldText,
+                style: AppTextStyle.whiteBoldText,
               ),
             ],
           ),
@@ -137,7 +137,7 @@ class AppPrimaryOutlineButton extends _CustomButton {
   }) : super(
           Text(
             text,
-            style: AppTextStyle.whiteSmallBoldText,
+            style: AppTextStyle.primaryBoldText,
           ),
           onPressed,
           buttonStyle: _CustomButtonStyle.primaryOutline,
@@ -152,7 +152,7 @@ class AppPrimaryOutlineFullButton extends _CustomButton {
   ) : super(
           Text(
             text,
-            style: AppTextStyle.whiteSmallBoldText,
+            style: AppTextStyle.primaryBoldText,
           ),
           onPressed,
           buttonStyle: _CustomButtonStyle.primaryOutline,
