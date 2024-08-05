@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/register/view/register_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -111,7 +112,12 @@ class _LoginViewState extends State<LoginView> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppPrimaryFullButton(
                 "Masuk",
-                () {},
+                () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    DashboardPage(),
+                    DashboardPage.routeSettings(),
+                  ));
+                },
               ),
             ),
             const Expanded(child: SizedBox()),
