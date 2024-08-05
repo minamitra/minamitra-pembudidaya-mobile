@@ -25,16 +25,20 @@ class AppDefaultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: margin,
-      padding: padding ??
-          const EdgeInsets.symmetric(
-            vertical: 20.0,
-            horizontal: 15.0,
-          ),
+      padding: padding ?? const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(borderRadius ?? 10.0),
         border:
-            Border.all(color: borderColor ?? Colors.black.withOpacity(0.03)),
+            Border.all(color: borderColor ?? AppColor.black.withOpacity(0.03)),
         color: backgroundCardColor ?? AppColor.white,
+        boxShadow: [
+          BoxShadow(
+            color: AppColor.black.withOpacity(0.03),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
       ),
       child: child,
     );
