@@ -84,4 +84,19 @@
 		],
 		"description": "error handler layer minamitra"
 	  },
+
+	"text component minamitra": {
+		"prefix": "minamitra_text",
+		"body": [
+			"Text(",
+				"'',",
+				"textAlign: TextAlign.start,",
+				"style: appTextTheme(context).bodyMedium?.copyWith(",
+							"fontWeight: FontWeight.w400,",
+							"color: AppColor.black,",
+						"),",
+			"),",
+		],
+		"description": "error handler layer minamitra"
+	},
 }
