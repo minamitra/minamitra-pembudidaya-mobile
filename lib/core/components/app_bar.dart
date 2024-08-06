@@ -5,12 +5,12 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 PreferredSizeWidget appDefaultAppBar(
   BuildContext context,
   String title, {
-  bool needBackButton = true,
+  bool isBackButton = true,
   Color backButtonColor = AppColor.white,
   List<Widget>? actions,
   Widget? customTitle,
   PreferredSizeWidget? bottom,
-  Color bgColor = AppColor.white,
+  Color bgColor = AppColor.primaryDark,
   Function()? onBackButtonPressed,
   Widget? flexibleSpace,
   bool isCenterTitle = false,
@@ -21,14 +21,14 @@ PreferredSizeWidget appDefaultAppBar(
           title,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: AppTextStyle.whiteExtraLargeMediumText,
+          style: AppTextStyle.whiteLargeBoldText,
           textAlign: TextAlign.left,
         ),
     centerTitle: isCenterTitle,
     backgroundColor: bgColor,
-    titleSpacing: 0,
+    titleSpacing: isBackButton ? 0 : 16,
     elevation: 0,
-    leading: needBackButton
+    leading: isBackButton
         ? IconButton(
             onPressed: onBackButtonPressed ??
                 () {
