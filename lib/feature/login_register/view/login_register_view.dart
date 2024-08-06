@@ -3,6 +3,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/login/view/login_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/register/view/register_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class LoginRegisterView extends StatefulWidget {
@@ -113,7 +114,12 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppPrimaryOutlineFullButton(
                 "Daftar",
-                () {},
+                () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    const RegisterPage(),
+                    RegisterPage.routeSettings,
+                  ));
+                },
               ),
             ),
             const Expanded(child: SizedBox()),

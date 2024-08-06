@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_regex/flutter_regex.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/active/active_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/active/secondary_active_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -40,43 +45,87 @@ class _RegisterViewState extends State<RegisterView> {
       ];
     }
 
-    List<Widget> registerForm() {
-      return [
-        AppValidatorTextField(
-          controller: nameController,
-          hintText: "Ketik nama lengkap",
-          labelText: "Nama Lengkap",
-          withUpperLabel: true,
-        ),
-        const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: phoneController,
-          hintText: "Ketik nomor lengkap",
-          labelText: "Nomor Telepon",
-          inputType: TextInputType.phone,
-          withUpperLabel: true,
-        ),
-        const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: emailController,
-          hintText: "Ketik email",
-          labelText: "Email",
-          withUpperLabel: true,
-        ),
-        const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: passwordController,
-          labelText: "Password",
-          withUpperLabel: true,
-          isMandatory: false,
-          hintText: "Masukan Kata Sandi",
-          suffixWidget: IconButton(
-            icon: const Icon(Icons.visibility),
-            onPressed: () {},
+    Widget registerForm() {
+      return ListView(
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          AppValidatorTextField(
+            controller: nameController,
+            hintText: "Ketik nama lengkap",
+            labelText: "Nama Lengkap",
+            withUpperLabel: true,
+            validator: (String? value) {
+              if (value?.isEmpty ?? true) {
+                return "Isi nama lengkap";
+              }
+              return null;
+            },
           ),
-        ),
-        const SizedBox(height: 32.0),
-      ];
+          const SizedBox(height: 18.0),
+          AppValidatorTextField(
+            controller: phoneController,
+            hintText: "Ketik nomor lengkap",
+            labelText: "Nomor Telepon",
+            inputType: TextInputType.phone,
+            withUpperLabel: true,
+            validator: (String? value) {
+              if (value?.isEmpty ?? true) {
+                return "Isi nomor lengkap";
+              }
+              if (!value!.isPhone()) {
+                return "Nomor tidak valid";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 18.0),
+          AppValidatorTextField(
+            controller: emailController,
+            hintText: "Ketik email",
+            labelText: "Email",
+            withUpperLabel: true,
+            validator: (String? value) {
+              if (value?.isEmpty ?? true) {
+                return "Isi email";
+              }
+              if (!value!.isEmail()) {
+                return "Email tidak valid";
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 18.0),
+          BlocBuilder<ActiveCubit, bool>(
+            builder: (context, state) {
+              return AppValidatorTextField(
+                controller: passwordController,
+                labelText: "Password",
+                withUpperLabel: true,
+                isMandatory: false,
+                isObscure: !state,
+                hintText: "Masukan Kata Sandi",
+                suffixWidget: IconButton(
+                  icon: Icon(state ? Icons.visibility : Icons.visibility_off),
+                  onPressed: () {
+                    context.read<ActiveCubit>().toggle(!state);
+                  },
+                ),
+                validator: (String? value) {
+                  if (value?.isEmpty ?? true) {
+                    return "Isi password";
+                  }
+                  if (value!.length < 6) {
+                    return "Minimal 6 karakter";
+                  }
+                  return null;
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 32.0),
+        ],
+      );
     }
 
     Widget toc() {
@@ -86,14 +135,20 @@ class _RegisterViewState extends State<RegisterView> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 4.0),
-            child: SizedBox(
-              height: 16.0,
-              width: 16.0,
-              child: Checkbox(
-                value: true,
-                checkColor: Colors.white,
-                onChanged: (value) {},
-              ),
+            child: BlocBuilder<SecondaryActiveCubit, bool>(
+              builder: (context, state) {
+                return SizedBox(
+                  height: 16.0,
+                  width: 16.0,
+                  child: Checkbox(
+                    value: state,
+                    checkColor: Colors.white,
+                    onChanged: (value) {
+                      context.read<SecondaryActiveCubit>().toggle(!state);
+                    },
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(width: 10.0),
@@ -146,29 +201,45 @@ class _RegisterViewState extends State<RegisterView> {
     Widget submitButton() {
       return AppPrimaryFullButton(
         "Daftar",
-        () {},
+        () {
+          if (formKey.currentState!.validate()) {
+            SystemChannels.textInput.invokeMethod('TextInput.hide');
+            if (!context.read<SecondaryActiveCubit>().state) {
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                content: Text("Harap berikan persetujuan TOC"),
+                backgroundColor: Colors.red,
+              ));
+              return;
+            }
+          }
+        },
       );
     }
 
     Widget loginSection() {
-      return Wrap(
-        children: [
-          Text(
-            "Sudah Mempunyai Akun? ",
-            textAlign: TextAlign.center,
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  fontWeight: FontWeight.w400,
-                ),
-          ),
-          Text(
-            "Masuk",
-            textAlign: TextAlign.center,
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColor.primary[600],
-                ),
-          ),
-        ],
+      return InkWell(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Wrap(
+          children: [
+            Text(
+              "Sudah Mempunyai Akun? ",
+              textAlign: TextAlign.center,
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    fontWeight: FontWeight.w400,
+                  ),
+            ),
+            Text(
+              "Masuk",
+              textAlign: TextAlign.center,
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColor.primary[600],
+                  ),
+            ),
+          ],
+        ),
       );
     }
 
@@ -181,12 +252,11 @@ class _RegisterViewState extends State<RegisterView> {
             const SizedBox(height: 18.0),
             ...header(),
             const SizedBox(height: 32.0),
-            ...registerForm(),
-            const Expanded(flex: 3, child: SizedBox()),
+            Expanded(child: registerForm()),
             toc(),
-            const Expanded(flex: 2, child: SizedBox()),
+            const SizedBox(height: 16.0),
             submitButton(),
-            const Expanded(flex: 2, child: SizedBox()),
+            const SizedBox(height: 16.0),
             loginSection(),
             const SizedBox(height: 18.0),
           ],
