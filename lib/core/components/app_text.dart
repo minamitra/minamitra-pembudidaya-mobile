@@ -220,6 +220,13 @@ class AppTextStyle {
     fontWeight: _CustomFontWeightType.medium.weight,
   );
 
+  static final blackBoldText = TextStyle(
+    fontFamily: defaultFontFamily,
+    color: _CustomColorType.black.color,
+    fontSize: _CustomFontSizeType.normal.size,
+    fontWeight: _CustomFontWeightType.bold.weight,
+  );
+
   static final blackSemiBoldText = TextStyle(
     fontFamily: defaultFontFamily,
     color: _CustomColorType.black.color,
@@ -253,6 +260,13 @@ class AppTextStyle {
     color: _CustomColorType.black.color,
     fontSize: _CustomFontSizeType.extraSmall.size,
     fontWeight: _CustomFontWeightType.normal.weight,
+  );
+
+  static final blackExtraSmallBoldText = TextStyle(
+    fontFamily: defaultFontFamily,
+    color: _CustomColorType.black.color,
+    fontSize: _CustomFontSizeType.extraSmall.size,
+    fontWeight: _CustomFontWeightType.bold.weight,
   );
 
   static final blackDoubleExtraSmallMediumText = TextStyle(

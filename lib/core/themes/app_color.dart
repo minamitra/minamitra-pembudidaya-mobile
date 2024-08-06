@@ -49,7 +49,38 @@ class AppColor {
     },
   );
 
-  // Shortcut
+  static const accent = MaterialColor(
+    0xFFFFA41B,
+    <int, Color>{
+      50: Color(0xFFFFF6E8),
+      100: Color(0xFFFFEDD1),
+      200: Color(0xFFFFE4BB),
+      300: Color(0xFFFFDBA4),
+      400: Color(0xFFFFD18D),
+      500: Color(0xFFFFC876),
+      600: Color(0xFFFFBF5F),
+      700: Color(0xFFFFB649),
+      800: Color(0xFFFFAD32),
+      900: Color(0xFFFFA41B),
+    },
+  );
+
+  static const black = MaterialColor(
+    0xFF111827,
+    <int, Color>{
+      50: Color(0xFFF9FAFB),
+      100: Color(0xFFF3F4F6),
+      200: Color(0xFFE5E7EB),
+      300: Color(0xFFD1D5DB),
+      400: Color(0xFF9CA3AF),
+      500: Color(0xFF6B7280),
+      600: Color(0xFF4B5563),
+      700: Color(0xFF374151),
+      800: Color(0xFF1F2937),
+      900: Color(0xFF111827),
+    },
+  );
+
   static const white = Color(0xFFFFFFFF);
-  static const black = Color(0xFF1F2024);
+  static const transparent = Colors.transparent;
 }
