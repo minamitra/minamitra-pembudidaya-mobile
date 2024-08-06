@@ -65,7 +65,7 @@ class _CustomButton extends StatelessWidget {
   final _CustomButtonStyle buttonStyle;
   final bool isFull;
   final double? customWidth;
-  final double height;
+  final double? height;
 
   const _CustomButton(
     this.child,
@@ -73,7 +73,7 @@ class _CustomButton extends StatelessWidget {
     this.buttonStyle = _CustomButtonStyle.primary,
     this.isFull = false,
     this.customWidth,
-    this.height = 53.0,
+    this.height = 40.0,
   });
 
   @override
@@ -105,11 +105,13 @@ class _CustomButton extends StatelessWidget {
 class AppPrimaryButton extends _CustomButton {
   AppPrimaryButton(
     String text,
-    Function() onPressed,
-  ) : super(
+    Function() onPressed, {
+    double? width,
+  }) : super(
           Text(text, style: AppTextStyle.whiteSmallBoldText),
           onPressed,
           buttonStyle: _CustomButtonStyle.primary,
+          customWidth: width,
         );
 }
 
@@ -117,6 +119,7 @@ class AppPrimaryFullButton extends _CustomButton {
   AppPrimaryFullButton(
     String text,
     Function() onPressed, {
+    double? height,
     Widget? prefixIcon,
   }) : super(
           Row(
@@ -137,6 +140,7 @@ class AppPrimaryFullButton extends _CustomButton {
           onPressed,
           buttonStyle: _CustomButtonStyle.primary,
           isFull: true,
+          height: height,
         );
 }
 
