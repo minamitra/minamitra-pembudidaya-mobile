@@ -10,10 +10,11 @@ class AppTheme {
       textTheme: AppTextStyle.lightTextTheme,
       primaryColor: AppColor.primary,
       colorScheme: ApptColorScheme.light,
+      scaffoldBackgroundColor: AppColor.black[50],
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
           // Status bar color
-          statusBarColor: AppColor.primary,
+          statusBarColor: AppColor.primaryDark,
           // Status bar brightness (optional)
           statusBarIconBrightness: Brightness.light, // For Android (dark icons)
           statusBarBrightness: Brightness.light, // For iOS (dark icons)
