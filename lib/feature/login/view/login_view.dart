@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_regex/flutter_regex.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/active/active_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -16,6 +20,7 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -46,7 +51,9 @@ class _LoginViewState extends State<LoginView> {
     Widget fieldSection() {
       return Expanded(
         flex: 7,
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
+          physics: const AlwaysScrollableScrollPhysics(),
           children: [
             const SizedBox(height: 32.0),
             Text(
@@ -74,23 +81,50 @@ class _LoginViewState extends State<LoginView> {
                 labelText: "Email",
                 withUpperLabel: true,
                 isMandatory: false,
+                autoValidateMode: AutovalidateMode.onUserInteraction,
                 hintText: "Masukan Email",
+                validator: (String? value) {
+                  if (value!.isEmpty) {
+                    return "Email tidak boleh kosong";
+                  } else if (!value.contains("@")) {
+                    return "Email tidak valid";
+                  } else if (!value.isEmail()) {
+                    return "Email tidak valid";
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 18.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: AppValidatorTextField(
-                controller: passwordController,
-                labelText: "Password",
-                withUpperLabel: true,
-                isMandatory: false,
-                hintText: "Masukan Kata Sandi",
-                suffixWidget: IconButton(
-                  icon: const Icon(Icons.visibility),
-                  onPressed: () {},
-                ),
-              ),
+            BlocBuilder<ActiveCubit, bool>(
+              builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: AppValidatorTextField(
+                    controller: passwordController,
+                    labelText: "Password",
+                    withUpperLabel: true,
+                    isMandatory: false,
+                    isObscure: !state,
+                    hintText: "Masukan Kata Sandi",
+                    suffixWidget: IconButton(
+                      icon:
+                          Icon(state ? Icons.visibility : Icons.visibility_off),
+                      onPressed: () {
+                        context.read<ActiveCubit>().toggle(!state);
+                      },
+                    ),
+                    validator: (String? value) {
+                      if (value!.isEmpty) {
+                        return "Password tidak boleh kosong";
+                      } else if (value.length < 6) {
+                        return "Password minimal 6 karakter";
+                      }
+                      return null;
+                    },
+                  ),
+                );
+              },
             ),
             const SizedBox(height: 18.0),
             Padding(
@@ -113,52 +147,65 @@ class _LoginViewState extends State<LoginView> {
               child: AppPrimaryFullButton(
                 "Masuk",
                 () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    DashboardPage(),
-                    DashboardPage.routeSettings(),
-                  ));
+                  if (formKey.currentState!.validate()) {
+                    SystemChannels.textInput.invokeMethod('TextInput.hide');
+                    Navigator.of(context).pushAndRemoveUntil(
+                      AppTransition.pushAndRemoveUntilTransition(
+                        DashboardPage(),
+                        DashboardPage.routeSettings(),
+                      ),
+                      (route) => false,
+                    );
+                    return;
+                  }
                 },
               ),
             ),
-            const Expanded(child: SizedBox()),
-            Wrap(
-              children: [
-                Text(
-                  "Belum Mempunyai Akun? ",
-                  textAlign: TextAlign.center,
-                  style: appTextTheme(context).bodySmall?.copyWith(
-                        fontWeight: FontWeight.w400,
-                      ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const RegisterPage(),
-                      RegisterPage.routeSettings,
-                    ));
-                  },
-                  child: Text(
-                    "Daftar",
-                    textAlign: TextAlign.center,
-                    style: appTextTheme(context).bodySmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColor.primary[600],
-                        ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 24.0),
           ],
         ),
       );
     }
 
-    return Column(
-      children: [
-        headerSection(),
-        fieldSection(),
-      ],
+    Widget bottomRegister() {
+      return Wrap(
+        children: [
+          Text(
+            "Belum Mempunyai Akun? ",
+            textAlign: TextAlign.center,
+            style: appTextTheme(context).bodySmall?.copyWith(
+                  fontWeight: FontWeight.w400,
+                ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).push(AppTransition.pushTransition(
+                const RegisterPage(),
+                RegisterPage.routeSettings,
+              ));
+            },
+            child: Text(
+              "Daftar",
+              textAlign: TextAlign.center,
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColor.primary[600],
+                  ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          headerSection(),
+          fieldSection(),
+          bottomRegister(),
+          const SizedBox(height: 24.0),
+        ],
+      ),
     );
   }
 }
