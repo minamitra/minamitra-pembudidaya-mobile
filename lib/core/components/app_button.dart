@@ -73,7 +73,7 @@ class _CustomButton extends StatelessWidget {
     this.buttonStyle = _CustomButtonStyle.primary,
     this.isFull = false,
     this.customWidth,
-    this.height = 40.0,
+    this.height = 53.0,
   });
 
   @override
@@ -119,11 +119,12 @@ class AppPrimaryFullButton extends _CustomButton {
   AppPrimaryFullButton(
     String text,
     Function() onPressed, {
-    double? height,
+    double height = 53.0,
     Widget? prefixIcon,
   }) : super(
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               prefixIcon != null
                   ? Container(
@@ -148,7 +149,7 @@ class AppPrimaryOutlineButton extends _CustomButton {
   AppPrimaryOutlineButton(
     String text,
     Function() onPressed, {
-    double height = 48.0,
+    double height = 53.0,
   }) : super(
           Text(
             text,

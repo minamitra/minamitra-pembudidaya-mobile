@@ -13,84 +13,65 @@ class TransactionView extends StatefulWidget {
   State<TransactionView> createState() => _TransactionViewState();
 }
 
-class _TransactionViewState extends State<TransactionView> {
-  List<String> menus = [
-    "Belum Dibayar",
-    "Diproses",
-    "Selesai",
-    "Dibatalkan",
-  ];
-  int menuIndex = 0;
+class _TransactionViewState extends State<TransactionView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
-  Widget menuSelect() {
-    return SizedBox(
-      height: 48,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: menus.length,
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              setState(() {
-                menuIndex = index;
-              });
-            },
-            child: Container(
-              padding: const EdgeInsets.fromLTRB(16, 12, 16, 0),
-              decoration: BoxDecoration(
-                color: AppColor.white,
-                border: Border(
-                  bottom: BorderSide(
-                    color:
-                        menuIndex == index ? AppColor.primary : AppColor.white,
-                    width: 2,
-                  ),
-                ),
-              ),
-              child: Text(
-                menus[index],
-                textAlign: TextAlign.start,
-                style: appTextTheme(context).bodyMedium?.copyWith(
-                      fontWeight: menuIndex == index
-                          ? FontWeight.w600
-                          : FontWeight.w400,
-                      color: menuIndex == index
-                          ? AppColor.primary
-                          : AppColor.black[400],
-                    ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget menu() {
-    switch (menuIndex) {
-      case 0:
-        return const TransactionUnpaidSection();
-      case 1:
-        return const TransactionProcessSection();
-      case 2:
-        return const TransactionDoneSection();
-      case 3:
-        return const TransactionCancelSection();
-      default:
-        return const TransactionUnpaidSection();
-    }
+  @override
+  void initState() {
+    _tabController = TabController(length: 4, vsync: this);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget tabBar() {
+      return Container(
+        height: 60,
+        decoration: BoxDecoration(color: AppColor.neutral[50]),
+        child: TabBar(
+          controller: _tabController,
+          dividerColor: Colors.white,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorColor: AppColor.primary,
+          indicatorWeight: 2.5,
+          padding: EdgeInsets.zero,
+          labelColor: AppColor.primary,
+          unselectedLabelColor: AppColor.neutral[400],
+          labelStyle:
+              appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
+          unselectedLabelStyle:
+              appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
+          tabs: const [
+            Tab(text: 'Menunggu'),
+            Tab(text: 'Diproses'),
+            Tab(text: 'Selesai'),
+            Tab(text: 'Dibatalkan'),
+          ],
+        ),
+      );
+    }
+
+    Widget bodyTab() {
+      return Expanded(
+        child: TabBarView(
+          controller: _tabController,
+          children: const [
+            TransactionUnpaidSection(),
+            TransactionProcessSection(),
+            TransactionDoneSection(),
+            TransactionCancelSection(),
+          ],
+        ),
+      );
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        menuSelect(),
-        const SizedBox(height: 16),
+        tabBar(),
         Expanded(
-          child: menu(),
+          child: bodyTab(),
         ),
       ],
     );
