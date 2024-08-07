@@ -82,5 +82,6 @@ class AppColor {
   );
 
   static const white = Color(0xFFFFFFFF);
+  static const primaryDark = Color(0xFF00317E);
   static const transparent = Colors.transparent;
 }

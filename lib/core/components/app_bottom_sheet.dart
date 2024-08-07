@@ -1,6 +1,7 @@
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AppBottomSheet extends StatelessWidget {
   final String _title;
@@ -32,20 +33,25 @@ class AppBottomSheet extends StatelessWidget {
           const SizedBox(height: 16.0),
           Container(
             width: MediaQuery.of(context).size.width * 0.1,
-            height: 3.0,
+            height: 4.0,
             decoration: BoxDecoration(
-              color: AppColor.primary,
+              color: AppColor.black[300],
               borderRadius: BorderRadius.circular(2.0),
             ),
           ),
           const SizedBox(height: 16.0),
           Text(
             _title,
-            style: AppTextStyle.whiteLargeBoldText,
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.start,
+            style: appTextTheme(context).titleMedium?.copyWith(
+                  color: AppColor.black,
+                ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          const Divider(
-            color: AppColor.primary,
+          Divider(
+            color: AppColor.black[400],
+            thickness: 0.5,
             height: 32,
           ),
           Expanded(child: _body),

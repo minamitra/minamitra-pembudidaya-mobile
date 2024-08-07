@@ -17,10 +17,12 @@ class DashboardBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: AppColor.white,
+      shadowColor: AppColor.black,
+      padding: const EdgeInsets.all(0),
+      height: 64,
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             NavigationItem(
               () {

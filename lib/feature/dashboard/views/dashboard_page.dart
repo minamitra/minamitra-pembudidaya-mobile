@@ -1,6 +1,7 @@
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/components/dashboard_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/views/home_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction/views/transaction_page.dart';
 
 class DashboardPage extends StatefulWidget {
   int currentIndex;
@@ -16,7 +17,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> currentScrenList = const [
     HomePage(),
-    Placeholder(),
+    TransactionPage(),
     Placeholder(),
     Placeholder(),
   ];

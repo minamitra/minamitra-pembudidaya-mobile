@@ -11,6 +11,7 @@ class AppDefaultCard extends StatelessWidget {
     this.padding,
     this.borderRadius,
     this.margin,
+    this.isShadow = true,
     Key? key,
   }) : super(key: key);
 
@@ -20,6 +21,7 @@ class AppDefaultCard extends StatelessWidget {
   final EdgeInsetsGeometry? padding;
   final double? borderRadius;
   final EdgeInsetsGeometry? margin;
+  final bool isShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +33,16 @@ class AppDefaultCard extends StatelessWidget {
         border:
             Border.all(color: borderColor ?? AppColor.black.withOpacity(0.03)),
         color: backgroundCardColor ?? AppColor.white,
-        boxShadow: [
-          BoxShadow(
-            color: AppColor.black.withOpacity(0.03),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: const Offset(0, 3), // changes position of shadow
-          ),
-        ],
+        boxShadow: isShadow
+            ? [
+                BoxShadow(
+                  color: AppColor.black.withOpacity(0.05),
+                  spreadRadius: 1,
+                  blurRadius: 3,
+                  offset: const Offset(0, 3), // changes position of shadow
+                ),
+              ]
+            : null,
       ),
       child: child,
     );

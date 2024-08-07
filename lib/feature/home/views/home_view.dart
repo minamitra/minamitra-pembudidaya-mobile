@@ -77,7 +77,7 @@ class _HomeViewState extends State<HomeView> {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          color: AppColor.primary,
+          color: AppColor.primary[800],
           child: Row(
             children: [
               Expanded(
@@ -123,7 +123,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         Container(
-          color: AppColor.primary,
+          color: AppColor.primary[800],
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -169,7 +169,7 @@ class _HomeViewState extends State<HomeView> {
             Container(
               width: double.infinity,
               height: 40,
-              color: AppColor.primary,
+              color: AppColor.primary[800],
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -356,7 +356,7 @@ class _HomeViewState extends State<HomeView> {
     return AppDefaultCard(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       borderRadius: 16.0,
-      backgroundCardColor: AppColor.primary[700],
+      backgroundCardColor: AppColor.primary,
       child: Row(
         children: [
           Expanded(
