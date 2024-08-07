@@ -179,8 +179,9 @@ class AppPrimaryOutlineFullButton extends _CustomButton {
 class AppWhiteButton extends _CustomButton {
   AppWhiteButton(
     String text,
-    Function() onPressed,
-  ) : super(
+    Function() onPressed, {
+    double? height = 53.0,
+  }) : super(
           Text(
             text,
             style: AppTextStyle.primarySmallBoldText.copyWith(
@@ -189,6 +190,7 @@ class AppWhiteButton extends _CustomButton {
           ),
           onPressed,
           buttonStyle: _CustomButtonStyle.white,
+          height: height,
         );
 }
 

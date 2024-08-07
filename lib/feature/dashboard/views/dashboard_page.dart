@@ -1,6 +1,7 @@
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/components/dashboard_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/views/home_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile/view/profile_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/views/transaction_page.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
     HomePage(),
     TransactionPage(),
     Placeholder(),
-    Placeholder(),
+    ProfilePage(),
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();

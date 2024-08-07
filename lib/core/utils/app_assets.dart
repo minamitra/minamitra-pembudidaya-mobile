@@ -37,4 +37,9 @@ class AppAssets {
   // Transaction
   static const String product1Image = "$imagePath/product-1-image.png";
   static const String cashIcon = "$iconPath/cash-icon.png";
+
+  // Profile
+  static const String profileImageDummy = "$imagePath/profile.png";
+  static const String circleBackdropImage = "$imagePath/circle-backdrop.png";
+  static const String startFullIcon = "$iconPath/star-full-icon.png";
 }
