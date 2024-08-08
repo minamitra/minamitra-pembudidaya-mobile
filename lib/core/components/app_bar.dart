@@ -1,6 +1,7 @@
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 
 PreferredSizeWidget appDefaultAppBar(
   BuildContext context,
@@ -82,5 +83,30 @@ Widget appSliverDefaultAppBar({
       centerTitle: centerTitleFlexibleCard,
       background: flexibleCardWidget,
     ),
+  );
+}
+
+PreferredSizeWidget appDefaultAppBarWithBucket(
+  BuildContext context,
+  String title,
+) {
+  return appDefaultAppBar(
+    context,
+    title,
+    isBackButton: false,
+    actions: [
+      Image.asset(
+        AppAssets.basketIcon,
+        height: 20.0,
+        fit: BoxFit.cover,
+      ),
+      const SizedBox(width: 16.0),
+      Image.asset(
+        AppAssets.bellIcon,
+        height: 20.0,
+        fit: BoxFit.cover,
+      ),
+      const SizedBox(width: 16.0),
+    ],
   );
 }
