@@ -42,6 +42,7 @@ class _TransactionViewState extends State<TransactionView>
               appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
           unselectedLabelStyle:
               appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
+          labelPadding: const EdgeInsets.all(0),
           tabs: const [
             Tab(text: 'Menunggu'),
             Tab(text: 'Diproses'),
@@ -53,16 +54,14 @@ class _TransactionViewState extends State<TransactionView>
     }
 
     Widget bodyTab() {
-      return Expanded(
-        child: TabBarView(
-          controller: _tabController,
-          children: const [
-            TransactionUnpaidSection(),
-            TransactionProcessSection(),
-            TransactionDoneSection(),
-            TransactionCancelSection(),
-          ],
-        ),
+      return TabBarView(
+        controller: _tabController,
+        children: const [
+          TransactionUnpaidSection(),
+          TransactionProcessSection(),
+          TransactionDoneSection(),
+          TransactionCancelSection(),
+        ],
       );
     }
 
