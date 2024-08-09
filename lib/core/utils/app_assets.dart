@@ -48,4 +48,6 @@ class AppAssets {
   // Activity
   static const String dymmyActivityImage =
       "$imagePath/dummy-activity-image.png";
+  static const String dummyDetailActivityBannerImage =
+      "$imagePath/dummy-activity-detail-banner-image.png";
 }
