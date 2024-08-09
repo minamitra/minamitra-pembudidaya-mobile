@@ -116,7 +116,7 @@ class _ProfileViewState extends State<ProfileView> {
               alignment: Alignment.bottomRight,
               child: Image.asset(
                 AppAssets.circleBackdropImage,
-                width: 150.0,
+                height: 78.0,
                 fit: BoxFit.fill,
               ),
             ),
