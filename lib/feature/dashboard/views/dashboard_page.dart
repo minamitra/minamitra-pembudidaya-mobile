@@ -1,3 +1,4 @@
+import 'package:minamitra_pembudidaya_mobile/feature/activity/view/activity_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/components/dashboard_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/views/home_page.dart';
@@ -19,7 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
   final List<Widget> currentScrenList = const [
     HomePage(),
     TransactionPage(),
-    Placeholder(),
+    ActivityPage(),
     ProfilePage(),
   ];
 
