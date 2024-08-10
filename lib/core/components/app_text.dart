@@ -114,32 +114,166 @@ extension _CustomTextAlignmentTypeExt on _CustomTextAlignmentType {
 }
 
 class AppTextStyle {
+  // Light Text Theme
   static final TextTheme lightTextTheme = TextTheme(
-    displayMedium: TextStyle(
+    displayLarge: TextStyle(
       fontFamily: defaultFontFamily,
       color: _CustomColorType.black.color,
       fontSize: 36.0,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.bold,
+    ),
+    displayMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 28.0,
+      fontWeight: FontWeight.bold,
     ),
     displaySmall: TextStyle(
       fontFamily: defaultFontFamily,
       color: _CustomColorType.black.color,
-      fontSize: 28.0,
-      fontWeight: FontWeight.w700,
+      fontSize: 24.0,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 22.0,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineSmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 18.0,
+      fontWeight: FontWeight.bold,
+    ),
+    titleLarge: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 18.0,
+      fontWeight: FontWeight.w500,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
+    ),
+    bodyLarge: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 18.0,
+      fontWeight: FontWeight.normal,
+    ),
+    bodyMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 16.0,
+      fontWeight: FontWeight.normal,
+    ),
+    bodySmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 14.0,
+      fontWeight: FontWeight.normal,
+    ),
+    labelLarge: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+    ),
+    labelSmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.black.color,
+      fontSize: 10.0,
+      fontWeight: FontWeight.normal,
     ),
   );
+  // Dark Text Theme
   static final TextTheme darkTextTheme = TextTheme(
-    displayMedium: TextStyle(
+    displayLarge: TextStyle(
       fontFamily: defaultFontFamily,
       color: _CustomColorType.white.color,
       fontSize: 36.0,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.bold,
+    ),
+    displayMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 28.0,
+      fontWeight: FontWeight.bold,
     ),
     displaySmall: TextStyle(
       fontFamily: defaultFontFamily,
       color: _CustomColorType.white.color,
-      fontSize: 28.0,
-      fontWeight: FontWeight.w700,
+      fontSize: 24.0,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 22.0,
+      fontWeight: FontWeight.bold,
+    ),
+    headlineSmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 18.0,
+      fontWeight: FontWeight.bold,
+    ),
+    titleLarge: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 18.0,
+      fontWeight: FontWeight.w500,
+    ),
+    titleMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 16.0,
+      fontWeight: FontWeight.w500,
+    ),
+    titleSmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 14.0,
+      fontWeight: FontWeight.w500,
+    ),
+    bodyLarge: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 18.0,
+      fontWeight: FontWeight.normal,
+    ),
+    bodyMedium: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 16.0,
+      fontWeight: FontWeight.normal,
+    ),
+    bodySmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 14.0,
+      fontWeight: FontWeight.normal,
+    ),
+    labelLarge: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 12.0,
+      fontWeight: FontWeight.normal,
+    ),
+    labelSmall: TextStyle(
+      fontFamily: defaultFontFamily,
+      color: _CustomColorType.white.color,
+      fontSize: 10.0,
+      fontWeight: FontWeight.normal,
     ),
   );
 

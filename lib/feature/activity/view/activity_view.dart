@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -16,32 +18,35 @@ class _ActivityViewState extends State<ActivityView> {
   @override
   Widget build(BuildContext context) {
     Widget chartSection() {
-      return Center(
-        child: SfCircularChart(
-          legend: const Legend(
-            isVisible: true,
-            position: LegendPosition.bottom,
-            overflowMode: LegendItemOverflowMode.wrap,
-            isResponsive: true,
+      return SizedBox(
+        height: 260.0,
+        child: Center(
+          child: SfCircularChart(
+            legend: const Legend(
+              isVisible: true,
+              position: LegendPosition.bottom,
+              overflowMode: LegendItemOverflowMode.wrap,
+              isResponsive: true,
+            ),
+            tooltipBehavior: TooltipBehavior(
+              enable: true,
+              format: 'point.x : point.y %',
+            ),
+            series: <CircularSeries>[
+              // Renders radial bar chart
+              RadialBarSeries<ChartDummy, String>(
+                dataSource: chartDummyData,
+                xValueMapper: (ChartDummy data, _) => data.name,
+                yValueMapper: (ChartDummy data, _) => data.value,
+                legendIconType: LegendIconType.circle,
+                cornerStyle: CornerStyle.endCurve,
+                maximumValue: 100.0,
+                name: "Aktifitas",
+                enableTooltip: true,
+                dataLabelMapper: (ChartDummy data, _) => data.name,
+              )
+            ],
           ),
-          tooltipBehavior: TooltipBehavior(
-            enable: true,
-            format: 'point.x : point.y %',
-          ),
-          series: <CircularSeries>[
-            // Renders radial bar chart
-            RadialBarSeries<ChartDummy, String>(
-              dataSource: chartDummyData,
-              xValueMapper: (ChartDummy data, _) => data.name,
-              yValueMapper: (ChartDummy data, _) => data.value,
-              legendIconType: LegendIconType.circle,
-              cornerStyle: CornerStyle.endCurve,
-              maximumValue: 100.0,
-              name: "Aktifitas",
-              enableTooltip: true,
-              dataLabelMapper: (ChartDummy data, _) => data.name,
-            )
-          ],
         ),
       );
     }
@@ -172,7 +177,12 @@ class _ActivityViewState extends State<ActivityView> {
             title: "Kolam $index",
             value: "2500 Ekor",
             percentage: "50%",
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(AppTransition.pushTransition(
+                const DetailActivityPage(),
+                DetailActivityPage.routeSettings(),
+              ));
+            },
           );
         },
       );
