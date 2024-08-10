@@ -44,4 +44,8 @@ class AppAssets {
   static const String profileImageDummy = "$imagePath/profile.png";
   static const String circleBackdropImage = "$imagePath/circle-backdrop.png";
   static const String startFullIcon = "$iconPath/star-full-icon.png";
+
+  // Activity
+  static const String dymmyActivityImage =
+      "$imagePath/dummy-activity-image.png";
 }

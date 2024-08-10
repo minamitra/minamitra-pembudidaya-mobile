@@ -24,17 +24,17 @@ class _AppState extends State<App> {
       themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme(context),
       darkTheme: AppTheme.darkTheme(context),
-      home: const SplashView(),
+      home: const LoginRegisterPage(),
       builder: (context, child) {
-        Future.delayed(
-          const Duration(seconds: 3),
-          () {
-            _navigator.pushReplacement(AppTransition.pushTransition(
-              const LoginRegisterPage(),
-              LoginRegisterPage.route,
-            ));
-          },
-        );
+        // Future.delayed(
+        //   const Duration(seconds: 3),
+        //   () {
+        //     _navigator.pushReplacement(AppTransition.pushTransition(
+        //       const LoginRegisterPage(),
+        //       LoginRegisterPage.route,
+        //     ));
+        //   },
+        // );
         return child!;
       },
     );

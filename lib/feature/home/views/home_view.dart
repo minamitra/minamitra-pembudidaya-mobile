@@ -355,31 +355,48 @@ class _HomeViewState extends State<HomeView> {
   Widget poinCard() {
     return AppDefaultCard(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
+      padding: const EdgeInsets.only(),
       borderRadius: 16.0,
       backgroundCardColor: AppColor.primary,
-      child: Row(
+      child: Stack(
+        alignment: Alignment.bottomRight,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
               children: [
-                Text(
-                  "0 Poin",
-                  style: AppTextStyle.whiteBoldText,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "0 Poin",
+                        style: AppTextStyle.whiteBoldText,
+                      ),
+                      Text(
+                        "Lengkapi data kolam sekarang!",
+                        style: AppTextStyle.whiteExtraSmallText,
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  "Lengkapi data kolam sekarang!",
-                  style: AppTextStyle.whiteExtraSmallText,
+                SizedBox(
+                  height: 32,
+                  width: 120,
+                  child: AppWhiteButton(
+                    "Lengkapi Data",
+                    () {},
+                  ),
                 ),
               ],
             ),
           ),
-          SizedBox(
-            height: 32,
-            width: 120,
-            child: AppWhiteButton(
-              "Lengkapi Data",
-              () {},
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Image.asset(
+              AppAssets.circleBackdropImage,
+              height: 72.0,
+              fit: BoxFit.fill,
             ),
           ),
         ],
