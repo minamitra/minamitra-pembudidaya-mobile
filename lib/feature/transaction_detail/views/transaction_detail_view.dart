@@ -21,7 +21,7 @@ class TransactionDetailView extends StatelessWidget {
       child: Text(
         'Menunggu Konfirmasi Pesanan',
         textAlign: TextAlign.center,
-        style: appTextTheme(context).bodyMedium?.copyWith(
+        style: appTextTheme(context).bodySmall?.copyWith(
               fontWeight: FontWeight.w500,
               color: AppColor.white,
             ),
@@ -68,7 +68,7 @@ class TransactionDetailView extends StatelessWidget {
                     Text(
                       "Plafon",
                       textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodyMedium?.copyWith(
+                      style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: AppColor.black,
                           ),
@@ -76,7 +76,7 @@ class TransactionDetailView extends StatelessWidget {
                     Text(
                       "Bayar menggunakan plafon",
                       textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodyMedium?.copyWith(
+                      style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w400,
                             color: AppColor.black[400],
                           ),
@@ -113,7 +113,7 @@ class TransactionDetailView extends StatelessWidget {
                   Text(
                     'ID Pesanan',
                     textAlign: TextAlign.start,
-                    style: appTextTheme(context).bodyMedium?.copyWith(
+                    style: appTextTheme(context).bodySmall?.copyWith(
                           fontWeight: FontWeight.w400,
                           color: AppColor.black[500],
                         ),
@@ -122,7 +122,7 @@ class TransactionDetailView extends StatelessWidget {
                   Text(
                     '782784991',
                     textAlign: TextAlign.start,
-                    style: appTextTheme(context).bodyMedium?.copyWith(
+                    style: appTextTheme(context).bodySmall?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColor.black,
                         ),
@@ -171,7 +171,7 @@ class TransactionDetailView extends StatelessWidget {
                       Text(
                         "Alamat Pengiriman",
                         textAlign: TextAlign.start,
-                        style: appTextTheme(context).bodyMedium?.copyWith(
+                        style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w700,
                               color: AppColor.black,
                             ),
@@ -179,7 +179,7 @@ class TransactionDetailView extends StatelessWidget {
                       Text(
                         "Jl. Raya Bunga Matahari",
                         textAlign: TextAlign.start,
-                        style: appTextTheme(context).bodyMedium?.copyWith(
+                        style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w400,
                               color: AppColor.black[500],
                             ),
@@ -232,7 +232,7 @@ class TransactionDetailView extends StatelessWidget {
                     Text(
                       "Pakan Siap Cetak (PSC) Mina Mitra Mandiri",
                       textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodyMedium?.copyWith(
+                      style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: AppColor.black,
                           ),
@@ -242,7 +242,7 @@ class TransactionDetailView extends StatelessWidget {
                     Text(
                       "Pakan",
                       textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodyMedium?.copyWith(
+                      style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w400,
                             color: AppColor.black[400],
                           ),
@@ -255,7 +255,7 @@ class TransactionDetailView extends StatelessWidget {
                           child: Text(
                             appConvertCurrency(200000),
                             textAlign: TextAlign.start,
-                            style: appTextTheme(context).bodyMedium?.copyWith(
+                            style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.black,
                                 ),
@@ -265,7 +265,7 @@ class TransactionDetailView extends StatelessWidget {
                           child: Text(
                             "x1",
                             textAlign: TextAlign.end,
-                            style: appTextTheme(context).bodyMedium?.copyWith(
+                            style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.black,
                                 ),
@@ -294,7 +294,7 @@ class TransactionDetailView extends StatelessWidget {
         Text(
           title,
           textAlign: TextAlign.start,
-          style: appTextTheme(context).bodyMedium?.copyWith(
+          style: appTextTheme(context).bodySmall?.copyWith(
                 fontWeight: FontWeight.w400,
                 color: AppColor.black[500],
               ),
@@ -302,7 +302,7 @@ class TransactionDetailView extends StatelessWidget {
         Text(
           value,
           textAlign: TextAlign.end,
-          style: appTextTheme(context).bodyMedium?.copyWith(
+          style: appTextTheme(context).bodySmall?.copyWith(
                 fontWeight: FontWeight.w400,
                 color: AppColor.black,
               ),
