@@ -2,6 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/activity_activities_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -30,7 +32,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
   Widget build(BuildContext context) {
     Widget bottomActionItem(
       String name,
-      IconData icon, {
+      String icon, {
       Function()? onTap,
     }) {
       return InkWell(
@@ -38,9 +40,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            Image.asset(
               icon,
-              color: Colors.white,
+              height: 24.0,
+              width: 24.0,
+              fit: BoxFit.cover,
             ),
             const SizedBox(height: 8.0),
             Text(
@@ -64,8 +68,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
             vertical: 12.0,
           ),
           padding: const EdgeInsets.symmetric(
-            horizontal: 18.0,
-            vertical: 8.0,
+            horizontal: 16.0,
+            vertical: 12.0,
           ),
           decoration: BoxDecoration(
             color: const Color(0xFF155ED0).withOpacity(0.8),
@@ -75,18 +79,28 @@ class _DetailActivityViewState extends State<DetailActivityView> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               bottomActionItem(
+                'Aktivitas',
+                AppAssets.documentAddIcon,
+                onTap: () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    const ActivityActivitiesPage(),
+                    ActivityActivitiesPage.routeSettings(),
+                  ));
+                },
+              ),
+              bottomActionItem(
                 'Kejadian',
-                Icons.manage_search_rounded,
+                AppAssets.notebookIcon,
                 onTap: () {},
               ),
               bottomActionItem(
-                'Aktifitas',
-                Icons.bar_chart_rounded,
+                'Monitoring',
+                AppAssets.pulseIcon,
                 onTap: () {},
               ),
               bottomActionItem(
                 'Panen',
-                Icons.archive_rounded,
+                AppAssets.cartIcon,
                 onTap: () {},
               ),
             ],
