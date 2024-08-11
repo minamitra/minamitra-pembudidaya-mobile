@@ -50,4 +50,15 @@ class AppAssets {
       "$imagePath/dummy-activity-image.png";
   static const String dummyDetailActivityBannerImage =
       "$imagePath/dummy-activity-detail-banner-image.png";
+  static const String sortIcon = "$iconPath/sort-icon.png";
+  static const String cartIcon = "$iconPath/cart-icon.png";
+  static const String notebookIcon = "$iconPath/notebook-icon.png";
+  static const String pulseIcon = "$iconPath/pulse-icon.png";
+  static const String documentAddIcon = "$iconPath/document-add-icon.png";
+  static const String documentIcon = "$iconPath/document-icon.png";
+  static const String priceTagIcon = "$iconPath/price-tag-icon.png";
+  static const String weigherIcon = "$iconPath/weigher-icon.png";
+  static const String trashIcon = "$iconPath/trash-icon.png";
+  static const String editIcon = "$iconPath/edit-icon.png";
+  static const String calendarIcon = "$iconPath/calendar-icon.png";
 }
