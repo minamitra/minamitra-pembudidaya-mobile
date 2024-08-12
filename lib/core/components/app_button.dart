@@ -40,7 +40,7 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: const BorderSide(color: AppColor.primary),
+              side: const BorderSide(color: AppColor.primary, width: 1.5),
             ),
           ),
           elevation: WidgetStateProperty.all(0),
