@@ -13,7 +13,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Aktivitas",
+        "Tambah Aktivitas",
       ),
       backgroundColor: Colors.white,
       // resizeToAvoidBottomInset: false,
