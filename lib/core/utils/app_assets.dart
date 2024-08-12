@@ -61,4 +61,9 @@ class AppAssets {
   static const String trashIcon = "$iconPath/trash-icon.png";
   static const String editIcon = "$iconPath/edit-icon.png";
   static const String calendarIcon = "$iconPath/calendar-icon.png";
+  static const String galleryIcon = "$iconPath/gallery-icon.png";
+  static const String uploadIcon = "$iconPath/upload-icon.png";
+  static const String clockIcon = "$iconPath/clock-icon.png";
+  static const String dummyActivityIncidentImage =
+      "$imagePath/dummy-activity-incident-image.png";
 }
