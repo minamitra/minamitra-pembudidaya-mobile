@@ -36,11 +36,23 @@ class ActivityActivitiesDetailView extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           columnText("Waktu Pakan", "Pakan Pagi"),
-          const SizedBox(height: 24.0),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
           columnText("Tanggal", "05 Agustus 2024 17:00"),
-          const SizedBox(height: 24.0),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
           columnText("Merk Pakan", "Merk ABC"),
-          const SizedBox(height: 24.0),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
           columnText("Catatan",
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
           const SizedBox(height: 98.0),
