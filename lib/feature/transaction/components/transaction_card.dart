@@ -84,7 +84,7 @@ class _TransactionCardState extends State<TransactionCard> {
                                         listMethodPayment[index].name,
                                         textAlign: TextAlign.start,
                                         style: appTextTheme(context)
-                                            .bodyMedium
+                                            .bodySmall
                                             ?.copyWith(
                                               fontWeight: FontWeight.w600,
                                               color: AppColor.black,
@@ -94,7 +94,7 @@ class _TransactionCardState extends State<TransactionCard> {
                                         listMethodPayment[index].description,
                                         textAlign: TextAlign.start,
                                         style: appTextTheme(context)
-                                            .bodyMedium
+                                            .bodySmall
                                             ?.copyWith(
                                               fontWeight: FontWeight.w400,
                                               color: AppColor.black[400],
@@ -156,7 +156,7 @@ class _TransactionCardState extends State<TransactionCard> {
                     child: Text(
                       widget.data.status!,
                       textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodyMedium?.copyWith(
+                      style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w400,
                             color: AppColor.primary,
                           ),
@@ -182,7 +182,7 @@ class _TransactionCardState extends State<TransactionCard> {
                       Text(
                         widget.data.title,
                         textAlign: TextAlign.start,
-                        style: appTextTheme(context).bodyMedium?.copyWith(
+                        style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w600,
                               color: AppColor.black,
                             ),
@@ -192,7 +192,7 @@ class _TransactionCardState extends State<TransactionCard> {
                       Text(
                         widget.data.productType,
                         textAlign: TextAlign.start,
-                        style: appTextTheme(context).bodyMedium?.copyWith(
+                        style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w400,
                               color: AppColor.black[400],
                             ),
@@ -205,7 +205,7 @@ class _TransactionCardState extends State<TransactionCard> {
                             child: Text(
                               appConvertCurrency(widget.data.price),
                               textAlign: TextAlign.start,
-                              style: appTextTheme(context).bodyMedium?.copyWith(
+                              style: appTextTheme(context).bodySmall?.copyWith(
                                     fontWeight: FontWeight.w400,
                                     color: AppColor.black,
                                   ),
@@ -215,7 +215,7 @@ class _TransactionCardState extends State<TransactionCard> {
                             child: Text(
                               "x${widget.data.amount}",
                               textAlign: TextAlign.end,
-                              style: appTextTheme(context).bodyMedium?.copyWith(
+                              style: appTextTheme(context).bodySmall?.copyWith(
                                     fontWeight: FontWeight.w400,
                                     color: AppColor.black,
                                   ),
@@ -239,7 +239,7 @@ class _TransactionCardState extends State<TransactionCard> {
                 Text(
                   "1 Item",
                   textAlign: TextAlign.start,
-                  style: appTextTheme(context).bodyMedium?.copyWith(
+                  style: appTextTheme(context).bodySmall?.copyWith(
                         fontWeight: FontWeight.w400,
                         color: AppColor.black[400],
                       ),
@@ -247,7 +247,7 @@ class _TransactionCardState extends State<TransactionCard> {
                 Text(
                   appConvertCurrency(widget.data.price * widget.data.amount),
                   textAlign: TextAlign.end,
-                  style: appTextTheme(context).bodyLarge?.copyWith(
+                  style: appTextTheme(context).bodyMedium?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColor.accent,
                       ),
@@ -268,7 +268,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           Text(
                             "Bayar Sekarang",
                             textAlign: TextAlign.start,
-                            style: appTextTheme(context).bodyMedium?.copyWith(
+                            style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.black[400],
                                 ),
@@ -300,7 +300,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           Text(
                             "Pesan Lagi Yuk",
                             textAlign: TextAlign.start,
-                            style: appTextTheme(context).bodyMedium?.copyWith(
+                            style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.black[400],
                                 ),
@@ -332,7 +332,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           Text(
                             "Pesanan Dibatalkan",
                             textAlign: TextAlign.start,
-                            style: appTextTheme(context).bodyMedium?.copyWith(
+                            style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
                                   color: AppColor.black[400],
                                 ),

@@ -150,10 +150,23 @@ class AppPrimaryOutlineButton extends _CustomButton {
     String text,
     Function() onPressed, {
     double height = 53.0,
+    Widget? prefixIcon,
   }) : super(
-          Text(
-            text,
-            style: AppTextStyle.primaryBoldText,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              prefixIcon != null
+                  ? Container(
+                      margin: const EdgeInsets.only(right: 8.0),
+                      child: prefixIcon,
+                    )
+                  : const SizedBox(),
+              Text(
+                text,
+                style: AppTextStyle.primaryBoldText,
+              ),
+            ],
           ),
           onPressed,
           buttonStyle: _CustomButtonStyle.primaryOutline,
