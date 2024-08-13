@@ -1,0 +1,102 @@
+{
+	"service layer minamitra": {
+		"prefix": "minamitra_service",
+		"body": [
+		  "import 'package:minamitra_pembudidaya_mobile/core/injections/injections/injection.dart';",
+		  "import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';",
+		  "import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';",
+		  "",
+		  "abstract class YourService {}",
+		  "",
+		  "class YourServiceImpl implements YourService {",
+		  "  final HttpClient httpClient;",
+		  "  final HeaderProvider headerProvider;",
+		  "",
+		  "  YourServiceImpl({",
+		  "    required this.httpClient,",
+		  "    required this.headerProvider,",
+		  "  });",
+		  "",
+		  "  factory YourServiceImpl.create() {",
+		  "    return YourServiceImpl(",
+		  "      httpClient: Injection.httpClient,",
+		  "      headerProvider: Injection.headerProvider,",
+		  "    );",
+		  "  }",
+		  "}",
+		  ""
+		],
+		"description": "service layer minamitra"
+	  },
+
+	  "endpoint layer minamitra": {
+		"prefix": "minamitra_endpoint",
+		"body": [
+		  "import 'package:minamitra_pembudidaya_mobile/core/network/url_builder.dart';",
+		  "",
+		  "class YourEndpoint {",
+		  "  YourEndpoint();",
+		  "",
+		  "  Uri yourEndpoint() {",
+		  "    return createUrl(",
+		  "      path: \"pos/pembelian/supplier/data\",",
+		  "      queryParameters: {",
+		  "        \"id\": id,",
+		  "      },",
+		  "    );",
+		  "  }",
+		  "",
+		  "}",
+		  ""
+		],
+		"description": "endpoint layer amanata"
+	  },
+
+	  "error handler layer minamitra": {
+		"prefix": "minamitra_error_handler",
+		"body": [
+			"if (state.status.isFailed) {",
+				"if (state.errorMessage == \"TOKEN_EXPIRED\") {",
+				  "RepositoryProvider.of<AuthenticationRepository>(context)",
+					  ".logout();",
+				"} else {",
+				  "AppTopSnackBar(context).showDanger(state.errorMessage);",
+				"}",
+			  "}",
+		],
+		"description": "error handler layer minamitra"
+	  },
+
+	  "error logic handler layer minamitra": {
+		"prefix": "minamitra_error_logic_handler",
+		"body": [
+			"on AppException catch (e) {",
+				"emit(state.copyWith(",
+				  "status: GlobalState.failed,",
+				  "errorMessage: e.message,",
+				"));",
+			  "} catch (e) {",
+				"emit(state.copyWith(",
+				  "status: GlobalState.failed,",
+				  "errorMessage: e.toString(),",
+				"));",
+			  "}",
+		],
+		"description": "error handler layer minamitra"
+	  },
+
+	"text component minamitra": {
+		"prefix": "minamitra_text",
+		"body": [
+			"Text(",
+			"  '',",
+			"  textAlign: TextAlign.start,",
+			"  style: appTextTheme(context).bodyMedium?.copyWith(",
+			"     fontWeight: FontWeight.w400,",
+			"     color: AppColor.black,",
+			"   ),",
+			"),",
+		],
+		"description": "error handler layer minamitra"
+	},
+}
