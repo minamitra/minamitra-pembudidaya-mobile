@@ -4,8 +4,21 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
-class ActivityActivitiesDetailView extends StatelessWidget {
-  const ActivityActivitiesDetailView({super.key});
+class ActivityIncidentDetailView extends StatefulWidget {
+  const ActivityIncidentDetailView({super.key});
+
+  @override
+  State<ActivityIncidentDetailView> createState() =>
+      _ActivityIncidentDetailViewState();
+}
+
+class _ActivityIncidentDetailViewState
+    extends State<ActivityIncidentDetailView> {
+  List<String> listFile = [
+    AppAssets.dummyActivityIncidentImage,
+    AppAssets.dummyActivityIncidentImage,
+    AppAssets.dummyActivityIncidentImage,
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,23 +44,49 @@ class ActivityActivitiesDetailView extends StatelessWidget {
       );
     }
 
+    Widget fileAttachment() {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "File Lampiran",
+            textAlign: TextAlign.start,
+            style: appTextTheme(context).bodySmall?.copyWith(
+                  color: AppColor.neutral[500],
+                ),
+          ),
+          const SizedBox(height: 8.0),
+          SizedBox(
+            height: 160.0,
+            child: ListView.separated(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: listFile.length,
+              separatorBuilder: (context, index) => const SizedBox(width: 8.0),
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: AspectRatio(
+                    aspectRatio: 3 / 2,
+                    child: Image.asset(
+                      listFile[index],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
+
     Widget body() {
       return ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          columnText("Waktu Pakan", "Pakan Pagi"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
-          ),
           columnText("Tanggal", "05 Agustus 2024 17:00"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
-          ),
-          columnText("Merk Pakan", "Merk ABC"),
           Divider(
             height: 32.0,
             thickness: 1,
@@ -55,6 +94,12 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           ),
           columnText("Catatan",
               "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          fileAttachment(),
           const SizedBox(height: 98.0),
         ],
       );
