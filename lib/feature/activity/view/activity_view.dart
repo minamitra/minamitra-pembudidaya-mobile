@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -188,6 +190,18 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
+    Widget addButton() {
+      return AppPrimaryOutlineFullButton(
+        "Tambah ",
+        () {
+          Navigator.of(context).push(AppTransition.pushTransition(
+            const AddPondPage(),
+            AddPondPage.routeSettings(),
+          ));
+        },
+      );
+    }
+
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 18.0),
       children: [
@@ -199,6 +213,9 @@ class _ActivityViewState extends State<ActivityView> {
         seeAllText(),
         const SizedBox(height: 18.0),
         ...listActivityItem(),
+        const SizedBox(height: 18.0),
+        addButton(),
+        const SizedBox(height: 18.0),
       ],
     );
   }
