@@ -108,7 +108,10 @@ class AppPrimaryButton extends _CustomButton {
     Function() onPressed, {
     double? width,
   }) : super(
-          Text(text, style: AppTextStyle.whiteSmallBoldText),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Text(text, style: AppTextStyle.whiteSmallBoldText),
+          ),
           onPressed,
           buttonStyle: _CustomButtonStyle.primary,
           customWidth: width,

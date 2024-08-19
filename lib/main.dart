@@ -1,7 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/app.dart';
 import 'package:minamitra_pembudidaya_mobile/core/injections/env.dart';
+import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
 
 // shortcut for app theme
 TextTheme appTextTheme(BuildContext context) => Theme.of(context).textTheme;
@@ -10,7 +12,11 @@ ColorScheme appColorScheme(BuildContext context) =>
 // Set your environment here
 const Environment env = Environment.development;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

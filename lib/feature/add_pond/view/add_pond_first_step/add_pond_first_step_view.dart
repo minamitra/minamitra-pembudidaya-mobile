@@ -14,10 +14,10 @@ class AddPondFirstStepView extends StatefulWidget {
 
 class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
   final TextEditingController pondNameController = TextEditingController();
-  final TextEditingController pondLengthController = TextEditingController();
-  final TextEditingController fishCountController = TextEditingController();
-  final TextEditingController spreadSizeController = TextEditingController();
-  final TextEditingController targetController = TextEditingController();
+  final TextEditingController pondlengthController = TextEditingController();
+  final TextEditingController pondWidthController = TextEditingController();
+  final TextEditingController pondWideController = TextEditingController();
+  final TextEditingController pondDeepController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
       return [
         const SizedBox(height: 18.0),
         Text(
-          "Informasi Pakan",
+          "Informasi Kolam",
           style: appTextTheme(context).titleMedium,
         ),
         const SizedBox(height: 8.0),
@@ -69,42 +69,82 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pondLengthController,
+          controller: pondlengthController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
-          labelText: "Luas Lahan",
+          labelText: "Panjang Kolam",
           hintText: "0",
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "m2",
+              "m",
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
                   ),
             ),
           ),
+          onChanged: (value) {
+            pondWideController.text =
+                (double.parse(value.isEmpty ? "0" : value) *
+                        double.parse(pondWidthController.text))
+                    .toStringAsFixed(0);
+          },
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Luas lahan tidak boleh kosong";
+              return "Panjang lahan tidak boleh kosong";
+            }
+
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: pondWidthController,
+          inputType: TextInputType.phone,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: "Lebar Kolam",
+          hintText: "0",
+          suffixWidget: Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Text(
+              "m",
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    color: AppColor.neutral[500],
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          onChanged: (value) {
+            pondWideController.text =
+                (double.parse(value.isEmpty ? "0" : value) *
+                        double.parse(pondlengthController.text))
+                    .toStringAsFixed(0);
+          },
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Lebar lahan tidak boleh kosong";
             }
             return null;
           },
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: fishCountController,
+          controller: pondDeepController,
           inputType: TextInputType.phone,
-          isMandatory: true,
+          isMandatory: false,
           withUpperLabel: true,
-          labelText: "Jumlah Ikan",
+          readOnly: true,
+          labelText: "Kedalaman Kolam",
           hintText: "0",
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "ekor",
+              "m",
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -113,61 +153,32 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           ),
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Junmlah ikan tidak boleh kosong";
-            }
             return null;
           },
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: spreadSizeController,
+          controller: pondWideController,
           inputType: TextInputType.phone,
-          isMandatory: true,
+          isMandatory: false,
           withUpperLabel: true,
-          labelText: "Ukuran Tebar",
+          readOnly: true,
+          labelText: "Luas Kolam",
           hintText: "0",
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "gram/ekor",
+              "m",
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
                   ),
             ),
           ),
+          onChanged: (value) {},
           suffixConstraints: const BoxConstraints(),
+          fillColor: AppColor.neutral[200],
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Ukuran tebar tidak boleh kosong";
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: targetController,
-          inputType: TextInputType.phone,
-          isMandatory: true,
-          withUpperLabel: true,
-          labelText: "Target Bobot Panen",
-          hintText: "0",
-          suffixWidget: Padding(
-            padding: const EdgeInsets.only(right: 18.0),
-            child: Text(
-              "gram/ekor",
-              style: appTextTheme(context).bodySmall?.copyWith(
-                    color: AppColor.neutral[500],
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Target bobot panen tidak boleh kosong";
-            }
             return null;
           },
         ),
