@@ -95,7 +95,7 @@ class _HomeViewState extends State<HomeView> {
                     decoration: InputDecoration(
                       isCollapsed: true,
                       hintStyle: AppTextStyle.blackSmallText,
-                      hintText: 'Cari kajian',
+                      hintText: 'Cari produk',
                       prefixIcon: const Icon(
                         Icons.search,
                         color: AppColor.black,

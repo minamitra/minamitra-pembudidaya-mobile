@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/location_service/location_permission.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/login/view/login_page.dart';
@@ -14,6 +15,12 @@ class LoginRegisterView extends StatefulWidget {
 }
 
 class _LoginRegisterViewState extends State<LoginRegisterView> {
+  @override
+  void initState() {
+    requestLocationPermission();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget headerSection() {
