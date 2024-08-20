@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
@@ -31,6 +33,73 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
   final TextEditingController regencyController = TextEditingController();
   final TextEditingController subdisctrictController = TextEditingController();
   final TextEditingController villageController = TextEditingController();
+
+  Function() bottomSheetShowModal(
+    BuildContext context,
+    String title,
+    List<String> data,
+  ) {
+    return () {
+      showModalBottomSheet(
+        isDismissible: true,
+        enableDrag: true,
+        context: context,
+        builder: (modalContext) {
+          return StatefulBuilder(
+            builder: (stateContext, setModalState) {
+              return AppBottomSheet(
+                title,
+                height: MediaQuery.of(context).size.height * 0.5,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: data.length,
+                          separatorBuilder: (context, index) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Divider(
+                              color: AppColor.neutral[100],
+                              thickness: 1.0,
+                              height: 0.0,
+                            ),
+                          ),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop(data[index]);
+                              },
+                              child: Text(
+                                data[index],
+                                textAlign: TextAlign.start,
+                                style:
+                                    appTextTheme(context).bodySmall?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColor.black,
+                                        ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ).then((value) {
+        if (value != null) {
+          if (value is String) {}
+        }
+      });
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,36 +217,104 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
 
     List<Widget> form() {
       return [
-        AppDropdownTextField(
-          "Provinsi",
-          ["contoh", "contohs", "aowkoakw"],
-          provinceController,
+        AppValidatorTextField(
+          controller: provinceController,
           isMandatory: true,
-          hint: "Pilih provinsi",
+          withUpperLabel: true,
+          readOnly: true,
+          labelText: "Provinsi",
+          hintText: "Pilih provinsi",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Provinsi tidak boleh kosong";
+            }
+            return null;
+          },
+          onTap: bottomSheetShowModal(
+            context,
+            "Pilih Provinsi",
+            ["contoh", "contohs", "aowkoakw"],
+          ),
         ),
         const SizedBox(height: 18.0),
-        AppDropdownTextField(
-          "Kabupaten",
-          ["contoh", "contohs", "aowkoakw"],
-          regencyController,
+        AppValidatorTextField(
+          controller: regencyController,
           isMandatory: true,
-          hint: "Pilih kabupaten",
+          withUpperLabel: true,
+          readOnly: true,
+          labelText: "Kabupaten",
+          hintText: "Pilih kabupaten",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Kabupaten tidak boleh kosong";
+            }
+            return null;
+          },
+          onTap: bottomSheetShowModal(
+            context,
+            "Pilih Kabupaten",
+            ["contoh", "contohs", "aowkoakw"],
+          ),
         ),
         const SizedBox(height: 18.0),
-        AppDropdownTextField(
-          "Kecamatan",
-          ["contoh", "contohs", "aowkoakw"],
-          subdisctrictController,
+        AppValidatorTextField(
+          controller: subdisctrictController,
           isMandatory: true,
-          hint: "Pilih kecamatan",
+          withUpperLabel: true,
+          readOnly: true,
+          labelText: "Kecamatan",
+          hintText: "Pilih kecamatan",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Kecamatan tidak boleh kosong";
+            }
+            return null;
+          },
+          onTap: bottomSheetShowModal(
+            context,
+            "Pilih kecamatan",
+            ["contoh", "contohs", "aowkoakw"],
+          ),
         ),
         const SizedBox(height: 18.0),
-        AppDropdownTextField(
-          "Kelurahan",
-          ["contoh", "contohs", "aowkoakw"],
-          villageController,
+        AppValidatorTextField(
+          controller: villageController,
           isMandatory: true,
-          hint: "Pilih kelurahan",
+          withUpperLabel: true,
+          readOnly: true,
+          labelText: "Kelurahan",
+          hintText: "Pilih kelurahan",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Kelurahan tidak boleh kosong";
+            }
+            return null;
+          },
+          onTap: bottomSheetShowModal(
+            context,
+            "Pilih kelurahan",
+            ["contoh", "contohs", "aowkoakw"],
+          ),
         ),
         const SizedBox(height: 18.0),
         Text(
