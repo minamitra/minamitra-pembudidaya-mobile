@@ -21,7 +21,13 @@ class ActivityView extends StatefulWidget {
 
 class _ActivityViewState extends State<ActivityView> {
   final TextEditingController pondController = TextEditingController();
-  PageController pageController = PageController(initialPage: 0);
+  final PageController pageController = PageController(initialPage: 0);
+  int page = 0;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   Function() bottomSheetShowModal(
     BuildContext context,
@@ -453,7 +459,7 @@ class _ActivityViewState extends State<ActivityView> {
 
     Widget scrollIndicator() {
       return AnimatedSmoothIndicator(
-        activeIndex: int.parse(pageController.page?.toStringAsFixed(0) ?? "0"),
+        activeIndex: page,
         count: 2,
         effect: const ExpandingDotsEffect(
           dotHeight: 7,
@@ -496,10 +502,15 @@ class _ActivityViewState extends State<ActivityView> {
               height: MediaQuery.sizeOf(context).height * 0.35,
               width: double.infinity,
               child: PageView(
-                onPageChanged: (value) => setState(() {}),
+                onPageChanged: (value) {
+                  setState(() {
+                    page = value;
+                  });
+                },
                 controller: pageController,
                 physics: AlwaysScrollableScrollPhysics(),
-                // allowImplicitScrolling: true,
+                allowImplicitScrolling: true,
+                pageSnapping: true,
                 children: [
                   firstData(),
                   secondData(),
