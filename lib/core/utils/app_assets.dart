@@ -66,4 +66,14 @@ class AppAssets {
   static const String clockIcon = "$iconPath/clock-icon.png";
   static const String dummyActivityIncidentImage =
       "$imagePath/dummy-activity-incident-image.png";
+
+  // product
+  static const String arrowLeftIcon = "$iconPath/arrow-left-icon.png";
+  static const String shareIcon = "$iconPath/share-icon.png";
+  static const String productSlide1Image =
+      "$imagePath/product-slide-1-image.png";
+  static const String minamitraLogo = "$imagePath/minamitra-logo.png";
+  static const String starSingleIcon = "$iconPath/star-single-icon.png";
+  static const String dummyPerson1Image = "$imagePath/dummy-person-1-image.png";
+  static const String dummyPerson2Image = "$imagePath/dummy-person-2-image.png";
 }
