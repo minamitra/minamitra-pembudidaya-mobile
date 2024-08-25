@@ -97,6 +97,22 @@ class AppColor {
     },
   );
 
+  static const yellow = MaterialColor(
+    0xFFCA8A04,
+    <int, Color>{
+      50: Color(0xFFFEFCE8),
+      100: Color(0xFFFEF9C3),
+      200: Color(0xFFFEF08A),
+      300: Color(0xFFFDE047),
+      400: Color(0xFFFACC15),
+      500: Color(0xFFEAB308),
+      600: Color(0xFFCA8A04),
+      700: Color(0xFFA16207),
+      800: Color(0xFF854D0E),
+      900: Color(0xFF713F12),
+    },
+  );
+
   static const white = Color(0xFFFFFFFF);
   static const primaryDark = Color(0xFF00317E);
   static const transparent = Colors.transparent;
