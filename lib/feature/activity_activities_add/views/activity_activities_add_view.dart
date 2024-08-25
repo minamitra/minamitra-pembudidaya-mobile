@@ -73,18 +73,6 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   }
 
   Widget typeTextField() {
-    // return AppValidatorTextField(
-    //   controller: typeController,
-    //   hintText: "Masukan jenis kegiatan",
-    //   labelText: "Jenis Kegiatan",
-    //   isMandatory: true,
-    //   validator: (String? value) {
-    //     if (value!.isEmpty) {
-    //       return "Jenis tidak boleh kosong";
-    //     }
-    //     return null;
-    //   },
-    // );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -144,8 +132,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   Widget amountTextField() {
     return AppValidatorTextField(
       controller: amountController,
-      hintText: "Masukan jumlah",
-      labelText: "Jumlah",
+      hintText: "Masukan jumlah pakan",
+      labelText: "Jumlah Pakan Diberikan ",
       inputType: TextInputType.number,
       isMandatory: true,
       validator: (String? value) {
@@ -154,6 +142,17 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         }
         return null;
       },
+      suffixConstraints: const BoxConstraints(),
+      suffixWidget: Padding(
+        padding: const EdgeInsets.only(right: 18.0),
+        child: Text(
+          "gram",
+          style: appTextTheme(context).bodySmall?.copyWith(
+                color: AppColor.neutral[500],
+                fontWeight: FontWeight.w500,
+              ),
+        ),
+      ),
     );
   }
 
@@ -187,6 +186,62 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
     );
   }
 
+  Widget suggestion() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16.0),
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: AppColor.accent[50],
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Tambah jumlah pakan sebanyak 120 gram?',
+            textAlign: TextAlign.start,
+            style: appTextTheme(context).titleSmall!,
+          ),
+          const SizedBox(height: 16.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              AppAccentOutlineButton(
+                Text(
+                  "Tidak",
+                  style: appTextTheme(context).titleSmall?.copyWith(
+                        color: AppColor.accent,
+                      ),
+                ),
+                () {
+                  setState(() {
+                    amountController.text = "";
+                  });
+                },
+                height: 28,
+              ),
+              const SizedBox(width: 8.0),
+              AppAccentButton(
+                Text(
+                  "Ya",
+                  style: appTextTheme(context).titleSmall?.copyWith(
+                        color: AppColor.white,
+                      ),
+                ),
+                () {
+                  setState(() {
+                    amountController.text = "120";
+                  });
+                },
+                height: 28,
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget body() {
@@ -197,6 +252,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           const SizedBox(height: 16.0),
           typeTextField(),
           const SizedBox(height: 16.0),
+          typeController.text != "" ? suggestion() : const SizedBox(),
           amountTextField(),
           const SizedBox(height: 16.0),
           brandTextField(),
