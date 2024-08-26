@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/repositories/incident_data.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityIncidentDetailView extends StatefulWidget {
-  const ActivityIncidentDetailView({super.key});
+  final Incident incident;
+  const ActivityIncidentDetailView(this.incident, {super.key});
 
   @override
   State<ActivityIncidentDetailView> createState() =>
@@ -82,24 +84,60 @@ class _ActivityIncidentDetailViewState
       );
     }
 
+    Widget statusBar() {
+      return Container(
+        margin: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: incidentTypeColor(widget.incident.type),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          'Status Laporan ${incidentTypeToString(widget.incident.type)}',
+          textAlign: TextAlign.start,
+          style: appTextTheme(context).titleSmall?.copyWith(
+                color: AppColor.white,
+              ),
+        ),
+      );
+    }
+
     Widget body() {
       return ListView(
-        padding: const EdgeInsets.all(16.0),
         children: [
-          columnText("Tanggal", "05 Agustus 2024 17:00"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
+          statusBar(),
+          const SizedBox(height: 0),
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            color: AppColor.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                columnText("Judul Laporan", widget.incident.title),
+                Divider(
+                  height: 32.0,
+                  thickness: 1,
+                  color: AppColor.neutral[100],
+                ),
+                columnText("Tanggal", widget.incident.date),
+                Divider(
+                  height: 32.0,
+                  thickness: 1,
+                  color: AppColor.neutral[100],
+                ),
+                columnText("Catatan", widget.incident.description),
+                Divider(
+                  height: 32.0,
+                  thickness: 1,
+                  color: AppColor.neutral[100],
+                ),
+                fileAttachment(),
+              ],
+            ),
           ),
-          columnText("Catatan",
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
-          ),
-          fileAttachment(),
           const SizedBox(height: 98.0),
         ],
       );
