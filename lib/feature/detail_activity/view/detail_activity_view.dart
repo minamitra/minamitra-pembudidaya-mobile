@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/activity_activities_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/views/activity_incident_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/view/monitoring_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -102,7 +103,12 @@ class _DetailActivityViewState extends State<DetailActivityView> {
               bottomActionItem(
                 'Monitoring',
                 AppAssets.pulseIcon,
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    const MonitoringPage(),
+                    MonitoringPage.route,
+                  ));
+                },
               ),
               bottomActionItem(
                 'Panen',
