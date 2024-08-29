@@ -456,18 +456,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         ),
       ),
       child: AppPrimaryFullButton(
-        "Tambah ke Keranjang",
+        "Beli Sekarang",
         () {
           Navigator.of(context).push(AppTransition.pushTransition(
             const CheckoutPage(),
             CheckoutPage.route,
           ));
         },
-        prefixIcon: const Icon(
-          Icons.add,
-          size: 24,
-          color: AppColor.white,
-        ),
       ),
     );
   }
