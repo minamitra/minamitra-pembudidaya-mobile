@@ -27,30 +27,38 @@ class AppBottomSheet extends StatelessWidget {
       ),
       height: height,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           const SizedBox(height: 16.0),
-          Container(
-            width: MediaQuery.of(context).size.width * 0.1,
-            height: 4.0,
-            decoration: BoxDecoration(
-              color: AppColor.black[300],
-              borderRadius: BorderRadius.circular(2.0),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.1,
+              height: 4.0,
+              decoration: BoxDecoration(
+                color: AppColor.black[300],
+                borderRadius: BorderRadius.circular(2.0),
+              ),
             ),
           ),
           const SizedBox(height: 16.0),
-          Text(
-            _title,
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).titleMedium?.copyWith(
-                  color: AppColor.black,
-                ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
+              _title,
+              textAlign: TextAlign.start,
+              style: appTextTheme(context).titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.black,
+                  ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
           Divider(
-            color: AppColor.black[400],
+            color: AppColor.neutral[300],
             thickness: 0.5,
             height: 32,
           ),
