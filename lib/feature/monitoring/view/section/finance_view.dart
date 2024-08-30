@@ -16,9 +16,18 @@ class FinanceView extends StatefulWidget {
 class _FinanceViewState extends State<FinanceView> {
   final TextEditingController parameterController = TextEditingController();
 
+  List<String> dataKeuanganDummy = [
+    "Biaya Pakan",
+    "Estimasi Biaya Produksi",
+    "Ekstimasi Harga Jual",
+    "Potensi Revenue",
+    "Potesnsi Profit",
+    "Estimasi HPP (Rp/kg)",
+  ];
+
   @override
   void initState() {
-    parameterController.text = "Biaya Pakan";
+    parameterController.text = dataKeuanganDummy.first;
     super.initState();
   }
 
@@ -67,16 +76,26 @@ class _FinanceViewState extends State<FinanceView> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
+                                setModalState(() {
+                                  parameterController.text = data[index];
+                                });
                                 Navigator.of(context).pop(data[index]);
                               },
-                              child: Text(
-                                data[index],
-                                textAlign: TextAlign.start,
-                                style:
-                                    appTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColor.black,
-                                        ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                child: Text(
+                                  data[index],
+                                  textAlign: TextAlign.start,
+                                  style:
+                                      appTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: data[index] ==
+                                                    parameterController.text
+                                                ? AppColor.primary[500]
+                                                : AppColor.black,
+                                          ),
+                                ),
                               ),
                             );
                           },
@@ -122,7 +141,7 @@ class _FinanceViewState extends State<FinanceView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih Parameter",
-            ["contoh", "Contoh", "Contoh"],
+            dataKeuanganDummy,
           ),
         ),
       );
@@ -167,7 +186,7 @@ class _FinanceViewState extends State<FinanceView> {
                     horizontal: 12.0,
                     vertical: 14.0,
                   ),
-                  child: const Text("10"),
+                  child: const Text("0"),
                 ),
                 SizedBox(
                   height: 44.0,
@@ -203,7 +222,7 @@ class _FinanceViewState extends State<FinanceView> {
                     horizontal: 12.0,
                     vertical: 14.0,
                   ),
-                  child: Text("10"),
+                  child: Text("100"),
                 ),
               ],
             ),

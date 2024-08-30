@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
+import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -48,6 +51,139 @@ class _ProfileViewState extends State<ProfileView> {
             ],
           ),
         ],
+      );
+    }
+
+    Widget balanceLegendItem(
+      Color color,
+      String pond,
+      String balance,
+    ) {
+      return Row(
+        children: [
+          Container(
+            width: 10.0,
+            height: 10.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color,
+            ),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Text(
+              pond,
+              style: appTextTheme(context).labelLarge?.copyWith(
+                    color: AppColor.neutral[400],
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          Text(
+            balance,
+            style: appTextTheme(context)
+                .labelLarge
+                ?.copyWith(fontWeight: FontWeight.w500),
+          ),
+        ],
+      );
+    }
+
+    Widget currentlyUsedBalance() {
+      return Container(
+        padding: const EdgeInsets.all(18.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          color: AppColor.white,
+          boxShadow: AppBoxShadow().medium,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Pengeluaran",
+              style: appTextTheme(context).titleSmall,
+            ),
+            const SizedBox(height: 8.0),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  "Rp 1.000.000",
+                  style: appTextTheme(context).bodyLarge?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const SizedBox(width: 8.0),
+                Text(
+                  "dari Rp 1.500.000",
+                  style: appTextTheme(context).labelLarge?.copyWith(
+                        color: AppColor.neutral[400],
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0),
+            SizedBox(
+              height: 12.0,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  LinearPercentIndicator(
+                    padding: const EdgeInsets.all(0),
+                    animation: true,
+                    lineHeight: 12.0,
+                    animationDuration: 1000,
+                    percent: 0.65,
+                    barRadius: const Radius.circular(8.0),
+                    progressColor: AppColor.green[500],
+                    backgroundColor: AppColor.neutral[100],
+                  ),
+                  LinearPercentIndicator(
+                    padding: const EdgeInsets.all(0),
+                    animation: true,
+                    lineHeight: 12.0,
+                    animationDuration: 1000,
+                    percent: 0.49,
+                    barRadius: const Radius.circular(8.0),
+                    progressColor: AppColor.accent[900],
+                    backgroundColor: Colors.transparent,
+                  ),
+                  LinearPercentIndicator(
+                    padding: const EdgeInsets.all(0),
+                    animation: true,
+                    lineHeight: 12.0,
+                    animationDuration: 1000,
+                    percent: 0.33,
+                    barRadius: const Radius.circular(8.0),
+                    progressColor: AppColor.primary[500],
+                    backgroundColor: Colors.transparent,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 18.0),
+            balanceLegendItem(
+              AppColor.primary[500]!,
+              "Kolam 1",
+              "Rp 500.000",
+            ),
+            const SizedBox(height: 8.0),
+            balanceLegendItem(
+              AppColor.accent[900]!,
+              "Kolam 2",
+              "Rp 250.000",
+            ),
+            const SizedBox(height: 8.0),
+            balanceLegendItem(
+              AppColor.green[500]!,
+              "Kolam 3",
+              "Rp 250.000",
+            ),
+          ],
+        ),
       );
     }
 
@@ -224,6 +360,8 @@ class _ProfileViewState extends State<ProfileView> {
       children: [
         const SizedBox(height: 18.0),
         headerProfile(),
+        const SizedBox(height: 18.0),
+        currentlyUsedBalance(),
         const SizedBox(height: 18.0),
         pointCard(),
         const SizedBox(height: 18.0),
