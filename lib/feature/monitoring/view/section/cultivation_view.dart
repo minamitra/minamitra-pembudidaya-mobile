@@ -16,9 +16,19 @@ class CultivationView extends StatefulWidget {
 class _CultivationViewState extends State<CultivationView> {
   final TextEditingController parameterController = TextEditingController();
 
+  List<String> dataBudidayDummy = [
+    "MBW (Mean Body Weight) (gram)",
+    "Total Biomass (kg)",
+    "Harvest Accumuation (kg)",
+    "Feed (kg)",
+    "FCR (Feed Convertion Ratio)",
+    "SR (Survival Rate) (%)",
+    "ADG (Average Daily Growth) (gram)",
+  ];
+
   @override
   void initState() {
-    parameterController.text = "MBW (Mean Body Weight) (gram)";
+    parameterController.text = dataBudidayDummy[0];
     super.initState();
   }
 
@@ -67,16 +77,26 @@ class _CultivationViewState extends State<CultivationView> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
+                                setModalState(() {
+                                  parameterController.text = data[index];
+                                });
                                 Navigator.of(context).pop(data[index]);
                               },
-                              child: Text(
-                                data[index],
-                                textAlign: TextAlign.start,
-                                style:
-                                    appTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColor.black,
-                                        ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12.0),
+                                child: Text(
+                                  data[index],
+                                  textAlign: TextAlign.start,
+                                  style:
+                                      appTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: data[index] ==
+                                                    parameterController.text
+                                                ? AppColor.primary[500]
+                                                : AppColor.black,
+                                          ),
+                                ),
                               ),
                             );
                           },
@@ -122,7 +142,7 @@ class _CultivationViewState extends State<CultivationView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih Parameter",
-            ["contoh", "Contoh", "Contoh"],
+            dataBudidayDummy,
           ),
         ),
       );
@@ -167,7 +187,7 @@ class _CultivationViewState extends State<CultivationView> {
                     horizontal: 12.0,
                     vertical: 14.0,
                   ),
-                  child: const Text("10"),
+                  child: const Text("0"),
                 ),
                 SizedBox(
                   height: 44.0,
@@ -203,7 +223,7 @@ class _CultivationViewState extends State<CultivationView> {
                     horizontal: 12.0,
                     vertical: 14.0,
                   ),
-                  child: Text("10"),
+                  child: Text("100"),
                 ),
               ],
             ),

@@ -73,14 +73,18 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                               onTap: () {
                                 Navigator.of(context).pop(data[index]);
                               },
-                              child: Text(
-                                data[index],
-                                textAlign: TextAlign.start,
-                                style:
-                                    appTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColor.black,
-                                        ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Text(
+                                  data[index],
+                                  textAlign: TextAlign.start,
+                                  style:
+                                      appTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColor.black,
+                                          ),
+                                ),
                               ),
                             );
                           },
@@ -238,7 +242,17 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih Provinsi",
-            ["contoh", "contohs", "aowkoakw"],
+            [
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh"
+            ],
           ),
         ),
         const SizedBox(height: 18.0),
@@ -263,7 +277,17 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih Kabupaten",
-            ["contoh", "contohs", "aowkoakw"],
+            [
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh"
+            ],
           ),
         ),
         const SizedBox(height: 18.0),
@@ -288,7 +312,17 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih kecamatan",
-            ["contoh", "contohs", "aowkoakw"],
+            [
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh"
+            ],
           ),
         ),
         const SizedBox(height: 18.0),
@@ -313,7 +347,17 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih kelurahan",
-            ["contoh", "contohs", "aowkoakw"],
+            [
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh",
+              "contoh"
+            ],
           ),
         ),
         const SizedBox(height: 18.0),

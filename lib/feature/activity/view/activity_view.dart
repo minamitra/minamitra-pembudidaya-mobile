@@ -68,14 +68,19 @@ class _ActivityViewState extends State<ActivityView> {
                               onTap: () {
                                 Navigator.of(context).pop(data[index]);
                               },
-                              child: Text(
-                                data[index],
-                                textAlign: TextAlign.start,
-                                style:
-                                    appTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColor.black,
-                                        ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12.0,
+                                ),
+                                child: Text(
+                                  data[index],
+                                  textAlign: TextAlign.start,
+                                  style:
+                                      appTextTheme(context).bodySmall?.copyWith(
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColor.black,
+                                          ),
+                                ),
                               ),
                             );
                           },
@@ -352,20 +357,20 @@ class _ActivityViewState extends State<ActivityView> {
               children: [
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.monitor_weight,
+                    iconColor: AppColor.secondary[800],
+                    title: "Biomasa",
+                    value: "1.234,56 Kg",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.shopping_bag_rounded,
+                    iconColor: AppColor.red[400],
+                    title: "Pakan",
+                    value: "15.2 Kg",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
@@ -376,20 +381,20 @@ class _ActivityViewState extends State<ActivityView> {
               children: [
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.pie_chart_sharp,
+                    iconColor: AppColor.accent[700],
+                    title: "Estimasi SR (%)",
+                    value: "84,5 %",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.bar_chart_rounded,
+                    iconColor: AppColor.green[400],
+                    title: "Estimasi Jual (Rp)",
+                    value: "12,34 Jt",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
@@ -409,20 +414,20 @@ class _ActivityViewState extends State<ActivityView> {
               children: [
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.monitor_weight,
+                    iconColor: AppColor.secondary[800],
+                    title: "Biomasa",
+                    value: "1.234,56 Kg",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.shopping_bag_rounded,
+                    iconColor: AppColor.red[400],
+                    title: "Pakan",
+                    value: "15.2 Kg",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
@@ -433,20 +438,20 @@ class _ActivityViewState extends State<ActivityView> {
               children: [
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.pie_chart_sharp,
+                    iconColor: AppColor.accent[700],
+                    title: "Estimasi SR (%)",
+                    value: "84,5 %",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
                 const SizedBox(width: 12.0),
                 Expanded(
                   child: headerDataItem(
-                    icon: Icons.account_balance_wallet_rounded,
-                    iconColor: AppColor.primary,
-                    title: "Total Plafon",
-                    value: "Rp 120.000.000",
+                    icon: Icons.bar_chart_rounded,
+                    iconColor: AppColor.green[400],
+                    title: "Estimasi Jual (Rp)",
+                    value: "12,34 Jt",
                     description: "dari 3 kolam aktif",
                   ),
                 ),
@@ -537,7 +542,7 @@ class _ActivityViewState extends State<ActivityView> {
                   child: Text(
                     "Kolam",
                     style: appTextTheme(context).titleMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                         ),
                   ),
                 ),
@@ -548,25 +553,33 @@ class _ActivityViewState extends State<ActivityView> {
                       AddPondPage.routeSettings(),
                     ));
                   },
-                  child: Icon(
-                    Icons.add,
-                    color: AppColor.secondary[900],
-                  ),
-                ),
-                const SizedBox(width: 4.0),
-                InkWell(
-                  onTap: () {
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const AddPondPage(),
-                      AddPondPage.routeSettings(),
-                    ));
-                  },
-                  child: Text(
-                    "Tambah",
-                    style: appTextTheme(context).titleSmall?.copyWith(
-                          color: AppColor.secondary[900],
-                          fontWeight: FontWeight.w600,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12.0,
+                      vertical: 8.0,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColor.primary[600],
+                      borderRadius: BorderRadius.circular(100.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.add,
+                          color: AppColor.white,
+                          size: 16.0,
                         ),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          "Tambah",
+                          style: appTextTheme(context).titleSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],

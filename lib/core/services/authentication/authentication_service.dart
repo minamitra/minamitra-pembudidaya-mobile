@@ -5,17 +5,17 @@
 // import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 // import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dart';
 
-// abstract class AuthenticationService {
-//   Future<BaseResponse<LoginResponse>> login(LoginRequest request);
-//   Future<bool?> register(
-//     String email,
-//     String phoneNumber,
-//     String password,
-//     String name,
-//   );
-//   // Future<UserMeData> getUserMe(); // Note : Please make sure the user model for this one
-//   // Future<UserKyc> getUserKyc();
-// }
+abstract class AuthenticationService {
+  // Future<BaseResponse<LoginResponse>> login(LoginRequest request);
+  // Future<bool?> register(
+  //   String email,
+  //   String phoneNumber,
+  //   String password,
+  //   String name,
+  // );
+  // Future<UserMeData> getUserMe(); // Note : Please make sure the user model for this one
+  // Future<UserKyc> getUserKyc();
+}
 
 // class AuthenticationServiceImpl implements AuthenticationService {
 //   final HttpClient httpClient;
