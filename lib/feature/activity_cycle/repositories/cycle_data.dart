@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 
-enum CycleType { active, done }
+enum CycleType { active, done, ready, failed }
 
 String cycleTypeToString(CycleType type) {
   switch (type) {
@@ -9,6 +9,10 @@ String cycleTypeToString(CycleType type) {
       return 'Aktif';
     case CycleType.done:
       return 'Selesai';
+    case CycleType.ready:
+      return 'Siap Panen';
+    case CycleType.failed:
+      return 'Gagal';
   }
 }
 
@@ -18,6 +22,10 @@ Color cycleTypeColor(CycleType type) {
       return AppColor.secondary[900]!;
     case CycleType.done:
       return AppColor.green[500]!;
+    case CycleType.ready:
+      return AppColor.accent[900]!;
+    case CycleType.failed:
+      return AppColor.red[500]!;
   }
 }
 

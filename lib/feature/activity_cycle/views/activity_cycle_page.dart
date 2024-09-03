@@ -17,16 +17,6 @@ class ActivityCyclePage extends StatelessWidget {
         context,
         "Siklus",
       ),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            const ActivityCycleAddPage(),
-            ActivityCycleAddPage.routeSettings(),
-          ));
-        },
-        child: const Icon(Icons.add),
-      ),
       body: const ActivityCycleView(),
     );
   }

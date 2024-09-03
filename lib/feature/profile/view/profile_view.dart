@@ -4,6 +4,9 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -324,7 +327,22 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Informasi Pribadi",
           "Informasi akun milikmu",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const ProfileMemberPage(),
+              ProfileMemberPage.routeSettings,
+            ));
+          },
+        ),
+        actionMenu(
+          "Alamat Saya",
+          "Daftar alamat saya",
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const AddressMemberPage(),
+              AddressMemberPage.routeSettings,
+            ));
+          },
         ),
         actionMenu(
           "Pengaturan Rekening",

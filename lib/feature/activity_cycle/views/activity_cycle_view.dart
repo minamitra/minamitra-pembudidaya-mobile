@@ -19,7 +19,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
   @override
   void initState() {
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
 
@@ -33,19 +33,17 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
         indicatorSize: TabBarIndicatorSize.tab,
         indicatorColor: AppColor.primary,
         indicatorWeight: 2.5,
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        padding: EdgeInsets.zero,
         labelColor: AppColor.primary,
         unselectedLabelColor: AppColor.neutral[400],
         labelStyle: appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
         unselectedLabelStyle:
             appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
-        labelPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-        isScrollable: true,
-        tabAlignment: TabAlignment.start,
+        labelPadding: const EdgeInsets.all(0),
+        isScrollable: false,
         tabs: const [
-          Tab(text: 'Semua'),
           Tab(text: 'Aktif'),
-          Tab(text: 'Selesai'),
+          Tab(text: 'Riwayat'),
         ],
       ),
     );
@@ -58,7 +56,6 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
         children: [
           listCard(listCycleAll),
           listCard(listCycleActive),
-          listCard(listCycleDone),
         ],
       ),
     );
@@ -67,10 +64,10 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
   Widget itemCard(Cycle cycle) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(AppTransition.pushTransition(
-          ActivityCycleDetailPage(cycle),
-          ActivityCycleDetailPage.routeSettings(),
-        ));
+        // Navigator.of(context).push(AppTransition.pushTransition(
+        //   ActivityCycleDetailPage(cycle),
+        //   ActivityCycleDetailPage.routeSettings(),
+        // ));
       },
       child: AppDefaultCard(
         backgroundCardColor: AppColor.white,
@@ -78,28 +75,51 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cycle.title,
+                      cycle.date,
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: AppColor.primary,
                           ),
                     ),
-                    const SizedBox(height: 4.0),
+                    const SizedBox(height: 12.0),
                     Text(
-                      cycle.date,
-                      textAlign: TextAlign.start,
-                      style: appTextTheme(context).labelLarge?.copyWith(
-                            color: AppColor.black[500],
+                      "${cycle.amount} kg",
+                      style: appTextTheme(context).titleSmall!.copyWith(
+                            color: AppColor.neutral[400],
+                            fontWeight: FontWeight.w500,
                           ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.delete_outline,
+                    color: AppColor.neutral[400],
+                    size: 20.0,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  cycle.price,
+                  style: appTextTheme(context).bodySmall!,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -117,26 +137,9 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                     cycleTypeToString(cycle.type),
                     style: appTextTheme(context).titleSmall?.copyWith(
                           color: cycleTypeColor(cycle.type),
+                          fontWeight: FontWeight.w500,
                         ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${cycle.amount} kg",
-                  style: appTextTheme(context).bodySmall!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  cycle.price,
-                  style: appTextTheme(context).bodySmall!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
