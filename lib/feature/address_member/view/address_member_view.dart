@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/detail_member_address/view/detail_member_address_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddressMemberView extends StatefulWidget {
@@ -113,7 +115,12 @@ class _AddressMemberViewState extends State<AddressMemberView> {
             const SizedBox(height: 18.0),
             AppPrimaryFullButton(
               "Tambah",
-              () {},
+              () {
+                Navigator.of(context).push(AppTransition.pushTransition(
+                  const DetailMemberAddressPage(),
+                  DetailMemberAddressPage.routeSettings(),
+                ));
+              },
             ),
             const SizedBox(height: 18.0),
           ],
