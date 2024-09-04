@@ -6,9 +6,14 @@ class AppAssets {
   static const String appIcon = "";
   static const String logoIcon = "$iconPath/logo-icon.png";
 
+  // Icon General
+  static const String fishIcon = "$iconPath/fish-icon.png";
+  static const String targetIcon = "$iconPath/target-icon.png";
+
   // Image
   static const String circleImage = "$imagePath/circle-image.png";
   static const String fisherManImage = "$imagePath/fisherman-image.png";
+  static const String rocketImage = "$imagePath/rocket-image.png";
 
   // Dashboard
   static const String homeIcon = "$iconPath/home-icon.png";
@@ -76,4 +81,7 @@ class AppAssets {
   static const String starSingleIcon = "$iconPath/star-single-icon.png";
   static const String dummyPerson1Image = "$imagePath/dummy-person-1-image.png";
   static const String dummyPerson2Image = "$imagePath/dummy-person-2-image.png";
+
+  // add bulk feed
+  static const String handStarsIcon = "$iconPath/hand-stars-icon.png";
 }

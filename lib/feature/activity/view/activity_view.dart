@@ -4,8 +4,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/view/add_bulk_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -278,14 +280,27 @@ class _ActivityViewState extends State<ActivityView> {
     }
 
     Widget addButton() {
-      return AppPrimaryOutlineFullButton(
-        "Tambah ",
-        () {
+      return InkWell(
+        onTap: () {
           Navigator.of(context).push(AppTransition.pushTransition(
             const AddPondPage(),
             AddPondPage.routeSettings(),
           ));
         },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.add, color: AppColor.primary[600]),
+            const SizedBox(width: 8.0),
+            Text(
+              "Tambah Kolam",
+              style: appTextTheme(context).titleSmall?.copyWith(
+                    color: AppColor.primary[600],
+                    fontWeight: FontWeight.w500,
+                  ),
+            )
+          ],
+        ),
       );
     }
 
@@ -538,9 +553,14 @@ class _ActivityViewState extends State<ActivityView> {
           children: [
             Row(
               children: [
+                const Icon(
+                  Icons.date_range_outlined,
+                  color: AppColor.primary,
+                ),
+                const SizedBox(width: 8.0),
                 Expanded(
                   child: Text(
-                    "Kolam",
+                    AppConvertDateTime().edmy(DateTime.now()),
                     style: appTextTheme(context).titleMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -549,8 +569,8 @@ class _ActivityViewState extends State<ActivityView> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(AppTransition.pushTransition(
-                      const AddPondPage(),
-                      AddPondPage.routeSettings(),
+                      const AddBulkFeedPage(),
+                      AddBulkFeedPage.routeSettings(),
                     ));
                   },
                   child: Container(
@@ -572,7 +592,7 @@ class _ActivityViewState extends State<ActivityView> {
                         ),
                         const SizedBox(width: 4.0),
                         Text(
-                          "Tambah",
+                          "Pakan",
                           style: appTextTheme(context).titleSmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
@@ -607,7 +627,7 @@ class _ActivityViewState extends State<ActivityView> {
         addPond(),
         ...listActivityItem(),
         const SizedBox(height: 18.0),
-        // addButton(),
+        addButton(),
         const SizedBox(height: 18.0),
       ],
     );
