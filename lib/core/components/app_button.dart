@@ -4,25 +4,16 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 
 enum _CustomButtonStyle {
   primary,
-  primaryFull,
   primaryOutline,
   white,
+  accent,
+  accentOutline,
 }
 
 extension _CustomButtonStyleExtension on _CustomButtonStyle {
   ButtonStyle get style {
     switch (this) {
       case _CustomButtonStyle.primary:
-        return ButtonStyle(
-          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
-          foregroundColor: WidgetStateProperty.all(AppColor.primary),
-          backgroundColor: WidgetStateProperty.all(AppColor.primary),
-          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-          elevation: WidgetStateProperty.all(0),
-        );
-      case _CustomButtonStyle.primaryFull:
         return ButtonStyle(
           padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
           foregroundColor: WidgetStateProperty.all(AppColor.primary),
@@ -52,6 +43,29 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           backgroundColor: WidgetStateProperty.all(AppColor.white),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          elevation: WidgetStateProperty.all(0),
+        );
+      case _CustomButtonStyle.accent:
+        return ButtonStyle(
+          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor: WidgetStateProperty.all(AppColor.accent),
+          backgroundColor: WidgetStateProperty.all(AppColor.accent),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          elevation: WidgetStateProperty.all(0),
+        );
+      case _CustomButtonStyle.accentOutline:
+        return ButtonStyle(
+          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor: WidgetStateProperty.all(AppColor.accent),
+          backgroundColor: WidgetStateProperty.all(Colors.transparent),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: const BorderSide(color: AppColor.accent, width: 1.5),
+            ),
           ),
           elevation: WidgetStateProperty.all(0),
         );
@@ -108,7 +122,10 @@ class AppPrimaryButton extends _CustomButton {
     Function() onPressed, {
     double? width,
   }) : super(
-          Text(text, style: AppTextStyle.whiteSmallBoldText),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Text(text, style: AppTextStyle.whiteSmallBoldText),
+          ),
           onPressed,
           buttonStyle: _CustomButtonStyle.primary,
           customWidth: width,
@@ -233,5 +250,31 @@ class AppWhiteFullButton extends _CustomButton {
           onPressed,
           buttonStyle: _CustomButtonStyle.white,
           isFull: true,
+        );
+}
+
+class AppAccentButton extends _CustomButton {
+  AppAccentButton(
+    Widget text,
+    Function() onPressed, {
+    double? height = 53.0,
+  }) : super(
+          text,
+          onPressed,
+          buttonStyle: _CustomButtonStyle.accent,
+          height: height,
+        );
+}
+
+class AppAccentOutlineButton extends _CustomButton {
+  AppAccentOutlineButton(
+    Widget text,
+    Function() onPressed, {
+    double? height = 53.0,
+  }) : super(
+          text,
+          onPressed,
+          buttonStyle: _CustomButtonStyle.accentOutline,
+          height: height,
         );
 }

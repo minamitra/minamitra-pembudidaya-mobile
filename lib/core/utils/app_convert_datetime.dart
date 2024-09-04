@@ -20,7 +20,7 @@ class AppConvertDateTime {
   }
 
   String edmy(DateTime dateTime) {
-    return DateFormat('EEEE, dd MMMM yyyy', countryCode).format(dateTime);
+    return DateFormat('EEE, dd MMM yyyy', countryCode).format(dateTime);
   }
 
   String mdy(DateTime dateTime) {

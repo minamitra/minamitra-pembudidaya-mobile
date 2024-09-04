@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "204455506381",
+    "project_id": "mitra3m-ae108",
+    "storage_bucket": "mitra3m-ae108.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204455506381:android:663a1f04864b28a7fd1484",
+        "android_client_info": {
+          "package_name": "com.example.minamitra_pembudidaya_mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC67QM9ohMXQVSXqpI0JvUyWlTSb_U7dq0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

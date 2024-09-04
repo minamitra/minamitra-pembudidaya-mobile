@@ -296,6 +296,10 @@ class AppValidatorTextField extends StatelessWidget {
               color: AppColor.neutral[400],
               fontSize: 14,
             ),
+            suffixStyle: const TextTheme().bodySmall?.copyWith(
+                  color: AppColor.neutral[500],
+                  fontWeight: FontWeight.w500,
+                ),
             errorMaxLines: 2,
             enabledBorder: _borderFormaterOnEnable,
             border: _borderFormaterOnEnable,

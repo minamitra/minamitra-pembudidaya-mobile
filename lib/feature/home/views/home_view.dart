@@ -7,7 +7,9 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_module_card.dar
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatefulWidget {
@@ -67,7 +69,7 @@ class _HomeViewState extends State<HomeView> {
       AppAssets.ticketIcon,
     ),
     NameIconEntity(
-      "Beli Pakan",
+      "Belanja",
       AppAssets.bagIcon,
     ),
   ];
@@ -95,7 +97,7 @@ class _HomeViewState extends State<HomeView> {
                     decoration: InputDecoration(
                       isCollapsed: true,
                       hintStyle: AppTextStyle.blackSmallText,
-                      hintText: 'Cari kajian',
+                      hintText: 'Cari produk',
                       prefixIcon: const Icon(
                         Icons.search,
                         color: AppColor.black,
@@ -408,7 +410,23 @@ class _HomeViewState extends State<HomeView> {
     return AppModuleCard(
       entity.name,
       entity.icon,
-      () {},
+      () {
+        switch (entity.name) {
+          case "Promo 3M":
+            break;
+          case "Lapak Ikan":
+            break;
+          case "Acara 3M":
+            break;
+          case "Belanja":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const ProductsPage(),
+              ProductsPage.routeSettings(),
+            ));
+            break;
+          default:
+        }
+      },
     );
   }
 

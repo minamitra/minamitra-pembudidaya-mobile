@@ -81,6 +81,54 @@ class AppColor {
     },
   );
 
+  static const green = MaterialColor(
+    0XFF134E4A,
+    <int, Color>{
+      50: Color(0xFFF0FDFA),
+      100: Color(0xFFCCFBF1),
+      200: Color(0xFF99F6E4),
+      300: Color(0xFF5EEAD4),
+      400: Color(0xFF2DD4BF),
+      500: Color(0xFF14B8A6),
+      600: Color(0xFF0D9488),
+      700: Color(0xFF0F766E),
+      800: Color(0xFF115E59),
+      900: Color(0XFF134E4A),
+    },
+  );
+
+  static const red = MaterialColor(
+    0xFFF43F5E,
+    <int, Color>{
+      50: Color(0xFFFFF1F2),
+      100: Color(0xFFFFE4E6),
+      200: Color(0xFFFECDD3),
+      300: Color(0xFFFDA4AF),
+      400: Color(0xFFFB7185),
+      500: Color(0xFFF43F5E),
+      600: Color(0xFFE11D48),
+      700: Color(0xFFBE123C),
+      800: Color(0xFF9F1239),
+      900: Color(0xFF881337),
+      },
+  );
+
+  static const yellow = MaterialColor(
+    0xFFCA8A04,
+    <int, Color>{
+      50: Color(0xFFFEFCE8),
+      100: Color(0xFFFEF9C3),
+      200: Color(0xFFFEF08A),
+      300: Color(0xFFFDE047),
+      400: Color(0xFFFACC15),
+      500: Color(0xFFEAB308),
+      600: Color(0xFFCA8A04),
+      700: Color(0xFFA16207),
+      800: Color(0xFF854D0E),
+      900: Color(0xFF713F12),
+    },
+  );
+
   static const white = Color(0xFFFFFFFF);
   static const primaryDark = Color(0xFF00317E);
   static const transparent = Colors.transparent;
