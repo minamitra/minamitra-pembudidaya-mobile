@@ -9,7 +9,32 @@ import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_loca
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class DetailMemberAddressView extends StatefulWidget {
-  const DetailMemberAddressView({super.key});
+  const DetailMemberAddressView({
+    super.key,
+    this.nameAddress,
+    this.nameReceiver,
+    this.phoneReceiver,
+    this.province,
+    this.district,
+    this.subdistrict,
+    this.village,
+    this.fullAddress,
+    this.latitude,
+    this.longitude,
+    this.isPrimaryAddress,
+  });
+
+  final String? nameAddress;
+  final String? nameReceiver;
+  final String? phoneReceiver;
+  final String? province;
+  final String? district;
+  final String? subdistrict;
+  final String? village;
+  final String? fullAddress;
+  final String? latitude;
+  final String? longitude;
+  final bool? isPrimaryAddress;
 
   @override
   State<DetailMemberAddressView> createState() =>
@@ -26,6 +51,20 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
   final TextEditingController villageController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   bool isPrimaryAddress = false;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.nameAddress ?? "";
+    recieverController.text = widget.nameReceiver ?? "";
+    recieverPhoneController.text = widget.phoneReceiver ?? "";
+    provinceController.text = widget.province ?? "";
+    districtController.text = widget.district ?? "";
+    subdistrictController.text = widget.subdistrict ?? "";
+    villageController.text = widget.village ?? "";
+    addressController.text = widget.fullAddress ?? "";
+    isPrimaryAddress = widget.isPrimaryAddress ?? false;
+  }
 
   Function() bottomSheetShowModal(
     BuildContext context,
