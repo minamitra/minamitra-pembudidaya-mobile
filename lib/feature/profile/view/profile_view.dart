@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
@@ -367,7 +370,42 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Keluar",
           "Keluar dari akun kamu",
-          onTap: () {},
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (_) {
+                return AppDefaultDialog(
+                  title: "Keluar",
+                  subTitle: "Yakin ingin keluar?",
+                  buttons: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppWhiteButton(
+                            "Batal",
+                            () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: AppPrimaryButton(
+                            "Keluar",
+                            () {
+                              RepositoryProvider.of<AuthenticationRepository>(
+                                      context)
+                                  .logout();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                );
+              },
+            );
+          },
           isRedTitle: true,
         ),
       ];

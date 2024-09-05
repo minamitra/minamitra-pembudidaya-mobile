@@ -5,10 +5,13 @@ import 'package:flutter_regex/flutter_regex.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/active/active_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/location_service/location_permission.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/login/logic/login_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/login/repositories/login_request.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/register/view/register_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -23,6 +26,12 @@ class _LoginViewState extends State<LoginView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    requestLocationPermission();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,13 +158,10 @@ class _LoginViewState extends State<LoginView> {
                 () {
                   if (formKey.currentState!.validate()) {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
-                    Navigator.of(context).pushAndRemoveUntil(
-                      AppTransition.pushAndRemoveUntilTransition(
-                        DashboardPage(),
-                        DashboardPage.routeSettings(),
-                      ),
-                      (route) => false,
-                    );
+                    context.read<LoginCubit>().login(LoginRequest(
+                          username: emailController.text,
+                          password: passwordController.text,
+                        ));
                     return;
                   }
                 },
