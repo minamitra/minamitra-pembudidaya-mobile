@@ -78,10 +78,10 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(AppTransition.pushTransition(
-        //   ActivityCycleDetailPage(cycle),
-        //   ActivityCycleDetailPage.routeSettings(),
-        // ));
+        Navigator.of(context).push(AppTransition.pushTransition(
+          ActivityCycleDetailPage(cycle),
+          ActivityCycleDetailPage.routeSettings(),
+        ));
       },
       child: AppDefaultCard(
         backgroundCardColor: AppColor.white,
