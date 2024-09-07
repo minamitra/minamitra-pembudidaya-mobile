@@ -9,6 +9,7 @@ class AppAssets {
   // Icon General
   static const String fishIcon = "$iconPath/fish-icon.png";
   static const String targetIcon = "$iconPath/target-icon.png";
+  static const String weightIcon = "$iconPath/weight-icon.png";
 
   // Image
   static const String circleImage = "$imagePath/circle-image.png";
