@@ -2,6 +2,7 @@ import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -51,45 +52,57 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView> {
                   ],
                 ),
                 const Spacer(),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.primary[50],
-                    borderRadius: BorderRadius.circular(4.0),
-                    border: Border.all(
-                      color: AppColor.secondary[900]!,
-                    ),
-                  ),
-                  child: Text(
-                    'Aktual',
-                    style: appTextTheme(context).titleSmall?.copyWith(
-                          color: AppColor.secondary[900]!,
-                        ),
-                  ),
-                ),
+                Icon(
+                  Icons.delete_outline_rounded,
+                  color: AppColor.neutral[400],
+                )
+                // Container(
+                //   padding: const EdgeInsets.symmetric(
+                //     horizontal: 8.0,
+                //     vertical: 4.0,
+                //   ),
+                //   decoration: BoxDecoration(
+                //     color: AppColor.primary[50],
+                //     borderRadius: BorderRadius.circular(4.0),
+                //     border: Border.all(
+                //       color: AppColor.secondary[900]!,
+                //     ),
+                //   ),
+                //   child: Text(
+                //     'Aktual',
+                //     style: appTextTheme(context).titleSmall?.copyWith(
+                //           color: AppColor.secondary[900]!,
+                //         ),
+                //   ),
+                // ),
               ],
             ),
-            Divider(
-              color: AppColor.neutral[100],
-              thickness: 1.0,
-              height: 32,
+            // Divider(
+            //   color: AppColor.neutral[100],
+            //   thickness: 1.0,
+            //   height: 32,
+            // ),
+            const SizedBox(height: 18.0),
+            Row(
+              children: [
+                Image.asset(AppAssets.weigherIcon, height: 20.0),
+                const SizedBox(width: 12.0),
+                Text("500 Gram", style: appTextTheme(context).titleSmall),
+              ],
             ),
-            Text(
-              "Merk ABC [1000 gram]",
-              style: appTextTheme(context).bodySmall!,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              style: appTextTheme(context).bodySmall!,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            // Text(
+            //   "Merk ABC [1000 gram]",
+            //   style: appTextTheme(context).bodySmall!,
+            //   maxLines: 1,
+            //   overflow: TextOverflow.ellipsis,
+            // ),
+            // const SizedBox(height: 8.0),
+            // Text(
+            //   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+            //   style: appTextTheme(context).bodySmall!,
+            //   maxLines: 1,
+            //   overflow: TextOverflow.ellipsis,
+            // ),
           ],
         ),
       ),

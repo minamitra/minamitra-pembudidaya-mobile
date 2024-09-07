@@ -2,7 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/app.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/injections/env.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
 
 // shortcut for app theme
@@ -17,47 +19,48 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+
+  final AuthenticationRepository authenticationRepository =
+      AuthenticationRepositoryImpl.create();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return App();
-
-    // MultiRepositoryProvider(
-    //   providers: [
-    //     // RepositoryProvider<AuthenticationRepository>(
-    //     //   create: (context) => authenticationRepository,
-    //     // ),
-    //   ],
-    //   child: MultiBlocProvider(
-    //     providers: [
-    //       // BlocProvider<AuthenticationCubit>(
-    //       //   create: (context) => AuthenticationCubit(authenticationRepository)
-    //       //     ..listeningStatus(),
-    //       // ),
-    //       // BlocProvider<UserCubit>(
-    //       //   create: (context) => UserCubit(
-    //       //     SharedPreferenceServiceImpl.create(),
-    //       //     OutletServiceImpl.create(),
-    //       //   ),
-    //       // ),
-    //       // BlocProvider<ConnectionCheckCubit>(
-    //       //   create: (context) => ConnectionCheckCubit()..streamConnection(),
-    //       // ),
-    //       // BlocProvider<BluetoothPrinterCubit>(
-    //       //   create: (context) => BluetoothPrinterCubit(),
-    //       // ),
-    //       // BlocProvider<HomeCubit>(
-    //       //   create: (context) => HomeCubit(FinanceServiceImpl.create()),
-    //       // ),
-    //     ],
-    //     child: App(),
-    //   ),
-    // );
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<AuthenticationRepository>(
+          create: (context) => authenticationRepository,
+        ),
+      ],
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AuthenticationCubit>(
+            create: (context) => AuthenticationCubit(authenticationRepository)
+              ..listeningStatus(),
+          ),
+          // BlocProvider<UserCubit>(
+          //   create: (context) => UserCubit(
+          //     SharedPreferenceServiceImpl.create(),
+          //     OutletServiceImpl.create(),
+          //   ),
+          // ),
+          // BlocProvider<ConnectionCheckCubit>(
+          //   create: (context) => ConnectionCheckCubit()..streamConnection(),
+          // ),
+          // BlocProvider<BluetoothPrinterCubit>(
+          //   create: (context) => BluetoothPrinterCubit(),
+          // ),
+          // BlocProvider<HomeCubit>(
+          //   create: (context) => HomeCubit(FinanceServiceImpl.create()),
+          // ),
+        ],
+        child: App(),
+      ),
+    );
   }
 }

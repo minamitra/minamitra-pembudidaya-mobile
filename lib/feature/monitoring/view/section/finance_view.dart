@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/line_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -343,15 +344,17 @@ class _FinanceViewState extends State<FinanceView> {
       );
     }
 
-    return Column(
-      children: [
-        const SizedBox(height: 18),
-        parameter(),
-        const SizedBox(height: 18),
-        xSetter(),
-        Expanded(child: lineChart()),
-        notes(),
-      ],
-    );
+    return CommingSoonView();
+
+    // Column(
+    //   children: [
+    //     const SizedBox(height: 18),
+    //     parameter(),
+    //     const SizedBox(height: 18),
+    //     xSetter(),
+    //     Expanded(child: lineChart()),
+    //     notes(),
+    //   ],
+    // );
   }
 }

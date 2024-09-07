@@ -2,7 +2,6 @@
 /// @email dikynugraha1111@gmail.com
 /// @create date 2024-03-24 14:22:33
 /// @modify date 2024-03-24 14:22:33
-import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';

@@ -7,14 +7,14 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 class AppDialogComponent extends StatefulWidget {
   final String title;
   final String subTitle;
-  final String image;
+  final String? image;
   final List<Widget>? buttons;
 
   const AppDialogComponent({
     Key? key,
     required this.title,
     required this.subTitle,
-    required this.image,
+    this.image,
     this.buttons,
   }) : super(key: key);
 
@@ -34,24 +34,26 @@ class _AppDialogComponentState extends State<AppDialogComponent> {
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               widget.title,
-              style: AppTextStyle.whiteLargeMediumText,
+              style: appTextTheme(context).headlineSmall,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 8),
             Text(
               widget.subTitle,
-              style: AppTextStyle.blackExtraSmallText,
+              style: appTextTheme(context).bodySmall,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 16),
-            Image.asset(
-              widget.image,
-              height: 200,
-            ),
+            if (widget.image != null) ...[
+              const SizedBox(height: 16),
+              Image.asset(
+                widget.image!,
+                height: 200,
+              ),
+            ],
             const SizedBox(height: 16),
             ...(widget.buttons ?? []),
           ],
@@ -63,18 +65,12 @@ class _AppDialogComponentState extends State<AppDialogComponent> {
 
 class AppDefaultDialog extends AppDialogComponent {
   const AppDefaultDialog({
-    Key? key,
-    required String title,
-    required String subTitle,
-    required String image,
-    List<Widget>? buttons,
-  }) : super(
-          key: key,
-          title: title,
-          subTitle: subTitle,
-          image: image,
-          buttons: buttons,
-        );
+    super.key,
+    required super.title,
+    required super.subTitle,
+    super.image,
+    super.buttons,
+  });
 }
 
 class AppDialog {

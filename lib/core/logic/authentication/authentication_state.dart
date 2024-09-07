@@ -2,15 +2,22 @@ part of 'authentication_cubit.dart';
 
 class AuthenticationState extends Equatable {
   const AuthenticationState({
-    this.status = GlobalState.initial,
+    this.status = AuthenticationStatus.initial,
     this.message = '',
   });
 
-  final GlobalState status;
+  final AuthenticationStatus status;
   final String message;
 
+  factory AuthenticationState.initial() {
+    return const AuthenticationState(
+      status: AuthenticationStatus.initial,
+      message: "UNKNOWN ERROR - DEFAULT",
+    );
+  }
+
   AuthenticationState copyWith({
-    GlobalState? status,
+    AuthenticationStatus? status,
     String? message,
   }) {
     return AuthenticationState(

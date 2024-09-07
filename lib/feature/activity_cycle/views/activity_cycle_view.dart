@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/cycle_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_detail/views/activity_cycle_detail_page.dart';
@@ -42,7 +43,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
         labelPadding: const EdgeInsets.all(0),
         isScrollable: false,
         tabs: const [
-          Tab(text: 'Aktif'),
+          Tab(text: 'Berjalan'),
           Tab(text: 'Riwayat'),
         ],
       ),
@@ -62,6 +63,19 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
   }
 
   Widget itemCard(Cycle cycle) {
+    Widget itemDataCard(
+      String asset,
+      String value,
+    ) {
+      return Row(
+        children: [
+          Image.asset(asset, height: 20.0),
+          const SizedBox(width: 12.0),
+          Text(value, style: appTextTheme(context).titleSmall),
+        ],
+      );
+    }
+
     return InkWell(
       onTap: () {
         // Navigator.of(context).push(AppTransition.pushTransition(
@@ -89,16 +103,16 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                             color: AppColor.primary,
                           ),
                     ),
-                    const SizedBox(height: 12.0),
-                    Text(
-                      "${cycle.amount} kg",
-                      style: appTextTheme(context).titleSmall!.copyWith(
-                            color: AppColor.neutral[400],
-                            fontWeight: FontWeight.w500,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    // const SizedBox(height: 12.0),
+                    // Text(
+                    //   "${cycle.amount} kg",
+                    //   style: appTextTheme(context).titleSmall!.copyWith(
+                    //         color: AppColor.neutral[400],
+                    //         fontWeight: FontWeight.w500,
+                    //       ),
+                    //   maxLines: 1,
+                    //   overflow: TextOverflow.ellipsis,
+                    // ),
                   ],
                 ),
                 InkWell(
@@ -111,15 +125,29 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                 ),
               ],
             ),
+            const SizedBox(height: 18.0),
+            itemDataCard(
+              AppAssets.fishIcon,
+              "100 Ekor",
+            ),
+            const SizedBox(height: 12.0),
+            itemDataCard(
+              AppAssets.weigherIcon,
+              "250 gram/ekor",
+            ),
             const SizedBox(height: 12.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  cycle.price,
-                  style: appTextTheme(context).bodySmall!,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                // Text(
+                //   cycle.price,
+                //   style: appTextTheme(context).bodySmall!,
+                //   maxLines: 1,
+                //   overflow: TextOverflow.ellipsis,
+                // ),
+                itemDataCard(
+                  AppAssets.targetIcon,
+                  "100 gram/ekor",
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(

@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_regex/flutter_regex.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/active/active_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/active/secondary_active_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/register/logic/register_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class RegisterView extends StatefulWidget {
@@ -199,19 +201,29 @@ class _RegisterViewState extends State<RegisterView> {
     }
 
     Widget submitButton() {
-      return AppPrimaryFullButton(
-        "Daftar",
-        () {
-          if (formKey.currentState!.validate()) {
-            SystemChannels.textInput.invokeMethod('TextInput.hide');
-            if (!context.read<SecondaryActiveCubit>().state) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text("Harap berikan persetujuan TOC"),
-                backgroundColor: Colors.red,
-              ));
-              return;
-            }
-          }
+      return BlocBuilder<SecondaryActiveCubit, bool>(
+        builder: (context, state) {
+          return AppPrimaryFullButton(
+            "Daftar",
+            () {
+              if (formKey.currentState!.validate()) {
+                SystemChannels.textInput.invokeMethod('TextInput.hide');
+                if (!context.read<SecondaryActiveCubit>().state) {
+                  AppTopSnackBar(context)
+                      .showDanger("Harap berikan persetujuan TOC");
+                  return;
+                } else {
+                  context.read<RegisterCubit>().register(
+                        name: nameController.text,
+                        phoneNumber: phoneController.text,
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                }
+              }
+            },
+            isActive: state,
+          );
         },
       );
     }

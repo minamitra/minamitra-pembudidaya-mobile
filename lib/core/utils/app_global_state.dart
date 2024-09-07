@@ -6,6 +6,7 @@ enum GlobalState {
   hideDialogLoading,
   error,
   refresh,
+  successSubmit,
 }
 
 extension GlobalStateExtension on GlobalState {
@@ -16,4 +17,5 @@ extension GlobalStateExtension on GlobalState {
   bool get isHideDialogLoading => this == GlobalState.hideDialogLoading;
   bool get isError => this == GlobalState.error;
   bool get isRefresh => this == GlobalState.refresh;
+  bool get isSuccessSubmit => this == GlobalState.successSubmit;
 }

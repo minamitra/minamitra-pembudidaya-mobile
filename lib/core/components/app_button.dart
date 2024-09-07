@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 
 enum _CustomButtonStyle {
   primary,
+  primaryDisable,
   primaryOutline,
   white,
   accent,
@@ -18,6 +19,18 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
           foregroundColor: WidgetStateProperty.all(AppColor.primary),
           backgroundColor: WidgetStateProperty.all(AppColor.primary),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          elevation: WidgetStateProperty.all(0),
+        );
+      case _CustomButtonStyle.primaryDisable:
+        return ButtonStyle(
+          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor:
+              WidgetStateProperty.all(AppColor.primary.withOpacity(0.3)),
+          backgroundColor:
+              WidgetStateProperty.all(AppColor.primary.withOpacity(0.3)),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
@@ -138,6 +151,7 @@ class AppPrimaryFullButton extends _CustomButton {
     Function() onPressed, {
     double height = 53.0,
     Widget? prefixIcon,
+    bool isActive = true,
   }) : super(
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -156,7 +170,9 @@ class AppPrimaryFullButton extends _CustomButton {
             ],
           ),
           onPressed,
-          buttonStyle: _CustomButtonStyle.primary,
+          buttonStyle: isActive
+              ? _CustomButtonStyle.primary
+              : _CustomButtonStyle.primaryDisable,
           isFull: true,
           height: height,
         );
