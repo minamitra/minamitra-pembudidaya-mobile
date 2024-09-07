@@ -6,9 +6,9 @@ enum CycleType { active, done, ready, failed }
 String cycleTypeToString(CycleType type) {
   switch (type) {
     case CycleType.active:
-      return 'Aktif';
+      return 'Berjalan';
     case CycleType.done:
-      return 'Selesai';
+      return 'Panen Berhasil';
     case CycleType.ready:
       return 'Siap Panen';
     case CycleType.failed:
@@ -35,6 +35,8 @@ class Cycle {
   final CycleType type;
   final String amount;
   final String price;
+  final String weight;
+  final String target;
 
   Cycle({
     required this.title,
@@ -42,37 +44,47 @@ class Cycle {
     required this.type,
     required this.amount,
     required this.price,
+    required this.weight,
+    required this.target,
   });
 }
 
 final List<Cycle> listCycleAll = [
   Cycle(
     title: 'Siklus 1',
-    date: '05 Agustus 2024',
+    date: '05-08-2024 17:00 WIB',
     type: CycleType.active,
     amount: '1000',
     price: 'Rp 1.000.000',
+    weight: '250',
+    target: '200',
   ),
   Cycle(
     title: 'Siklus 2',
-    date: '05 Agustus 2024',
+    date: '25-07-2024 17:00 WIB',
     type: CycleType.active,
     amount: '800',
     price: 'Rp 800.000',
+    weight: '200',
+    target: '150',
   ),
   Cycle(
     title: 'Siklus 3',
-    date: '05 Agustus 2024',
+    date: '15-06-2024 17:00 WIB',
     type: CycleType.done,
     amount: '750',
     price: 'Rp 750.000',
+    weight: '175',
+    target: '120',
   ),
   Cycle(
     title: 'Siklus 4',
-    date: '05 Agustus 2024',
+    date: '27-05-2024 17:00 WIB',
     type: CycleType.done,
     amount: '1200',
     price: 'Rp 1.200.000',
+    weight: '280',
+    target: '220',
   ),
 ];
 
