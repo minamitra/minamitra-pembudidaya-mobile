@@ -17,7 +17,6 @@ class ActivityCycleDetailPage extends StatelessWidget {
         context,
         "Detail Siklus",
       ),
-      backgroundColor: Colors.white,
       body: ActivityCycleDetailView(cycle),
     );
   }
