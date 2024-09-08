@@ -17,7 +17,13 @@ class AuthenticationEndpoint {
 
   Uri userMe() {
     return createUrl(
-      path: "api/user/me",
+      path: "mitra/profile/detail",
+    );
+  }
+
+  Uri logout() {
+    return createUrl(
+      path: "mitra/auth/logout",
     );
   }
 

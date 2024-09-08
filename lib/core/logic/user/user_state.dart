@@ -1,25 +1,25 @@
-part of 'home_cubit.dart';
+part of 'user_cubit.dart';
 
-class HomeState extends Equatable {
-  const HomeState({
+class UserState extends Equatable {
+  const UserState({
     this.status = GlobalState.initial,
     this.errorMessage = '',
-    this.bannerResponse,
+    this.userData,
   });
 
   final GlobalState status;
   final String errorMessage;
-  final HomeResponse? bannerResponse;
+  final UserData? userData;
 
-  HomeState copyWith({
+  UserState copyWith({
     GlobalState? status,
     String? errorMessage,
-    HomeResponse? bannerResponse,
+    UserData? userData,
   }) {
-    return HomeState(
+    return UserState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
-      bannerResponse: bannerResponse,
+      userData: userData ?? this.userData,
     );
   }
 
@@ -27,6 +27,6 @@ class HomeState extends Equatable {
   List<Object?> get props => [
         status,
         errorMessage,
-        bannerResponse,
+        userData,
       ];
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_view.dart';
@@ -16,20 +18,27 @@ class AddPondPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => AddPondCubit()),
+        BlocProvider(
+          create: (context) => AddPondCubit(RefServiceImpl.create())..init(),
+        ),
         BlocProvider(create: (context) => ActivityIncidentPictureCubit()),
       ],
-      child: BlocProvider(
-        create: (context) => AddPondCubit(),
-        child: Scaffold(
-          appBar: appDefaultAppBar(
-            context,
-            "Tambah Kolam",
-            onBackButtonPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          body: AddPondView(),
+      child: Scaffold(
+        appBar: appDefaultAppBar(
+          context,
+          "Tambah Kolam",
+          onBackButtonPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        body: BlocBuilder<AddPondCubit, AddPondState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            return AddPondView();
+          },
         ),
       ),
     );

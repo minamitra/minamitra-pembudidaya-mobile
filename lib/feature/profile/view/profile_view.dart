@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
-import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
@@ -24,39 +24,43 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     Widget headerProfile() {
-      return Row(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: AssetImage(AppAssets.profileImageDummy),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(width: 18.0),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+      return BlocBuilder<UserCubit, UserState>(
+        builder: (context, state) {
+          return Row(
             children: [
-              Text(
-                "Mina Mitra Mandiri",
-                style: appTextTheme(context).titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+              Container(
+                width: 60,
+                height: 60,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  image: DecorationImage(
+                    image: AssetImage(AppAssets.profileImageDummy),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
-              const SizedBox(height: 4),
-              Text(
-                "No KTA 003 | 081125699",
-                style: appTextTheme(context).bodySmall?.copyWith(
-                      color: AppColor.neutral[400],
-                    ),
+              const SizedBox(width: 18.0),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    state.userData?.name ?? "-",
+                    style: appTextTheme(context).titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "No KTA - | ${state.userData?.mobilephone ?? "-"}",
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          color: AppColor.neutral[400],
+                        ),
+                  ),
+                ],
               ),
             ],
-          ),
-        ],
+          );
+        },
       );
     }
 

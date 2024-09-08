@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class LoginResponse {
-  final Data? data;
+  final UserData? data;
   final String? token;
   final int? expiredIn;
 
@@ -17,7 +17,7 @@ class LoginResponse {
   String toJson() => json.encode(toMap());
 
   factory LoginResponse.fromMap(Map<String, dynamic> json) => LoginResponse(
-        data: json["data"] == null ? null : Data.fromMap(json["data"]),
+        data: json["data"] == null ? null : UserData.fromMap(json["data"]),
         token: json["token"],
         expiredIn: json["expired_in"],
       );
@@ -29,14 +29,14 @@ class LoginResponse {
       };
 }
 
-class Data {
+class UserData {
   final String? id;
   final String? name;
   final String? email;
   final String? mobilephone;
   final String? imageUrl;
 
-  Data({
+  UserData({
     this.id,
     this.name,
     this.email,
@@ -44,11 +44,11 @@ class Data {
     this.imageUrl,
   });
 
-  factory Data.fromJson(String str) => Data.fromMap(json.decode(str));
+  factory UserData.fromJson(String str) => UserData.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory Data.fromMap(Map<String, dynamic> json) => Data(
+  factory UserData.fromMap(Map<String, dynamic> json) => UserData(
         id: json["id"],
         name: json["name"],
         email: json["email"],

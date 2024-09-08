@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -16,6 +14,8 @@ abstract class AuthenticationService {
     required String password,
     required String name,
   });
+  Future<BaseResponse<UserData>> getUserData();
+  Future<void> logout();
   // Future<UserMeData> getUserMe(); // Note : Please make sure the user model for this one
   // Future<UserKyc> getUserKyc();
 }
@@ -72,6 +72,26 @@ class AuthenticationServiceImpl implements AuthenticationService {
     } else {
       return false;
     }
+  }
+
+  @override
+  Future<BaseResponse<UserData>> getUserData() async {
+    final url = endpoint.userMe();
+    final headers = await headerProvider.headers;
+    final response = await httpClient.get(
+      url,
+      headers,
+    );
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    final UserData userData = UserData.fromMap(metaResponse.result!["data"]);
+    return BaseResponse(meta: metaResponse, data: userData);
+  }
+
+  @override
+  Future<void> logout() async {
+    final url = endpoint.logout();
+    final header = await headerProvider.headers;
+    await httpClient.multipartPost(url, header, {}, {});
   }
 
   // @override

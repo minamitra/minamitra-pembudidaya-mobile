@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/app.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/injections/env.dart';
+import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
 
 // shortcut for app theme
@@ -43,6 +45,12 @@ class MyApp extends StatelessWidget {
             create: (context) => AuthenticationCubit(authenticationRepository)
               ..listeningStatus(),
           ),
+          BlocProvider<UserCubit>(
+            create: (context) => UserCubit(
+              authenticationRepository,
+              SharedPreferenceServiceImpl.create(),
+            ),
+          )
           // BlocProvider<UserCubit>(
           //   create: (context) => UserCubit(
           //     SharedPreferenceServiceImpl.create(),

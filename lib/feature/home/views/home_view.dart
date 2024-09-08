@@ -1,13 +1,17 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_module_card.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -124,141 +128,157 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
         ),
-        Container(
-          color: AppColor.primary[800],
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              CarouselSlider.builder(
-                itemCount: listImage.length,
-                itemBuilder: (context, index, realIndex) {
-                  return InkWell(
-                    onTap: () {},
-                    child: Image.asset(
-                      listImage[index],
-                      fit: BoxFit.cover,
+        BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                175,
+                double.infinity,
+                0,
+              );
+            }
+
+            return Container(
+              color: AppColor.primary[800],
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CarouselSlider.builder(
+                    itemCount: state.bannerResponse?.data?.length,
+                    itemBuilder: (context, index, realIndex) {
+                      return InkWell(
+                        onTap: () {},
+                        child: Image.network(
+                          state.bannerResponse?.data?[index].imageUrl ?? "",
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      initialPage: 0,
+                      aspectRatio: 375 / 160,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          activeIndex = index;
+                        });
+                      },
                     ),
-                  );
-                },
-                options: CarouselOptions(
-                  viewportFraction: 1,
-                  initialPage: 0,
-                  aspectRatio: 375 / 160,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      activeIndex = index;
-                    });
-                  },
-                ),
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    child: AnimatedSmoothIndicator(
+                      activeIndex: activeIndex,
+                      count: state.bannerResponse?.data?.length ?? 0,
+                      effect: const ExpandingDotsEffect(
+                        dotHeight: 7,
+                        dotWidth: 7,
+                        activeDotColor: AppColor.white,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 16,
-                child: AnimatedSmoothIndicator(
-                  activeIndex: activeIndex,
-                  count: listImage.length,
-                  effect: const ExpandingDotsEffect(
-                    dotHeight: 7,
-                    dotWidth: 7,
-                    activeDotColor: AppColor.white,
+            );
+          },
+        ),
+        BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            return Stack(
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 40,
+                  color: AppColor.primary[800],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: AppDefaultCard(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 12.0,
+                    ),
+                    borderRadius: 16.0,
+                    child: Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            color: AppColor.primary[50],
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Image.asset(
+                            AppAssets.walletIcon,
+                            height: 20.0,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Rp 12.500.000",
+                                style: AppTextStyle.blackSemiBoldText,
+                              ),
+                              Text(
+                                "Sisa plafon anda",
+                                style: AppTextStyle.blackExtraSmallText,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: AppColor.primary,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Image.asset(
+                                AppAssets.scanIcon,
+                                height: 20.0,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              "Bayar",
+                              style: AppTextStyle.blackExtraSmallText,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 12.0),
+                        Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                color: AppColor.primary,
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              child: Image.asset(
+                                AppAssets.historyIcon,
+                                height: 20.0,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              "Riwayat",
+                              style: AppTextStyle.blackExtraSmallText,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 40,
-              color: AppColor.primary[800],
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: AppDefaultCard(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 12.0,
-                ),
-                borderRadius: 16.0,
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                        color: AppColor.primary[50],
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: Image.asset(
-                        AppAssets.walletIcon,
-                        height: 20.0,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    const SizedBox(width: 16.0),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Rp 12.500.000",
-                            style: AppTextStyle.blackSemiBoldText,
-                          ),
-                          Text(
-                            "Sisa plafon anda",
-                            style: AppTextStyle.blackExtraSmallText,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: AppColor.primary,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Image.asset(
-                            AppAssets.scanIcon,
-                            height: 20.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          "Bayar",
-                          style: AppTextStyle.blackExtraSmallText,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 12.0),
-                    Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          decoration: BoxDecoration(
-                            color: AppColor.primary,
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          child: Image.asset(
-                            AppAssets.historyIcon,
-                            height: 20.0,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Text(
-                          "Riwayat",
-                          style: AppTextStyle.blackExtraSmallText,
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         ),
       ],
     );

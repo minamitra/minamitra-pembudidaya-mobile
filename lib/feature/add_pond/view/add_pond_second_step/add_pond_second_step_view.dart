@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -8,10 +9,12 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/repositories/map_callback_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_location_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -30,7 +33,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
   final TextEditingController growerFeedController = TextEditingController();
   final TextEditingController finisherFeedController = TextEditingController();
   final TextEditingController provinceController = TextEditingController();
-  final TextEditingController regencyController = TextEditingController();
+  final TextEditingController districtController = TextEditingController();
   final TextEditingController subdisctrictController = TextEditingController();
   final TextEditingController villageController = TextEditingController();
 
@@ -38,6 +41,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
     BuildContext context,
     String title,
     List<String> data,
+    Function(String) onSelected,
   ) {
     return () {
       showModalBottomSheet(
@@ -71,7 +75,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                           itemBuilder: (context, index) {
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).pop(data[index]);
+                                onSelected(data[index]);
+                                Navigator.of(context).pop();
                               },
                               child: Padding(
                                 padding:
@@ -219,7 +224,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       );
     }
 
-    List<Widget> form() {
+    List<Widget> form(AddPondState state) {
       return [
         AppValidatorTextField(
           controller: provinceController,
@@ -242,22 +247,21 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           onTap: bottomSheetShowModal(
             context,
             "Pilih Provinsi",
-            [
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh"
-            ],
+            state.provinceData?.data?.map((e) => e.name ?? "").toList() ?? [],
+            (value) {
+              final selectedProvince = state.provinceData?.data
+                  ?.firstWhere((element) => element.name == value);
+              context.read<AddPondCubit>().selectProvince(selectedProvince!);
+              provinceController.text = selectedProvince.name ?? "";
+              districtController.clear();
+              subdisctrictController.clear();
+              villageController.clear();
+            },
           ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: regencyController,
+          controller: districtController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
@@ -274,21 +278,28 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
             }
             return null;
           },
-          onTap: bottomSheetShowModal(
-            context,
-            "Pilih Kabupaten",
-            [
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh"
-            ],
-          ),
+          onTap: state.selectedProvince == null
+              ? () {
+                  AppTopSnackBar(context)
+                      .showDanger("Pilih provinsi terlebih dahulu");
+                }
+              : bottomSheetShowModal(
+                  context,
+                  "Pilih Kabupaten",
+                  state.districtData?.data?.map((e) => e.name ?? "").toList() ??
+                      [],
+                  (value) {
+                    log("itsRun");
+                    final selectedDistrict = state.districtData?.data
+                        ?.firstWhere((element) => element.name == value);
+                    context
+                        .read<AddPondCubit>()
+                        .selectDistrict(selectedDistrict!);
+                    districtController.text = selectedDistrict.name ?? "";
+                    subdisctrictController.clear();
+                    villageController.clear();
+                  },
+                ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -309,21 +320,29 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
             }
             return null;
           },
-          onTap: bottomSheetShowModal(
-            context,
-            "Pilih kecamatan",
-            [
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh"
-            ],
-          ),
+          onTap: state.selectedDistrict == null
+              ? () {
+                  AppTopSnackBar(context)
+                      .showDanger("Pilih kabupaten terlebih dahulu");
+                }
+              : bottomSheetShowModal(
+                  context,
+                  "Pilih kecamatan",
+                  state.subDistrictData?.data
+                          ?.map((e) => e.name ?? "")
+                          .toList() ??
+                      [],
+                  (value) {
+                    final selectedSubDistrict = state.subDistrictData?.data
+                        ?.firstWhere((element) => element.name == value);
+                    context
+                        .read<AddPondCubit>()
+                        .selectSubDistrict(selectedSubDistrict!);
+                    subdisctrictController.text =
+                        selectedSubDistrict.name ?? "";
+                    villageController.clear();
+                  },
+                ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -344,21 +363,25 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
             }
             return null;
           },
-          onTap: bottomSheetShowModal(
-            context,
-            "Pilih kelurahan",
-            [
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh",
-              "contoh"
-            ],
-          ),
+          onTap: state.selectedSubDistrict == null
+              ? () {
+                  AppTopSnackBar(context)
+                      .showDanger("Pilih kecamatan terlebih dahulu");
+                }
+              : bottomSheetShowModal(
+                  context,
+                  "Pilih kelurahan",
+                  state.villageData?.data?.map((e) => e.name ?? "").toList() ??
+                      [],
+                  (value) {
+                    final selectedVillage = state.villageData?.data
+                        ?.firstWhere((element) => element.name == value);
+                    context
+                        .read<AddPondCubit>()
+                        .selectVillage(selectedVillage!);
+                    villageController.text = selectedVillage.name ?? "";
+                  },
+                ),
         ),
         const SizedBox(height: 18.0),
         Text(
@@ -429,19 +452,23 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       ];
     }
 
-    return Form(
-      key: widget.formSecondStepKey,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          const SizedBox(height: 18.0),
-          ...pondInformation(),
-          ...form(),
-          const SizedBox(height: 18.0),
-        ],
-      ),
+    return BlocBuilder<AddPondCubit, AddPondState>(
+      builder: (context, state) {
+        return Form(
+          key: widget.formSecondStepKey,
+          child: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              const SizedBox(height: 18.0),
+              ...pondInformation(),
+              ...form(state),
+              const SizedBox(height: 18.0),
+            ],
+          ),
+        );
+      },
     );
   }
 }

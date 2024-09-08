@@ -39,6 +39,7 @@ abstract class AuthenticationRepository {
   // Future<UserMeData> readUserProfile();
   Stream<AuthenticationStatus> get streamedStatus;
   Future<void> authorizingProfile();
+  Future<void> refreshUserData();
   // Future<UserKycData> getUserKyc();
 }
 
@@ -59,7 +60,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     final String? accessToken =
         await _storageService.getSharedPreference(AppSharedPrefKey.tokenKey);
     if (accessToken != null && accessToken.isNotEmpty) {
-      // await authorizingProfile();
+      await refreshUserData();
       _controller.add(AuthenticationStatus.authenticated);
     } else {
       throw TokenNotFound();
@@ -87,6 +88,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
 
   @override
   Future<void> logout() async {
+    await authenticationService.logout();
     await _storageService.clearSecureStorage();
     _controller.add(AuthenticationStatus.unauthenticated);
   }
@@ -136,6 +138,10 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
         AppSharedPrefKey.loginResponseKey,
         loginResponse.data.toJson(),
       );
+      await _storageService.setSharedPreference(
+        AppSharedPrefKey.userProfileKey,
+        loginResponse.data.data!.toJson(),
+      );
       _controller.add(AuthenticationStatus.authenticated);
       return loginResponse;
     } on AppException {
@@ -173,6 +179,15 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   //   await _credentialsStorageService.saveToken(loginResponse);
   //   await authorizingProfile();
   // }
+
+  @override
+  Future<void> refreshUserData() async {
+    final response = await authenticationService.getUserData();
+    await _storageService.setSharedPreference(
+      AppSharedPrefKey.userProfileKey,
+      response.data.toJson(),
+    );
+  }
 
   factory AuthenticationRepositoryImpl.create() {
     return AuthenticationRepositoryImpl(
