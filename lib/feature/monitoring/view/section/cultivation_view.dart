@@ -235,64 +235,73 @@ class _CultivationViewState extends State<CultivationView> {
     }
 
     Widget lineChart() {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          margin: const EdgeInsets.only(right: 18.0),
-          width: MediaQuery.sizeOf(context).width * 1.5,
-          child: SfCartesianChart(
-            borderWidth: 2.0,
-            plotAreaBorderWidth: 2.0,
-            legend: Legend(
-              isVisible: true,
-            ),
-            primaryXAxis: NumericAxis(
-              title: AxisTitle(text: "DoC (hari)"),
-              minimum: 0,
-              maximum: 100,
-              interval: 10,
-              majorGridLines: MajorGridLines(
-                width: 1.5,
-                color: AppColor.neutral[200],
-                dashArray: const [8, 10],
-              ),
-            ),
-            primaryYAxis: NumericAxis(
-              title: AxisTitle(text: "MBW (gram)"),
-              minimum: 0,
-              maximum: 100,
-              interval: 10,
-              majorGridLines: MajorGridLines(
-                width: 1.5,
-                color: AppColor.neutral[200],
-                dashArray: const [8, 10],
-              ),
-            ),
-            series: <CartesianSeries>[
-              // Renders line chart
-              LineSeries<LineDummy, int>(
-                dataSource: lineDummyData,
-                xValueMapper: (LineDummy sales, _) => sales.xAxis,
-                yValueMapper: (LineDummy sales, _) => sales.yAxis,
-                width: 4.0,
-                color: AppColor.primary,
-                legendIconType: LegendIconType.seriesType,
-                isVisibleInLegend: true,
-                legendItemText: "Hiu",
-              ),
-              LineSeries<LineDummy, int>(
-                dataSource: lineDummyData2,
-                xValueMapper: (LineDummy sales, _) => sales.xAxis,
-                yValueMapper: (LineDummy sales, _) => sales.yAxis,
-                width: 4.0,
-                color: AppColor.accent,
-                legendIconType: LegendIconType.seriesType,
-                isVisibleInLegend: true,
-                legendItemText: "Gurame",
-              )
-            ],
+      return Container(
+        margin: const EdgeInsets.only(right: 18.0),
+        width: MediaQuery.sizeOf(context).width * 1.5,
+        child: SfCartesianChart(
+          borderWidth: 2.0,
+          plotAreaBorderWidth: 2.0,
+          zoomPanBehavior: ZoomPanBehavior(
+            maximumZoomLevel: 0.5,
+            enablePanning: true, // Enable panning for the chart
+            enablePinching: true, // Enable pinch zooming
+            zoomMode:
+                ZoomMode.x, // Allow zooming and panning only on the X-axis
           ),
+          legend: Legend(
+            isVisible: true,
+          ),
+          primaryXAxis: NumericAxis(
+            title: AxisTitle(text: "DoC (hari)"),
+            minimum: 0,
+            interval: 10,
+            initialVisibleMaximum: 50,
+            enableAutoIntervalOnZooming: true,
+            anchorRangeToVisiblePoints: true,
+            majorGridLines: MajorGridLines(
+              width: 1.5,
+              color: AppColor.neutral[200],
+              dashArray: const [8, 10],
+            ),
+            decimalPlaces: 0,
+            desiredIntervals: 4,
+          ),
+          primaryYAxis: NumericAxis(
+            title: AxisTitle(text: "MBW (gram)"),
+            minimum: 0,
+            maximum: 100,
+            interval: 10,
+            initialVisibleMinimum: 0,
+            initialVisibleMaximum: 100,
+            majorGridLines: MajorGridLines(
+              width: 1.5,
+              color: AppColor.neutral[200],
+              dashArray: const [8, 10],
+            ),
+          ),
+          series: <CartesianSeries>[
+            // Renders line chart
+            LineSeries<LineDummy, int>(
+              dataSource: lineDummyData,
+              xValueMapper: (LineDummy sales, _) => sales.xAxis,
+              yValueMapper: (LineDummy sales, _) => sales.yAxis,
+              width: 4.0,
+              color: AppColor.primary,
+              legendIconType: LegendIconType.seriesType,
+              isVisibleInLegend: true,
+              legendItemText: "Hiu",
+            ),
+            LineSeries<LineDummy, int>(
+              dataSource: lineDummyData2,
+              xValueMapper: (LineDummy sales, _) => sales.xAxis,
+              yValueMapper: (LineDummy sales, _) => sales.yAxis,
+              width: 4.0,
+              color: AppColor.accent,
+              legendIconType: LegendIconType.seriesType,
+              isVisibleInLegend: true,
+              legendItemText: "Gurame",
+            )
+          ],
         ),
       );
     }

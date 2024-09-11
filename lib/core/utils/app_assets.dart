@@ -10,11 +10,13 @@ class AppAssets {
   static const String fishIcon = "$iconPath/fish-icon.png";
   static const String targetIcon = "$iconPath/target-icon.png";
   static const String weightIcon = "$iconPath/weight-icon.png";
+  static const String targetIconFill = "$iconPath/target-icon-fill.png";
 
   // Image
   static const String circleImage = "$imagePath/circle-image.png";
   static const String fisherManImage = "$imagePath/fisherman-image.png";
   static const String rocketImage = "$imagePath/rocket-image.png";
+  static const String newFishIcon = "$iconPath/new-fish-icon.png";
 
   // Dashboard
   static const String homeIcon = "$iconPath/home-icon.png";
@@ -72,6 +74,7 @@ class AppAssets {
   static const String clockIcon = "$iconPath/clock-icon.png";
   static const String dummyActivityIncidentImage =
       "$imagePath/dummy-activity-incident-image.png";
+  static const String weigherIconFill = "$iconPath/weigher-icon-fill.png";
 
   // product
   static const String arrowLeftIcon = "$iconPath/arrow-left-icon.png";

@@ -220,26 +220,52 @@ class _ActivityViewState extends State<ActivityView> {
                     children: [
                       Text(
                         title,
-                        style: appTextTheme(context).titleSmall,
-                      ),
-                      const SizedBox(height: 4.0),
-                      Text(
-                        value,
                         style: appTextTheme(context).titleSmall?.copyWith(
-                              color: const Color(0xFF94A3B8),
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w700,
                             ),
+                      ),
+                      const SizedBox(height: 12.0),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.assignment_turned_in_rounded,
+                            color: AppColor.secondary[900],
+                            size: 20.0,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            "5 Kg",
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  color: const Color(0xFF94A3B8),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                          const SizedBox(width: 18.0),
+                          Icon(
+                            Icons.error,
+                            color: AppColor.accent[900],
+                            size: 20.0,
+                          ),
+                          const SizedBox(width: 8.0),
+                          Text(
+                            "10 Kg",
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  color: const Color(0xFF94A3B8),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ),
-                Text(
-                  percentage,
-                  style: appTextTheme(context).titleSmall?.copyWith(
-                        color: const Color(0xFF94A3B8),
-                        fontWeight: FontWeight.w500,
-                      ),
-                ),
+                // Text(
+                //   percentage,
+                //   style: appTextTheme(context).titleSmall?.copyWith(
+                //         color: const Color(0xFF94A3B8),
+                //         fontWeight: FontWeight.w500,
+                //       ),
+                // ),
                 const SizedBox(width: 18.0),
                 Icon(
                   Icons.arrow_forward_ios_rounded,

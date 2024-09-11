@@ -318,6 +318,7 @@ class AppValidatorTextField extends StatelessWidget {
                 ),
             counterText: "",
             prefix: prefixWidget,
+            prefixIconConstraints: suffixConstraints,
           ),
           validator: validator ?? defaultValidator,
           onSaved: onSaved ?? (value) {},

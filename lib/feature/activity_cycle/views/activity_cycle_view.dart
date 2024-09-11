@@ -127,12 +127,12 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
             ),
             const SizedBox(height: 18.0),
             itemDataCard(
-              AppAssets.fishIcon,
+              AppAssets.newFishIcon,
               "100 Ekor",
             ),
             const SizedBox(height: 12.0),
             itemDataCard(
-              AppAssets.weigherIcon,
+              AppAssets.weigherIconFill,
               "250 gram/ekor",
             ),
             const SizedBox(height: 12.0),
@@ -146,7 +146,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                 //   overflow: TextOverflow.ellipsis,
                 // ),
                 itemDataCard(
-                  AppAssets.targetIcon,
+                  AppAssets.targetIconFill,
                   "100 gram/ekor",
                 ),
                 Container(

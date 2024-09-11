@@ -23,4 +23,5 @@ List<LineDummy> lineDummyData2 = [
   LineDummy(xAxis: 50, yAxis: 70),
   LineDummy(xAxis: 52, yAxis: 55),
   LineDummy(xAxis: 80, yAxis: 68),
+  LineDummy(xAxis: 110, yAxis: 68),
 ];

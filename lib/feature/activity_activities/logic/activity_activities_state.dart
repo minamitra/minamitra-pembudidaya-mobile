@@ -1,7 +1,7 @@
-part of 'add_pond_cubit.dart';
+part of 'activity_activities_cubit.dart';
 
-class AddPondState extends Equatable {
-  const AddPondState({
+class ActivityActivitiesState extends Equatable {
+  const ActivityActivitiesState({
     this.status = GlobalState.initial,
     this.errorMessage = '',
     this.index = 0,
@@ -11,12 +11,12 @@ class AddPondState extends Equatable {
   final String errorMessage;
   final int index;
 
-  AddPondState copyWith({
+  ActivityActivitiesState copyWith({
     GlobalState? status,
     String? errorMessage,
     int? index,
   }) {
-    return AddPondState(
+    return ActivityActivitiesState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       index: index ?? this.index,
@@ -24,7 +24,7 @@ class AddPondState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         status,
         errorMessage,
         index,
