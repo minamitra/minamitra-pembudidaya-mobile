@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
@@ -14,7 +13,7 @@ import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/p
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/repositories/map_callback_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_location_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -224,7 +223,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       );
     }
 
-    List<Widget> form(AddPondState state) {
+    List<Widget> form(AddPondSecondStepState state) {
       return [
         AppValidatorTextField(
           controller: provinceController,
@@ -251,7 +250,9 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
             (value) {
               final selectedProvince = state.provinceData?.data
                   ?.firstWhere((element) => element.name == value);
-              context.read<AddPondCubit>().selectProvince(selectedProvince!);
+              context
+                  .read<AddPondSecondStepCubit>()
+                  .selectProvince(selectedProvince!);
               provinceController.text = selectedProvince.name ?? "";
               districtController.clear();
               subdisctrictController.clear();
@@ -293,7 +294,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     final selectedDistrict = state.districtData?.data
                         ?.firstWhere((element) => element.name == value);
                     context
-                        .read<AddPondCubit>()
+                        .read<AddPondSecondStepCubit>()
                         .selectDistrict(selectedDistrict!);
                     districtController.text = selectedDistrict.name ?? "";
                     subdisctrictController.clear();
@@ -336,7 +337,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     final selectedSubDistrict = state.subDistrictData?.data
                         ?.firstWhere((element) => element.name == value);
                     context
-                        .read<AddPondCubit>()
+                        .read<AddPondSecondStepCubit>()
                         .selectSubDistrict(selectedSubDistrict!);
                     subdisctrictController.text =
                         selectedSubDistrict.name ?? "";
@@ -377,7 +378,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     final selectedVillage = state.villageData?.data
                         ?.firstWhere((element) => element.name == value);
                     context
-                        .read<AddPondCubit>()
+                        .read<AddPondSecondStepCubit>()
                         .selectVillage(selectedVillage!);
                     villageController.text = selectedVillage.name ?? "";
                   },
@@ -452,7 +453,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       ];
     }
 
-    return BlocBuilder<AddPondCubit, AddPondState>(
+    return BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
       builder: (context, state) {
         return Form(
           key: widget.formSecondStepKey,

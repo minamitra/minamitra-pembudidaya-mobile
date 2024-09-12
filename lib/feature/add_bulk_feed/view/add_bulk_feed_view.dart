@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
@@ -300,6 +299,27 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                             ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.error,
+                      size: 16.0,
+                      color: AppColor.accent[900],
+                    ),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      "Pemberian pakan 2-3 kali per hari",
+                      style: appTextTheme(context).labelLarge?.copyWith(
+                            color: AppColor.accent[900],
+                            fontWeight: FontWeight.w500,
+                          ),
+                    )
                   ],
                 ),
               ),

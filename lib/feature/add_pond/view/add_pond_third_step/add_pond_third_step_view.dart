@@ -24,6 +24,22 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   final TextEditingController seedOriginController = TextEditingController();
   final TextEditingController targetController = TextEditingController();
   final TextEditingController pakanStarterController = TextEditingController();
+  final TextEditingController survivalRateController = TextEditingController();
+
+  // Optional when user picked other as seed origin
+  final TextEditingController seedOriginNameController =
+      TextEditingController();
+  final TextEditingController seedOriginAgeController = TextEditingController();
+  final TextEditingController seedOriginWeightController =
+      TextEditingController();
+  final TextEditingController seedOriginPriceController =
+      TextEditingController();
+  final TextEditingController seedOriginVarietyController =
+      TextEditingController();
+  final TextEditingController seedOriginHatcheryController =
+      TextEditingController();
+  final TextEditingController seedOriginNotesController =
+      TextEditingController();
 
   DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
@@ -31,7 +47,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
   List<PakanStarterDummy> pakanList = pakanListDummy;
 
-  Function() unpaidShowModal(
+  Function() checklistShowModal(
     BuildContext context,
     List<PakanStarterDummy> pakanList,
   ) {
@@ -144,6 +160,71 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
     };
   }
 
+  Function() radioShowModal(
+    BuildContext context,
+    String title,
+    List<String> data,
+    Function(String value) onSelected,
+  ) {
+    return () {
+      showModalBottomSheet(
+        isDismissible: false,
+        enableDrag: false,
+        context: context,
+        builder: (modalContext) {
+          return StatefulBuilder(
+            builder: (stateContext, setModalState) {
+              return AppBottomSheet(
+                title,
+                height: MediaQuery.of(context).size.height * 0.5,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                          shrinkWrap: true,
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          itemCount: data.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 16),
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).pop(data[index]);
+                              },
+                              child: Text(
+                                data[index],
+                                textAlign: TextAlign.start,
+                                style:
+                                    appTextTheme(context).bodySmall?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColor.black,
+                                        ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ).then((value) {
+        if (value != null) {
+          if (value is String) {
+            onSelected(value);
+          }
+        }
+      });
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> pondInformation() {
@@ -221,6 +302,160 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
       );
     }
 
+    List<Widget> seedOrignOtherChildren() {
+      return [
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginNameController,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: "Nama Benih",
+          hintText: "Masukan nama benih",
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Nama benih tidak boleh kosong";
+            }
+
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginAgeController,
+          inputType: TextInputType.phone,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: "Umur Benih",
+          hintText: "0",
+          suffixWidget: Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Text(
+              "hari",
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    color: AppColor.neutral[500],
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Umur benih tidak boleh kosong";
+            }
+
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginWeightController,
+          inputType: TextInputType.phone,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: "Bobot Benih",
+          hintText: "0",
+          suffixWidget: Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Text(
+              "gram/ekor",
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    color: AppColor.neutral[500],
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Bobot benih tidak boleh kosong";
+            }
+
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginPriceController,
+          inputType: TextInputType.phone,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: "Harga Benih",
+          hintText: "0",
+          prefixIcon: Padding(
+            padding: const EdgeInsets.only(left: 18.0),
+            child: Text(
+              "Rp ",
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Harga benih tidak boleh kosong";
+            }
+
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginVarietyController,
+          isMandatory: true,
+          withUpperLabel: true,
+          readOnly: true,
+          labelText: "Varietas",
+          hintText: "Pilih Benih",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            return null;
+          },
+          onTap: radioShowModal(
+            context,
+            "Pilih Varietas",
+            ["Beli", "Budidaya Sendiri", "Lainnya"],
+            (value) {},
+          ),
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginHatcheryController,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: "Hatchery",
+          hintText: "Masukan nama hatchery",
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "Hatchery tidak boleh kosong";
+            }
+
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: seedOriginNotesController,
+          isMandatory: false,
+          withUpperLabel: true,
+          labelText: "Keterangan",
+          hintText: "Masukan keterangan",
+          maxLines: 3,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return null;
+            }
+
+            return null;
+          },
+        ),
+      ];
+    }
+
     List<Widget> form() {
       return [
         dateTextField(),
@@ -230,7 +465,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
-          labelText: "Jumlah Ikan",
+          labelText: "Jumlah Tebar",
           hintText: "0",
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
@@ -257,7 +492,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
-          labelText: "Ukuran Tebar",
+          labelText: "Bobot Tebar",
           hintText: "0",
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
@@ -275,18 +510,6 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               return "Jumlah ikan tidak boleh kosong";
             }
 
-            return null;
-          },
-        ),
-        const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: seedOriginController,
-          inputType: TextInputType.text,
-          isMandatory: false,
-          withUpperLabel: true,
-          labelText: "Asal Benih",
-          hintText: "Ketik asal benih",
-          validator: (value) {
             return null;
           },
         ),
@@ -320,6 +543,54 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
+          labelText: "Asal Benih",
+          hintText: "Pilih asal benih",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            return null;
+          },
+          onTap: radioShowModal(
+            context,
+            "Pilih asal benih",
+            ["Beli", "Budidaya Sendiri", "Lainnya"],
+            (value) {},
+          ),
+        ),
+        ...seedOrignOtherChildren(),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: survivalRateController,
+          inputType: TextInputType.phone,
+          isMandatory: false,
+          withUpperLabel: true,
+          labelText: "Target Survival Rate",
+          hintText: "0",
+          suffixWidget: Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Text(
+              "%",
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    color: AppColor.neutral[500],
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: pakanStarterController,
+          inputType: TextInputType.phone,
+          isMandatory: true,
+          withUpperLabel: true,
+          readOnly: true,
           labelText: "Pakan Starter",
           hintText: "Pilih Pakan",
           suffixWidget: const Padding(
@@ -330,7 +601,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: unpaidShowModal(context, pakanList),
+          onTap: checklistShowModal(context, pakanList),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -349,7 +620,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: unpaidShowModal(context, pakanList),
+          onTap: checklistShowModal(context, pakanList),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -368,7 +639,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: unpaidShowModal(context, pakanList),
+          onTap: checklistShowModal(context, pakanList),
         ),
       ];
     }

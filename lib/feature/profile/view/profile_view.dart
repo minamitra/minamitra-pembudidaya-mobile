@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
@@ -26,39 +27,42 @@ class _ProfileViewState extends State<ProfileView> {
     Widget headerProfile() {
       return BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
-          return Row(
-            children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: AssetImage(AppAssets.profileImageDummy),
-                    fit: BoxFit.cover,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: AssetImage(AppAssets.profileImageDummy),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(width: 18.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    state.userData?.name ?? "-",
-                    style: appTextTheme(context).titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    "No KTA - | ${state.userData?.mobilephone ?? "-"}",
-                    style: appTextTheme(context).bodySmall?.copyWith(
-                          color: AppColor.neutral[400],
-                        ),
-                  ),
-                ],
-              ),
-            ],
+                const SizedBox(width: 18.0),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      state.userData?.name ?? "-",
+                      style: appTextTheme(context).titleMedium?.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "No KTA - | ${state.userData?.mobilephone ?? "-"}",
+                      style: appTextTheme(context).bodySmall?.copyWith(
+                            color: AppColor.neutral[400],
+                          ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           );
         },
       );
@@ -102,6 +106,7 @@ class _ProfileViewState extends State<ProfileView> {
     Widget currentlyUsedBalance() {
       return Container(
         padding: const EdgeInsets.all(18.0),
+        margin: const EdgeInsets.symmetric(horizontal: 18.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: AppColor.white,
@@ -199,6 +204,7 @@ class _ProfileViewState extends State<ProfileView> {
 
     Widget pointCard() {
       return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 18.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16.0),
           color: AppColor.primary,
@@ -283,7 +289,7 @@ class _ProfileViewState extends State<ProfileView> {
           children: [
             const SizedBox(height: 18.0),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 34.0),
               child: Row(
                 children: [
                   Expanded(
@@ -351,11 +357,22 @@ class _ProfileViewState extends State<ProfileView> {
             ));
           },
         ),
+        const SizedBox(height: 18.0),
+        const AppDivider(),
+        const SizedBox(height: 18.0),
         actionMenu(
           "Pengaturan Rekening",
           "Alamat rekening untuk penarikan saldo",
           onTap: () {},
         ),
+        actionMenu(
+          "Informasi Point",
+          "Informasi Poin milikmu",
+          onTap: () {},
+        ),
+        const SizedBox(height: 18.0),
+        const AppDivider(),
+        const SizedBox(height: 18.0),
         actionMenu(
           "Tentang Kami",
           "Informasi mengenai Mitra3M",
@@ -369,6 +386,14 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Hubungi Pusat Bantuan",
           "Hubungi untuk informasi lebih lanjut",
+          onTap: () {},
+        ),
+        const SizedBox(height: 18.0),
+        const AppDivider(),
+        const SizedBox(height: 18.0),
+        actionMenu(
+          "Undang Teman",
+          "Dapatkan hadiah poin",
           onTap: () {},
         ),
         actionMenu(
@@ -416,7 +441,6 @@ class _ProfileViewState extends State<ProfileView> {
     }
 
     return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0),
       children: [
         const SizedBox(height: 18.0),
         headerProfile(),

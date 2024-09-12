@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
@@ -21,6 +22,10 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   final TextEditingController amountController = TextEditingController();
   final TextEditingController brandController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  final TextEditingController totalAmountFeedFromInitController =
+      TextEditingController();
+  final TextEditingController hourController = TextEditingController();
+  final TextEditingController fishAgeController = TextEditingController();
 
   DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
@@ -187,57 +192,190 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   }
 
   Widget suggestion() {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16.0),
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: AppColor.accent[50],
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Tambah jumlah pakan sebanyak 120 gram?',
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).titleSmall!,
+    return Column(
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 8.0),
+          padding: const EdgeInsets.all(12.0),
+          decoration: BoxDecoration(
+            color: AppColor.accent[50],
+            borderRadius: BorderRadius.circular(8.0),
+            border: Border.all(color: AppColor.accent[900]!),
           ),
-          const SizedBox(height: 16.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+          child: Row(
             children: [
-              AppAccentOutlineButton(
-                Text(
-                  "Tidak",
-                  style: appTextTheme(context).titleSmall?.copyWith(
-                        color: AppColor.accent,
-                      ),
-                ),
-                () {
-                  setState(() {
-                    amountController.text = "";
-                  });
-                },
-                height: 28,
+              Icon(
+                Icons.error,
+                color: AppColor.accent[900],
+                size: 20.0,
               ),
               const SizedBox(width: 8.0),
-              AppAccentButton(
-                Text(
-                  "Ya",
+              Expanded(
+                child: Text(
+                  "Saran Pakan: 90 gram",
+                  style: appTextTheme(context).titleSmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: AppColor.accent[900],
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Text(
+                  'Terapkan',
                   style: appTextTheme(context).titleSmall?.copyWith(
                         color: AppColor.white,
                       ),
                 ),
-                () {
-                  setState(() {
-                    amountController.text = "120";
-                  });
-                },
-                height: 28,
               ),
             ],
-          )
-        ],
+          ),
+        ),
+        Row(
+          children: [
+            Icon(
+              Icons.error,
+              color: AppColor.neutral[600],
+              size: 16.0,
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              "Pemberian pakan 2-3 kali per hari",
+              style: appTextTheme(context).labelLarge?.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: AppColor.neutral[600],
+                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 18.0),
+      ],
+    );
+  }
+
+  Widget brandName() {
+    return AppValidatorTextField(
+      controller: brandController,
+      isMandatory: true,
+      withUpperLabel: true,
+      readOnly: true,
+      labelText: "Nama Pakan Diberikan",
+      hintText: "Pilih Pakan",
+      suffixWidget: const Padding(
+        padding: EdgeInsets.only(right: 18.0),
+        child: Icon(Icons.arrow_drop_down_rounded),
+      ),
+      suffixConstraints: const BoxConstraints(),
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Pakan tidak boleh kosong";
+        }
+        return null;
+      },
+      onTap: appBottomSheetShowModal(
+        context,
+        "Pilih pakan",
+        ["Pakan 1", "Pakan 2", "Pakan 3"],
+        (value) {},
+      ),
+    );
+  }
+
+  Widget totalAmountFeedFromInit() {
+    return AppValidatorTextField(
+      controller: totalAmountFeedFromInitController,
+      hintText: "0",
+      labelText: "Total Pakan Diberikan",
+      inputType: TextInputType.number,
+      isMandatory: true,
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return "Jumlah tidak boleh kosong";
+        }
+        return null;
+      },
+      suffixConstraints: const BoxConstraints(),
+      suffixWidget: Padding(
+        padding: const EdgeInsets.only(right: 18.0),
+        child: Text(
+          "gram",
+          style: appTextTheme(context).bodySmall?.copyWith(
+                color: AppColor.neutral[500],
+                fontWeight: FontWeight.w500,
+              ),
+        ),
+      ),
+    );
+  }
+
+  AppValidatorTextField hourTextField(BuildContext context) {
+    return AppValidatorTextField(
+      readOnly: true,
+      controller: hourController,
+      hintText: "Pilih Jam",
+      labelText: "Jam",
+      suffixConstraints: const BoxConstraints(
+        maxHeight: 50,
+        maxWidth: 50,
+      ),
+      suffixWidget: SizedBox(
+        width: 66,
+        child: Center(
+          child: Image.asset(
+            AppAssets.clockIcon,
+            height: 24,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+      isMandatory: true,
+      onTap: () {
+        showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.now(),
+        ).then((time) {
+          setState(() {
+            if (time != null) {
+              hourController.text = time.format(context);
+            }
+          });
+        });
+      },
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return "Jam tidak boleh kosong";
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget fishAge() {
+    return AppValidatorTextField(
+      controller: fishAgeController,
+      hintText: "0",
+      labelText: "Umur Ikan",
+      inputType: TextInputType.number,
+      isMandatory: true,
+      validator: (String? value) {
+        if (value!.isEmpty) {
+          return "Umur ikan tidak boleh kosong";
+        }
+        return null;
+      },
+      suffixConstraints: const BoxConstraints(),
+      suffixWidget: Padding(
+        padding: const EdgeInsets.only(right: 18.0),
+        child: Text(
+          "hari",
+          style: appTextTheme(context).bodySmall?.copyWith(
+                color: AppColor.neutral[500],
+                fontWeight: FontWeight.w500,
+              ),
+        ),
       ),
     );
   }
@@ -250,12 +388,16 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         children: [
           dateTextField(context),
           const SizedBox(height: 16.0),
-          typeTextField(),
+          hourTextField(context),
           const SizedBox(height: 16.0),
-          typeController.text != "" ? suggestion() : const SizedBox(),
+          fishAge(),
+          const SizedBox(height: 16.0),
+          suggestion(),
           amountTextField(),
           const SizedBox(height: 16.0),
-          brandTextField(),
+          brandName(),
+          const SizedBox(height: 16.0),
+          totalAmountFeedFromInit(),
           const SizedBox(height: 16.0),
           noteTextField(),
           const SizedBox(height: 98.0),

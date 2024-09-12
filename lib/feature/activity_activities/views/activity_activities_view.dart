@@ -1,9 +1,11 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -14,7 +16,61 @@ class ActivityActivitiesView extends StatefulWidget {
   State<ActivityActivitiesView> createState() => _ActivityActivitiesViewState();
 }
 
-class _ActivityActivitiesViewState extends State<ActivityActivitiesView> {
+class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 4, vsync: this);
+    _tabController.addListener(() {
+      context.read<ActivityActivitiesCubit>().changeIndex(_tabController.index);
+    });
+    super.initState();
+  }
+
+  Widget tabBar() {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(color: AppColor.neutral[50]),
+      child: TabBar(
+        controller: _tabController,
+        dividerColor: Colors.white,
+        indicatorSize: TabBarIndicatorSize.tab,
+        indicatorColor: AppColor.primary,
+        indicatorWeight: 2.5,
+        padding: EdgeInsets.zero,
+        labelColor: AppColor.primary,
+        unselectedLabelColor: AppColor.neutral[400],
+        labelStyle: appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
+        unselectedLabelStyle:
+            appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
+        labelPadding: const EdgeInsets.all(0),
+        isScrollable: false,
+        tabs: const [
+          Tab(text: 'Pakan'),
+          Tab(text: 'Perlakuan'),
+          Tab(text: 'Sampling'),
+          Tab(text: 'Kualitas Air'),
+        ],
+      ),
+    );
+  }
+
+  Widget bodyTab() {
+    return Expanded(
+      child: TabBarView(
+        controller: _tabController,
+        children: [
+          listCard(),
+          listCard(),
+          listCard(),
+          listCard(),
+        ],
+      ),
+    );
+  }
+
   Widget itemCard() {
     return InkWell(
       onTap: () {
@@ -85,7 +141,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView> {
             const SizedBox(height: 18.0),
             Row(
               children: [
-                Image.asset(AppAssets.weigherIcon, height: 20.0),
+                Image.asset(AppAssets.weigherIconFill, height: 20.0),
                 const SizedBox(width: 12.0),
                 Text("500 Gram", style: appTextTheme(context).titleSmall),
               ],
@@ -137,17 +193,15 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView> {
   }
 
   Widget listCard() {
-    return Expanded(
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-        shrinkWrap: true,
-        physics: const BouncingScrollPhysics(),
-        itemCount: 5,
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          return itemCard();
-        },
-      ),
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      shrinkWrap: true,
+      physics: const BouncingScrollPhysics(),
+      itemCount: 5,
+      separatorBuilder: (context, index) => const SizedBox(height: 16),
+      itemBuilder: (context, index) {
+        return itemCard();
+      },
     );
   }
 
@@ -157,7 +211,9 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView> {
       children: [
         calendar(),
         const SizedBox(height: 16.0),
-        listCard(),
+        tabBar(),
+        const SizedBox(height: 16.0),
+        bodyTab(),
       ],
     );
   }
