@@ -20,3 +20,21 @@ class AppDivider extends StatelessWidget {
     );
   }
 }
+
+class AppDividerLarge extends AppDivider {
+  AppDividerLarge({
+    super.key,
+  }) : super(
+          color: AppColor.neutral[100],
+          thickness: 18.0,
+        );
+}
+
+class AppDividerSmall extends AppDivider {
+  AppDividerSmall({
+    super.key,
+  }) : super(
+          color: AppColor.neutral[100],
+          thickness: 1.0,
+        );
+}

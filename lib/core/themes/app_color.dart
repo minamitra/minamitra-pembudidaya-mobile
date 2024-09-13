@@ -110,7 +110,7 @@ class AppColor {
       700: Color(0xFFBE123C),
       800: Color(0xFF9F1239),
       900: Color(0xFF881337),
-      },
+    },
   );
 
   static const yellow = MaterialColor(
@@ -126,6 +126,22 @@ class AppColor {
       700: Color(0xFFA16207),
       800: Color(0xFF854D0E),
       900: Color(0xFF713F12),
+    },
+  );
+
+  static const neutralBlueGrey = MaterialColor(
+    0xff4B5563,
+    <int, Color>{
+      50: Color(0xFFF8FAFC),
+      100: Color(0xFFEBF0F5),
+      200: Color(0xFFE2E8F0),
+      300: Color(0xFFCBD5E1),
+      400: Color(0xFF94A3B8),
+      500: Color(0xFF64748B),
+      600: Color(0xFF475569),
+      700: Color(0xFF334155),
+      800: Color(0xFF1E293B),
+      900: Color(0xFF0F172A),
     },
   );
 

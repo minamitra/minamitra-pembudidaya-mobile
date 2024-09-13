@@ -5,6 +5,9 @@ class AppAssets {
   // General
   static const String appIcon = "";
   static const String logoIcon = "$iconPath/logo-icon.png";
+  static const String rupiahIcon = "$iconPath/rupiah-icon.png";
+  static const String phIcon = "$iconPath/ph-icon.png";
+  static const String celciusIcon = "$iconPath/celcius-icon.png";
 
   // Icon General
   static const String fishIcon = "$iconPath/fish-icon.png";
@@ -52,6 +55,8 @@ class AppAssets {
   static const String profileImageDummy = "$imagePath/profile.png";
   static const String circleBackdropImage = "$imagePath/circle-backdrop.png";
   static const String startFullIcon = "$iconPath/star-full-icon.png";
+  static const String memberCardDummyImage =
+      "$imagePath/member-card-dummy-image.png";
 
   // Activity
   static const String dymmyActivityImage =

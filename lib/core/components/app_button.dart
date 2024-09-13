@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 enum _CustomButtonStyle {
   primary,
@@ -231,7 +232,7 @@ class AppWhiteButton extends _CustomButton {
           Text(
             text,
             style: AppTextStyle.primarySmallBoldText.copyWith(
-              color: AppColor.primary[700],
+              color: AppColor.primary[500],
             ),
           ),
           onPressed,
@@ -293,4 +294,86 @@ class AppAccentOutlineButton extends _CustomButton {
           buttonStyle: _CustomButtonStyle.accentOutline,
           height: height,
         );
+}
+
+class AppPrimaryGradientButton extends StatelessWidget {
+  const AppPrimaryGradientButton(this.text, this.onTap, {super.key});
+
+  final String text;
+  final Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.0),
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF155ED0),
+              Color(0xFF1049A2),
+            ],
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF000000),
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          style:
+              appTextTheme(context).titleSmall?.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
+class AppGreenGradientButton extends StatelessWidget {
+  const AppGreenGradientButton(this.text, this.onTap, {super.key});
+
+  final String text;
+  final Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.0),
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF14B8A6),
+              Color(0xFF0D9488),
+            ],
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF000000),
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          style:
+              appTextTheme(context).titleSmall?.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
 }

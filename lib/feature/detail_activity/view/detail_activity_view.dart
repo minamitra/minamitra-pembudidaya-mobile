@@ -1,5 +1,9 @@
+import 'dart:ui';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -271,22 +275,30 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   ),
             ),
             const SizedBox(height: 18.0),
-            Row(
-              children: [
-                Expanded(child: headerInformationsItem("405 m", "Luas Lahan")),
-                SizedBox(
-                  height: 38.0,
-                  child: VerticalDivider(color: AppColor.neutral[200]),
-                ),
-                Expanded(child: headerInformationsItem("250", "Jumlah Ikan")),
-                SizedBox(
-                  height: 38.0,
-                  child: VerticalDivider(color: AppColor.neutral[200]),
-                ),
-                Expanded(child: headerInformationsItem("50 Kg", "Total Pakan")),
-              ],
+          ],
+        ),
+      );
+    }
+
+    Widget headerDataInformation() {
+      return Container(
+        padding: const EdgeInsets.all(18.0),
+        decoration: BoxDecoration(
+          color: AppColor.neutralBlueGrey[50],
+        ),
+        child: Row(
+          children: [
+            Expanded(child: headerInformationsItem("405 m", "Luas Lahan")),
+            SizedBox(
+              height: 38.0,
+              child: VerticalDivider(color: AppColor.neutral[200]),
             ),
-            const SizedBox(height: 18.0),
+            Expanded(child: headerInformationsItem("250", "Jumlah Ikan")),
+            SizedBox(
+              height: 38.0,
+              child: VerticalDivider(color: AppColor.neutral[200]),
+            ),
+            Expanded(child: headerInformationsItem("50 Kg", "Total Pakan")),
           ],
         ),
       );
@@ -300,22 +312,24 @@ class _DetailActivityViewState extends State<DetailActivityView> {
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Row(
           children: [
-            Text(
-              title,
-              style: appTextTheme(context).bodySmall?.copyWith(
-                    color: AppColor.neutral[500],
-                  ),
-            ),
-            const SizedBox(width: 8.0),
             Expanded(
               child: Text(
-                value,
-                textAlign: TextAlign.end,
-                style: appTextTheme(context).bodySmall?.copyWith(
-                      color: AppColor.neutral[600],
-                      fontWeight: FontWeight.w500,
-                    ),
+                title,
+                maxLines: 2,
+                style: appTextTheme(context)
+                    .bodySmall
+                    ?.copyWith(color: AppColor.neutral[500]),
               ),
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              value,
+              textAlign: TextAlign.end,
+              maxLines: 1,
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    color: AppColor.neutral[800],
+                    fontWeight: FontWeight.w500,
+                  ),
             ),
           ],
         ),
@@ -330,36 +344,53 @@ class _DetailActivityViewState extends State<DetailActivityView> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const SizedBox(height: 18.0),
-            Text(
-              "Pakan",
-              style: appTextTheme(context)
-                  .bodyMedium
-                  ?.copyWith(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    "Siklus Saat Ini",
+                    style: appTextTheme(context)
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+                AppGreenGradientButton(
+                  "Panen",
+                  () {},
+                )
+              ],
             ),
             const SizedBox(height: 18.0),
             detailItem(
-              "Starter",
-              "PF 500, PF 800, NH 632-0.5",
+              "Tanggal Tebar",
+              "17 Agustus 2024",
             ),
-            const Divider(
-              color: Color(0xFFF3F6F9),
-              height: 0.0,
-              thickness: 1.0,
-            ),
+            AppDividerSmall(),
             detailItem(
-              "Grower",
-              "NH 835-3, NH 835-3 Hi-Pro 783-3",
+              "Ukuran Tebar",
+              "25 gr/ekor",
             ),
-            const Divider(
-              color: Color(0xFFF3F6F9),
-              height: 0.0,
-              thickness: 1.0,
-            ),
+            AppDividerSmall(),
             detailItem(
-              "Finisher",
-              "NH 835-3, Hi-Pro 783-3, Super Patin",
+              "Asal Benih",
+              "Yogyakarta",
             ),
-            const SizedBox(height: 18.0),
+            AppDividerSmall(),
+            detailItem(
+              "Target Bobot Panen",
+              "100 gr/ekor",
+            ),
+            AppDividerSmall(),
+            detailItem(
+              "Estimasi Perkiraan Waktu Panen",
+              "17 Desember 2024",
+            ),
+            AppDividerSmall(),
+            detailItem(
+              "Estimasi Perkiraan Tonase Panen",
+              "17 Desember 2024",
+            ),
+            const SizedBox(height: 36.0),
           ],
         ),
       );
@@ -372,28 +403,29 @@ class _DetailActivityViewState extends State<DetailActivityView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 18.0),
+            const SizedBox(height: 36.0),
             Text(
-              "Target",
+              "Pilihan Pakan",
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 18.0),
+            AppDividerSmall(),
             detailItem(
-              "Tanggal Tebar",
-              "17 Agustus 2024",
-            ),
-            const Divider(
-              color: Color(0xFFF3F6F9),
-              height: 0.0,
-              thickness: 1.0,
+              "Starter",
+              "PF 500, PF 800, NH 632-0.5",
             ),
             detailItem(
-              "Target Bobot Panen",
-              "250 gr",
+              "Grower",
+              "NH 835-3, NH 835-3 Hi-Pro 783-3",
             ),
-            const SizedBox(height: 18.0),
+            AppDividerSmall(),
+            detailItem(
+              "Finisher",
+              "NH 835-3, Hi-Pro 783-3, Super Patin",
+            ),
+            const SizedBox(height: 36.0),
           ],
         ),
       );
@@ -405,7 +437,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
           children: [
             header(),
             headerInformations(),
+            headerDataInformation(),
             feedSection(),
+            AppDividerLarge(),
             targetSection(),
             const SizedBox(height: 72.0),
           ],

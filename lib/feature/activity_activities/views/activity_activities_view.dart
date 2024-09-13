@@ -6,6 +6,9 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/sampling/sampling_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/treatment/treatment_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/water_quality/water_quality_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -63,9 +66,9 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
         controller: _tabController,
         children: [
           listCard(),
-          listCard(),
-          listCard(),
-          listCard(),
+          TreatmentView(),
+          SamplingView(),
+          WaterQualityView(),
         ],
       ),
     );
@@ -212,7 +215,6 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
         calendar(),
         const SizedBox(height: 16.0),
         tabBar(),
-        const SizedBox(height: 16.0),
         bodyTab(),
       ],
     );

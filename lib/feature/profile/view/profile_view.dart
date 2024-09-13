@@ -197,6 +197,19 @@ class _ProfileViewState extends State<ProfileView> {
               "Kolam 3",
               "Rp 250.000",
             ),
+            const SizedBox(height: 18.0),
+            InkWell(
+              onTap: () {},
+              child: Center(
+                child: Text(
+                  "Lihat Selengkapnya",
+                  textAlign: TextAlign.center,
+                  style: appTextTheme(context)
+                      .titleSmall
+                      ?.copyWith(color: AppColor.secondary[900]),
+                ),
+              ),
+            )
           ],
         ),
       );
@@ -219,33 +232,33 @@ class _ProfileViewState extends State<ProfileView> {
               ),
               child: Row(
                 children: [
-                  Container(
-                    height: 38.0,
-                    width: 38.0,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColor.neutral[100],
-                      image: const DecorationImage(
-                        image: AssetImage(AppAssets.startFullIcon),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
+                  // Container(
+                  //   height: 38.0,
+                  //   width: 38.0,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     color: AppColor.neutral[100],
+                  //     image: const DecorationImage(
+                  //       image: AssetImage(AppAssets.startFullIcon),
+                  //       fit: BoxFit.fill,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(width: 12.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "10 Poin",
+                        "Rp 1.000.000",
                         style: appTextTheme(context).headlineSmall?.copyWith(
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w700,
                               fontSize: 16.0,
                               color: Colors.white,
                             ),
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Bronze",
+                        "Plafon Terpakai",
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: Colors.white,
                             ),
@@ -256,7 +269,7 @@ class _ProfileViewState extends State<ProfileView> {
                   SizedBox(
                     width: 98.0,
                     child: AppWhiteButton(
-                      "Tukar Poin",
+                      "Bayar",
                       () {},
                       height: 32.0,
                     ),
@@ -445,9 +458,9 @@ class _ProfileViewState extends State<ProfileView> {
         const SizedBox(height: 18.0),
         headerProfile(),
         const SizedBox(height: 18.0),
-        currentlyUsedBalance(),
-        const SizedBox(height: 18.0),
         pointCard(),
+        const SizedBox(height: 18.0),
+        currentlyUsedBalance(),
         const SizedBox(height: 18.0),
         ...actionMenuList(),
       ],
