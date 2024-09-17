@@ -26,6 +26,60 @@ class _CultivationViewState extends State<CultivationView> {
     "ADG (Average Daily Growth) (gram)",
   ];
 
+  TrackballBehavior defaultTrackballBehavior = TrackballBehavior(
+    enable: true,
+    tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
+    activationMode: ActivationMode.singleTap,
+    lineType: TrackballLineType.vertical,
+    tooltipSettings: const InteractiveTooltip(
+      textStyle: TextStyle(
+        color: Colors.blue,
+        fontSize: 12,
+      ),
+      format: "point.x Hari : point.y gram",
+    ),
+    builder: (context, trackballs) {
+      return trackballs.seriesIndex == 2
+          ? Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black,
+                    offset: Offset(0, 1),
+                  )
+                ],
+              ),
+              child: Text(
+                "DoC : ${trackballs.point?.x.toString()} Hari\nMBW : ${trackballs.point?.y.toString()} gram",
+                style: const TextStyle(color: Colors.white),
+              ),
+            )
+          : Container();
+    },
+  );
+
+  TooltipBehavior defaultTooltipBehavior = TooltipBehavior(
+    enable: true,
+    activationMode: ActivationMode.singleTap,
+    header: '',
+    animationDuration: 500,
+    duration: 2000,
+    canShowMarker: false,
+    shouldAlwaysShow: false,
+    format: 'point.x Hari : point.y gram',
+    builder: (data, point, series, pointIndex, seriesIndex) {
+      return Container(
+        margin: const EdgeInsets.all(5),
+        child: Text(
+          "DoC : ${point?.x.toString()} Hari\nMBW : ${point?.y.toString()} gram",
+          style: const TextStyle(color: Colors.white),
+        ),
+      );
+    },
+  );
+
   @override
   void initState() {
     parameterController.text = dataBudidayDummy[0];
@@ -248,14 +302,16 @@ class _CultivationViewState extends State<CultivationView> {
             zoomMode:
                 ZoomMode.x, // Allow zooming and panning only on the X-axis
           ),
+          trackballBehavior: defaultTrackballBehavior,
+          tooltipBehavior: defaultTooltipBehavior,
           legend: Legend(
             isVisible: true,
           ),
           primaryXAxis: NumericAxis(
             title: AxisTitle(text: "DoC (hari)"),
             minimum: 0,
-            interval: 10,
-            initialVisibleMaximum: 50,
+            interval: 1,
+            initialVisibleMaximum: 10,
             enableAutoIntervalOnZooming: true,
             anchorRangeToVisiblePoints: true,
             majorGridLines: MajorGridLines(
@@ -264,7 +320,7 @@ class _CultivationViewState extends State<CultivationView> {
               dashArray: const [8, 10],
             ),
             decimalPlaces: 0,
-            desiredIntervals: 4,
+            desiredIntervals: 10,
           ),
           primaryYAxis: NumericAxis(
             title: AxisTitle(text: "MBW (gram)"),
@@ -290,6 +346,7 @@ class _CultivationViewState extends State<CultivationView> {
               legendIconType: LegendIconType.seriesType,
               isVisibleInLegend: true,
               legendItemText: "Hiu",
+              enableTooltip: true,
             ),
             LineSeries<LineDummy, int>(
               dataSource: lineDummyData2,
@@ -300,19 +357,61 @@ class _CultivationViewState extends State<CultivationView> {
               legendIconType: LegendIconType.seriesType,
               isVisibleInLegend: true,
               legendItemText: "Gurame",
+              enableTooltip: true,
             )
           ],
         ),
       );
     }
 
-    return Column(
+    Widget notes() {
+      return Container(
+        margin: const EdgeInsets.symmetric(horizontal: 18.0),
+        padding: const EdgeInsets.all(18.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8.0),
+          color: AppColor.neutralBlueGrey[50],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.comment_rounded,
+                  color: AppColor.primary[500],
+                  size: 20.0,
+                ),
+                const SizedBox(width: 12.0),
+                Text(
+                  "Rekomendasi Pendamping",
+                  style: appTextTheme(context).titleSmall?.copyWith(
+                        color: AppColor.primary[500],
+                        fontWeight: FontWeight.w600,
+                      ),
+                )
+              ],
+            ),
+            const SizedBox(height: 18.0),
+            Text(
+              """Figma ipsum component variant main layer. Main underline scrolling selection text pixel scale stroke community.\n 
+Arrow reesizing rectangle blur fill. Strikethrough layout selection asset hand fill. Distribute italic object opacity duplicate. Stroke select underline effect edit.\n 
+Follower arrange rectangle star scale boolean. Align link bullet selection hand list distribute figjam.""",
+              style: appTextTheme(context).titleSmall,
+            )
+          ],
+        ),
+      );
+    }
+
+    return ListView(
       children: [
         const SizedBox(height: 18),
         parameter(),
         const SizedBox(height: 18),
         xSetter(),
         lineChart(),
+        notes(),
+        const SizedBox(height: 18),
       ],
     );
   }

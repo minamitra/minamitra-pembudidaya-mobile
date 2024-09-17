@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
@@ -203,7 +204,55 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   right: 18.0,
                   child: InkWell(
                     onTap: () {
-                      // Navigator.pop(context);
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (modalContext) {
+                          return AppBottomSheet(
+                            "Pilih Aksi",
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 18.0,
+                                vertical: 15.0,
+                              ),
+                              child: Column(
+                                children: [
+                                  AppPrimaryFullButton(
+                                    "Edit Data",
+                                    () {},
+                                  ),
+                                  const SizedBox(height: 15.0),
+                                  AppPrimaryOutlineFullButton(
+                                    "Hapus Data",
+                                    () {
+                                      Navigator.of(context).pop();
+                                      showDeleteBottomSheet(
+                                        context,
+                                        title: "Hapus Kolam ?",
+                                        descriptions:
+                                            "Data yang sudah terhapus\ntidak dapat dipulihkan kembali!",
+                                        onTapDelete: () {},
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                            height: MediaQuery.of(context).size.height * 0.3,
+                            actions: [
+                              InkWell(
+                                onTap: () {
+                                  Navigator.of(modalContext).pop();
+                                },
+                                child: Icon(
+                                  Icons.close,
+                                  size: 24.0,
+                                  color: AppColor.neutral[300],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.all(4.0),

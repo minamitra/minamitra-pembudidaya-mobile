@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/view/activity_treatment_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class TreatmentView extends StatefulWidget {
@@ -16,10 +18,10 @@ class _TreatmentViewState extends State<TreatmentView> {
     Widget itemCard() {
       return InkWell(
         onTap: () {
-          // Navigator.of(context).push(AppTransition.pushTransition(
-          //   const ActivityActivitiesDetailPage(),
-          //   ActivityActivitiesDetailPage.routeSettings(),
-          // ));
+          Navigator.of(context).push(AppTransition.pushTransition(
+            const ActivityTreatmentDetailPage(),
+            ActivityTreatmentDetailPage.routeSettings(),
+          ));
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -59,9 +61,9 @@ class _TreatmentViewState extends State<TreatmentView> {
               const SizedBox(height: 18.0),
               Row(
                 children: [
-                  Image.asset(AppAssets.rupiahIcon, height: 20.0),
+                  Image.asset(AppAssets.dollarIcon, height: 20.0),
                   const SizedBox(width: 12.0),
-                  Text("100.000", style: appTextTheme(context).titleSmall),
+                  Text("Rp 100.000", style: appTextTheme(context).titleSmall),
                 ],
               ),
             ],

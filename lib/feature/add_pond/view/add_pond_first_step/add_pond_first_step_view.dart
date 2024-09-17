@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondFirstStepView extends StatefulWidget {
-  const AddPondFirstStepView(this.formFirstStepKey, {super.key});
+  const AddPondFirstStepView(this.rootPageController, {super.key});
 
-  final GlobalKey<FormState> formFirstStepKey;
+  final PageController rootPageController;
 
   @override
   State<AddPondFirstStepView> createState() => _AddPondFirstStepViewState();
@@ -18,6 +23,8 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
   final TextEditingController pondWidthController = TextEditingController();
   final TextEditingController pondWideController = TextEditingController();
   final TextEditingController pondDeepController = TextEditingController();
+
+  final GlobalKey<FormState> formFirstStepKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +145,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           inputType: TextInputType.phone,
           isMandatory: false,
           withUpperLabel: true,
-          readOnly: true,
+          readOnly: false,
           labelText: "Kedalaman Kolam",
           hintText: "0",
           suffixWidget: Padding(
@@ -185,18 +192,56 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
       ];
     }
 
+    Widget bottomButton() {
+      return BlocBuilder<AddPondCubit, AddPondState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: AppAnimatedSize(
+              isShow: true,
+              child: AppPrimaryFullButton(
+                "Selanjutnya",
+                () {
+                  if (formFirstStepKey.currentState?.validate() ?? false) {
+                    widget.rootPageController.nextPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                    );
+                    context.read<AddPondCubit>().changeStep(1);
+                    context.read<AddPondFirstStepCubit>().onChangeData(
+                          pondName: pondNameController.text,
+                          pondLength: double.parse(pondlengthController.text),
+                          pondWidth: double.parse(pondWidthController.text),
+                          pondDepth: double.parse(pondDeepController.text),
+                        );
+                  }
+                },
+              ),
+            ),
+          );
+        },
+      );
+    }
+
     return Form(
-      key: widget.formFirstStepKey,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
+      key: formFirstStepKey,
+      child: Column(
         children: [
-          const SizedBox(height: 18.0),
-          ...pondInformation(),
-          const SizedBox(height: 18.0),
-          ...form(),
-          const SizedBox(height: 18.0),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              shrinkWrap: true,
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                const SizedBox(height: 18.0),
+                ...pondInformation(),
+                const SizedBox(height: 18.0),
+                ...form(),
+                const SizedBox(height: 18.0),
+              ],
+            ),
+          ),
+          bottomButton(),
         ],
       ),
     );

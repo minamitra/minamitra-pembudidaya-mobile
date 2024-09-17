@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/view/activity_treatment_detail_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
-class ActivityActivitiesDetailPage extends StatelessWidget {
-  const ActivityActivitiesDetailPage({super.key});
+class ActivityTreatmentDetailPage extends StatelessWidget {
+  const ActivityTreatmentDetailPage({super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-activities-detail");
+      const RouteSettings(name: "/activity-treatment-detail-page");
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Aktivitas",
+        "Detail Perlakuan",
         actions: [
           InkWell(
             onTap: () {},
@@ -28,8 +28,7 @@ class ActivityActivitiesDetailPage extends StatelessWidget {
           const SizedBox(width: 16.0),
         ],
       ),
-      backgroundColor: Colors.white,
-      body: const ActivityActivitiesDetailView(),
+      body: ActivityTreatmentDetailView(),
     );
   }
 }

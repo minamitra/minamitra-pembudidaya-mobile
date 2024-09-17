@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart'
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_view.dart';
 
@@ -23,6 +24,7 @@ class AddPondPage extends StatelessWidget {
           create: (context) => AddPondCubit(RefServiceImpl.create())..init(),
         ),
         BlocProvider(create: (context) => ActivityIncidentPictureCubit()),
+        BlocProvider(create: (context) => AddPondFirstStepCubit()),
         BlocProvider(
           create: (context) =>
               AddPondSecondStepCubit(RefServiceImpl.create())..init(),

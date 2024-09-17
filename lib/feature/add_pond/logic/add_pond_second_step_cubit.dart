@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
@@ -85,6 +87,20 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       selectedSubDistrict: state.selectedSubDistrict,
       villageData: state.villageData,
       selectedVillage: village,
+      status: GlobalState.loaded,
+    ));
+  }
+
+  void changeLocationOnMap(
+    String latitude,
+    String longitude,
+    Uint8List? snapshot,
+  ) {
+    emit(state.copyWith(status: GlobalState.onUpdating));
+    emit(state.copyWith(
+      latitude: latitude,
+      longitude: longitude,
+      snapshotMap: snapshot,
       status: GlobalState.loaded,
     ));
   }

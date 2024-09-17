@@ -7,9 +7,16 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_desctiption_item.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_separated_item.dart';
 
-class ActivityActivitiesDetailView extends StatelessWidget {
-  const ActivityActivitiesDetailView({super.key});
+class ActivityTreatmentDetailView extends StatefulWidget {
+  const ActivityTreatmentDetailView({super.key});
 
+  @override
+  State<ActivityTreatmentDetailView> createState() =>
+      _ActivityTreatmentDetailViewState();
+}
+
+class _ActivityTreatmentDetailViewState
+    extends State<ActivityTreatmentDetailView> {
   @override
   Widget build(BuildContext context) {
     Widget columnText(String title, String value) {
@@ -34,12 +41,38 @@ class ActivityActivitiesDetailView extends StatelessWidget {
       );
     }
 
+    Widget attachmentFile() {
+      return SizedBox(
+        height: 100.0,
+        width: double.infinity,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          physics: const AlwaysScrollableScrollPhysics(),
+          children: List.generate(
+            5,
+            (index) {
+              return Container(
+                width: 100.0,
+                height: 100.0,
+                margin: const EdgeInsets.only(right: 12.0),
+                decoration: BoxDecoration(
+                  color: AppColor.secondary,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+    }
+
     Widget body() {
       return ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
           const SizedBox(height: 2.0),
-          AppWidgetSeparatedItem("Waktu Pakan", "05 Agustus 2024, 17:00 WIB"),
+          AppWidgetSeparatedItem(
+              "Waktu  Perlakuan", "05 Agustus 2024, 17:00 WIB"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
@@ -47,15 +80,11 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Jumlah Pakan", "100 gram"),
+          AppWidgetSeparatedItem("Perlakuan", "Permberian Pakan"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Merk Pakan", "Merk ABC"),
-          const SizedBox(height: 18.0),
-          AppDividerSmall(),
-          const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Total Pakan", "4500 gram"),
+          AppWidgetSeparatedItem("Biaya", "Rp 100.000"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
@@ -63,6 +92,17 @@ class ActivityActivitiesDetailView extends StatelessWidget {
             "Catatan",
             "Figma ipsum component variant main layer. Export team scrolling comment prototype edit undo. Follower inspect rotate pixel duplicate asset.",
           ),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          Text(
+            "File Lampiran",
+            style: appTextTheme(context).bodySmall?.copyWith(
+                  color: AppColor.neutral[500],
+                ),
+          ),
+          const SizedBox(height: 8.0),
+          attachmentFile(),
           const SizedBox(height: 98.0),
         ],
       );

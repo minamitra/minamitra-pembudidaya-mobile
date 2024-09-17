@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
-class WaterQualityView extends StatefulWidget {
-  const WaterQualityView({super.key});
+class FeedingView extends StatefulWidget {
+  const FeedingView({super.key});
 
   @override
-  State<WaterQualityView> createState() => _WaterQualityViewState();
+  State<FeedingView> createState() => _FeedingViewState();
 }
 
-class _WaterQualityViewState extends State<WaterQualityView> {
+class _FeedingViewState extends State<FeedingView> {
   @override
   Widget build(BuildContext context) {
     Widget itemCard() {
       return InkWell(
         onTap: () {
-          // Navigator.of(context).push(AppTransition.pushTransition(
-          //   const ActivityActivitiesDetailPage(),
-          //   ActivityActivitiesDetailPage.routeSettings(),
-          // ));
+          Navigator.of(context).push(AppTransition.pushTransition(
+            const ActivityActivitiesDetailPage(),
+            ActivityActivitiesDetailPage.routeSettings(),
+          ));
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -32,7 +34,7 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pemberian Vaksin',
+                        'Merk ABCD Pakan Ikan Patin Murah',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
@@ -59,13 +61,9 @@ class _WaterQualityViewState extends State<WaterQualityView> {
               const SizedBox(height: 18.0),
               Row(
                 children: [
-                  Image.asset(AppAssets.phNewIcon, height: 20.0),
-                  const SizedBox(width: 8.0),
-                  Text("7", style: appTextTheme(context).titleSmall),
-                  const SizedBox(width: 24.0),
-                  Image.asset(AppAssets.temperatureIcon, height: 20.0),
-                  const SizedBox(width: 8.0),
-                  Text("25 °C", style: appTextTheme(context).titleSmall),
+                  Image.asset(AppAssets.weigherIconFill, height: 20.0),
+                  const SizedBox(width: 12.0),
+                  Text("500 Gram", style: appTextTheme(context).titleSmall),
                 ],
               ),
             ],

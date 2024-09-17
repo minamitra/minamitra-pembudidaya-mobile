@@ -4,24 +4,28 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/repositories/map_callback_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_location_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondSecondStepView extends StatefulWidget {
-  const AddPondSecondStepView(this.formSecondStepKey, {super.key});
+  const AddPondSecondStepView(this.rootPageController, {super.key});
 
-  final GlobalKey<FormState> formSecondStepKey;
+  final PageController rootPageController;
 
   @override
   State<AddPondSecondStepView> createState() => _AddPondSecondStepViewState();
@@ -35,6 +39,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
   final TextEditingController districtController = TextEditingController();
   final TextEditingController subdisctrictController = TextEditingController();
   final TextEditingController villageController = TextEditingController();
+
+  final GlobalKey<FormState> formSecondStepKey = GlobalKey<FormState>();
 
   Function() bottomSheetShowModal(
     BuildContext context,
@@ -223,6 +229,114 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       );
     }
 
+    Widget location() {
+      return BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
+        builder: (context, state) {
+          return InkWell(
+            onTap: () {
+              Navigator.of(context)
+                  .push(AppTransition.pushTransition(
+                const SetLocationPage(),
+                SetLocationPage.routeSettings(),
+              ))
+                  .then((value) {
+                if (value != null) {
+                  if (value is MapCallbackData) {
+                    context.read<AddPondSecondStepCubit>().changeLocationOnMap(
+                          value.latLng.latitude.toString(),
+                          value.latLng.longitude.toString(),
+                          value.snapshotMap,
+                        );
+                  }
+                }
+              });
+            },
+            child: state.snapshotMap != null
+                ? Stack(
+                    children: [
+                      ClipRRect(
+                          borderRadius: BorderRadius.circular(20.0),
+                          child: Image.memory(
+                            state.snapshotMap!,
+                            fit: BoxFit.cover,
+                            height: 180.0,
+                            width: double.infinity,
+                          )),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20.0),
+                          color: Colors.black.withOpacity(0.30),
+                        ),
+                        height: 180.0,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Icon(
+                                Icons.location_on,
+                                color: Colors.white,
+                                size: 32.0,
+                              ),
+                              const SizedBox(height: 8.0),
+                              Text(
+                                "Ganti lokasi",
+                                style: appTextTheme(context)
+                                    .titleLarge
+                                    ?.copyWith(color: AppColor.white),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    padding: const EdgeInsets.all(18.0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16.0),
+                      border: Border.all(
+                        color: AppColor.neutral[200]!,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: 38.0,
+                          height: 38.0,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColor.primary[600],
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.location_on_outlined,
+                              size: 18.0,
+                              color: AppColor.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12.0),
+                        Expanded(
+                          child: Text(
+                            "Pilih lokasi",
+                            style: appTextTheme(context).bodySmall?.copyWith(
+                                  color: AppColor.neutral[400],
+                                ),
+                          ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColor.black[800],
+                        ),
+                      ],
+                    ),
+                  ),
+          );
+        },
+      );
+    }
+
     List<Widget> form(AddPondSecondStepState state) {
       return [
         AppValidatorTextField(
@@ -392,82 +506,103 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
               ?.copyWith(fontWeight: FontWeight.w500),
         ),
         const SizedBox(height: 8.0),
-        InkWell(
-          onTap: () {
-            Navigator.of(context)
-                .push(AppTransition.pushTransition(
-              const SetLocationPage(),
-              SetLocationPage.routeSettings(),
-            ))
-                .then((value) {
-              if (value != null) {
-                if (value is MapCallbackData) {}
-              }
-            });
-          },
-          child: Container(
-            padding: const EdgeInsets.all(18.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.0),
-              border: Border.all(
-                color: AppColor.neutral[200]!,
-                width: 1.0,
-              ),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  width: 38.0,
-                  height: 38.0,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.primary[600],
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.location_on_outlined,
-                      size: 18.0,
-                      color: AppColor.white,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Expanded(
-                  child: Text(
-                    "Pilih lokasi",
-                    style: appTextTheme(context).bodySmall?.copyWith(
-                          color: AppColor.neutral[400],
-                        ),
-                  ),
-                ),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  color: AppColor.black[800],
-                ),
-              ],
-            ),
-          ),
-        ),
+        location(),
         const SizedBox(height: 18.0),
         fileAttachment(),
       ];
     }
 
+    Widget bottomButton() {
+      return BlocBuilder<AddPondCubit, AddPondState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppAnimatedSize(
+                    isShow: state.index > 0,
+                    child: AppPrimaryOutlineFullButton(
+                      "Kembali",
+                      () {
+                        if (formSecondStepKey.currentState?.validate() ??
+                            false) {
+                          if (context
+                                  .read<ActivityIncidentPictureCubit>()
+                                  .state
+                                  ?.isEmpty ??
+                              true) {
+                            AppTopSnackBar(context)
+                                .showDanger("Unggah lampiran terlebih dahulu");
+                            return;
+                          }
+                          widget.rootPageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          context.read<AddPondCubit>().changeStep(2);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: AppAnimatedSize(
+                    isShow: true,
+                    child: AppPrimaryFullButton(
+                      "Selanjutnya",
+                      () {
+                        if (context
+                                .read<ActivityIncidentPictureCubit>()
+                                .state
+                                ?.isEmpty ??
+                            true) {
+                          AppTopSnackBar(context)
+                              .showDanger("Unggah lampiran terlebih dahulu");
+                          return;
+                        }
+                        if (formSecondStepKey.currentState?.validate() ??
+                            false) {
+                          widget.rootPageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          context.read<AddPondCubit>().changeStep(2);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
     return BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
       builder: (context, state) {
-        return Form(
-          key: widget.formSecondStepKey,
-          child: ListView(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: [
-              const SizedBox(height: 18.0),
-              ...pondInformation(),
-              ...form(state),
-              const SizedBox(height: 18.0),
-            ],
-          ),
+        return Column(
+          children: [
+            Expanded(
+              child: Form(
+                key: formSecondStepKey,
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    const SizedBox(height: 18.0),
+                    ...pondInformation(),
+                    ...form(state),
+                    const SizedBox(height: 18.0),
+                  ],
+                ),
+              ),
+            ),
+            bottomButton(),
+          ],
         );
       },
     );

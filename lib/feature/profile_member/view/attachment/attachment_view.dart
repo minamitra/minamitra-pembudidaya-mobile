@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -24,13 +27,61 @@ class _AttachmentViewState extends State<AttachmentView> {
             style: appTextTheme(context).titleSmall,
           ),
           const SizedBox(height: 8.0),
-          Container(
-            width: 100.0,
-            height: 100.0,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(AppAssets.profileImageDummy),
-                fit: BoxFit.cover,
+          InkWell(
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                shape: const RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.0)),
+                ),
+                builder: (bottomSheetContext) {
+                  return AppImagePickerMenu(
+                    "Upload Gambar",
+                    (type) async {
+                      switch (type) {
+                        case PhotoSource.camera:
+                          final document = await pickDocumentImage(
+                            bottomSheetContext,
+                            ImageSource.camera,
+                          );
+                          if (document != null) {
+                            // await document.readAsBytes().then((image) {
+                            //   context
+                            //       .read<ActivityCyclePictureCubit>()
+                            //       .setImage(image);
+                            //   Navigator.of(bottomSheetContext).pop();
+                            // });
+                          }
+                          break;
+                        case PhotoSource.gallery:
+                          final document = await pickDocumentImage(
+                            bottomSheetContext,
+                            ImageSource.gallery,
+                          );
+                          if (document != null) {
+                            // await document.readAsBytes().then((image) {
+                            //   context
+                            //       .read<ActivityCyclePictureCubit>()
+                            //       .setImage(image);
+                            //   Navigator.of(bottomSheetContext).pop();
+                            // });
+                          }
+                          break;
+                      }
+                    },
+                  );
+                },
+              );
+            },
+            child: Container(
+              width: 100.0,
+              height: 100.0,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(AppAssets.profileImageDummy),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
@@ -45,17 +96,64 @@ class _AttachmentViewState extends State<AttachmentView> {
           style: appTextTheme(context).titleSmall,
         ),
         const SizedBox(height: 8.0),
-        Container(
-          width: double.infinity,
-          height: 170.0,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: AppColor.neutral[300]!),
-          ),
-          child: Center(
-            child: Icon(
-              Icons.photo_library_outlined,
-              color: AppColor.neutral[200],
+        InkWell(
+          onTap: () {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+              ),
+              builder: (bottomSheetContext) {
+                return AppImagePickerMenu(
+                  "Upload Gambar",
+                  (type) async {
+                    switch (type) {
+                      case PhotoSource.camera:
+                        final document = await pickDocumentImage(
+                          bottomSheetContext,
+                          ImageSource.camera,
+                        );
+                        if (document != null) {
+                          // await document.readAsBytes().then((image) {
+                          //   context
+                          //       .read<ActivityCyclePictureCubit>()
+                          //       .setImage(image);
+                          //   Navigator.of(bottomSheetContext).pop();
+                          // });
+                        }
+                        break;
+                      case PhotoSource.gallery:
+                        final document = await pickDocumentImage(
+                          bottomSheetContext,
+                          ImageSource.gallery,
+                        );
+                        if (document != null) {
+                          // await document.readAsBytes().then((image) {
+                          //   context
+                          //       .read<ActivityCyclePictureCubit>()
+                          //       .setImage(image);
+                          //   Navigator.of(bottomSheetContext).pop();
+                          // });
+                        }
+                        break;
+                    }
+                  },
+                );
+              },
+            );
+          },
+          child: Container(
+            width: double.infinity,
+            height: 170.0,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: AppColor.neutral[300]!),
+            ),
+            child: Center(
+              child: Icon(
+                Icons.photo_library_outlined,
+                color: AppColor.neutral[200],
+              ),
             ),
           ),
         ),

@@ -11,6 +11,9 @@ class AddPondSecondStepState extends Equatable {
     this.selectedDistrict,
     this.selectedSubDistrict,
     this.selectedVillage,
+    this.latitude = "",
+    this.longitude = "",
+    this.snapshotMap,
   });
 
   final GlobalState status;
@@ -22,6 +25,9 @@ class AddPondSecondStepState extends Equatable {
   final DistrictResponseData? selectedDistrict;
   final SubDistrictResponseData? selectedSubDistrict;
   final VillageResponseData? selectedVillage;
+  final String? latitude;
+  final String? longitude;
+  final Uint8List? snapshotMap;
 
   AddPondSecondStepState copyWith({
     GlobalState? status,
@@ -33,6 +39,9 @@ class AddPondSecondStepState extends Equatable {
     DistrictResponseData? selectedDistrict,
     SubDistrictResponseData? selectedSubDistrict,
     VillageResponseData? selectedVillage,
+    String? latitude,
+    String? longitude,
+    Uint8List? snapshotMap,
   }) {
     return AddPondSecondStepState(
       status: status ?? this.status,
@@ -44,6 +53,9 @@ class AddPondSecondStepState extends Equatable {
       selectedDistrict: selectedDistrict,
       selectedSubDistrict: selectedSubDistrict,
       selectedVillage: selectedVillage,
+      latitude: latitude ?? this.latitude,
+      longitude: longitude ?? this.longitude,
+      snapshotMap: snapshotMap ?? this.snapshotMap,
     );
   }
 
@@ -57,5 +69,8 @@ class AddPondSecondStepState extends Equatable {
         selectedDistrict ?? '',
         selectedSubDistrict ?? '',
         selectedVillage ?? '',
+        latitude ?? '',
+        longitude ?? '',
+        snapshotMap ?? '',
       ];
 }

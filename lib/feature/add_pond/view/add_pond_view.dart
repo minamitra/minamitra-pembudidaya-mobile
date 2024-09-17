@@ -132,8 +132,8 @@ class _AddPondViewState extends State<AddPondView> {
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          AddPondFirstStepView(formFirstStepKey),
-          AddPondSecondStepView(formSecondStepKey),
+          AddPondFirstStepView(pageController),
+          AddPondSecondStepView(pageController),
           AddPondThirdStepView(formThirdStepKey),
         ],
       );
@@ -200,7 +200,7 @@ class _AddPondViewState extends State<AddPondView> {
           const SizedBox(height: 18.0),
           currentStep(),
           Expanded(child: body()),
-          bottomButton(),
+          // bottomButton(),
         ],
       ),
     );

@@ -8,6 +8,11 @@ class AppAssets {
   static const String rupiahIcon = "$iconPath/rupiah-icon.png";
   static const String phIcon = "$iconPath/ph-icon.png";
   static const String celciusIcon = "$iconPath/celcius-icon.png";
+  static const String dollarIcon = "$iconPath/dollar-icon.png";
+  static const String bussinessStatisticIcon =
+      "$iconPath/bussiness-statistic-icon.png";
+  static const String phNewIcon = "$iconPath/ph-new-icon.png";
+  static const String temperatureIcon = "$iconPath/thermometer-icon.png";
 
   // Icon General
   static const String fishIcon = "$iconPath/fish-icon.png";
@@ -44,6 +49,20 @@ class AppAssets {
   static const String locationIcon = "$iconPath/location-icon.png";
   static const String ticketIcon = "$iconPath/ticket-icon.png";
   static const String bagIcon = "$iconPath/bag-icon.png";
+  static const String dummyEventImage = "$imagePath/event-dummy-image.png";
+  static const String referralImage = "$imagePath/referral-image.png";
+  static const String specialPriceIcon = "$iconPath/special-price-icon.png";
+  static const String economicalFeedIcon = "$iconPath/economical-feed-icon.png";
+  static const String feedPackageIcon = "$iconPath/feed-package-icon.png";
+  static const String cosulVoucherIcon = "$iconPath/consul-voucher-icon.png";
+  static const String informationDummy1Image =
+      "$imagePath/information-dummy-1-image.png";
+  static const String informationDummy2Image =
+      "$imagePath/information-dummy-2-image.png";
+  static const String informationDummy3Image =
+      "$imagePath/information-dummy-3-image.png";
+  static const String informationDummy4Image =
+      "$imagePath/information-dummy-4-image.png";
 
   // Transaction
   static const String product1Image = "$imagePath/product-1-image.png";
@@ -80,6 +99,13 @@ class AppAssets {
   static const String dummyActivityIncidentImage =
       "$imagePath/dummy-activity-incident-image.png";
   static const String weigherIconFill = "$iconPath/weigher-icon-fill.png";
+  static const String biomassaActivityIcon =
+      "$iconPath/biomassa-activity-icon.png";
+  static const String feedActivityIcon = "$iconPath/feed-activity-icon.png";
+  static const String sellEstimationActivityIcon =
+      "$iconPath/sell-estimation-activity-icon.png";
+  static const String survivalRateActivtyIcon =
+      "$iconPath/survival-rate-activity-icon.png";
 
   // product
   static const String arrowLeftIcon = "$iconPath/arrow-left-icon.png";
@@ -93,4 +119,9 @@ class AppAssets {
 
   // add bulk feed
   static const String handStarsIcon = "$iconPath/hand-stars-icon.png";
+
+  // Point Page
+  static const String circleActiveIcon = "$iconPath/circle-active-icon.png";
+  static const String circleInactiveIcon = "$iconPath/circle-inactive-icon.png";
+  static const String pointAddIcon = "$iconPath/point-add-icon.png";
 }

@@ -59,7 +59,7 @@ class _SamplingViewState extends State<SamplingView> {
               const SizedBox(height: 18.0),
               Row(
                 children: [
-                  Image.asset(AppAssets.rupiahIcon, height: 20.0),
+                  Image.asset(AppAssets.bussinessStatisticIcon, height: 20.0),
                   const SizedBox(width: 12.0),
                   Text("SR: 90%", style: appTextTheme(context).titleSmall),
                 ],

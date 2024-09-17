@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/activity_header_data_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/view/add_bulk_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
@@ -330,196 +331,270 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
-    Widget headerDataItem({
-      required IconData icon,
-      Color? iconColor,
+    // Widget headerDataItem({
+    //   required IconData icon,
+    //   Color? iconColor,
+    //   required String title,
+    //   required String value,
+    //   String? description,
+    // }) {
+    //   return Container(
+    //     padding: const EdgeInsets.symmetric(
+    //       horizontal: 12.0,
+    //       vertical: 18.0,
+    //     ),
+    //     decoration: BoxDecoration(
+    //       color: Colors.white,
+    //       borderRadius: BorderRadius.circular(8.0),
+    //     ),
+    //     child: Column(
+    //       crossAxisAlignment: CrossAxisAlignment.start,
+    //       children: [
+    //         Row(
+    //           children: [
+    //             Icon(
+    //               icon,
+    //               color: iconColor,
+    //             ),
+    //             const SizedBox(width: 8.0),
+    //             Expanded(
+    //               child: Text(
+    //                 title,
+    //                 maxLines: 1,
+    //                 style: appTextTheme(context).labelLarge?.copyWith(
+    //                       color: AppColor.neutral[600],
+    //                     ),
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //         const SizedBox(height: 12.0),
+    //         Text(
+    //           value,
+    //           maxLines: 1,
+    //           style: appTextTheme(context).headlineSmall?.copyWith(
+    //                 color: AppColor.neutral[600],
+    //               ),
+    //         ),
+    //         if (description != null) const SizedBox(height: 12.0),
+    //         if (description != null)
+    //           Text(
+    //             description,
+    //             maxLines: 1,
+    //             style: appTextTheme(context).labelLarge?.copyWith(
+    //                   color: AppColor.neutral[500],
+    //                 ),
+    //           ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
+    // Widget firstData() {
+    //   return Padding(
+    //     padding: const EdgeInsets.symmetric(horizontal: 18.0),
+    //     child: Column(
+    //       children: [
+    //         Row(
+    //           children: [
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.monitor_weight,
+    //                 iconColor: AppColor.secondary[800],
+    //                 title: "Biomasa",
+    //                 value: "1.234,56 Kg",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //             const SizedBox(width: 12.0),
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.shopping_bag_rounded,
+    //                 iconColor: AppColor.red[400],
+    //                 title: "Pakan",
+    //                 value: "15.2 Kg",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //         const SizedBox(height: 12.0),
+    //         Row(
+    //           children: [
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.pie_chart_sharp,
+    //                 iconColor: AppColor.accent[700],
+    //                 title: "Estimasi SR (%)",
+    //                 value: "84,5 %",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //             const SizedBox(width: 12.0),
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.bar_chart_rounded,
+    //                 iconColor: AppColor.green[400],
+    //                 title: "Estimasi Jual (Rp)",
+    //                 value: "12,34 Jt",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
+    // Widget secondData() {
+    //   return Padding(
+    //     padding: const EdgeInsets.symmetric(horizontal: 18.0),
+    //     child: Column(
+    //       children: [
+    //         Row(
+    //           children: [
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.monitor_weight,
+    //                 iconColor: AppColor.secondary[800],
+    //                 title: "Biomasa",
+    //                 value: "1.234,56 Kg",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //             const SizedBox(width: 12.0),
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.shopping_bag_rounded,
+    //                 iconColor: AppColor.red[400],
+    //                 title: "Pakan",
+    //                 value: "15.2 Kg",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //         const SizedBox(height: 12.0),
+    //         Row(
+    //           children: [
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.pie_chart_sharp,
+    //                 iconColor: AppColor.accent[700],
+    //                 title: "Estimasi SR (%)",
+    //                 value: "84,5 %",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //             const SizedBox(width: 12.0),
+    //             Expanded(
+    //               child: headerDataItem(
+    //                 icon: Icons.bar_chart_rounded,
+    //                 iconColor: AppColor.green[400],
+    //                 title: "Estimasi Jual (Rp)",
+    //                 value: "12,34 Jt",
+    //                 description: "dari 3 kolam aktif",
+    //               ),
+    //             ),
+    //           ],
+    //         ),
+    //       ],
+    //     ),
+    //   );
+    // }
+
+    // Widget scrollIndicator() {
+    //   return AnimatedSmoothIndicator(
+    //     activeIndex: page,
+    //     count: 2,
+    //     effect: const ExpandingDotsEffect(
+    //       dotHeight: 7,
+    //       dotWidth: 7,
+    //       activeDotColor: AppColor.white,
+    //     ),
+    //   );
+    // }
+
+    Widget headerItemData({
       required String title,
       required String value,
-      String? description,
+      required String imageAsset,
     }) {
       return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-          vertical: 18.0,
-        ),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        margin: const EdgeInsets.only(left: 18.0),
+        padding: const EdgeInsets.all(18.0),
+        height: 120.0,
+        width: MediaQuery.of(context).size.width * 0.64,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Row(
-              children: [
-                Icon(
-                  icon,
-                  color: iconColor,
-                ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Text(
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     title,
-                    maxLines: 1,
-                    style: appTextTheme(context).labelLarge?.copyWith(
-                          color: AppColor.neutral[600],
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          color: AppColor.neutralBlueGrey[400],
+                          fontWeight: FontWeight.w600,
                         ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12.0),
-            Text(
-              value,
-              maxLines: 1,
-              style: appTextTheme(context).headlineSmall?.copyWith(
-                    color: AppColor.neutral[600],
+                  const Spacer(),
+                  Text(value, style: appTextTheme(context).headlineMedium),
+                  const Spacer(),
+                  Text(
+                    "dari 3 kolam aktif",
+                    style: appTextTheme(context)
+                        .labelLarge
+                        ?.copyWith(color: AppColor.neutralBlueGrey[400]),
                   ),
-            ),
-            if (description != null) const SizedBox(height: 12.0),
-            if (description != null)
-              Text(
-                description,
-                maxLines: 1,
-                style: appTextTheme(context).labelLarge?.copyWith(
-                      color: AppColor.neutral[500],
-                    ),
+                ],
               ),
-          ],
-        ),
-      );
-    }
-
-    Widget firstData() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.monitor_weight,
-                    iconColor: AppColor.secondary[800],
-                    title: "Biomasa",
-                    value: "1.234,56 Kg",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.shopping_bag_rounded,
-                    iconColor: AppColor.red[400],
-                    title: "Pakan",
-                    value: "15.2 Kg",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-              ],
             ),
-            const SizedBox(height: 12.0),
-            Row(
-              children: [
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.pie_chart_sharp,
-                    iconColor: AppColor.accent[700],
-                    title: "Estimasi SR (%)",
-                    value: "84,5 %",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.bar_chart_rounded,
-                    iconColor: AppColor.green[400],
-                    title: "Estimasi Jual (Rp)",
-                    value: "12,34 Jt",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-              ],
+            Image.asset(
+              imageAsset,
+              height: 40.0,
+              width: 40.0,
+              fit: BoxFit.cover,
             ),
           ],
         ),
       );
     }
 
-    Widget secondData() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.monitor_weight,
-                    iconColor: AppColor.secondary[800],
-                    title: "Biomasa",
-                    value: "1.234,56 Kg",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.shopping_bag_rounded,
-                    iconColor: AppColor.red[400],
-                    title: "Pakan",
-                    value: "15.2 Kg",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-              ],
+    Widget wrappedHeaderItemData(ActivityHeaderDataWrapped data) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          headerItemData(
+            title: data.listActivtyHeaderDataDummy[0].title,
+            value: data.listActivtyHeaderDataDummy[0].value,
+            imageAsset: data.listActivtyHeaderDataDummy[0].imageAsset,
+          ),
+          const SizedBox(height: 18.0),
+          if (data.listActivtyHeaderDataDummy.length > 1)
+            headerItemData(
+              title: data.listActivtyHeaderDataDummy[1].title,
+              value: data.listActivtyHeaderDataDummy[1].value,
+              imageAsset: data.listActivtyHeaderDataDummy[1].imageAsset,
             ),
-            const SizedBox(height: 12.0),
-            Row(
-              children: [
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.pie_chart_sharp,
-                    iconColor: AppColor.accent[700],
-                    title: "Estimasi SR (%)",
-                    value: "84,5 %",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-                const SizedBox(width: 12.0),
-                Expanded(
-                  child: headerDataItem(
-                    icon: Icons.bar_chart_rounded,
-                    iconColor: AppColor.green[400],
-                    title: "Estimasi Jual (Rp)",
-                    value: "12,34 Jt",
-                    description: "dari 3 kolam aktif",
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    Widget scrollIndicator() {
-      return AnimatedSmoothIndicator(
-        activeIndex: page,
-        count: 2,
-        effect: const ExpandingDotsEffect(
-          dotHeight: 7,
-          dotWidth: 7,
-          activeDotColor: AppColor.white,
-        ),
+        ],
       );
     }
 
     Widget headerData() {
       return Container(
-        color: AppColor.primary[800],
+        color: AppColor.neutral[100],
         child: Column(
           children: [
+            const SizedBox(height: 18.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppValidatorTextField(
@@ -545,30 +620,81 @@ class _ActivityViewState extends State<ActivityView> {
             ),
             const SizedBox(height: 18.0),
             SizedBox(
-              height: MediaQuery.sizeOf(context).height * 0.35,
-              width: double.infinity,
-              child: PageView(
-                onPageChanged: (value) {
-                  setState(() {
-                    page = value;
-                  });
+              height: 258.0,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: activityHeaderDataWrappedList.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: activityHeaderDataWrappedList.length - 1 == index
+                        ? const EdgeInsets.only(right: 18.0)
+                        : EdgeInsets.zero,
+                    child: wrappedHeaderItemData(
+                        activityHeaderDataWrappedList[index]),
+                  );
                 },
-                controller: pageController,
-                physics: AlwaysScrollableScrollPhysics(),
-                allowImplicitScrolling: true,
-                pageSnapping: true,
-                children: [
-                  firstData(),
-                  secondData(),
-                ],
               ),
             ),
-            const SizedBox(height: 18.0),
-            scrollIndicator(),
             const SizedBox(height: 18.0),
           ],
         ),
       );
+      // ! Notes : Old data
+      // return Container(
+      //   color: AppColor.primary[800],
+      //   child: Column(
+      //     children: [
+      //       Padding(
+      //         padding: const EdgeInsets.symmetric(horizontal: 18.0),
+      //         child: AppValidatorTextField(
+      //           controller: pondController,
+      //           isMandatory: false,
+      //           withUpperLabel: false,
+      //           readOnly: true,
+      //           hintText: "Semua kolam",
+      //           suffixWidget: const Padding(
+      //             padding: EdgeInsets.only(right: 18.0),
+      //             child: Icon(Icons.arrow_drop_down_rounded),
+      //           ),
+      //           suffixConstraints: const BoxConstraints(),
+      //           validator: (value) {
+      //             return null;
+      //           },
+      //           onTap: bottomSheetShowModal(
+      //             context,
+      //             "Pilih Kolam",
+      //             ["Kolam 1", "Kolam 2", "Kolam 3"],
+      //           ),
+      //         ),
+      //       ),
+      //       const SizedBox(height: 18.0),
+      //       SizedBox(
+      //         height: MediaQuery.sizeOf(context).height * 0.35,
+      //         width: double.infinity,
+      //         child: PageView(
+      //           onPageChanged: (value) {
+      //             setState(() {
+      //               page = value;
+      //             });
+      //           },
+      //           controller: pageController,
+      //           physics: AlwaysScrollableScrollPhysics(),
+      //           allowImplicitScrolling: true,
+      //           pageSnapping: true,
+      //           children: [
+      //             firstData(),
+      //             secondData(),
+      //           ],
+      //         ),
+      //       ),
+      //       const SizedBox(height: 18.0),
+      //       scrollIndicator(),
+      //       const SizedBox(height: 18.0),
+      //     ],
+      //   ),
+      // );
     }
 
     Widget addPond() {
@@ -592,41 +718,14 @@ class _ActivityViewState extends State<ActivityView> {
                         ),
                   ),
                 ),
-                InkWell(
-                  onTap: () {
+                AppPrimaryGradientButton(
+                  "+ Pakan",
+                  () {
                     Navigator.of(context).push(AppTransition.pushTransition(
                       const AddBulkFeedPage(),
                       AddBulkFeedPage.routeSettings(),
                     ));
                   },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 8.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColor.primary[600],
-                      borderRadius: BorderRadius.circular(100.0),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(
-                          Icons.add,
-                          color: AppColor.white,
-                          size: 16.0,
-                        ),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          "Pakan",
-                          style: appTextTheme(context).titleSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ],
             ),
