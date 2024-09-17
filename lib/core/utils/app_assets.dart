@@ -124,4 +124,8 @@ class AppAssets {
   static const String circleActiveIcon = "$iconPath/circle-active-icon.png";
   static const String circleInactiveIcon = "$iconPath/circle-inactive-icon.png";
   static const String pointAddIcon = "$iconPath/point-add-icon.png";
+
+  // FAQ
+  static const String questionIcon = "$iconPath/question-icon.png";
+  static const String chatIcon = "$iconPath/chat-icon.png";
 }
