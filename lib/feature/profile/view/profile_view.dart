@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
@@ -395,7 +396,12 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Tentang Kami",
           "Informasi mengenai Mitra3M",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const AboutPage(),
+              AboutPage.routeSettings,
+            ));
+          },
         ),
         actionMenu(
           "FAQ",
