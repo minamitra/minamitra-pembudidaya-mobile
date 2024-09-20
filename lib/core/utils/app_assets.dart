@@ -128,4 +128,10 @@ class AppAssets {
   // FAQ
   static const String questionIcon = "$iconPath/question-icon.png";
   static const String chatIcon = "$iconPath/chat-icon.png";
+
+  // Referral page
+  static const String referralIllustrationImage =
+      "$imagePath/referral-illustration-image.png";
+  static const String userInvitedIcon = "$iconPath/user-invited-icon.png";
+  static const String pointRewardedIcon = "$iconPath/point-rewarded-icon.png";
 }

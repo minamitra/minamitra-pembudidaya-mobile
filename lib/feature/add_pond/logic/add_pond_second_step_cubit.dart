@@ -101,6 +101,14 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       latitude: latitude,
       longitude: longitude,
       snapshotMap: snapshot,
+      selectedProvince: state.selectedProvince,
+      provinceData: state.provinceData,
+      districtData: state.districtData,
+      selectedDistrict: state.selectedDistrict,
+      subDistrictData: state.subDistrictData,
+      selectedSubDistrict: state.selectedSubDistrict,
+      villageData: state.villageData,
+      selectedVillage: state.selectedVillage,
       status: GlobalState.loaded,
     ));
   }

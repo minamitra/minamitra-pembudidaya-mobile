@@ -11,9 +11,11 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/call_center/view/call_center_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -417,7 +419,12 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Hubungi Pusat Bantuan",
           "Hubungi untuk informasi lebih lanjut",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CallCenterPage(),
+              CallCenterPage.routeSettings,
+            ));
+          },
         ),
         const SizedBox(height: 18.0),
         const AppDivider(),
@@ -425,7 +432,12 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Undang Teman",
           "Dapatkan hadiah poin",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const ReferralPage(),
+              ReferralPage.routeSettings,
+            ));
+          },
         ),
         actionMenu(
           "Keluar",

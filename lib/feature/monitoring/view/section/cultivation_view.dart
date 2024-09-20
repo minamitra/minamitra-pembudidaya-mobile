@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/view/cultivation_note_all_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_detail/view/cultivation_note_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/line_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class CultivationView extends StatefulWidget {
@@ -364,42 +370,114 @@ class _CultivationViewState extends State<CultivationView> {
       );
     }
 
-    Widget notes() {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 18.0),
-        padding: const EdgeInsets.all(18.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: AppColor.neutralBlueGrey[50],
-        ),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Icon(
-                  Icons.comment_rounded,
-                  color: AppColor.primary[500],
-                  size: 20.0,
+    Widget itemNote() {
+      return Column(
+        children: [
+          const SizedBox(height: 18.0),
+          Row(
+            children: [
+              CircleAvatar(
+                radius: 18.0,
+                child: Image.asset(
+                  AppAssets.profileImageDummy,
+                  fit: BoxFit.cover,
                 ),
-                const SizedBox(width: 12.0),
-                Text(
-                  "Rekomendasi Pendamping",
-                  style: appTextTheme(context).titleSmall?.copyWith(
-                        color: AppColor.primary[500],
-                        fontWeight: FontWeight.w600,
+              ),
+              const SizedBox(width: 12.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Jacob Jones",
+                      style: appTextTheme(context).titleSmall,
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      "Senin, 12 Sept 2024, 14:30",
+                      style: appTextTheme(context)
+                          .labelLarge
+                          ?.copyWith(color: AppColor.neutral[400]),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 4.0,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4.0),
+                  color: AppColor.secondary[50],
+                  border: Border.all(color: AppColor.secondary[900]!),
+                ),
+                child: Text(
+                  "Baru",
+                  style: appTextTheme(context).bodySmall?.copyWith(
+                        color: AppColor.secondary[900],
+                        fontWeight: FontWeight.w500,
                       ),
-                )
-              ],
-            ),
-            const SizedBox(height: 18.0),
-            Text(
-              """Figma ipsum component variant main layer. Main underline scrolling selection text pixel scale stroke community.\n 
-Arrow reesizing rectangle blur fill. Strikethrough layout selection asset hand fill. Distribute italic object opacity duplicate. Stroke select underline effect edit.\n 
-Follower arrange rectangle star scale boolean. Align link bullet selection hand list distribute figjam.""",
-              style: appTextTheme(context).titleSmall,
-            )
-          ],
-        ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18.0),
+          Text(
+            "Pada tanggal 12 September 2024, dilakukan pengecekan kualitas air di Kolam 1. Ditemukan bahwa tingkat pH air menunjukkan fluktuasi yang cukup signifikan, dengan penurunan di bawah batas optimal. Kondisi ini dapat mempengaruhi kesehatan ikan, terutama dalam hal pertumbuhan dan daya tahan mereka terhadap penyakit. Setelah berkonsultasi dengan tim teknis, dilakukan penambahan buffer pH untuk menstabilkan kondisi air. Selain itu, pendamping merekomendasikan pemantauan harian untuk memastikan bahwa kondisi air tetap stabil dan tidak memburuk. Langkah selanjutnya adalah melakukan pengecekan lanjutan dalam 3 hari ke depan guna memastikan efektivitas dari penambahan buffer pH.",
+            maxLines: 3,
+            style: appTextTheme(context).bodySmall,
+          ),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+        ],
+      );
+    }
+
+    Widget notes() {
+      return ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          Row(
+            children: [
+              Text(
+                "Catatan Pendamping",
+                style: appTextTheme(context)
+                    .titleMedium
+                    ?.copyWith(fontWeight: FontWeight.w700),
+              ),
+              const Spacer(),
+              AppWidgetSecondaryChip(
+                text: "Lihat Semua",
+                onTap: () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    const CultivationNoteAllPage(),
+                    CultivationNoteAllPage.routeSettings,
+                  ));
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 18.0),
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: 5,
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    const CultivationNoteDetailPage(),
+                    CultivationNoteDetailPage.routeSettings,
+                  ));
+                },
+                child: itemNote(),
+              );
+            },
+          )
+        ],
       );
     }
 
@@ -410,6 +488,9 @@ Follower arrange rectangle star scale boolean. Align link bullet selection hand 
         const SizedBox(height: 18),
         xSetter(),
         lineChart(),
+        const SizedBox(height: 36),
+        AppDividerLarge(),
+        const SizedBox(height: 18),
         notes(),
         const SizedBox(height: 18),
       ],
