@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -16,6 +18,8 @@ class CultivationNoteAllView extends StatefulWidget {
 }
 
 class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
+  final TextEditingController companionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     Widget filterSection() {
@@ -55,16 +59,72 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                     ),
                   ),
                   const SizedBox(width: 18.0),
-                  Container(
-                    height: 44.0,
-                    width: 44.0,
-                    decoration: BoxDecoration(
-                      color: AppColor.primary[600],
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: const Icon(
-                      Icons.tune_rounded,
-                      color: AppColor.white,
+                  InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (bottomSheetContext) {
+                          return AppBottomSheet(
+                            "Filter Data",
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: Column(
+                                children: [
+                                  Expanded(
+                                    child: ListView(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(),
+                                      children: [
+                                        AppDropdownTextField(
+                                          "Pendamping",
+                                          ["Diky", "Lukas", "Sabik"],
+                                          companionController,
+                                          hint: "Pilih Pendamping",
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                  AppDividerSmall(),
+                                  const SizedBox(height: 18.0),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: AppPrimaryOutlineFullButton(
+                                          "Reset",
+                                          () {},
+                                        ),
+                                      ),
+                                      const SizedBox(width: 18.0),
+                                      Expanded(
+                                        child: AppPrimaryFullButton(
+                                          "Terapkan",
+                                          () {},
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  const SizedBox(height: 18.0),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      height: 44.0,
+                      width: 44.0,
+                      decoration: BoxDecoration(
+                        color: AppColor.primary[600],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: const Icon(
+                        Icons.tune_rounded,
+                        color: AppColor.white,
+                      ),
                     ),
                   ),
                 ],

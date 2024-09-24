@@ -1,23 +1,31 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/view/activity_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/pakan_starter_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondThirdStepView extends StatefulWidget {
-  const AddPondThirdStepView(this.formThirdStepKey, {super.key});
+  const AddPondThirdStepView(this.rootPageController, {super.key});
 
-  final GlobalKey<FormState> formThirdStepKey;
+  final PageController rootPageController;
 
   @override
   State<AddPondThirdStepView> createState() => _AddPondThirdStepViewState();
 }
 
 class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
+  final GlobalKey<FormState> formThirdStepKey = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController fishCountController = TextEditingController();
   final TextEditingController spreadController = TextEditingController();
@@ -25,6 +33,8 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   final TextEditingController targetController = TextEditingController();
   final TextEditingController pakanStarterController = TextEditingController();
   final TextEditingController survivalRateController = TextEditingController();
+  final TextEditingController pakanGrowerController = TextEditingController();
+  final TextEditingController pakanFinisherController = TextEditingController();
 
   // Optional when user picked other as seed origin
   final TextEditingController seedOriginNameController =
@@ -45,7 +55,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
 
-  List<PakanStarterDummy> pakanList = pakanListDummy;
+  List<String> selectedPakanStarter = [];
+  List<String> selectedPakanGrower = [];
+  List<String> selectedPakanFinisher = [];
 
   Function() checklistShowModal(
     BuildContext context,
@@ -515,7 +527,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: spreadController,
+          controller: targetController,
           inputType: TextInputType.phone,
           isMandatory: false,
           withUpperLabel: true,
@@ -538,7 +550,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pakanStarterController,
+          controller: seedOriginController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -553,14 +565,23 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: radioShowModal(
+          onTap: appBottomSheetShowModal(
             context,
-            "Pilih asal benih",
-            ["Beli", "Budidaya Sendiri", "Lainnya"],
-            (value) {},
+            "Asal Benih",
+            [
+              "Banyu Asin",
+              "Muara Enim",
+              "Lahat",
+              "Pagaralam",
+              "Palembang",
+              "Prabumilih"
+            ],
+            (value) {
+              seedOriginController.text = value;
+            },
           ),
         ),
-        ...seedOrignOtherChildren(),
+        // ...seedOrignOtherChildren(),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
           controller: survivalRateController,
@@ -601,11 +622,19 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: checklistShowModal(context, pakanList),
+          onTap: appBottomSheetShowModalChecklist(
+            context: context,
+            title: "Pakan Starter",
+            data: pakanStarterDummy,
+            selectedData: selectedPakanStarter,
+            onSelected: (value) {
+              pakanStarterController.text = value.join(", ");
+            },
+          ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pakanStarterController,
+          controller: pakanGrowerController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -620,11 +649,19 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: checklistShowModal(context, pakanList),
+          onTap: appBottomSheetShowModalChecklist(
+            context: context,
+            title: "Pakan Grower",
+            data: pakanGrowerDummy,
+            selectedData: selectedPakanGrower,
+            onSelected: (value) {
+              pakanGrowerController.text = value.join(", ");
+            },
+          ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pakanStarterController,
+          controller: pakanFinisherController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -639,24 +676,88 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           validator: (value) {
             return null;
           },
-          onTap: checklistShowModal(context, pakanList),
+          onTap: appBottomSheetShowModalChecklist(
+            context: context,
+            title: "Pakan Finisher",
+            data: pakanFinisherDummy,
+            selectedData: selectedPakanFinisher,
+            onSelected: (value) {
+              pakanFinisherController.text = value.join(", ");
+            },
+          ),
         ),
       ];
     }
 
-    return Form(
-      key: widget.formThirdStepKey,
-      child: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          const SizedBox(height: 18.0),
-          ...pondInformation(),
-          ...form(),
-          const SizedBox(height: 18.0),
-        ],
-      ),
+    Widget bottomButton() {
+      return BlocBuilder<AddPondCubit, AddPondState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: AppAnimatedSize(
+                    isShow: state.index > 0,
+                    child: AppPrimaryOutlineFullButton(
+                      "Kembali",
+                      () {
+                        widget.rootPageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                        context.read<AddPondCubit>().changeStep(2);
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: AppAnimatedSize(
+                    isShow: true,
+                    child: AppPrimaryFullButton(
+                      "Simpan",
+                      () {
+                        if (formThirdStepKey.currentState?.validate() ??
+                            false) {
+                          widget.rootPageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          Navigator.of(context).popUntil(ModalRoute.withName(
+                              DashboardPage.routeSettings().name ?? ""));
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    return Column(
+      children: [
+        Expanded(
+          child: Form(
+            key: formThirdStepKey,
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 18.0),
+              shrinkWrap: true,
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                const SizedBox(height: 18.0),
+                ...pondInformation(),
+                ...form(),
+                const SizedBox(height: 18.0),
+              ],
+            ),
+          ),
+        ),
+        bottomButton(),
+      ],
     );
   }
 }

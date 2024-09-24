@@ -11,11 +11,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/image/multiple_image_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/repositories/map_callback_data.dart';
@@ -32,14 +31,6 @@ class AddPondSecondStepView extends StatefulWidget {
 }
 
 class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
-  final TextEditingController starterFeedController = TextEditingController();
-  final TextEditingController growerFeedController = TextEditingController();
-  final TextEditingController finisherFeedController = TextEditingController();
-  final TextEditingController provinceController = TextEditingController();
-  final TextEditingController districtController = TextEditingController();
-  final TextEditingController subdisctrictController = TextEditingController();
-  final TextEditingController villageController = TextEditingController();
-
   final GlobalKey<FormState> formSecondStepKey = GlobalKey<FormState>();
 
   Function() bottomSheetShowModal(
@@ -117,6 +108,9 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
 
   @override
   Widget build(BuildContext context) {
+    final AddPondSecondStepCubit addPondSecondStepCubit =
+        context.read<AddPondSecondStepCubit>();
+
     List<Widget> pondInformation() {
       return [
         const SizedBox(height: 18.0),
@@ -167,7 +161,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
             ],
           ),
           const SizedBox(height: 8.0),
-          BlocBuilder<ActivityIncidentPictureCubit, List<Uint8List>?>(
+          BlocBuilder<MultipleImageCubit, List<Uint8List>?>(
             builder: (context, state) {
               return AppPickImageCard(
                 () {
@@ -190,7 +184,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                               if (document != null) {
                                 await document.readAsBytes().then((image) {
                                   context
-                                      .read<ActivityIncidentPictureCubit>()
+                                      .read<MultipleImageCubit>()
                                       .setImage(image);
                                   Navigator.of(bottomSheetContext).pop();
                                 });
@@ -204,7 +198,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                               if (document != null) {
                                 await document.readAsBytes().then((image) {
                                   context
-                                      .read<ActivityIncidentPictureCubit>()
+                                      .read<MultipleImageCubit>()
                                       .setImage(image);
                                   Navigator.of(bottomSheetContext).pop();
                                 });
@@ -218,9 +212,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                 },
                 listImage: state ?? [],
                 onTapImage: (value) {
-                  context
-                      .read<ActivityIncidentPictureCubit>()
-                      .removeImage(value);
+                  context.read<MultipleImageCubit>().removeImage(value);
                 },
               );
             },
@@ -340,7 +332,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
     List<Widget> form(AddPondSecondStepState state) {
       return [
         AppValidatorTextField(
-          controller: provinceController,
+          controller: addPondSecondStepCubit.provinceController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
@@ -367,16 +359,17 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
               context
                   .read<AddPondSecondStepCubit>()
                   .selectProvince(selectedProvince!);
-              provinceController.text = selectedProvince.name ?? "";
-              districtController.clear();
-              subdisctrictController.clear();
-              villageController.clear();
+              addPondSecondStepCubit.provinceController.text =
+                  selectedProvince.name ?? "";
+              addPondSecondStepCubit.districtController.clear();
+              addPondSecondStepCubit.subdisctrictController.clear();
+              addPondSecondStepCubit.villageController.clear();
             },
           ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: districtController,
+          controller: addPondSecondStepCubit.districtController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
@@ -410,15 +403,16 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     context
                         .read<AddPondSecondStepCubit>()
                         .selectDistrict(selectedDistrict!);
-                    districtController.text = selectedDistrict.name ?? "";
-                    subdisctrictController.clear();
-                    villageController.clear();
+                    addPondSecondStepCubit.districtController.text =
+                        selectedDistrict.name ?? "";
+                    addPondSecondStepCubit.subdisctrictController.clear();
+                    addPondSecondStepCubit.villageController.clear();
                   },
                 ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: subdisctrictController,
+          controller: addPondSecondStepCubit.subdisctrictController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
@@ -453,15 +447,15 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     context
                         .read<AddPondSecondStepCubit>()
                         .selectSubDistrict(selectedSubDistrict!);
-                    subdisctrictController.text =
+                    addPondSecondStepCubit.subdisctrictController.text =
                         selectedSubDistrict.name ?? "";
-                    villageController.clear();
+                    addPondSecondStepCubit.villageController.clear();
                   },
                 ),
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: villageController,
+          controller: addPondSecondStepCubit.villageController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
@@ -494,7 +488,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     context
                         .read<AddPondSecondStepCubit>()
                         .selectVillage(selectedVillage!);
-                    villageController.text = selectedVillage.name ?? "";
+                    addPondSecondStepCubit.villageController.text =
+                        selectedVillage.name ?? "";
                   },
                 ),
         ),
@@ -525,23 +520,11 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     child: AppPrimaryOutlineFullButton(
                       "Kembali",
                       () {
-                        if (formSecondStepKey.currentState?.validate() ??
-                            false) {
-                          if (context
-                                  .read<ActivityIncidentPictureCubit>()
-                                  .state
-                                  ?.isEmpty ??
-                              true) {
-                            AppTopSnackBar(context)
-                                .showDanger("Unggah lampiran terlebih dahulu");
-                            return;
-                          }
-                          widget.rootPageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          context.read<AddPondCubit>().changeStep(2);
-                        }
+                        widget.rootPageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                        context.read<AddPondCubit>().changeStep(0);
                       },
                     ),
                   ),
@@ -553,10 +536,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     child: AppPrimaryFullButton(
                       "Selanjutnya",
                       () {
-                        if (context
-                                .read<ActivityIncidentPictureCubit>()
-                                .state
-                                ?.isEmpty ??
+                        if (context.read<MultipleImageCubit>().state?.isEmpty ??
                             true) {
                           AppTopSnackBar(context)
                               .showDanger("Unggah lampiran terlebih dahulu");

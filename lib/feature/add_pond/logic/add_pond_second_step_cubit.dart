@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
@@ -16,6 +17,14 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       : super(const AddPondSecondStepState());
 
   final RefService refService;
+
+  final TextEditingController starterFeedController = TextEditingController();
+  final TextEditingController growerFeedController = TextEditingController();
+  final TextEditingController finisherFeedController = TextEditingController();
+  final TextEditingController provinceController = TextEditingController();
+  final TextEditingController districtController = TextEditingController();
+  final TextEditingController subdisctrictController = TextEditingController();
+  final TextEditingController villageController = TextEditingController();
 
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));

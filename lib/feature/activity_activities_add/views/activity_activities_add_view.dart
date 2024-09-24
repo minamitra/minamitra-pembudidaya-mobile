@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/view/add_new_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesAddView extends StatefulWidget {
@@ -182,9 +184,11 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       hintText: "Masukan catatan",
       labelText: "Catatan",
       maxLines: 3,
+      isMandatory: false,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Catatan tidak boleh kosong";
+          // return "Catatan tidak boleh kosong";
+          return null;
         }
         return null;
       },
@@ -275,11 +279,34 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         }
         return null;
       },
-      onTap: appBottomSheetShowModal(
-        context,
-        "Pilih pakan",
-        ["Pakan 1", "Pakan 2", "Pakan 3"],
-        (value) {},
+      onTap: appBottomSheetShowModalWithCustomButton(
+        context: context,
+        title: "Pilih Pakan",
+        data: ["Pakan 1", "Pakan 2", "Pakan 3"],
+        onSelected: (value) {},
+        buttonWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.add,
+              color: AppColor.primary[600],
+            ),
+            const SizedBox(width: 8.0),
+            Text(
+              "Tambah Pakan Baru",
+              style: appTextTheme(context).titleSmall?.copyWith(
+                    color: AppColor.primary[600],
+                  ),
+            ),
+          ],
+        ),
+        onTapButtonBottom: () {
+          Navigator.of(context).pop();
+          Navigator.of(context).push(AppTransition.pushTransition(
+            const AddNewFeedPage(),
+            AddNewFeedPage.routeSettings,
+          ));
+        },
       ),
     );
   }

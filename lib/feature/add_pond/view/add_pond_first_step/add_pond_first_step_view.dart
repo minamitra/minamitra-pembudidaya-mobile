@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
@@ -18,16 +19,19 @@ class AddPondFirstStepView extends StatefulWidget {
 }
 
 class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
-  final TextEditingController pondNameController = TextEditingController();
-  final TextEditingController pondlengthController = TextEditingController();
-  final TextEditingController pondWidthController = TextEditingController();
-  final TextEditingController pondWideController = TextEditingController();
-  final TextEditingController pondDeepController = TextEditingController();
+  // final TextEditingController pondNameController = TextEditingController();
+  // final TextEditingController pondlengthController = TextEditingController();
+  // final TextEditingController pondWidthController = TextEditingController();
+  // final TextEditingController pondWideController = TextEditingController();
+  // final TextEditingController pondDeepController = TextEditingController();
 
   final GlobalKey<FormState> formFirstStepKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final AddPondFirstStepCubit firstStepCubit =
+        context.read<AddPondFirstStepCubit>();
+
     List<Widget> pondInformation() {
       return [
         const SizedBox(height: 18.0),
@@ -62,7 +66,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
     List<Widget> form() {
       return [
         AppValidatorTextField(
-          controller: pondNameController,
+          controller: firstStepCubit.pondNameController,
           isMandatory: true,
           withUpperLabel: true,
           labelText: "Nama Kolam",
@@ -76,7 +80,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pondlengthController,
+          controller: firstStepCubit.pondlengthController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -93,9 +97,9 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
             ),
           ),
           onChanged: (value) {
-            pondWideController.text =
+            firstStepCubit.pondWideController.text =
                 (double.parse(value.isEmpty ? "0" : value) *
-                        double.parse(pondWidthController.text))
+                        double.parse(firstStepCubit.pondWidthController.text))
                     .toStringAsFixed(0);
           },
           suffixConstraints: const BoxConstraints(),
@@ -109,7 +113,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pondWidthController,
+          controller: firstStepCubit.pondWidthController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -126,9 +130,9 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
             ),
           ),
           onChanged: (value) {
-            pondWideController.text =
+            firstStepCubit.pondWideController.text =
                 (double.parse(value.isEmpty ? "0" : value) *
-                        double.parse(pondlengthController.text))
+                        double.parse(firstStepCubit.pondlengthController.text))
                     .toStringAsFixed(0);
           },
           suffixConstraints: const BoxConstraints(),
@@ -141,7 +145,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pondDeepController,
+          controller: firstStepCubit.pondDeepController,
           inputType: TextInputType.phone,
           isMandatory: false,
           withUpperLabel: true,
@@ -165,7 +169,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: pondWideController,
+          controller: firstStepCubit.pondWideController,
           inputType: TextInputType.phone,
           isMandatory: false,
           withUpperLabel: true,
@@ -208,12 +212,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
                       curve: Curves.easeInOut,
                     );
                     context.read<AddPondCubit>().changeStep(1);
-                    context.read<AddPondFirstStepCubit>().onChangeData(
-                          pondName: pondNameController.text,
-                          pondLength: double.parse(pondlengthController.text),
-                          pondWidth: double.parse(pondWidthController.text),
-                          pondDepth: double.parse(pondDeepController.text),
-                        );
+                    context.read<AddPondFirstStepCubit>().onChangeData();
                   }
                 },
               ),

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/views/activity_cycle_view.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add/views/activity_cycle_add_page.dart';
 
 class ActivityCyclePage extends StatelessWidget {
   const ActivityCyclePage({super.key});

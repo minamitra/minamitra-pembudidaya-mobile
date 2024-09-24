@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -12,12 +10,12 @@ class AppDialogComponent extends StatefulWidget {
   final List<Widget>? buttons;
 
   const AppDialogComponent({
-    Key? key,
+    super.key,
     required this.title,
     required this.subTitle,
     this.image,
     this.buttons,
-  }) : super(key: key);
+  });
 
   @override
   State<AppDialogComponent> createState() => _AppDialogComponentState();
@@ -162,77 +160,4 @@ class AppDialog {
       ),
     );
   }
-}
-
-Function() appBottomSheetShowModal(
-  BuildContext context,
-  String title,
-  List<String> data,
-  Function(String) onSelected,
-) {
-  return () {
-    showModalBottomSheet(
-      isDismissible: true,
-      enableDrag: true,
-      context: context,
-      builder: (modalContext) {
-        return StatefulBuilder(
-          builder: (stateContext, setModalState) {
-            return AppBottomSheet(
-              title,
-              height: MediaQuery.of(context).size.height * 0.5,
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: data.length,
-                        separatorBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Divider(
-                            color: AppColor.neutral[100],
-                            thickness: 1.0,
-                            height: 0.0,
-                          ),
-                        ),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              onSelected(data[index]);
-                              Navigator.of(context).pop();
-                            },
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 8.0),
-                              child: Text(
-                                data[index],
-                                textAlign: TextAlign.start,
-                                style:
-                                    appTextTheme(context).bodySmall?.copyWith(
-                                          fontWeight: FontWeight.w600,
-                                          color: AppColor.black,
-                                        ),
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    ).then((value) {
-      if (value != null) {
-        if (value is String) {}
-      }
-    });
-  };
 }

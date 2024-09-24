@@ -8,8 +8,8 @@ class MapView extends StatelessWidget {
   MapView(
     this.initLocation,
     this.onMapCreated, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final LatLng initLocation;
   final void Function(GoogleMapController)? onMapCreated;

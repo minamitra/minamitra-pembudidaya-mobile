@@ -9,7 +9,6 @@ import 'package:minamitra_pembudidaya_mobile/core/services/location_service/loca
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/login/logic/login_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/login/repositories/login_request.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/register/view/register_page.dart';

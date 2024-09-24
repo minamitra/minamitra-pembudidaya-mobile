@@ -4,13 +4,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.d
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_first_step/add_pond_first_step_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_second_step/add_pond_second_step_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_third_step/add_pond_third_step_view.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_location_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondView extends StatefulWidget {
@@ -134,7 +131,7 @@ class _AddPondViewState extends State<AddPondView> {
         children: [
           AddPondFirstStepView(pageController),
           AddPondSecondStepView(pageController),
-          AddPondThirdStepView(formThirdStepKey),
+          AddPondThirdStepView(pageController),
         ],
       );
     }

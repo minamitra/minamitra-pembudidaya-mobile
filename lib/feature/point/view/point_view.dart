@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';

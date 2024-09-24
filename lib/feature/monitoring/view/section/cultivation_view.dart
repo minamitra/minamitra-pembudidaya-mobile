@@ -79,7 +79,7 @@ class _CultivationViewState extends State<CultivationView> {
       return Container(
         margin: const EdgeInsets.all(5),
         child: Text(
-          "DoC : ${point?.x.toString()} Hari\nMBW : ${point?.y.toString()} gram",
+          "DoC : ${point.x.toString()} Hari\nMBW : ${point.y.toString()} gram",
           style: const TextStyle(color: Colors.white),
         ),
       );

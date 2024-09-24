@@ -8,7 +8,6 @@ import 'package:minamitra_pembudidaya_mobile/core/logic/active/secondary_active_
 import 'package:minamitra_pembudidaya_mobile/core/services/authentication/authentication_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/login/logic/login_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/register/logic/register_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/register/view/register_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/image/multiple_image_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/logics/activity_incident_picture_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
@@ -23,7 +23,7 @@ class AddPondPage extends StatelessWidget {
         BlocProvider(
           create: (context) => AddPondCubit(RefServiceImpl.create())..init(),
         ),
-        BlocProvider(create: (context) => ActivityIncidentPictureCubit()),
+        BlocProvider(create: (context) => MultipleImageCubit()),
         BlocProvider(create: (context) => AddPondFirstStepCubit()),
         BlocProvider(
           create: (context) =>

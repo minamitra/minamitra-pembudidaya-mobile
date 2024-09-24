@@ -13,6 +13,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart'
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/call_center/view/call_center_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
@@ -122,7 +123,7 @@ class _ProfileViewState extends State<ProfileView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Pengeluaran",
+              "Distribusi Plafon",
               style: appTextTheme(context).titleSmall,
             ),
             const SizedBox(height: 8.0),
@@ -204,7 +205,12 @@ class _ProfileViewState extends State<ProfileView> {
             ),
             const SizedBox(height: 18.0),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(AppTransition.pushTransition(
+                  const PlafonDistributionPage(),
+                  PlafonDistributionPage.routeSettings,
+                ));
+              },
               child: Center(
                 child: Text(
                   "Lihat Selengkapnya",

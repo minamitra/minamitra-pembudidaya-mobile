@@ -12,7 +12,6 @@ import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/view/add_bulk
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ActivityView extends StatefulWidget {
