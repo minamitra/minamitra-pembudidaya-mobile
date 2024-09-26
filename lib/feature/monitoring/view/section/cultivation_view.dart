@@ -45,46 +45,45 @@ class _CultivationViewState extends State<CultivationView> {
       format: "point.x Hari : point.y gram",
     ),
     builder: (context, trackballs) {
-      return trackballs.seriesIndex == 2
-          ? Container(
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.black,
-                    offset: Offset(0, 1),
-                  )
-                ],
-              ),
-              child: Text(
-                "DoC : ${trackballs.point?.x.toString()} Hari\nMBW : ${trackballs.point?.y.toString()} gram",
-                style: const TextStyle(color: Colors.white),
-              ),
-            )
-          : Container();
-    },
-  );
-
-  TooltipBehavior defaultTooltipBehavior = TooltipBehavior(
-    enable: true,
-    activationMode: ActivationMode.singleTap,
-    header: '',
-    animationDuration: 500,
-    duration: 2000,
-    canShowMarker: false,
-    shouldAlwaysShow: false,
-    format: 'point.x Hari : point.y gram',
-    builder: (data, point, series, pointIndex, seriesIndex) {
       return Container(
-        margin: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black,
+              offset: Offset(0, 1),
+            )
+          ],
+        ),
         child: Text(
-          "DoC : ${point.x.toString()} Hari\nMBW : ${point.y.toString()} gram",
+          "DoC : ${trackballs.point?.x.toString()} Hari\nMBW : ${trackballs.point?.y.toString()} gram",
           style: const TextStyle(color: Colors.white),
         ),
       );
+      // : Container();
     },
   );
+
+  // TooltipBehavior defaultTooltipBehavior = TooltipBehavior(
+  //   enable: true,
+  //   activationMode: ActivationMode.singleTap,
+  //   header: '',
+  //   animationDuration: 500,
+  //   duration: 2000,
+  //   canShowMarker: false,
+  //   shouldAlwaysShow: false,
+  //   format: 'point.x Hari : point.y gram',
+  //   builder: (data, point, series, pointIndex, seriesIndex) {
+  //     return Container(
+  //       margin: const EdgeInsets.all(5),
+  //       child: Text(
+  //         "DoC : ${point.x.toString()} Hari\nMBW : ${point.y.toString()} gram",
+  //         style: const TextStyle(color: Colors.white),
+  //       ),
+  //     );
+  //   },
+  // );
 
   @override
   void initState() {
@@ -309,7 +308,7 @@ class _CultivationViewState extends State<CultivationView> {
                 ZoomMode.x, // Allow zooming and panning only on the X-axis
           ),
           trackballBehavior: defaultTrackballBehavior,
-          tooltipBehavior: defaultTooltipBehavior,
+          // tooltipBehavior: defaultTooltipBehavior,
           legend: Legend(
             isVisible: true,
           ),
@@ -348,10 +347,10 @@ class _CultivationViewState extends State<CultivationView> {
               xValueMapper: (LineDummy sales, _) => sales.xAxis,
               yValueMapper: (LineDummy sales, _) => sales.yAxis,
               width: 4.0,
-              color: AppColor.primary,
+              color: AppColor.accent[900],
               legendIconType: LegendIconType.seriesType,
               isVisibleInLegend: true,
-              legendItemText: "Hiu",
+              legendItemText: "Target",
               enableTooltip: true,
             ),
             LineSeries<LineDummy, int>(
@@ -359,10 +358,10 @@ class _CultivationViewState extends State<CultivationView> {
               xValueMapper: (LineDummy sales, _) => sales.xAxis,
               yValueMapper: (LineDummy sales, _) => sales.yAxis,
               width: 4.0,
-              color: AppColor.accent,
+              color: AppColor.green[500],
               legendIconType: LegendIconType.seriesType,
               isVisibleInLegend: true,
-              legendItemText: "Gurame",
+              legendItemText: "Aktual",
               enableTooltip: true,
             )
           ],

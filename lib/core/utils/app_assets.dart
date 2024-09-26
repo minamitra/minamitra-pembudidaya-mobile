@@ -134,4 +134,9 @@ class AppAssets {
       "$imagePath/referral-illustration-image.png";
   static const String userInvitedIcon = "$iconPath/user-invited-icon.png";
   static const String pointRewardedIcon = "$iconPath/point-rewarded-icon.png";
+
+  // Transaction Assets
+  static const String bcaBankIcon = "$iconPath/bca-bank-icon.png";
+  static const String mandiriBankIcon = "$iconPath/mandiri-bank-icon.png";
+  static const String briBankIcon = "$iconPath/bri-bank-icon.png";
 }

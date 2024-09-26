@@ -308,10 +308,18 @@ class _ActivityViewState extends State<ActivityView> {
     Widget addButton() {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
             const AddPondPage(),
             AddPondPage.routeSettings(),
-          ));
+          ))
+              .then((value) {
+            if (value != null && value is String) {
+              if (value == "refresh") {
+                // Refresh the page
+              }
+            }
+          });
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

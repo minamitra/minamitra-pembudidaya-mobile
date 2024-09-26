@@ -15,6 +15,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart'
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/information_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
@@ -301,17 +302,25 @@ class _HomeViewState extends State<HomeView> {
                 "Level Kamu",
                 style: AppTextStyle.blackBoldText,
               ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                decoration: BoxDecoration(
-                  color: AppColor.primary[50],
-                  borderRadius: BorderRadius.circular(16.0),
-                ),
-                child: Text(
-                  "Detail",
-                  style: AppTextStyle.primarySmallMediumText.copyWith(
-                    color: AppColor.secondary,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).push(AppTransition.pushTransition(
+                    const PointPage(),
+                    PointPage.routeSettings,
+                  ));
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 8.0),
+                  decoration: BoxDecoration(
+                    color: AppColor.primary[50],
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: Text(
+                    "Detail",
+                    style: AppTextStyle.primarySmallMediumText.copyWith(
+                      color: AppColor.secondary,
+                    ),
                   ),
                 ),
               ),
@@ -636,7 +645,7 @@ class _HomeViewState extends State<HomeView> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: Text(
-          "Promo Mitra3M",
+          "Literasi & Informasi",
           style: appTextTheme(context)
               .titleMedium
               ?.copyWith(fontWeight: FontWeight.w700),

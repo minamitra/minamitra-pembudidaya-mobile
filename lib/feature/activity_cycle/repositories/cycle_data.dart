@@ -1,11 +1,19 @@
 import 'dart:ui';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 
-enum CycleType { active, done, ready, failed }
+enum CycleType {
+  active,
+  done,
+  ready,
+  failed,
+  onBid,
+}
 
 String cycleTypeToString(CycleType type) {
   switch (type) {
     case CycleType.active:
+      return 'Berjalan';
+    case CycleType.onBid:
       return 'Berjalan';
     case CycleType.done:
       return 'Panen Berhasil';
@@ -19,6 +27,8 @@ String cycleTypeToString(CycleType type) {
 Color cycleTypeColor(CycleType type) {
   switch (type) {
     case CycleType.active:
+      return AppColor.secondary[900]!;
+    case CycleType.onBid:
       return AppColor.secondary[900]!;
     case CycleType.done:
       return AppColor.green[500]!;
@@ -53,7 +63,7 @@ final List<Cycle> listCycleAll = [
   Cycle(
     title: 'Siklus 1',
     date: '05-08-2024 17:00 WIB',
-    type: CycleType.active,
+    type: CycleType.ready,
     amount: '1000',
     price: 'Rp 1.000.000',
     weight: '250',
@@ -62,7 +72,7 @@ final List<Cycle> listCycleAll = [
   Cycle(
     title: 'Siklus 2',
     date: '25-07-2024 17:00 WIB',
-    type: CycleType.active,
+    type: CycleType.done,
     amount: '800',
     price: 'Rp 800.000',
     weight: '200',
@@ -86,10 +96,22 @@ final List<Cycle> listCycleAll = [
     weight: '280',
     target: '220',
   ),
+  Cycle(
+    title: 'Siklus 5',
+    date: '05-08-2024 17:00 WIB',
+    type: CycleType.onBid,
+    amount: '1000',
+    price: 'Rp 1.000.000',
+    weight: '250',
+    target: '200',
+  ),
 ];
 
 final List<Cycle> listCycleActive =
-    listCycleAll.where((element) => element.type == CycleType.active).toList();
+    listCycleAll.where((element) => element.type == CycleType.ready).toList();
+
+final List<Cycle> listCycleOnBid =
+    listCycleAll.where((element) => element.type == CycleType.onBid).toList();
 
 final List<Cycle> listCycleDone =
     listCycleAll.where((element) => element.type == CycleType.done).toList();

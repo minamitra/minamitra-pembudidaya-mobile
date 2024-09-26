@@ -1,16 +1,17 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity/view/activity_page.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_third_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/pakan_starter_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -26,15 +27,6 @@ class AddPondThirdStepView extends StatefulWidget {
 
 class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   final GlobalKey<FormState> formThirdStepKey = GlobalKey<FormState>();
-  final TextEditingController dateController = TextEditingController();
-  final TextEditingController fishCountController = TextEditingController();
-  final TextEditingController spreadController = TextEditingController();
-  final TextEditingController seedOriginController = TextEditingController();
-  final TextEditingController targetController = TextEditingController();
-  final TextEditingController pakanStarterController = TextEditingController();
-  final TextEditingController survivalRateController = TextEditingController();
-  final TextEditingController pakanGrowerController = TextEditingController();
-  final TextEditingController pakanFinisherController = TextEditingController();
 
   // Optional when user picked other as seed origin
   final TextEditingController seedOriginNameController =
@@ -59,118 +51,118 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   List<String> selectedPakanGrower = [];
   List<String> selectedPakanFinisher = [];
 
-  Function() checklistShowModal(
-    BuildContext context,
-    List<PakanStarterDummy> pakanList,
-  ) {
-    List<PakanStarterDummy> pakanListTemp = [];
-    pakanListTemp.addAll(pakanList);
-    return () {
-      showModalBottomSheet(
-        isDismissible: false,
-        enableDrag: false,
-        context: context,
-        builder: (modalContext) {
-          return StatefulBuilder(
-            builder: (stateContext, setModalState) {
-              return AppBottomSheet(
-                "Pilihan Pakan Starter",
-                height: MediaQuery.of(context).size.height * 0.5,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: pakanListTemp.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 16),
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                setModalState(() {
-                                  pakanListTemp[index].isActive =
-                                      !pakanListTemp[index].isActive;
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  Checkbox(
-                                    value: pakanListTemp[index].isActive,
-                                    onChanged: (value) {
-                                      setModalState(() {
-                                        pakanListTemp[index].isActive = value!;
-                                      });
-                                    },
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Text(
-                                      pakanListTemp[index].name,
-                                      textAlign: TextAlign.start,
-                                      style: appTextTheme(context)
-                                          .bodySmall
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: AppColor.black,
-                                          ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: AppPrimaryOutlineFullButton(
-                              "Reset",
-                              () {
-                                for (var element in pakanListTemp) {
-                                  setModalState(() {
-                                    element.isActive = false;
-                                  });
-                                }
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 18.0),
-                          Expanded(
-                            child: AppPrimaryFullButton(
-                              "Konfirmasi",
-                              () {
-                                Navigator.of(context).pop(pakanListTemp);
-                              },
-                              height: 56,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ).then((value) {
-        if (value != null) {
-          if (value is List<PakanStarterDummy>) {
-            pakanStarterController.text = value
-                .where((element) => element.isActive)
-                .map((e) => e.name)
-                .join(", ");
-          }
-        }
-      });
-    };
-  }
+  // Function() checklistShowModal(
+  //   BuildContext context,
+  //   List<PakanStarterDummy> pakanList,
+  // ) {
+  //   List<PakanStarterDummy> pakanListTemp = [];
+  //   pakanListTemp.addAll(pakanList);
+  //   return () {
+  //     showModalBottomSheet(
+  //       isDismissible: false,
+  //       enableDrag: false,
+  //       context: context,
+  //       builder: (modalContext) {
+  //         return StatefulBuilder(
+  //           builder: (stateContext, setModalState) {
+  //             return AppBottomSheet(
+  //               "Pilihan Pakan Starter",
+  //               height: MediaQuery.of(context).size.height * 0.5,
+  //               Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 16),
+  //                 child: Column(
+  //                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                   children: [
+  //                     Expanded(
+  //                       child: ListView.separated(
+  //                         shrinkWrap: true,
+  //                         physics: const AlwaysScrollableScrollPhysics(),
+  //                         itemCount: pakanListTemp.length,
+  //                         separatorBuilder: (context, index) =>
+  //                             const SizedBox(height: 16),
+  //                         itemBuilder: (context, index) {
+  //                           return InkWell(
+  //                             onTap: () {
+  //                               setModalState(() {
+  //                                 pakanListTemp[index].isActive =
+  //                                     !pakanListTemp[index].isActive;
+  //                               });
+  //                             },
+  //                             child: Row(
+  //                               children: [
+  //                                 Checkbox(
+  //                                   value: pakanListTemp[index].isActive,
+  //                                   onChanged: (value) {
+  //                                     setModalState(() {
+  //                                       pakanListTemp[index].isActive = value!;
+  //                                     });
+  //                                   },
+  //                                 ),
+  //                                 const SizedBox(width: 16),
+  //                                 Expanded(
+  //                                   child: Text(
+  //                                     pakanListTemp[index].name,
+  //                                     textAlign: TextAlign.start,
+  //                                     style: appTextTheme(context)
+  //                                         .bodySmall
+  //                                         ?.copyWith(
+  //                                           fontWeight: FontWeight.w600,
+  //                                           color: AppColor.black,
+  //                                         ),
+  //                                   ),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           );
+  //                         },
+  //                       ),
+  //                     ),
+  //                     Row(
+  //                       children: [
+  //                         Expanded(
+  //                           child: AppPrimaryOutlineFullButton(
+  //                             "Reset",
+  //                             () {
+  //                               for (var element in pakanListTemp) {
+  //                                 setModalState(() {
+  //                                   element.isActive = false;
+  //                                 });
+  //                               }
+  //                             },
+  //                           ),
+  //                         ),
+  //                         const SizedBox(width: 18.0),
+  //                         Expanded(
+  //                           child: AppPrimaryFullButton(
+  //                             "Konfirmasi",
+  //                             () {
+  //                               Navigator.of(context).pop(pakanListTemp);
+  //                             },
+  //                             height: 56,
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                     const SizedBox(height: 16),
+  //                   ],
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         );
+  //       },
+  //     ).then((value) {
+  //       if (value != null) {
+  //         if (value is List<PakanStarterDummy>) {
+  //           pakanStarterController.text = value
+  //               .where((element) => element.isActive)
+  //               .map((e) => e.name)
+  //               .join(", ");
+  //         }
+  //       }
+  //     });
+  //   };
+  // }
 
   Function() radioShowModal(
     BuildContext context,
@@ -239,6 +231,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
   @override
   Widget build(BuildContext context) {
+    final AddPondThirdStepCubit addPondThirdStepCubit =
+        context.read<AddPondThirdStepCubit>();
+
     List<Widget> pondInformation() {
       return [
         const SizedBox(height: 18.0),
@@ -273,7 +268,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
     AppValidatorTextField dateTextField() {
       return AppValidatorTextField(
         readOnly: true,
-        controller: dateController,
+        controller: addPondThirdStepCubit.dateController,
         hintText: "Pilih Tanggal",
         labelText: "Tanggal Tebar",
         suffixConstraints: const BoxConstraints(
@@ -300,7 +295,8 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           ).then((date) {
             setState(() {
               if (date != null) {
-                dateController.text = AppConvertDateTime().dmyName(date);
+                addPondThirdStepCubit.dateController.text =
+                    AppConvertDateTime().dmyName(date);
               }
             });
           });
@@ -473,7 +469,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         dateTextField(),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: fishCountController,
+          controller: addPondThirdStepCubit.fishCountController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -500,7 +496,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: spreadController,
+          controller: addPondThirdStepCubit.spreadController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -527,7 +523,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: targetController,
+          controller: addPondThirdStepCubit.targetController,
           inputType: TextInputType.phone,
           isMandatory: false,
           withUpperLabel: true,
@@ -550,7 +546,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: seedOriginController,
+          controller: addPondThirdStepCubit.seedOriginController,
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
@@ -577,14 +573,14 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               "Prabumilih"
             ],
             (value) {
-              seedOriginController.text = value;
+              addPondThirdStepCubit.seedOriginController.text = value;
             },
           ),
         ),
         // ...seedOrignOtherChildren(),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
-          controller: survivalRateController,
+          controller: addPondThirdStepCubit.survivalRateController,
           inputType: TextInputType.phone,
           isMandatory: false,
           withUpperLabel: true,
@@ -606,85 +602,133 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           },
         ),
         const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: pakanStarterController,
-          inputType: TextInputType.phone,
-          isMandatory: true,
-          withUpperLabel: true,
-          readOnly: true,
-          labelText: "Pakan Starter",
-          hintText: "Pilih Pakan",
-          suffixWidget: const Padding(
-            padding: EdgeInsets.only(right: 18.0),
-            child: Icon(Icons.arrow_drop_down_rounded),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            return null;
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.pakanStarterController,
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: "Pakan Starter",
+              hintText: "Pilih Pakan",
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                return null;
+              },
+              onTap: appBottomSheetShowModalChecklist(
+                context: context,
+                title: "Pakan Starter",
+                data: addPondThirdStepCubit.state.feedStarterData?.data
+                        ?.map((element) => element.name ?? "")
+                        .toList() ??
+                    [],
+                selectedData: selectedPakanStarter,
+                onSelected: (value) {
+                  addPondThirdStepCubit.pakanStarterController.text =
+                      value.join(", ");
+                },
+              ),
+            );
           },
-          onTap: appBottomSheetShowModalChecklist(
-            context: context,
-            title: "Pakan Starter",
-            data: pakanStarterDummy,
-            selectedData: selectedPakanStarter,
-            onSelected: (value) {
-              pakanStarterController.text = value.join(", ");
-            },
-          ),
         ),
         const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: pakanGrowerController,
-          inputType: TextInputType.phone,
-          isMandatory: true,
-          withUpperLabel: true,
-          readOnly: true,
-          labelText: "Pakan Grower",
-          hintText: "Pilih Pakan",
-          suffixWidget: const Padding(
-            padding: EdgeInsets.only(right: 18.0),
-            child: Icon(Icons.arrow_drop_down_rounded),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            return null;
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.pakanGrowerController,
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: "Pakan Grower",
+              hintText: "Pilih Pakan",
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                return null;
+              },
+              onTap: appBottomSheetShowModalChecklist(
+                context: context,
+                title: "Pakan Grower",
+                data: addPondThirdStepCubit.state.feedGrowerData?.data
+                        ?.map((element) => element.name ?? "")
+                        .toList() ??
+                    [],
+                selectedData: selectedPakanGrower,
+                onSelected: (value) {
+                  addPondThirdStepCubit.pakanGrowerController.text =
+                      value.join(", ");
+                },
+              ),
+            );
           },
-          onTap: appBottomSheetShowModalChecklist(
-            context: context,
-            title: "Pakan Grower",
-            data: pakanGrowerDummy,
-            selectedData: selectedPakanGrower,
-            onSelected: (value) {
-              pakanGrowerController.text = value.join(", ");
-            },
-          ),
         ),
         const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: pakanFinisherController,
-          inputType: TextInputType.phone,
-          isMandatory: true,
-          withUpperLabel: true,
-          readOnly: true,
-          labelText: "Pakan Finisher",
-          hintText: "Pilih Pakan",
-          suffixWidget: const Padding(
-            padding: EdgeInsets.only(right: 18.0),
-            child: Icon(Icons.arrow_drop_down_rounded),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            return null;
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.pakanFinisherController,
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: "Pakan Finisher",
+              hintText: "Pilih Pakan",
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                return null;
+              },
+              onTap: appBottomSheetShowModalChecklist(
+                context: context,
+                title: "Pakan Finisher",
+                data: addPondThirdStepCubit.state.feedFinisherData?.data
+                        ?.map((element) => element.name ?? "")
+                        .toList() ??
+                    [],
+                selectedData: selectedPakanFinisher,
+                onSelected: (value) {
+                  addPondThirdStepCubit.pakanFinisherController.text =
+                      value.join(", ");
+                },
+              ),
+            );
           },
-          onTap: appBottomSheetShowModalChecklist(
-            context: context,
-            title: "Pakan Finisher",
-            data: pakanFinisherDummy,
-            selectedData: selectedPakanFinisher,
-            onSelected: (value) {
-              pakanFinisherController.text = value.join(", ");
-            },
-          ),
         ),
       ];
     }

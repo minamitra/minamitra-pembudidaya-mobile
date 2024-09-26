@@ -20,7 +20,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     super.initState();
   }
 
@@ -43,7 +43,8 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
         labelPadding: const EdgeInsets.all(0),
         isScrollable: false,
         tabs: const [
-          Tab(text: 'Berjalan'),
+          Tab(text: 'Aktif'),
+          Tab(text: 'Lelang'),
           Tab(text: 'Riwayat'),
         ],
       ),
@@ -55,8 +56,9 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
       child: TabBarView(
         controller: _tabController,
         children: [
-          listCard(listCycleAll),
           listCard(listCycleActive),
+          listCard(listCycleOnBid),
+          listCard(listCycleDone),
         ],
       ),
     );

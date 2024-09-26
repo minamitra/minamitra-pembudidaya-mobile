@@ -16,11 +16,29 @@ List<MethodPaymentData> listMethodPayment = [
   MethodPaymentData(
     icon: AppAssets.walletIcon,
     name: 'Plafon',
-    description: 'Konfirmasi Otomatis',
+    description: 'Sisa Saldo: Rp 2.5000.000',
   ),
   MethodPaymentData(
     icon: AppAssets.cashIcon,
     name: 'Tunai',
     description: 'Bayar Menggunakan Uang Tunai',
+  ),
+];
+
+List<MethodPaymentData> listMethodBank = [
+  MethodPaymentData(
+    icon: AppAssets.bcaBankIcon,
+    name: 'BCA',
+    description: 'Transfer ke Rekening BCA',
+  ),
+  MethodPaymentData(
+    icon: AppAssets.mandiriBankIcon,
+    name: 'Mandiri',
+    description: 'Transfer ke Rekening Mandiri',
+  ),
+  MethodPaymentData(
+    icon: AppAssets.briBankIcon,
+    name: 'BRI',
+    description: 'Transfer ke Rekening BRI',
   ),
 ];

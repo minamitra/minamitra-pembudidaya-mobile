@@ -34,7 +34,9 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Text(
-        "Siklus Sedang ${cycleTypeToString(widget.cycle.type)}",
+        widget.cycle.type == CycleType.done
+            ? "Siklus Selesai"
+            : "Siklus Sedang ${cycleTypeToString(widget.cycle.type)}",
         textAlign: TextAlign.center,
         style: appTextTheme(context).bodySmall?.copyWith(
               fontWeight: FontWeight.w500,
@@ -341,7 +343,10 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
                 : const SizedBox(height: 98.0),
           ],
         ),
-        widget.cycle.type != CycleType.done ? button() : const SizedBox(),
+        widget.cycle.type == CycleType.done ||
+                widget.cycle.type == CycleType.onBid
+            ? const SizedBox()
+            : button(),
       ],
     );
   }
