@@ -91,7 +91,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppAssets.documentAddIcon,
                 onTap: () {
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const ActivityActivitiesPage(),
+                    const ActivityActivitiesPage(1, 1),
                     ActivityActivitiesPage.routeSettings(),
                   ));
                 },
