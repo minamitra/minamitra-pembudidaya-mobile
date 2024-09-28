@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_desctiption_item.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_separated_item.dart';
 
 class ActivityTreatmentDetailView extends StatefulWidget {
-  const ActivityTreatmentDetailView({super.key});
+  final TreatmentResponseData data;
+
+  const ActivityTreatmentDetailView(this.data, {super.key});
 
   @override
   State<ActivityTreatmentDetailView> createState() =>
@@ -41,29 +47,40 @@ class _ActivityTreatmentDetailViewState
       );
     }
 
-    Widget attachmentFile() {
-      return SizedBox(
-        height: 100.0,
-        width: double.infinity,
-        child: ListView(
-          scrollDirection: Axis.horizontal,
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: List.generate(
-            5,
-            (index) {
-              return Container(
-                width: 100.0,
-                height: 100.0,
-                margin: const EdgeInsets.only(right: 12.0),
-                decoration: BoxDecoration(
-                  color: AppColor.secondary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-              );
-            },
+    Widget attachmentFile(List<String>? attachmentJsonArray) {
+      if (attachmentJsonArray == null || attachmentJsonArray.isEmpty) {
+        return Text(
+          'File tidak ada',
+          textAlign: TextAlign.center,
+          style: appTextTheme(context).labelMedium?.copyWith(
+                fontWeight: FontWeight.w400,
+                color: AppColor.neutral[500],
+              ),
+        );
+      } else {
+        return SizedBox(
+          height: 100.0,
+          width: double.infinity,
+          child: ListView(
+            scrollDirection: Axis.horizontal,
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: List.generate(
+              attachmentJsonArray.length,
+              (index) {
+                return AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: AppNetworkImage(
+                    attachmentJsonArray[index],
+                    width: double.infinity,
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            ),
           ),
-        ),
-      );
+        );
+      }
     }
 
     Widget body() {
@@ -72,25 +89,32 @@ class _ActivityTreatmentDetailViewState
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-              "Waktu  Perlakuan", "05 Agustus 2024, 17:00 WIB"),
+              "Waktu  Perlakuan",
+              widget.data.datetime != null
+                  ? AppConvertDateTime().dmyName(widget.data.datetime!)
+                  : ""),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Umur Ikan", "100 hari"),
+          AppWidgetSeparatedItem("Umur Ikan", widget.data.fishAge ?? ""),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Perlakuan", "Permberian Pakan"),
+          AppWidgetSeparatedItem("Perlakuan", widget.data.name ?? ""),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Biaya", "Rp 100.000"),
+          AppWidgetSeparatedItem(
+              "Biaya",
+              widget.data.cost != null
+                  ? appConvertCurrency(double.parse(widget.data.cost!))
+                  : ""),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
             "Catatan",
-            "Figma ipsum component variant main layer. Export team scrolling comment prototype edit undo. Follower inspect rotate pixel duplicate asset.",
+            widget.data.note ?? "",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
@@ -102,7 +126,7 @@ class _ActivityTreatmentDetailViewState
                 ),
           ),
           const SizedBox(height: 8.0),
-          attachmentFile(),
+          attachmentFile(widget.data.attachmentJsonArray),
           const SizedBox(height: 98.0),
         ],
       );

@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/view/activity_treatment_detail_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityTreatmentDetailPage extends StatelessWidget {
-  const ActivityTreatmentDetailPage({super.key});
+  final TreatmentResponseData data;
+
+  const ActivityTreatmentDetailPage(this.data, {super.key});
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-treatment-detail-page");
@@ -28,7 +31,7 @@ class ActivityTreatmentDetailPage extends StatelessWidget {
           const SizedBox(width: 16.0),
         ],
       ),
-      body: ActivityTreatmentDetailView(),
+      body: ActivityTreatmentDetailView(data),
     );
   }
 }
