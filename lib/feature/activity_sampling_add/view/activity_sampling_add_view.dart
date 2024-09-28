@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,10 +12,20 @@ import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/p
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/logics/activity_sampling_add_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/repositories/add_sampling_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivitySamplingAddView extends StatefulWidget {
-  const ActivitySamplingAddView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+
+  const ActivitySamplingAddView(
+    this.fishpondId,
+    this.fishpondcycleId, {
+    super.key,
+  });
 
   @override
   State<ActivitySamplingAddView> createState() =>
@@ -23,6 +33,7 @@ class ActivitySamplingAddView extends StatefulWidget {
 }
 
 class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController hourController = TextEditingController();
   final TextEditingController mbwController = TextEditingController();
@@ -60,7 +71,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           ).then((date) {
             setState(() {
               if (date != null) {
-                dateController.text = AppConvertDateTime().dmyName(date);
+                dateController.text = AppConvertDateTime().ymdDash(date);
               }
             });
           });
@@ -102,7 +113,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           ).then((time) {
             setState(() {
               if (time != null) {
-                hourController.text = time.format(context);
+                hourController.text = time.format(context).replaceAll(".", ":");
               }
             });
           });
@@ -178,12 +189,6 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         hintText: "Masukan catatan",
         labelText: "Catatan",
         maxLines: 3,
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            return "Catatan tidak boleh kosong";
-          }
-          return null;
-        },
       );
     }
 
@@ -274,24 +279,25 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
     }
 
     Widget body() {
-      return ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          dateTextField(),
-          const SizedBox(height: 16.0),
-          hourTextField(),
-          const SizedBox(height: 16.0),
-          mbw(),
-          const SizedBox(height: 16.0),
-          sr(),
-          const SizedBox(height: 16.0),
-          noteTextField(),
-          const SizedBox(height: 16.0),
-          noteTextField(),
-          const SizedBox(height: 16.0),
-          fileAttachment(),
-          const SizedBox(height: 98.0),
-        ],
+      return Form(
+        key: formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: [
+            dateTextField(),
+            const SizedBox(height: 16.0),
+            hourTextField(),
+            const SizedBox(height: 16.0),
+            mbw(),
+            const SizedBox(height: 16.0),
+            sr(),
+            const SizedBox(height: 16.0),
+            noteTextField(),
+            const SizedBox(height: 16.0),
+            fileAttachment(),
+            const SizedBox(height: 98.0),
+          ],
+        ),
       );
     }
 
@@ -309,7 +315,32 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         ),
         child: AppPrimaryFullButton(
           "Simpan",
-          () {},
+          () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
+            List<File>? attachment = context
+                .read<MultiImageCubit>()
+                .state
+                ?.map((e) => convertUint8ListToFile(e))
+                .toList();
+
+            AddSamplingPayload payload = AddSamplingPayload(
+              fishpondId: widget.fishpondId,
+              fishpondcycleId: widget.fishpondcycleId,
+              datetime: DateTime.parse(
+                "${dateController.text} ${hourController.text}",
+              ),
+              mbw: double.parse(mbwController.text),
+              sr: double.parse(srController.text),
+              note: noteController.text,
+            );
+
+            context.read<ActivitySamplingAddCubit>().addSampling(
+                  payload,
+                  attachment ?? [],
+                );
+          },
         ),
       );
     }
