@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/sampling_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/treatment_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/feeding/feeding_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/sampling/sampling_view.dart';
@@ -91,6 +92,11 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
           //`selectedDate` the new date selected.
           String finalDate = AppConvertDateTime().ymdDash(selectedDate);
           context.read<TreatmentCubit>().init(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                finalDate,
+              );
+          context.read<SamplingCubit>().init(
                 widget.fishpondId,
                 widget.fishpondcycleId,
                 finalDate,

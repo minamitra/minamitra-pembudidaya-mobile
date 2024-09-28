@@ -3,10 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/activity_sampling/activity_sampling_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_treatment/activity_treatment_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/sampling_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/treatment_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/activity_activities_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/views/activity_activities_add_page.dart';
@@ -41,6 +43,15 @@ class ActivityActivitiesPage extends StatelessWidget {
               AppConvertDateTime().ymdDash(DateTime.now()),
             ),
         ),
+        BlocProvider(
+          create: (context) => SamplingCubit(
+            ActivitySamplingServiceImpl.create(),
+          )..init(
+              fishpondId,
+              fishpondcycleId,
+              AppConvertDateTime().ymdDash(DateTime.now()),
+            ),
+        ),
       ],
       child: Scaffold(
         appBar: appDefaultAppBar(
@@ -68,7 +79,7 @@ class ActivityActivitiesPage extends StatelessWidget {
                     ));
                   case 2:
                     Navigator.of(context).push(AppTransition.pushTransition(
-                      const ActivitySamplingAddPage(),
+                      const ActivitySamplingAddPage(1, 1),
                       ActivitySamplingAddPage.routeSettings,
                     ));
                   case 3:
