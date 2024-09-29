@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dar
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_treatment/activity_treatment_endpoint.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/add_treatment_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/update_treatment_payload.dart';
 
 abstract class ActivityTreatmentService {
   Future<BaseResponse<TreatmentResponse>> dataTreatment(
@@ -13,6 +14,8 @@ abstract class ActivityTreatmentService {
     String datetime,
   );
   Future<BaseResponse<bool>> addTreatment(AddTreatmentPayload payload);
+  Future<BaseResponse<bool>> deleteTreatment(String id);
+  Future<BaseResponse<bool>> updateTreatment(UpdateTreatmentPayload payload);
 }
 
 class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
@@ -56,6 +59,35 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
   @override
   Future<BaseResponse<bool>> addTreatment(AddTreatmentPayload payload) async {
     final url = endpoint.addTreatment();
+    final header = await headerProvider.headers;
+    final response = await httpClient.multipartPost(
+      url,
+      header,
+      {},
+      payload.toMap(),
+    );
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> deleteTreatment(String id) async {
+    final url = endpoint.deleteTreatment();
+    final header = await headerProvider.headers;
+    final response = await httpClient.multipartPost(
+      url,
+      header,
+      {},
+      {"id": id},
+    );
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> updateTreatment(
+      UpdateTreatmentPayload payload) async {
+    final url = endpoint.updateTreatment();
     final header = await headerProvider.headers;
     final response = await httpClient.multipartPost(
       url,
