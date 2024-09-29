@@ -7,6 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/core/services/activity_sampling/act
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/repositories/add_sampling_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/repositories/update_sampling_payload.dart';
 
 part 'activity_sampling_add_state.dart';
 
@@ -24,6 +25,30 @@ class ActivitySamplingAddCubit extends Cubit<ActivitySamplingAddState> {
       List<String> attachmentLink = await uploadImage(attachment);
       payload.attachmentJsonArray = attachmentLink;
       await samplingService.addSampling(payload);
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(status: GlobalState.successSubmit));
+    } on AppException catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> updateSampling(
+      UpdateSamplingPayload payload, List<File> attachment) async {
+    emit(state.copyWith(status: GlobalState.showDialogLoading));
+    try {
+      List<String> attachmentLink = await uploadImage(attachment);
+      payload.attachmentJsonArray = attachmentLink;
+      await samplingService.updateSampling(payload);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
