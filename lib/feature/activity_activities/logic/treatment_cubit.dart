@@ -40,4 +40,35 @@ class TreatmentCubit extends Cubit<TreatmentState> {
       ));
     }
   }
+
+  void deleteTreatment(
+    String id,
+    int fishpondId,
+    int fishpondcycleId,
+    String datetime,
+  ) async {
+    emit(state.copyWith(status: GlobalState.loading));
+    try {
+      await service.deleteTreatment(id);
+      final treatments = await service.dataTreatment(
+        fishpondId,
+        fishpondcycleId,
+        datetime,
+      );
+      emit(state.copyWith(
+        status: GlobalState.loaded,
+        treatments: treatments.data.data,
+      ));
+    } on AppException catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
 }
