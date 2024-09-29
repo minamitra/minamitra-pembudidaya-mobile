@@ -40,4 +40,35 @@ class SamplingCubit extends Cubit<SamplingState> {
       ));
     }
   }
+
+  void deleteSampling(
+    String id,
+    int fishpondId,
+    int fishpondcycleId,
+    String datetime,
+  ) async {
+    emit(state.copyWith(status: GlobalState.loading));
+    try {
+      await service.deleteSampling(id);
+      final samplings = await service.dataSampling(
+        fishpondId,
+        fishpondcycleId,
+        datetime,
+      );
+      emit(state.copyWith(
+        status: GlobalState.loaded,
+        samplings: samplings.data.data,
+      ));
+    } on AppException catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
 }
