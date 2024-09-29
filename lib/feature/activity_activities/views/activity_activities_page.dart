@@ -19,10 +19,12 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/
 class ActivityActivitiesPage extends StatelessWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
 
   const ActivityActivitiesPage(
     this.fishpondId,
-    this.fishpondcycleId, {
+    this.fishpondcycleId,
+    this.dateDistribution, {
     super.key,
   });
 
@@ -87,7 +89,8 @@ class ActivityActivitiesPage extends StatelessWidget {
                   case 1:
                     Navigator.of(context)
                         .push(AppTransition.pushTransition(
-                      const ActivityTreatmentAddPage(1, 1),
+                      ActivityTreatmentAddPage(
+                          fishpondId, fishpondcycleId, dateDistribution),
                       ActivityTreatmentAddPage.routeSettings,
                     ))
                         .then((value) {
@@ -100,7 +103,7 @@ class ActivityActivitiesPage extends StatelessWidget {
                   case 2:
                     Navigator.of(context)
                         .push(AppTransition.pushTransition(
-                      const ActivitySamplingAddPage(1, 1),
+                      ActivitySamplingAddPage(fishpondId, fishpondcycleId),
                       ActivitySamplingAddPage.routeSettings,
                     ))
                         .then((value) {
@@ -113,7 +116,7 @@ class ActivityActivitiesPage extends StatelessWidget {
                   case 3:
                     Navigator.of(context)
                         .push(AppTransition.pushTransition(
-                      const ActivityWaterQualityAddPage(1, 1),
+                      ActivityWaterQualityAddPage(fishpondId, fishpondcycleId),
                       ActivityWaterQualityAddPage.routeSettings,
                     ))
                         .then((value) {
@@ -139,6 +142,7 @@ class ActivityActivitiesPage extends StatelessWidget {
         body: ActivityActivitiesView(
           fishpondId,
           fishpondcycleId,
+          dateDistribution,
         ),
       ),
     );

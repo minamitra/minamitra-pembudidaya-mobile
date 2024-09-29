@@ -16,10 +16,12 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 class ActivityActivitiesView extends StatefulWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
 
   const ActivityActivitiesView(
     this.fishpondId,
-    this.fishpondcycleId, {
+    this.fishpondcycleId,
+    this.dateDistribution, {
     super.key,
   });
 
@@ -81,6 +83,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
               TreatmentView(
                 widget.fishpondId,
                 widget.fishpondcycleId,
+                widget.dateDistribution,
                 state.datetime,
               ),
               SamplingView(
