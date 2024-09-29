@@ -8,8 +8,10 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityTreatmentDetailPage extends StatelessWidget {
   final TreatmentResponseData data;
+  final DateTime dateDistribution;
 
-  const ActivityTreatmentDetailPage(this.data, {super.key});
+  const ActivityTreatmentDetailPage(this.data, this.dateDistribution,
+      {super.key});
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-treatment-detail-page");
@@ -27,6 +29,7 @@ class ActivityTreatmentDetailPage extends StatelessWidget {
                 ActivityTreatmentAddPage(
                   int.parse(data.fishpondId ?? "1"),
                   int.parse(data.fishpondcycleId ?? "1"),
+                  dateDistribution,
                   isEdit: true,
                   data: data,
                 ),
