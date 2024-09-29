@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dar
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/sampling_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/treatment_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/water_quality_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/feeding/feeding_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/sampling/sampling_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/treatment/treatment_view.dart';
@@ -97,6 +98,11 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
                 finalDate,
               );
           context.read<SamplingCubit>().init(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                finalDate,
+              );
+          context.read<WaterQualityCubit>().init(
                 widget.fishpondId,
                 widget.fishpondcycleId,
                 finalDate,
