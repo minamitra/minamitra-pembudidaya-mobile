@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
@@ -81,41 +79,19 @@ class _SamplingViewState extends State<SamplingView> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) {
-                          return AppDialogComponent(
-                            title: "Hapus Sampling",
-                            subTitle:
-                                "Apakah Anda yakin ingin menghapus sampling ini?",
-                            buttons: [
-                              Expanded(
-                                child: AppPrimaryOutlineFullButton(
-                                  "Batal",
-                                  () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: AppPrimaryFullButton(
-                                  "Hapus",
-                                  () {
-                                    context
-                                        .read<SamplingCubit>()
-                                        .deleteSampling(
-                                          data.id ?? "",
-                                          widget.fishpondId,
-                                          widget.fishpondcycleId,
-                                          widget.datetime,
-                                        );
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
+                      showDeleteBottomSheet(
+                        context,
+                        title: "Hapus Sampling",
+                        descriptions:
+                            "Apakah Anda yakin ingin menghapus sampling ini?",
+                        onTapDelete: () {
+                          context.read<SamplingCubit>().deleteSampling(
+                                data.id ?? "",
+                                widget.fishpondId,
+                                widget.fishpondcycleId,
+                                widget.datetime,
+                              );
+                          Navigator.of(context).pop();
                         },
                       );
                     },
@@ -152,22 +128,8 @@ class _SamplingViewState extends State<SamplingView> {
     return BlocBuilder<SamplingCubit, SamplingState>(
       builder: (context, state) {
         if (state.status.isLoading) {
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: 6,
-            separatorBuilder: (context, index) => Container(
-              height: 16.0,
-              width: double.infinity,
-              color: AppColor.neutralBlueGrey[50],
-            ),
-            itemBuilder: (context, index) {
-              return const AppShimmer(
-                120,
-                double.infinity,
-                0,
-              );
-            },
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         }
 
