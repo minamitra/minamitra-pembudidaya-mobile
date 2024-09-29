@@ -38,10 +38,10 @@ class AppHeaderProvider implements HeaderProvider {
     // }
 
     final headers = {
-      'x-api-key': "",
-      'Authorization': 'Basic YWlkYW46YTFkYW53M2IxZA==',
+      // 'x-api-key': "",
+      // 'Authorization': 'Basic YWlkYW46YTFkYW53M2IxZA==',
       'token': '$accessToken',
-      'Content-Type': 'application/json',
+      // "Content-Type": "application/json; charset=utf-8",
       'Accept': 'application/json',
       // 'Accept-Language': language
     };
@@ -50,7 +50,7 @@ class AppHeaderProvider implements HeaderProvider {
 
   @override
   Future<Map<String, String>> get emptyHeaders async => {
-        'Content-Type': 'application/json',
+        // 'Content-Type': 'application/json',
         'Accept': 'application/json',
       };
 
