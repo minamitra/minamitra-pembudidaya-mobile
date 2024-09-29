@@ -7,6 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/core/services/activity_treatment/ac
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/add_treatment_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/update_treatment_payload.dart';
 
 part 'activity_treatment_add_state.dart';
 
@@ -24,6 +25,30 @@ class ActivityTreatmentAddCubit extends Cubit<ActivityTreatmentAddState> {
       List<String> attachmentLink = await uploadImage(attachment);
       payload.attachmentJsonArray = attachmentLink;
       await treatmentService.addTreatment(payload);
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(status: GlobalState.successSubmit));
+    } on AppException catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
+
+  Future<void> updateTreatment(
+      UpdateTreatmentPayload payload, List<File> attachment) async {
+    emit(state.copyWith(status: GlobalState.showDialogLoading));
+    try {
+      List<String> attachmentLink = await uploadImage(attachment);
+      payload.attachmentJsonArray = attachmentLink;
+      await treatmentService.updateTreatment(payload);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
