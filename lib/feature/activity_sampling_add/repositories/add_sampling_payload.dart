@@ -35,13 +35,13 @@ class AddSamplingPayload {
         attachmentJsonArray: json["attachment_json_array"],
       );
 
-  Map<String, String> toMap() => {
-        "fishpond_id": fishpondId.toString(),
-        "fishpondcycle_id": fishpondcycleId.toString(),
+  Map<String, dynamic> toMap() => {
+        "fishpond_id": fishpondId,
+        "fishpondcycle_id": fishpondcycleId,
         "datetime": datetime!.toIso8601String(),
-        "mbw": mbw.toString(),
-        "sr": sr.toString(),
-        "note": note.toString(),
-        "attachment_json_array": attachmentJsonArray.toString(),
+        "mbw": mbw,
+        "sr": sr,
+        "note": note,
+        "attachment_json_array": attachmentJsonArray,
       };
 }
