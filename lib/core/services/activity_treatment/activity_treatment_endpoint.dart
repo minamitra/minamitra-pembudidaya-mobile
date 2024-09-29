@@ -32,6 +32,10 @@ class ActivityTreatmentEndpoint {
   }
 
   Uri deleteTreatment() {
-    return createUrl(path: "mitra/activity-treatment/add");
+    return createUrl(path: "mitra/activity-treatment/delete");
+  }
+
+  Uri updateTreatment() {
+    return createUrl(path: "mitra/activity-treatment/update");
   }
 }
