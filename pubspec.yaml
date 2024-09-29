@@ -66,6 +66,7 @@ dependencies:
   percent_indicator: ^4.2.3
   flutter_localization: ^0.2.2
   dotted_border: ^2.1.0
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:
