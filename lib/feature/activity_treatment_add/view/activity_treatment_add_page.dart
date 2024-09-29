@@ -8,6 +8,7 @@ import 'package:minamitra_pembudidaya_mobile/core/logic/multi_image/multi_image_
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_treatment/activity_treatment_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/logics/activity_treatment_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/view/activity_treatment_add_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -15,10 +16,14 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 class ActivityTreatmentAddPage extends StatelessWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final bool isEdit;
+  final TreatmentResponseData? data;
 
   const ActivityTreatmentAddPage(
     this.fishpondId,
     this.fishpondcycleId, {
+    this.isEdit = false,
+    this.data,
     super.key,
   });
 
@@ -43,7 +48,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Tambah Perlakuaan",
+          isEdit ? "Edit Perlakuan" : "Tambah Perlakuaan",
         ),
         body:
             BlocConsumer<ActivityTreatmentAddCubit, ActivityTreatmentAddState>(
@@ -66,9 +71,13 @@ class ActivityTreatmentAddPage extends StatelessWidget {
             }
 
             if (state.status.isSuccessSubmit) {
-              AppTopSnackBar(context)
-                  .showSuccess("Berhasil Membuat\nKolam Baru !");
-              Navigator.of(context).pop("refresh");
+              AppTopSnackBar(context).showSuccess(isEdit
+                  ? "Berhasil Edit\nPerlakuan!"
+                  : "Berhasil Membuat\nPerlakuan Baru!");
+              Navigator.of(context).pop();
+              if (isEdit) {
+                Navigator.of(context).pop("refresh");
+              }
             }
           },
           builder: (context, state) {
@@ -79,6 +88,8 @@ class ActivityTreatmentAddPage extends StatelessWidget {
             return ActivityTreatmentAddView(
               fishpondId,
               fishpondcycleId,
+              isEdit,
+              data,
             );
           },
         ),
