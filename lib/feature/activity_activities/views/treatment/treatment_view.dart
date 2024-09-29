@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
@@ -17,11 +15,13 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 class TreatmentView extends StatefulWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
   final String datetime;
 
   const TreatmentView(
     this.fishpondId,
     this.fishpondcycleId,
+    this.dateDistribution,
     this.datetime, {
     super.key,
   });
@@ -38,7 +38,7 @@ class _TreatmentViewState extends State<TreatmentView> {
         onTap: () {
           Navigator.of(context)
               .push(AppTransition.pushTransition(
-            ActivityTreatmentDetailPage(data),
+            ActivityTreatmentDetailPage(data, widget.dateDistribution),
             ActivityTreatmentDetailPage.routeSettings(),
           ))
               .then((value) {
@@ -82,41 +82,19 @@ class _TreatmentViewState extends State<TreatmentView> {
                   const Spacer(),
                   InkWell(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (dialogContext) {
-                          return AppDialogComponent(
-                            title: "Hapus Perlakuan",
-                            subTitle:
-                                "Apakah Anda yakin ingin menghapus perlakuan ini?",
-                            buttons: [
-                              Expanded(
-                                child: AppPrimaryOutlineFullButton(
-                                  "Batal",
-                                  () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: AppPrimaryFullButton(
-                                  "Hapus",
-                                  () {
-                                    context
-                                        .read<TreatmentCubit>()
-                                        .deleteTreatment(
-                                          data.id ?? "",
-                                          widget.fishpondId,
-                                          widget.fishpondcycleId,
-                                          widget.datetime,
-                                        );
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
+                      showDeleteBottomSheet(
+                        context,
+                        title: "Hapus Perlakuan",
+                        descriptions:
+                            "Apakah Anda yakin ingin menghapus perlakuan ini?",
+                        onTapDelete: () {
+                          context.read<TreatmentCubit>().deleteTreatment(
+                                data.id ?? "",
+                                widget.fishpondId,
+                                widget.fishpondcycleId,
+                                widget.datetime,
+                              );
+                          Navigator.of(context).pop();
                         },
                       );
                     },
@@ -149,22 +127,8 @@ class _TreatmentViewState extends State<TreatmentView> {
     return BlocBuilder<TreatmentCubit, TreatmentState>(
       builder: (context, state) {
         if (state.status.isLoading) {
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: 6,
-            separatorBuilder: (context, index) => Container(
-              height: 16.0,
-              width: double.infinity,
-              color: AppColor.neutralBlueGrey[50],
-            ),
-            itemBuilder: (context, index) {
-              return const AppShimmer(
-                120,
-                double.infinity,
-                0,
-              );
-            },
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         }
 
