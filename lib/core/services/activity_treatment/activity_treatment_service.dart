@@ -60,13 +60,12 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
   Future<BaseResponse<bool>> addTreatment(AddTreatmentPayload payload) async {
     final url = endpoint.addTreatment();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -74,13 +73,12 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
   Future<BaseResponse<bool>> deleteTreatment(String id) async {
     final url = endpoint.deleteTreatment();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       {"id": id},
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -89,13 +87,12 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
       UpdateTreatmentPayload payload) async {
     final url = endpoint.updateTreatment();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 }
