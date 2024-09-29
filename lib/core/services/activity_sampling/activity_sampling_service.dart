@@ -60,13 +60,12 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
   Future<BaseResponse<bool>> addSampling(AddSamplingPayload payload) async {
     final url = endpoint.addSampling();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -74,13 +73,12 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
   Future<BaseResponse<bool>> deleteSampling(String id) async {
     final url = endpoint.deleteSampling();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       {"id": id},
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -89,13 +87,12 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
       UpdateSamplingPayload payload) async {
     final url = endpoint.updateSampling();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 }
