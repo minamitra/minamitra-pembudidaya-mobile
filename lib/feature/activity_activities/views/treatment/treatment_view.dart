@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
@@ -13,7 +15,16 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/v
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class TreatmentView extends StatefulWidget {
-  const TreatmentView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+  final String datetime;
+
+  const TreatmentView(
+    this.fishpondId,
+    this.fishpondcycleId,
+    this.datetime, {
+    super.key,
+  });
 
   @override
   State<TreatmentView> createState() => _TreatmentViewState();
@@ -25,10 +36,20 @@ class _TreatmentViewState extends State<TreatmentView> {
     Widget itemCard(TreatmentResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
             ActivityTreatmentDetailPage(data),
             ActivityTreatmentDetailPage.routeSettings(),
-          ));
+          ))
+              .then((value) {
+            if (value == "refresh") {
+              context.read<TreatmentCubit>().init(
+                    widget.fishpondId,
+                    widget.fishpondcycleId,
+                    widget.datetime,
+                  );
+            }
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -41,7 +62,7 @@ class _TreatmentViewState extends State<TreatmentView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        data.name ?? "",
+                        data.name ?? "-",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
@@ -50,7 +71,7 @@ class _TreatmentViewState extends State<TreatmentView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : "",
+                        data.datetime != null ? data.datetime.toString() : "-",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -59,10 +80,52 @@ class _TreatmentViewState extends State<TreatmentView> {
                     ],
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColor.neutral[400],
-                  )
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (dialogContext) {
+                          return AppDialogComponent(
+                            title: "Hapus Perlakuan",
+                            subTitle:
+                                "Apakah Anda yakin ingin menghapus perlakuan ini?",
+                            buttons: [
+                              Expanded(
+                                child: AppPrimaryOutlineFullButton(
+                                  "Batal",
+                                  () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: AppPrimaryFullButton(
+                                  "Hapus",
+                                  () {
+                                    context
+                                        .read<TreatmentCubit>()
+                                        .deleteTreatment(
+                                          data.id ?? "",
+                                          widget.fishpondId,
+                                          widget.fishpondcycleId,
+                                          widget.datetime,
+                                        );
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      AppAssets.trashIcon,
+                      height: 20.0,
+                      color: AppColor.neutral[400],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 18.0),
