@@ -32,6 +32,10 @@ class ActivitySamplingEndpoint {
   }
 
   Uri deleteSampling() {
-    return createUrl(path: "mitra/activity-sampling/add");
+    return createUrl(path: "mitra/activity-sampling/delete");
+  }
+
+  Uri updateSampling() {
+    return createUrl(path: "mitra/activity-sampling/update");
   }
 }
