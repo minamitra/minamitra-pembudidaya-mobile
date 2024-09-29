@@ -23,12 +23,14 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 class ActivityTreatmentAddView extends StatefulWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
   final bool isEdit;
   final TreatmentResponseData? data;
 
   const ActivityTreatmentAddView(
     this.fishpondId,
     this.fishpondcycleId,
+    this.dateDistribution,
     this.isEdit,
     this.data, {
     super.key,
@@ -112,6 +114,11 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
             setState(() {
               if (date != null) {
                 dateController.text = AppConvertDateTime().ymdDash(date);
+                fishAgeController.text =
+                    (date.difference(widget.dateDistribution).inHours / 24)
+                        .round()
+                        .toString();
+                // fishAgeController.text = "test";
               }
             });
           });
@@ -174,6 +181,8 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         labelText: "Umur Ikan",
         inputType: TextInputType.number,
         isMandatory: true,
+        readOnly: true,
+        fillColor: AppColor.neutral[100],
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
             return "Umur ikan tidak boleh kosong";

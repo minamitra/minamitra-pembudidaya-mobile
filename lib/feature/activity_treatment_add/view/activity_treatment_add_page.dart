@@ -16,12 +16,14 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 class ActivityTreatmentAddPage extends StatelessWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
   final bool isEdit;
   final TreatmentResponseData? data;
 
   const ActivityTreatmentAddPage(
     this.fishpondId,
-    this.fishpondcycleId, {
+    this.fishpondcycleId,
+    this.dateDistribution, {
     this.isEdit = false,
     this.data,
     super.key,
@@ -88,6 +90,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
             return ActivityTreatmentAddView(
               fishpondId,
               fishpondcycleId,
+              dateDistribution,
               isEdit,
               data,
             );
