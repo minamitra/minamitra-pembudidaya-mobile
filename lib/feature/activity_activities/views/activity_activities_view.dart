@@ -30,6 +30,7 @@ class ActivityActivitiesView extends StatefulWidget {
 class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late String finalDate;
 
   @override
   void initState() {
@@ -37,6 +38,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
     _tabController.addListener(() {
       context.read<ActivityActivitiesCubit>().changeIndex(_tabController.index);
     });
+    finalDate = AppConvertDateTime().ymdDash(DateTime.now());
     super.initState();
   }
 
@@ -69,16 +71,32 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
   }
 
   Widget bodyTab() {
-    return Expanded(
-      child: TabBarView(
-        controller: _tabController,
-        children: const [
-          FeedingView(),
-          TreatmentView(),
-          SamplingView(),
-          WaterQualityView(),
-        ],
-      ),
+    return BlocBuilder<ActivityActivitiesCubit, ActivityActivitiesState>(
+      builder: (context, state) {
+        return Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              FeedingView(),
+              TreatmentView(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                state.datetime,
+              ),
+              SamplingView(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                state.datetime,
+              ),
+              WaterQualityView(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                state.datetime,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -91,7 +109,8 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
         locale: 'in_ID',
         onDateChange: (selectedDate) {
           //`selectedDate` the new date selected.
-          String finalDate = AppConvertDateTime().ymdDash(selectedDate);
+          finalDate = AppConvertDateTime().ymdDash(selectedDate);
+          context.read<ActivityActivitiesCubit>().changeDatetime(finalDate);
           context.read<TreatmentCubit>().init(
                 widget.fishpondId,
                 widget.fishpondcycleId,

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
@@ -35,7 +33,11 @@ class ActivityActivitiesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ActivityActivitiesCubit()),
+        BlocProvider(
+            create: (context) => ActivityActivitiesCubit()
+              ..changeDatetime(
+                AppConvertDateTime().ymdDash(DateTime.now()),
+              )),
         BlocProvider(
           create: (context) => TreatmentCubit(
             ActivityTreatmentServiceImpl.create(),
@@ -83,20 +85,44 @@ class ActivityActivitiesPage extends StatelessWidget {
                     ));
                     break;
                   case 1:
-                    Navigator.of(context).push(AppTransition.pushTransition(
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
                       const ActivityTreatmentAddPage(1, 1),
                       ActivityTreatmentAddPage.routeSettings,
-                    ));
+                    ))
+                        .then((value) {
+                      context.read<TreatmentCubit>().init(
+                            fishpondId,
+                            fishpondcycleId,
+                            state.datetime,
+                          );
+                    });
                   case 2:
-                    Navigator.of(context).push(AppTransition.pushTransition(
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
                       const ActivitySamplingAddPage(1, 1),
                       ActivitySamplingAddPage.routeSettings,
-                    ));
+                    ))
+                        .then((value) {
+                      context.read<SamplingCubit>().init(
+                            fishpondId,
+                            fishpondcycleId,
+                            state.datetime,
+                          );
+                    });
                   case 3:
-                    Navigator.of(context).push(AppTransition.pushTransition(
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
                       const ActivityWaterQualityAddPage(1, 1),
                       ActivityWaterQualityAddPage.routeSettings,
-                    ));
+                    ))
+                        .then((value) {
+                      context.read<WaterQualityCubit>().init(
+                            fishpondId,
+                            fishpondcycleId,
+                            state.datetime,
+                          );
+                    });
                     break;
                   default:
                     Navigator.of(context).push(AppTransition.pushTransition(
