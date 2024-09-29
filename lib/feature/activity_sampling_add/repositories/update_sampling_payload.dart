@@ -32,12 +32,12 @@ class UpdateSamplingPayload {
         attachmentJsonArray: json["attachment_json_array"],
       );
 
-  Map<String, String> toMap() => {
-        "id": id.toString(),
+  Map<String, dynamic> toMap() => {
+        "id": id,
         "datetime": datetime!.toIso8601String(),
-        "mbw": mbw.toString(),
-        "sr": sr.toString(),
-        "note": note.toString(),
-        "attachment_json_array": attachmentJsonArray.toString(),
+        "mbw": mbw,
+        "sr": sr,
+        "note": note,
+        "attachment_json_array": attachmentJsonArray,
       };
 }
