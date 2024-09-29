@@ -56,20 +56,20 @@ class AddWaterQualityPayload {
         attachmentJsonArray: json["attachment_json_array"],
       );
 
-  Map<String, String> toMap() => {
-        "fishpond_id": fishpondId.toString(),
-        "fishpondcycle_id": fishpondcycleId.toString(),
+  Map<String, dynamic> toMap() => {
+        "fishpond_id": fishpondId,
+        "fishpondcycle_id": fishpondcycleId,
         "datetime": datetime!.toIso8601String(),
-        "level": level.toString(),
-        "ph": ph.toString(),
-        "salinitas": salinitas.toString(),
-        "temperature": temperature.toString(),
-        "do": dissolvedOxygen.toString(),
-        "clarity": clarity.toString(),
-        "orp": orp.toString(),
-        "water_color": waterColor.toString(),
-        "water_weather": waterWeather.toString(),
-        "note": note.toString(),
-        "attachment_json_array": attachmentJsonArray.toString(),
+        "level": level,
+        "ph": ph,
+        "salinitas": salinitas,
+        "temperature": temperature,
+        "do": dissolvedOxygen,
+        "clarity": clarity,
+        "orp": orp,
+        "water_color": waterColor,
+        "water_weather": waterWeather,
+        "note": note,
+        "attachment_json_array": attachmentJsonArray ?? [],
       };
 }
