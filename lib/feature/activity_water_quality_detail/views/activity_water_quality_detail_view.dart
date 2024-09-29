@@ -36,15 +36,15 @@ class _ActivityWaterQualityDetailViewState
         );
       } else {
         return SizedBox(
-          height: 100.0,
+          height: 140.0,
           width: double.infinity,
-          child: ListView(
+          child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: List.generate(
-              attachmentJsonArray.length,
-              (index) {
-                return AspectRatio(
+            itemCount: attachmentJsonArray.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: AspectRatio(
                   aspectRatio: 2 / 1,
                   child: AppNetworkImage(
                     attachmentJsonArray[index],
@@ -52,9 +52,12 @@ class _ActivityWaterQualityDetailViewState
                     height: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(width: 16.0);
+            },
           ),
         );
       }
