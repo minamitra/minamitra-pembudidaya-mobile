@@ -40,4 +40,35 @@ class WaterQualityCubit extends Cubit<WaterQualityState> {
       ));
     }
   }
+
+  void deleteWaterQuality(
+    String id,
+    int fishpondId,
+    int fishpondcycleId,
+    String datetime,
+  ) async {
+    emit(state.copyWith(status: GlobalState.loading));
+    try {
+      await service.deleteWaterQuality(id);
+      final waterQualities = await service.dataWaterQuality(
+        fishpondId,
+        fishpondcycleId,
+        datetime,
+      );
+      emit(state.copyWith(
+        status: GlobalState.loaded,
+        waterQualities: waterQualities.data.data,
+      ));
+    } on AppException catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
 }
