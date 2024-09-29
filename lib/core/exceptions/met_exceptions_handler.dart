@@ -23,4 +23,18 @@ class MetaExceptionHanlder {
         throw AppException(message);
     }
   }
+
+  handleByErrorCodeDio() {
+    String message =
+        MetaResponse.fromJson(responseBody).message ?? "Unknown Error";
+
+    switch (errorCode) {
+      case 400:
+        throw AppException(message);
+      case 401:
+        throw TokenExpired();
+      default:
+        throw AppException(message);
+    }
+  }
 }
