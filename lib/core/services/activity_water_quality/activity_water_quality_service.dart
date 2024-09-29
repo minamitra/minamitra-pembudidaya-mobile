@@ -62,13 +62,12 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
       AddWaterQualityPayload payload) async {
     final url = endpoint.addWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromJson(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -76,13 +75,12 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
   Future<BaseResponse<bool>> deleteWaterQuality(String id) async {
     final url = endpoint.deleteWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       {"id": id},
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromJson(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -91,13 +89,12 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
       UpdateWaterQualityPayload payload) async {
     final url = endpoint.updateWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromJson(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 }
