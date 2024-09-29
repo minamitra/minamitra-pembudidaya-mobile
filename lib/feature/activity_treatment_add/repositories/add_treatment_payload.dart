@@ -38,14 +38,14 @@ class AddTreatmentPayload {
         attachmentJsonArray: json["attachment_json_array"],
       );
 
-  Map<String, String> toMap() => {
-        "fishpond_id": fishpondId.toString(),
-        "fishpondcycle_id": fishpondcycleId.toString(),
+  Map<String, dynamic> toMap() => {
+        "fishpond_id": fishpondId,
+        "fishpondcycle_id": fishpondcycleId,
         "datetime": datetime!.toIso8601String(),
-        "fish_age": fishAge.toString(),
-        "name": name.toString(),
-        "note": note.toString(),
-        "cost": cost.toString(),
-        "attachment_json_array": attachmentJsonArray!.toString(),
+        "fish_age": fishAge,
+        "name": name,
+        "note": note,
+        "cost": cost,
+        "attachment_json_array": attachmentJsonArray ?? [],
       };
 }
