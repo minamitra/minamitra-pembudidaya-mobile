@@ -1,27 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/multi_image/multi_image_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/activity_water_quality/activity_water_quality_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/logics/activity_water_quality_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/view/activity_water_quality_add_view.dart';
+import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class ActivityWaterQualityAddPage extends StatelessWidget {
-  const ActivityWaterQualityAddPage({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+
+  const ActivityWaterQualityAddPage(
+    this.fishpondId,
+    this.fishpondcycleId, {
+    super.key,
+  });
 
   static const RouteSettings routeSettings =
       RouteSettings(name: "/activity-water-quality-page");
 
   @override
   Widget build(BuildContext context) {
+    final SimpleFontelicoProgressDialog dialog =
+        SimpleFontelicoProgressDialog(context: context);
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => MultiImageCubit()),
+        BlocProvider(
+          create: (context) => ActivityWaterQualityAddCubit(
+            ActivityWaterQualityServiceImpl.create(),
+            CdnServiceImpl.create(),
+          ),
+        ),
       ],
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
           "Tambah Kualitas Air",
         ),
-        body: ActivityWaterQualityAddView(),
+        body: BlocConsumer<ActivityWaterQualityAddCubit,
+            ActivityWaterQualityAddState>(
+          listener: (context, state) {
+            if (state.status.isShowDialogLoading) {
+              AppDialog().showLoadingDialog(context, dialog);
+            }
+
+            if (state.status.isHideDialogLoading) {
+              dialog.hide();
+            }
+
+            if (state.status.isError) {
+              if (state.errorMessage == "TOKEN_EXPIRED") {
+                RepositoryProvider.of<AuthenticationRepository>(context)
+                    .logout();
+              } else {
+                AppTopSnackBar(context).showDanger(state.errorMessage);
+              }
+            }
+
+            if (state.status.isSuccessSubmit) {
+              AppTopSnackBar(context)
+                  .showSuccess("Berhasil Membuat\nKolam Baru !");
+              Navigator.of(context).pop("refresh");
+            }
+          },
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            return ActivityWaterQualityAddView(
+              fishpondId,
+              fishpondcycleId,
+            );
+          },
+        ),
       ),
     );
   }
