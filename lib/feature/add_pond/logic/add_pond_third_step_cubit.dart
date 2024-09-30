@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart
 import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_finisher_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_grower_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_starter_response.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/seed_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 
@@ -25,6 +26,7 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
   final TextEditingController survivalRateController = TextEditingController();
   final TextEditingController pakanGrowerController = TextEditingController();
   final TextEditingController pakanFinisherController = TextEditingController();
+  String seedID = "0";
 
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));
@@ -32,10 +34,12 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
       final feedStarterResponse = await feedService.getFeedStarter();
       final feedGrowerResponse = await feedService.getFeedGrower();
       final feedFinisherResponse = await feedService.getFeedFinisher();
+      final seedResponse = await feedService.getSeed();
       emit(state.copyWith(
         feedStarterData: feedStarterResponse.data,
         feedGrowerData: feedGrowerResponse.data,
         feedFinisherData: feedFinisherResponse.data,
+        seedResponse: seedResponse.data,
         status: GlobalState.loaded,
       ));
     } on AppException catch (e) {

@@ -11,4 +11,10 @@ class FeedEndpoint {
       },
     );
   }
+
+  Uri getSeed() {
+    return createUrl(
+      path: "mitra/fishseed/data",
+    );
+  }
 }

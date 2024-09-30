@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:minamitra_pembudidaya_mobile/core/repositories/add_pond_cycle_payload.dart';
+
 class FeedStarterResponse {
   List<FeedStarterResponseData>? data;
   Pagination? pagination;
@@ -100,6 +102,13 @@ class FeedStarterResponseData {
         "note": note,
         "active_bool": activeBool,
       };
+
+  Finisher toFinisherObject() {
+    return Finisher(
+      id: int.parse(id ?? "0"),
+      name: name ?? "",
+    );
+  }
 }
 
 class Pagination {

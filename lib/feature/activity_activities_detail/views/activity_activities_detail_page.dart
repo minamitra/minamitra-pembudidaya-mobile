@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesDetailPage extends StatelessWidget {
-  const ActivityActivitiesDetailPage({super.key});
+  const ActivityActivitiesDetailPage(this.data, {super.key});
+
+  final FeedActivityResponseData data;
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-activities-detail");
@@ -29,7 +32,7 @@ class ActivityActivitiesDetailPage extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      body: const ActivityActivitiesDetailView(),
+      body: ActivityActivitiesDetailView(data),
     );
   }
 }

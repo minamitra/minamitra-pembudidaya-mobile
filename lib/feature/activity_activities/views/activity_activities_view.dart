@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/feeding/feeding_view.dart';
@@ -63,14 +64,25 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
 
   Widget bodyTab() {
     return Expanded(
-      child: TabBarView(
-        controller: _tabController,
-        children: [
-          FeedingView(),
-          TreatmentView(),
-          SamplingView(),
-          WaterQualityView(),
-        ],
+      child: BlocBuilder<ActivityActivitiesCubit, ActivityActivitiesState>(
+        builder: (context, state) {
+          return TabBarView(
+            controller: _tabController,
+            children: state.status.isLoading
+                ? const [
+                    Center(child: CircularProgressIndicator()),
+                    Center(child: CircularProgressIndicator()),
+                    Center(child: CircularProgressIndicator()),
+                    Center(child: CircularProgressIndicator()),
+                  ]
+                : [
+                    FeedingView(),
+                    TreatmentView(),
+                    SamplingView(),
+                    WaterQualityView(),
+                  ],
+          );
+        },
       ),
     );
   }
@@ -78,10 +90,10 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
   Widget itemCard() {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(AppTransition.pushTransition(
-          const ActivityActivitiesDetailPage(),
-          ActivityActivitiesDetailPage.routeSettings(),
-        ));
+        // Navigator.of(context).push(AppTransition.pushTransition(
+        //   const ActivityActivitiesDetailPage(),
+        //   ActivityActivitiesDetailPage.routeSettings(),
+        // ));
       },
       child: AppDefaultCard(
         backgroundCardColor: AppColor.white,
@@ -177,10 +189,11 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
         initialDate: DateTime.now(),
         locale: 'in_ID',
         onDateChange: (selectedDate) {
-          //`selectedDate` the new date selected.
+          context.read<ActivityActivitiesCubit>().changeDateTime(selectedDate);
         },
         headerProps: const EasyHeaderProps(
-          dateFormatter: DateFormatter.monthOnly(),
+          dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
+          monthPickerType: MonthPickerType.dropDown,
         ),
         dayProps: EasyDayProps(
           height: 76,

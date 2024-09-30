@@ -3,7 +3,7 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dar
 
 class MetaExceptionHanlder {
   final int errorCode;
-  final String responseBody;
+  final dynamic responseBody;
 
   MetaExceptionHanlder(
     this.errorCode,
@@ -13,6 +13,20 @@ class MetaExceptionHanlder {
   handleByErrorCode() {
     String message =
         MetaResponse.fromJson(responseBody).message ?? "Unknown Error";
+
+    switch (errorCode) {
+      case 400:
+        throw AppException(message);
+      case 401:
+        throw TokenExpired();
+      default:
+        throw AppException(message);
+    }
+  }
+
+  handleByErrorCodeDio() {
+    String message =
+        MetaResponse.fromMap(responseBody).message ?? "Unknown Error";
 
     switch (errorCode) {
       case 400:

@@ -3,12 +3,16 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_desctiption_item.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_separated_item.dart';
 
 class ActivityActivitiesDetailView extends StatelessWidget {
-  const ActivityActivitiesDetailView({super.key});
+  const ActivityActivitiesDetailView(this.data, {super.key});
+
+  final FeedActivityResponseData data;
 
   @override
   Widget build(BuildContext context) {
@@ -39,29 +43,41 @@ class ActivityActivitiesDetailView extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         children: [
           const SizedBox(height: 2.0),
-          AppWidgetSeparatedItem("Waktu Pakan", "05 Agustus 2024, 17:00 WIB"),
+          AppWidgetSeparatedItem(
+            "Waktu Pakan",
+            AppConvertDateTime().ddmmyyyyhhmm(data.datetime ?? DateTime.now()),
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Umur Ikan", "100 hari"),
+          AppWidgetSeparatedItem(
+            "Umur Ikan",
+            "${data.fishAge} hari",
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Jumlah Pakan", "100 gram"),
+          AppWidgetSeparatedItem(
+            "Jumlah Pakan",
+            "${data.actual} gram",
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Merk Pakan", "Merk ABC"),
-          const SizedBox(height: 18.0),
-          AppDividerSmall(),
-          const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Total Pakan", "4500 gram"),
+          AppWidgetSeparatedItem(
+            "Merk Pakan",
+            data.fishfoodName ?? "-",
+          ),
+          // const SizedBox(height: 18.0),
+          // AppDividerSmall(),
+          // const SizedBox(height: 18.0),
+          // AppWidgetSeparatedItem("Total Pakan", "4500 gram"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
             "Catatan",
-            "Figma ipsum component variant main layer. Export team scrolling comment prototype edit undo. Follower inspect rotate pixel duplicate asset.",
+            data.note ?? "-",
           ),
           const SizedBox(height: 98.0),
         ],

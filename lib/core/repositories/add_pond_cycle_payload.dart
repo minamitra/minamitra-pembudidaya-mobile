@@ -2,7 +2,7 @@ import 'dart:convert';
 
 class AddPondCyclePayload {
   int? fishpondId;
-  DateTime? tebarDate;
+  String? tebarDate;
   int? tebarFishTotal;
   int? fishseedId;
   int? tebarBobot;
@@ -31,9 +31,7 @@ class AddPondCyclePayload {
   factory AddPondCyclePayload.fromMap(Map<String, dynamic> json) =>
       AddPondCyclePayload(
         fishpondId: json["fishpond_id"],
-        tebarDate: json["tebar_date"] == null
-            ? null
-            : DateTime.parse(json["tebar_date"]),
+        tebarDate: json["tebar_date"],
         tebarFishTotal: json["tebar_fish_total"],
         fishseedId: json["fishseed_id"],
         tebarBobot: json["tebar_bobot"],
@@ -45,17 +43,40 @@ class AddPondCyclePayload {
         estimationFishfoodEpp: json["estimation_fishfood_epp"],
       );
 
+  AddPondCyclePayload copyWith({
+    int? fishpondId,
+    String? tebarDate,
+    int? tebarFishTotal,
+    int? fishseedId,
+    int? tebarBobot,
+    int? targetPanenBobot,
+    int? srTarget,
+    FishfoodJsonObject? fishfoodJsonObject,
+    int? estimationFishfoodEpp,
+  }) {
+    return AddPondCyclePayload(
+      fishpondId: fishpondId,
+      tebarDate: tebarDate,
+      tebarFishTotal: tebarFishTotal,
+      fishseedId: fishseedId,
+      tebarBobot: tebarBobot,
+      targetPanenBobot: targetPanenBobot,
+      srTarget: srTarget,
+      fishfoodJsonObject: fishfoodJsonObject,
+      estimationFishfoodEpp: estimationFishfoodEpp,
+    );
+  }
+
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "tebar_date":
-            "${tebarDate!.year.toString().padLeft(4, '0')}-${tebarDate!.month.toString().padLeft(2, '0')}-${tebarDate!.day.toString().padLeft(2, '0')}",
-        "tebar_fish_total": tebarFishTotal,
-        "fishseed_id": fishseedId,
-        "tebar_bobot": tebarBobot,
-        "target_panen_bobot": targetPanenBobot,
-        "sr_target": srTarget,
-        "fishfood_json_object": fishfoodJsonObject?.toMap(),
-        "estimation_fishfood_epp": estimationFishfoodEpp,
+        "fishpond_id": fishpondId.toString(),
+        "tebar_date": tebarDate ?? "",
+        "tebar_fish_total": tebarFishTotal.toString(),
+        "fishseed_id": fishseedId.toString(),
+        "tebar_bobot": tebarBobot.toString(),
+        "target_panen_bobot": targetPanenBobot.toString(),
+        "sr_target": srTarget.toString(),
+        "fishfood_json_object": fishfoodJsonObject?.toMap() ?? "",
+        "estimation_fishfood_epp": estimationFishfoodEpp.toString(),
       };
 }
 
@@ -123,7 +144,7 @@ class Finisher {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
+        "id": id.toString(),
+        "name": name ?? "",
       };
 }
