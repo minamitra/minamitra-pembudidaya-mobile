@@ -23,7 +23,7 @@ class ActivityPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBarWithBucket(
           context,
-          "Aktifitas",
+          "Aktivitas",
         ),
         body: ActivityView(),
       ),

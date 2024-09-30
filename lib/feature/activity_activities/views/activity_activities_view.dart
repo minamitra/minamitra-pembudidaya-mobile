@@ -4,18 +4,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/sampling_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/treatment_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/water_quality_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/feeding/feeding_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/sampling/sampling_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/treatment/treatment_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/water_quality/water_quality_view.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/views/activity_activities_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesView extends StatefulWidget {
-  const ActivityActivitiesView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+  final DateTime dateDistribution;
+
+  const ActivityActivitiesView(
+    this.fishpondId,
+    this.fishpondcycleId,
+    this.dateDistribution, {
+    super.key,
+  });
 
   @override
   State<ActivityActivitiesView> createState() => _ActivityActivitiesViewState();
@@ -24,6 +35,7 @@ class ActivityActivitiesView extends StatefulWidget {
 class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  late String finalDate;
 
   @override
   void initState() {
@@ -31,13 +43,14 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
     _tabController.addListener(() {
       context.read<ActivityActivitiesCubit>().changeIndex(_tabController.index);
     });
+    finalDate = AppConvertDateTime().ymdDash(DateTime.now());
     super.initState();
   }
 
   Widget tabBar() {
     return Container(
       height: 60,
-      decoration: BoxDecoration(color: AppColor.neutral[50]),
+      decoration: const BoxDecoration(color: AppColor.white),
       child: TabBar(
         controller: _tabController,
         dividerColor: Colors.white,
@@ -76,10 +89,26 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
                     Center(child: CircularProgressIndicator()),
                   ]
                 : [
-                    FeedingView(),
-                    TreatmentView(),
-                    SamplingView(),
-                    WaterQualityView(),
+                    const FeedingView(),
+                    TreatmentView(
+                      widget.fishpondId,
+                      widget.fishpondcycleId,
+                      widget.dateDistribution,
+                      AppConvertDateTime()
+                          .ymdDash(state.selectedDate ?? DateTime.now()),
+                    ),
+                    SamplingView(
+                      widget.fishpondId,
+                      widget.fishpondcycleId,
+                      AppConvertDateTime()
+                          .ymdDash(state.selectedDate ?? DateTime.now()),
+                    ),
+                    WaterQualityView(
+                      widget.fishpondId,
+                      widget.fishpondcycleId,
+                      AppConvertDateTime()
+                          .ymdDash(state.selectedDate ?? DateTime.now()),
+                    ),
                   ],
           );
         },
@@ -190,6 +219,22 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
         locale: 'in_ID',
         onDateChange: (selectedDate) {
           context.read<ActivityActivitiesCubit>().changeDateTime(selectedDate);
+          finalDate = AppConvertDateTime().ymdDash(selectedDate);
+          context.read<TreatmentCubit>().init(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                finalDate,
+              );
+          context.read<SamplingCubit>().init(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                finalDate,
+              );
+          context.read<WaterQualityCubit>().init(
+                widget.fishpondId,
+                widget.fishpondcycleId,
+                finalDate,
+              );
         },
         headerProps: const EasyHeaderProps(
           dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
@@ -206,19 +251,6 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
           ),
         ),
       ),
-    );
-  }
-
-  Widget listCard() {
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemCount: 5,
-      separatorBuilder: (context, index) => const SizedBox(height: 16),
-      itemBuilder: (context, index) {
-        return itemCard();
-      },
     );
   }
 

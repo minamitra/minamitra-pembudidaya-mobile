@@ -33,7 +33,7 @@ class _AppDialogComponentState extends State<AppDialogComponent> {
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               widget.title,
@@ -53,8 +53,12 @@ class _AppDialogComponentState extends State<AppDialogComponent> {
                 height: 200,
               ),
             ],
-            const SizedBox(height: 16),
-            ...(widget.buttons ?? []),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                ...(widget.buttons ?? []),
+              ],
+            ),
           ],
         ),
       ),

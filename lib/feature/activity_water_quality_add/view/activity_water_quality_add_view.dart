@@ -1,8 +1,10 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
@@ -13,10 +15,26 @@ import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/p
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/water_quality_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/logics/activity_water_quality_add_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/repositories/add_water_quality_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/repositories/update_water_quality_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityWaterQualityAddView extends StatefulWidget {
-  const ActivityWaterQualityAddView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+  final bool isEdit;
+  final WaterQualityResponseData? data;
+
+  const ActivityWaterQualityAddView(
+    this.fishpondId,
+    this.fishpondcycleId,
+    this.isEdit,
+    this.data, {
+    super.key,
+  });
 
   @override
   State<ActivityWaterQualityAddView> createState() =>
@@ -25,6 +43,7 @@ class ActivityWaterQualityAddView extends StatefulWidget {
 
 class _ActivityWaterQualityAddViewState
     extends State<ActivityWaterQualityAddView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController hourController = TextEditingController();
   final TextEditingController waterLevelController = TextEditingController();
@@ -41,6 +60,59 @@ class _ActivityWaterQualityAddViewState
   DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
+
+  Future<void> convetAttachmentImage(List<String> images) async {
+    Future.forEach(images, (element) async {
+      http.Response imagePath = await http.get(Uri.parse(element));
+      context.read<MultiImageCubit>().setImage(imagePath.bodyBytes);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      dateController.text = widget.data!.datetime != null
+          ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
+          : "";
+      hourController.text = widget.data!.datetime != null
+          ? AppConvertDateTime().jm24(widget.data!.datetime!)
+          : "";
+      waterLevelController.text =
+          widget.data!.level != null ? widget.data!.level.toString() : "";
+      waterPHController.text =
+          widget.data!.ph != null ? widget.data!.ph.toString() : "";
+      salinityController.text = widget.data!.salinitas != null
+          ? widget.data!.salinitas.toString()
+          : "";
+      temperatureController.text = widget.data!.temperature != null
+          ? widget.data!.temperature.toString()
+          : "";
+      dOController.text =
+          widget.data!.dO != null ? widget.data!.dO.toString() : "";
+      brightnessController.text =
+          widget.data!.clarity != null ? widget.data!.clarity.toString() : "";
+      orpController.text =
+          widget.data!.orp != null ? widget.data!.orp.toString() : "";
+      waterColorController.text =
+          widget.data!.waterColor != null ? widget.data!.waterColor! : "";
+      weatherController.text =
+          widget.data!.waterWeather != null ? widget.data!.waterWeather! : "";
+      notesController.text =
+          widget.data!.note != null ? widget.data!.note! : "";
+      if (widget.data!.attachmentJsonArray != null &&
+          widget.data!.attachmentJsonArray!.isNotEmpty) {
+        convertAttachmentImage(widget.data!.attachmentJsonArray!);
+      }
+    }
+  }
+
+  Future<void> convertAttachmentImage(List<String> images) async {
+    Future.forEach(images, (element) async {
+      http.Response imagePath = await http.get(Uri.parse(element));
+      context.read<MultiImageCubit>().setImage(imagePath.bodyBytes);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +141,7 @@ class _ActivityWaterQualityAddViewState
           ).then((date) {
             setState(() {
               if (date != null) {
-                dateController.text = AppConvertDateTime().dmyName(date);
+                dateController.text = AppConvertDateTime().ymdDash(date);
               }
             });
           });
@@ -111,7 +183,8 @@ class _ActivityWaterQualityAddViewState
           ).then((time) {
             setState(() {
               if (time != null) {
-                hourController.text = time.format(context);
+                hourController.text = time.format(context).replaceAll(".", ":");
+                ;
               }
             });
           });
@@ -325,8 +398,10 @@ class _ActivityWaterQualityAddViewState
         onTap: appBottomSheetShowModal(
           context,
           "Pilih warna air",
-          ["Cokelar", "Biru", "Bening"],
-          (value) {},
+          ["Cokelat", "Biru", "Bening"],
+          (value) {
+            waterColorController.text = value;
+          },
         ),
       );
     }
@@ -354,7 +429,9 @@ class _ActivityWaterQualityAddViewState
           context,
           "Pilih cuaca",
           ["Mendung", "Badai", "Cerah"],
-          (value) {},
+          (value) {
+            weatherController.text = value;
+          },
         ),
       );
     }
@@ -366,12 +443,12 @@ class _ActivityWaterQualityAddViewState
         labelText: "Catatan",
         maxLines: 3,
         isMandatory: false,
-        validator: (String? value) {
-          if (value?.isEmpty ?? true) {
-            return null;
-          }
-          return null;
-        },
+        // validator: (String? value) {
+        //   if (value?.isEmpty ?? true) {
+        //     return null;
+        //   }
+        //   return null;
+        // },
       );
     }
 
@@ -384,12 +461,6 @@ class _ActivityWaterQualityAddViewState
               Text(
                 "Unggah Lampiran",
                 style: appTextTheme(context).bodyMedium,
-              ),
-              Text(
-                " *",
-                style: appTextTheme(context)
-                    .bodyMedium
-                    ?.copyWith(color: Colors.red),
               ),
             ],
           ),
@@ -462,36 +533,39 @@ class _ActivityWaterQualityAddViewState
     }
 
     Widget body() {
-      return ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          dateTextField(),
-          const SizedBox(height: 16.0),
-          hourTextField(),
-          const SizedBox(height: 16.0),
-          waterLevel(),
-          const SizedBox(height: 16.0),
-          waterPH(),
-          const SizedBox(height: 16.0),
-          salinity(),
-          const SizedBox(height: 16.0),
-          temperature(),
-          const SizedBox(height: 16.0),
-          dO(),
-          const SizedBox(height: 16.0),
-          brightness(),
-          const SizedBox(height: 16.0),
-          orp(),
-          const SizedBox(height: 16.0),
-          waterColor(),
-          const SizedBox(height: 16.0),
-          noteTextField(),
-          const SizedBox(height: 16.0),
-          weather(),
-          const SizedBox(height: 16.0),
-          fileAttachment(),
-          const SizedBox(height: 98.0),
-        ],
+      return Form(
+        key: formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: [
+            dateTextField(),
+            const SizedBox(height: 16.0),
+            hourTextField(),
+            const SizedBox(height: 16.0),
+            waterLevel(),
+            const SizedBox(height: 16.0),
+            waterPH(),
+            const SizedBox(height: 16.0),
+            salinity(),
+            const SizedBox(height: 16.0),
+            temperature(),
+            const SizedBox(height: 16.0),
+            dO(),
+            const SizedBox(height: 16.0),
+            brightness(),
+            const SizedBox(height: 16.0),
+            orp(),
+            const SizedBox(height: 16.0),
+            waterColor(),
+            const SizedBox(height: 16.0),
+            noteTextField(),
+            const SizedBox(height: 16.0),
+            weather(),
+            const SizedBox(height: 16.0),
+            fileAttachment(),
+            const SizedBox(height: 68.0),
+          ],
+        ),
       );
     }
 
@@ -509,7 +583,63 @@ class _ActivityWaterQualityAddViewState
         ),
         child: AppPrimaryFullButton(
           "Simpan",
-          () {},
+          () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
+            List<File>? attachment = context
+                .read<MultiImageCubit>()
+                .state
+                ?.map((e) => convertUint8ListToFile(e))
+                .toList();
+
+            if (!widget.isEdit) {
+              AddWaterQualityPayload payload = AddWaterQualityPayload(
+                fishpondId: widget.fishpondId,
+                fishpondcycleId: widget.fishpondcycleId,
+                datetime: DateTime.parse(
+                  "${dateController.text} ${hourController.text}",
+                ),
+                level: double.parse(waterLevelController.text),
+                ph: double.parse(waterPHController.text),
+                salinitas: double.parse(salinityController.text),
+                temperature: double.parse(temperatureController.text),
+                dissolvedOxygen: double.parse(dOController.text),
+                clarity: double.parse(brightnessController.text),
+                orp: double.parse(orpController.text),
+                waterColor: waterColorController.text,
+                waterWeather: weatherController.text,
+                note: notesController.text,
+              );
+
+              context.read<ActivityWaterQualityAddCubit>().addWaterQuality(
+                    payload,
+                    attachment ?? [],
+                  );
+            } else {
+              UpdateWaterQualityPayload payload = UpdateWaterQualityPayload(
+                id: widget.data?.id ?? "",
+                datetime: DateTime.parse(
+                  "${dateController.text} ${hourController.text}",
+                ),
+                level: double.parse(waterLevelController.text),
+                ph: double.parse(waterPHController.text),
+                salinitas: double.parse(salinityController.text),
+                temperature: double.parse(temperatureController.text),
+                dissolvedOxygen: double.parse(dOController.text),
+                clarity: double.parse(brightnessController.text),
+                orp: double.parse(orpController.text),
+                waterColor: waterColorController.text,
+                waterWeather: weatherController.text,
+                note: notesController.text,
+              );
+
+              context.read<ActivityWaterQualityAddCubit>().updateWaterQuality(
+                    payload,
+                    attachment ?? [],
+                  );
+            }
+          },
         ),
       );
     }

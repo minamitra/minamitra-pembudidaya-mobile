@@ -1,12 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/treatment_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/view/activity_treatment_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class TreatmentView extends StatefulWidget {
-  const TreatmentView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+  final DateTime dateDistribution;
+  final String datetime;
+
+  const TreatmentView(
+    this.fishpondId,
+    this.fishpondcycleId,
+    this.dateDistribution,
+    this.datetime, {
+    super.key,
+  });
 
   @override
   State<TreatmentView> createState() => _TreatmentViewState();
@@ -15,13 +33,23 @@ class TreatmentView extends StatefulWidget {
 class _TreatmentViewState extends State<TreatmentView> {
   @override
   Widget build(BuildContext context) {
-    Widget itemCard() {
+    Widget itemCard(TreatmentResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            const ActivityTreatmentDetailPage(),
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
+            ActivityTreatmentDetailPage(data, widget.dateDistribution),
             ActivityTreatmentDetailPage.routeSettings(),
-          ));
+          ))
+              .then((value) {
+            if (value == "refresh") {
+              context.read<TreatmentCubit>().init(
+                    widget.fishpondId,
+                    widget.fishpondcycleId,
+                    widget.datetime,
+                  );
+            }
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -34,7 +62,7 @@ class _TreatmentViewState extends State<TreatmentView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Pemberian Vaksin',
+                        data.name ?? "-",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
@@ -43,7 +71,7 @@ class _TreatmentViewState extends State<TreatmentView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        '05-08-2024 17:00 WIB',
+                        data.datetime != null ? data.datetime.toString() : "-",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -52,10 +80,30 @@ class _TreatmentViewState extends State<TreatmentView> {
                     ],
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColor.neutral[400],
-                  )
+                  InkWell(
+                    onTap: () {
+                      showDeleteBottomSheet(
+                        context,
+                        title: "Hapus Perlakuan",
+                        descriptions:
+                            "Apakah Anda yakin ingin menghapus perlakuan ini?",
+                        onTapDelete: () {
+                          context.read<TreatmentCubit>().deleteTreatment(
+                                data.id ?? "",
+                                widget.fishpondId,
+                                widget.fishpondcycleId,
+                                widget.datetime,
+                              );
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      AppAssets.trashIcon,
+                      height: 20.0,
+                      color: AppColor.neutral[400],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 18.0),
@@ -63,7 +111,11 @@ class _TreatmentViewState extends State<TreatmentView> {
                 children: [
                   Image.asset(AppAssets.dollarIcon, height: 20.0),
                   const SizedBox(width: 12.0),
-                  Text("Rp 100.000", style: appTextTheme(context).titleSmall),
+                  Text(
+                    appConvertCurrency(
+                        data.cost != null ? double.parse(data.cost!) : 0),
+                    style: appTextTheme(context).titleSmall,
+                  ),
                 ],
               ),
             ],
@@ -72,25 +124,50 @@ class _TreatmentViewState extends State<TreatmentView> {
       );
     }
 
-    return ListView.separated(
-      shrinkWrap: true,
-      physics: const BouncingScrollPhysics(),
-      itemCount: 5,
-      separatorBuilder: (context, index) => Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 18.0,
-          vertical: 16.0,
-        ),
-        color: AppColor.neutralBlueGrey[50],
-        child: Text(
-          "Hari ini",
-          style: appTextTheme(context).titleSmall?.copyWith(
-                color: AppColor.neutral[400],
-              ),
-        ),
-      ),
-      itemBuilder: (context, index) {
-        return itemCard();
+    return BlocBuilder<TreatmentCubit, TreatmentState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        if (state.status.isLoaded) {
+          return state.treatments!.isEmpty
+              ? const Padding(
+                  padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
+                  child: AppEmptyData(
+                      "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+                )
+              : ListView.separated(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: state.treatments!.length,
+                  separatorBuilder: (context, index) => Container(
+                    height: 16.0,
+                    width: double.infinity,
+                    color: AppColor.neutralBlueGrey[50],
+                  ),
+                  // Container(
+                  //   padding: const EdgeInsets.symmetric(
+                  //     horizontal: 18.0,
+                  //     vertical: 16.0,
+                  //   ),
+                  //   color: AppColor.neutralBlueGrey[50],
+                  //   child: Text(
+                  //     "Hari ini",
+                  //     style: appTextTheme(context).titleSmall?.copyWith(
+                  //           color: AppColor.neutral[400],
+                  //         ),
+                  //   ),
+                  // ),
+                  itemBuilder: (context, index) {
+                    return itemCard(state.treatments![index]);
+                  },
+                );
+        }
+
+        return const SizedBox();
       },
     );
   }

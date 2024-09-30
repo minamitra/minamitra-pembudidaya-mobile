@@ -26,7 +26,7 @@ class MetaExceptionHanlder {
 
   handleByErrorCodeDio() {
     String message =
-        MetaResponse.fromMap(responseBody).message ?? "Unknown Error";
+        MetaResponse.fromJson(responseBody).message ?? "Unknown Error";
 
     switch (errorCode) {
       case 400:

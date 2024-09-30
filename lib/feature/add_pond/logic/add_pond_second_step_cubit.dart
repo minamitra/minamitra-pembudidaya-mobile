@@ -150,7 +150,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
         selectedSubDistrict: state.selectedSubDistrict,
         villageData: state.villageData,
         selectedVillage: state.selectedVillage,
-        urlImage: response.data.fileuri,
+        urlImage: response.data.data?.fileuri ?? "",
         status: GlobalState.hideDialogLoading,
       ));
     } on AppException catch (e) {

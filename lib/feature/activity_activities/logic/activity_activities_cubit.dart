@@ -93,4 +93,9 @@ class ActivityActivitiesCubit extends Cubit<ActivityActivitiesState> {
     emit(state.copyWith(status: GlobalState.onUpdating));
     emit(state.copyWith(status: GlobalState.loaded, index: index));
   }
+
+  // void changeDatetime(String datetime) {
+  //   emit(state.copyWith(status: GlobalState.onUpdating));
+  //   emit(state.copyWith(status: GlobalState.loaded, datetime: datetime));
+  // }
 }

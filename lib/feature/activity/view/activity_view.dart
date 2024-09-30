@@ -146,7 +146,7 @@ class _ActivityViewState extends State<ActivityView> {
                 legendIconType: LegendIconType.circle,
                 cornerStyle: CornerStyle.endCurve,
                 maximumValue: 100.0,
-                name: "Aktifitas",
+                name: "Aktivitas",
                 enableTooltip: true,
                 dataLabelMapper: (ChartDummy data, _) => data.name,
               )

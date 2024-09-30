@@ -1,20 +1,10 @@
 import 'dart:convert';
 
 class CDNImageResponse {
-  final String? type;
-  final String? filename;
-  final String? filepath;
-  final String? filemime;
-  final String? fullpath;
-  final String? fileuri;
+  final CDNImageResponseData? data;
 
   CDNImageResponse({
-    this.type,
-    this.filename,
-    this.filepath,
-    this.filemime,
-    this.fullpath,
-    this.fileuri,
+    this.data,
   });
 
   factory CDNImageResponse.fromJson(String str) =>
@@ -24,6 +14,38 @@ class CDNImageResponse {
 
   factory CDNImageResponse.fromMap(Map<String, dynamic> json) =>
       CDNImageResponse(
+        data: CDNImageResponseData.fromMap(json),
+      );
+
+  Map<String, dynamic> toMap() => {
+        "data": data?.toMap(),
+      };
+}
+
+class CDNImageResponseData {
+  final String? type;
+  final String? filename;
+  final String? filepath;
+  final String? filemime;
+  final String? fullpath;
+  final String? fileuri;
+
+  CDNImageResponseData({
+    this.type,
+    this.filename,
+    this.filepath,
+    this.filemime,
+    this.fullpath,
+    this.fileuri,
+  });
+
+  factory CDNImageResponseData.fromJson(String str) =>
+      CDNImageResponseData.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory CDNImageResponseData.fromMap(Map<String, dynamic> json) =>
+      CDNImageResponseData(
         type: json["type"],
         filename: json["filename"],
         filepath: json["filepath"],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
@@ -99,6 +100,16 @@ class _FeedingViewState extends State<FeedingView> {
 
     return BlocBuilder<ActivityActivitiesCubit, ActivityActivitiesState>(
       builder: (context, state) {
+        if (state.feedActivityResponse?.data?.isEmpty ?? true) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
+              child: AppEmptyData(
+                  "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+            ),
+          );
+        }
+
         return ListView.separated(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
