@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -12,10 +13,20 @@ import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/p
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/logics/activity_treatment_add_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/add_treatment_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityTreatmentAddView extends StatefulWidget {
-  const ActivityTreatmentAddView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+
+  const ActivityTreatmentAddView(
+    this.fishpondId,
+    this.fishpondcycleId, {
+    super.key,
+  });
 
   @override
   State<ActivityTreatmentAddView> createState() =>
@@ -23,6 +34,7 @@ class ActivityTreatmentAddView extends StatefulWidget {
 }
 
 class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController hourController = TextEditingController();
   final TextEditingController fishAgeController = TextEditingController();
@@ -61,7 +73,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
           ).then((date) {
             setState(() {
               if (date != null) {
-                dateController.text = AppConvertDateTime().dmyName(date);
+                dateController.text = AppConvertDateTime().ymdDash(date);
               }
             });
           });
@@ -103,7 +115,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
           ).then((time) {
             setState(() {
               if (time != null) {
-                hourController.text = time.format(context);
+                hourController.text = time.format(context).replaceAll(".", ":");
               }
             });
           });
@@ -168,7 +180,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         isMandatory: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return null;
+            return "Biaya tidak boleh kosong";
           }
           return null;
         },
@@ -191,12 +203,12 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         hintText: "Masukan catatan",
         labelText: "Catatan",
         maxLines: 3,
-        validator: (String? value) {
-          if (value!.isEmpty) {
-            return "Catatan tidak boleh kosong";
-          }
-          return null;
-        },
+        // validator: (String? value) {
+        //   if (value!.isEmpty) {
+        //     return "Catatan tidak boleh kosong";
+        //   }
+        //   return null;
+        // },
       );
     }
 
@@ -287,24 +299,27 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
     }
 
     Widget body() {
-      return ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          dateTextField(),
-          const SizedBox(height: 16.0),
-          hourTextField(),
-          const SizedBox(height: 16.0),
-          fishAge(),
-          const SizedBox(height: 16.0),
-          treatment(),
-          const SizedBox(height: 16.0),
-          price(),
-          const SizedBox(height: 16.0),
-          noteTextField(),
-          const SizedBox(height: 16.0),
-          fileAttachment(),
-          const SizedBox(height: 98.0),
-        ],
+      return Form(
+        key: formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: [
+            dateTextField(),
+            const SizedBox(height: 16.0),
+            hourTextField(),
+            const SizedBox(height: 16.0),
+            fishAge(),
+            const SizedBox(height: 16.0),
+            treatment(),
+            const SizedBox(height: 16.0),
+            price(),
+            const SizedBox(height: 16.0),
+            noteTextField(),
+            const SizedBox(height: 16.0),
+            fileAttachment(),
+            const SizedBox(height: 98.0),
+          ],
+        ),
       );
     }
 
@@ -322,7 +337,31 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         ),
         child: AppPrimaryFullButton(
           "Simpan",
-          () {},
+          () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
+            List<File>? attachment = context
+                .read<MultiImageCubit>()
+                .state
+                ?.map((e) => convertUint8ListToFile(e))
+                .toList();
+            AddTreatmentPayload payload = AddTreatmentPayload(
+              fishpondId: widget.fishpondId,
+              fishpondcycleId: widget.fishpondcycleId,
+              datetime: DateTime.parse(
+                "${dateController.text} ${hourController.text}",
+              ),
+              fishAge: int.parse(fishAgeController.text),
+              name: treatmentController.text,
+              cost: int.parse(priceController.text),
+              note: noteController.text,
+            );
+
+            context
+                .read<ActivityTreatmentAddCubit>()
+                .addTreatment(payload, attachment ?? []);
+          },
         ),
       );
     }
