@@ -1,51 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_sampling/activity_sampling_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_treatment/activity_treatment_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_water_quality/activity_water_quality_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/sampling_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/treatment_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/water_quality_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/feed/activity_feed_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/activity_activities_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/views/activity_activities_add_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/view/activity_sampling_add_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/view/activity_treatment_add_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/view/activity_water_quality_add_page.dart';
+import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class ActivityActivitiesPage extends StatelessWidget {
-  final int fishpondId;
-  final int fishpondcycleId;
-  final DateTime dateDistribution;
-
   const ActivityActivitiesPage(
-    this.fishpondId,
-    this.fishpondcycleId,
-    this.dateDistribution, {
+    this.pondID,
+    this.pondCycleID,
+    this.tebarDate, {
     super.key,
   });
+
+  final String pondID;
+  final String pondCycleID;
+  final DateTime? tebarDate;
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-activities");
 
   @override
   Widget build(BuildContext context) {
+    final SimpleFontelicoProgressDialog dialog =
+        SimpleFontelicoProgressDialog(context: context);
+
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) => ActivityActivitiesCubit()
-              ..changeDatetime(
-                AppConvertDateTime().ymdDash(DateTime.now()),
-              )),
+            create: (context) =>
+                ActivityActivitiesCubit(FeedActivityServiceImpl.create())
+                  ..init(pondCycleID)),
+        BlocProvider(
+            create: (context) =>
+                ActivityFeedCubit(FeedActivityServiceImpl.create())),
         BlocProvider(
           create: (context) => TreatmentCubit(
             ActivityTreatmentServiceImpl.create(),
           )..init(
-              fishpondId,
-              fishpondcycleId,
+              int.parse(pondID),
+              int.parse(pondCycleID),
               AppConvertDateTime().ymdDash(DateTime.now()),
             ),
         ),
@@ -53,8 +66,8 @@ class ActivityActivitiesPage extends StatelessWidget {
           create: (context) => SamplingCubit(
             ActivitySamplingServiceImpl.create(),
           )..init(
-              fishpondId,
-              fishpondcycleId,
+              int.parse(pondID),
+              int.parse(pondCycleID),
               AppConvertDateTime().ymdDash(DateTime.now()),
             ),
         ),
@@ -62,8 +75,8 @@ class ActivityActivitiesPage extends StatelessWidget {
           create: (context) => WaterQualityCubit(
             ActivityWaterQualityServiceImpl.create(),
           )..init(
-              fishpondId,
-              fishpondcycleId,
+              int.parse(pondID),
+              int.parse(pondCycleID),
               AppConvertDateTime().ymdDash(DateTime.now()),
             ),
         ),
@@ -81,55 +94,54 @@ class ActivityActivitiesPage extends StatelessWidget {
               onPressed: () {
                 switch (state.index) {
                   case 0:
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const ActivityActivitiesAddPage(),
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
+                      ActivityActivitiesAddPage(
+                        pondID,
+                        pondCycleID,
+                        tebarDate ?? DateTime.now(),
+                      ),
                       ActivityActivitiesAddPage.routeSettings(),
-                    ));
+                    ))
+                        .then((value) {
+                      if (value != null && value == "refresh") {
+                        context.read<ActivityActivitiesCubit>().refreshData();
+                      }
+                    });
                     break;
                   case 1:
-                    Navigator.of(context)
-                        .push(AppTransition.pushTransition(
+                    Navigator.of(context).push(AppTransition.pushTransition(
                       ActivityTreatmentAddPage(
-                          fishpondId, fishpondcycleId, dateDistribution),
+                        int.parse(pondID),
+                        int.parse(pondCycleID),
+                        tebarDate ?? DateTime.now(),
+                      ),
                       ActivityTreatmentAddPage.routeSettings,
-                    ))
-                        .then((value) {
-                      context.read<TreatmentCubit>().init(
-                            fishpondId,
-                            fishpondcycleId,
-                            state.datetime,
-                          );
-                    });
+                    ));
                   case 2:
-                    Navigator.of(context)
-                        .push(AppTransition.pushTransition(
-                      ActivitySamplingAddPage(fishpondId, fishpondcycleId),
+                    Navigator.of(context).push(AppTransition.pushTransition(
+                      ActivitySamplingAddPage(
+                        int.parse(pondID),
+                        int.parse(pondCycleID),
+                      ),
                       ActivitySamplingAddPage.routeSettings,
-                    ))
-                        .then((value) {
-                      context.read<SamplingCubit>().init(
-                            fishpondId,
-                            fishpondcycleId,
-                            state.datetime,
-                          );
-                    });
+                    ));
                   case 3:
-                    Navigator.of(context)
-                        .push(AppTransition.pushTransition(
-                      ActivityWaterQualityAddPage(fishpondId, fishpondcycleId),
+                    Navigator.of(context).push(AppTransition.pushTransition(
+                      ActivityWaterQualityAddPage(
+                        int.parse(pondID),
+                        int.parse(pondCycleID),
+                      ),
                       ActivityWaterQualityAddPage.routeSettings,
-                    ))
-                        .then((value) {
-                      context.read<WaterQualityCubit>().init(
-                            fishpondId,
-                            fishpondcycleId,
-                            state.datetime,
-                          );
-                    });
+                    ));
                     break;
                   default:
                     Navigator.of(context).push(AppTransition.pushTransition(
-                      const ActivityActivitiesAddPage(),
+                      ActivityActivitiesAddPage(
+                        pondID,
+                        pondCycleID,
+                        tebarDate ?? DateTime.now(),
+                      ),
                       ActivityActivitiesAddPage.routeSettings(),
                     ));
                     break;
@@ -140,9 +152,9 @@ class ActivityActivitiesPage extends StatelessWidget {
           },
         ),
         body: ActivityActivitiesView(
-          fishpondId,
-          fishpondcycleId,
-          dateDistribution,
+          int.parse(pondID),
+          int.parse(pondCycleID),
+          tebarDate ?? DateTime.now(),
         ),
       ),
     );

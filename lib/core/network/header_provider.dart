@@ -41,7 +41,7 @@ class AppHeaderProvider implements HeaderProvider {
       // 'x-api-key': "",
       // 'Authorization': 'Basic YWlkYW46YTFkYW53M2IxZA==',
       'token': '$accessToken',
-      // "Content-Type": "application/json; charset=utf-8",
+      "Content-Type": "application/json",
       'Accept': 'application/json',
       // 'Accept-Language': language
     };

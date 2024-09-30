@@ -10,4 +10,20 @@ class PondEndpoint {
   Uri addPondCycle() {
     return createUrl(path: "mitra/fishpondcycle/add");
   }
+
+  Uri getPond() {
+    return createUrl(
+      path: "mitra/fishpond/data",
+      queryParameters: {
+        "pagination_bool": "false",
+      },
+    );
+  }
+
+  Uri getPondDashboard(String? pondID) {
+    return createUrl(
+      path: "mitra/dashboard/farming",
+      queryParameters: {if (pondID != null) "fishpond_id": pondID},
+    );
+  }
 }

@@ -1,15 +1,22 @@
+import 'dart:developer';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/add_pond_cycle_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_endpoint.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_dashboard_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/add_pond_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/add_pond_response.dart';
 
 abstract class PondService {
   Future<BaseResponse<AddPondResponse>> addPond(AddPondPayload payload);
   Future<BaseResponse<bool>> addPondCycle(AddPondCyclePayload payload);
+  Future<BaseResponse<PondResponse>> getPonds();
+  Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
+      {String? pondID});
 }
 
 class PondServiceImpl implements PondService {
@@ -35,26 +42,51 @@ class PondServiceImpl implements PondService {
   Future<BaseResponse<AddPondResponse>> addPond(AddPondPayload payload) async {
     final url = endpoint.addPond();
     final header = await headerProvider.headers;
-    final response = await httpClient.post(
-      url,
+
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      payload.toJson(),
+      payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     final AddPondResponse data = AddPondResponse.fromMap(meta.result!);
     return BaseResponse(meta: meta, data: data);
   }
 
   @override
   Future<BaseResponse<bool>> addPondCycle(AddPondCyclePayload payload) async {
+    log("masuk add pond cycle");
     final url = endpoint.addPondCycle();
     final header = await headerProvider.headers;
-    final response = await httpClient.post(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      payload.toJson(),
+      payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromMap(response.data);
     return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<PondResponse>> getPonds() async {
+    final url = endpoint.getPond();
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(url, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final PondResponse data = PondResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
+  }
+
+  @override
+  Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
+      {String? pondID}) async {
+    final url = endpoint.getPondDashboard(pondID);
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(url, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final PondDashboardResponse data =
+        PondDashboardResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
   }
 }

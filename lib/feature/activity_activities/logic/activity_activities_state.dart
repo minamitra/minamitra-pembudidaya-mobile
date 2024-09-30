@@ -5,33 +5,43 @@ class ActivityActivitiesState extends Equatable {
     this.status = GlobalState.initial,
     this.errorMessage = '',
     this.index = 0,
-    this.datetime = '',
+    this.feedActivityResponse,
+    this.selectedDate,
+    this.pondCycleID,
   });
 
   final GlobalState status;
   final String errorMessage;
   final int index;
-  final String datetime;
+  final FeedActivityResponse? feedActivityResponse;
+  final DateTime? selectedDate;
+  final String? pondCycleID;
 
   ActivityActivitiesState copyWith({
     GlobalState? status,
     String? errorMessage,
     int? index,
-    String? datetime,
+    FeedActivityResponse? feedActivityResponse,
+    DateTime? selectedDate,
+    String? pondCycleID,
   }) {
     return ActivityActivitiesState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       index: index ?? this.index,
-      datetime: datetime ?? this.datetime,
+      feedActivityResponse: feedActivityResponse ?? this.feedActivityResponse,
+      selectedDate: selectedDate ?? this.selectedDate,
+      pondCycleID: pondCycleID ?? this.pondCycleID,
     );
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
         errorMessage,
         index,
-        datetime,
+        feedActivityResponse,
+        selectedDate,
+        pondCycleID,
       ];
 }

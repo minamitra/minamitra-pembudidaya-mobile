@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -186,6 +187,9 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                                   context
                                       .read<MultipleImageCubit>()
                                       .setImage(image);
+                                  context
+                                      .read<AddPondSecondStepCubit>()
+                                      .uploadImage(File(document.path));
                                   Navigator.of(bottomSheetContext).pop();
                                 });
                               }
@@ -200,6 +204,9 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                                   context
                                       .read<MultipleImageCubit>()
                                       .setImage(image);
+                                  context
+                                      .read<AddPondSecondStepCubit>()
+                                      .uploadImage(File(document.path));
                                   Navigator.of(bottomSheetContext).pop();
                                 });
                               }

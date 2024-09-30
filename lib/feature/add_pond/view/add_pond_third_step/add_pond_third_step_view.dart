@@ -6,12 +6,19 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/add_pond_cycle_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_finisher_response.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_grower_response.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_starter_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_third_step_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/add_pond_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/pakan_starter_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -50,119 +57,6 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   List<String> selectedPakanStarter = [];
   List<String> selectedPakanGrower = [];
   List<String> selectedPakanFinisher = [];
-
-  // Function() checklistShowModal(
-  //   BuildContext context,
-  //   List<PakanStarterDummy> pakanList,
-  // ) {
-  //   List<PakanStarterDummy> pakanListTemp = [];
-  //   pakanListTemp.addAll(pakanList);
-  //   return () {
-  //     showModalBottomSheet(
-  //       isDismissible: false,
-  //       enableDrag: false,
-  //       context: context,
-  //       builder: (modalContext) {
-  //         return StatefulBuilder(
-  //           builder: (stateContext, setModalState) {
-  //             return AppBottomSheet(
-  //               "Pilihan Pakan Starter",
-  //               height: MediaQuery.of(context).size.height * 0.5,
-  //               Padding(
-  //                 padding: const EdgeInsets.symmetric(horizontal: 16),
-  //                 child: Column(
-  //                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                   children: [
-  //                     Expanded(
-  //                       child: ListView.separated(
-  //                         shrinkWrap: true,
-  //                         physics: const AlwaysScrollableScrollPhysics(),
-  //                         itemCount: pakanListTemp.length,
-  //                         separatorBuilder: (context, index) =>
-  //                             const SizedBox(height: 16),
-  //                         itemBuilder: (context, index) {
-  //                           return InkWell(
-  //                             onTap: () {
-  //                               setModalState(() {
-  //                                 pakanListTemp[index].isActive =
-  //                                     !pakanListTemp[index].isActive;
-  //                               });
-  //                             },
-  //                             child: Row(
-  //                               children: [
-  //                                 Checkbox(
-  //                                   value: pakanListTemp[index].isActive,
-  //                                   onChanged: (value) {
-  //                                     setModalState(() {
-  //                                       pakanListTemp[index].isActive = value!;
-  //                                     });
-  //                                   },
-  //                                 ),
-  //                                 const SizedBox(width: 16),
-  //                                 Expanded(
-  //                                   child: Text(
-  //                                     pakanListTemp[index].name,
-  //                                     textAlign: TextAlign.start,
-  //                                     style: appTextTheme(context)
-  //                                         .bodySmall
-  //                                         ?.copyWith(
-  //                                           fontWeight: FontWeight.w600,
-  //                                           color: AppColor.black,
-  //                                         ),
-  //                                   ),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           );
-  //                         },
-  //                       ),
-  //                     ),
-  //                     Row(
-  //                       children: [
-  //                         Expanded(
-  //                           child: AppPrimaryOutlineFullButton(
-  //                             "Reset",
-  //                             () {
-  //                               for (var element in pakanListTemp) {
-  //                                 setModalState(() {
-  //                                   element.isActive = false;
-  //                                 });
-  //                               }
-  //                             },
-  //                           ),
-  //                         ),
-  //                         const SizedBox(width: 18.0),
-  //                         Expanded(
-  //                           child: AppPrimaryFullButton(
-  //                             "Konfirmasi",
-  //                             () {
-  //                               Navigator.of(context).pop(pakanListTemp);
-  //                             },
-  //                             height: 56,
-  //                           ),
-  //                         ),
-  //                       ],
-  //                     ),
-  //                     const SizedBox(height: 16),
-  //                   ],
-  //                 ),
-  //               ),
-  //             );
-  //           },
-  //         );
-  //       },
-  //     ).then((value) {
-  //       if (value != null) {
-  //         if (value is List<PakanStarterDummy>) {
-  //           pakanStarterController.text = value
-  //               .where((element) => element.isActive)
-  //               .map((e) => e.name)
-  //               .join(", ");
-  //         }
-  //       }
-  //     });
-  //   };
-  // }
 
   Function() radioShowModal(
     BuildContext context,
@@ -296,7 +190,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             setState(() {
               if (date != null) {
                 addPondThirdStepCubit.dateController.text =
-                    AppConvertDateTime().dmyName(date);
+                    AppConvertDateTime().ymdDash(date);
               }
             });
           });
@@ -545,37 +439,49 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           },
         ),
         const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: addPondThirdStepCubit.seedOriginController,
-          inputType: TextInputType.phone,
-          isMandatory: true,
-          withUpperLabel: true,
-          readOnly: true,
-          labelText: "Asal Benih",
-          hintText: "Pilih asal benih",
-          suffixWidget: const Padding(
-            padding: EdgeInsets.only(right: 18.0),
-            child: Icon(Icons.arrow_drop_down_rounded),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            return null;
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.seedOriginController,
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: "Asal Benih",
+              hintText: "Pilih asal benih",
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                return null;
+              },
+              onTap: appBottomSheetShowModal(
+                context,
+                "Asal Benih",
+                state.seedResponse?.data
+                        ?.map((element) => element.name ?? "")
+                        .toList() ??
+                    [],
+                (value) {
+                  addPondThirdStepCubit.seedOriginController.text = value;
+                  addPondThirdStepCubit.seedID = state.seedResponse?.data
+                          ?.firstWhere((element) => element.name == value)
+                          .id ??
+                      "";
+                },
+              ),
+            );
           },
-          onTap: appBottomSheetShowModal(
-            context,
-            "Asal Benih",
-            [
-              "Banyu Asin",
-              "Muara Enim",
-              "Lahat",
-              "Pagaralam",
-              "Palembang",
-              "Prabumilih"
-            ],
-            (value) {
-              addPondThirdStepCubit.seedOriginController.text = value;
-            },
-          ),
         ),
         // ...seedOrignOtherChildren(),
         const SizedBox(height: 18.0),
@@ -762,14 +668,110 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                     child: AppPrimaryFullButton(
                       "Simpan",
                       () {
+                        final addPondFirstStepCubit =
+                            context.read<AddPondFirstStepCubit>();
+                        final addPondSecondStepCubit =
+                            context.read<AddPondSecondStepCubit>();
+
                         if (formThirdStepKey.currentState?.validate() ??
                             false) {
                           widget.rootPageController.nextPage(
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
-                          Navigator.of(context).popUntil(ModalRoute.withName(
-                              DashboardPage.routeSettings().name ?? ""));
+
+                          // Mapping data
+
+                          List<FeedStarterResponseData> selectedStarterData =
+                              addPondThirdStepCubit.state.feedStarterData?.data
+                                      ?.where((element) => selectedPakanStarter
+                                          .contains(element.name))
+                                      .toList() ??
+                                  [];
+                          List<FeedGrowerResponseData> selecterGrowerData =
+                              addPondThirdStepCubit.state.feedGrowerData?.data
+                                      ?.where((element) => selectedPakanGrower
+                                          .contains(element.name))
+                                      .toList() ??
+                                  [];
+                          List<FeedFinisherResponseData> selecterFinisherData =
+                              addPondThirdStepCubit.state.feedFinisherData?.data
+                                      ?.where((element) => selectedPakanFinisher
+                                          .contains(element.name))
+                                      .toList() ??
+                                  [];
+
+                          List<Finisher> selecterStarterFinisher =
+                              selectedStarterData
+                                  .map((element) => element.toFinisherObject())
+                                  .toList();
+                          List<Finisher> selecterGrowerFinisher =
+                              selecterGrowerData
+                                  .map((element) => element.toFinisherObject())
+                                  .toList();
+                          List<Finisher> selecterFinisherFinisher =
+                              selecterFinisherData
+                                  .map((element) => element.toFinisherObject())
+                                  .toList();
+
+                          context.read<AddPondCubit>().addPond(
+                                pondPayload: AddPondPayload(
+                                  name: addPondFirstStepCubit
+                                      .pondNameController.text,
+                                  areaLength: double.parse(addPondFirstStepCubit
+                                      .pondlengthController.text),
+                                  areaWidth: double.parse(addPondFirstStepCubit
+                                      .pondWidthController.text),
+                                  areaDepth: double.parse(addPondFirstStepCubit
+                                      .pondDeepController.text),
+                                  address: "",
+                                  addressLatitude:
+                                      addPondSecondStepCubit.state.latitude,
+                                  addressLongitude:
+                                      addPondSecondStepCubit.state.longitude,
+                                  addressProvinceId: addPondSecondStepCubit
+                                      .state.selectedProvince?.id,
+                                  addressProvinceName: addPondSecondStepCubit
+                                      .state.selectedProvince?.name,
+                                  addressCityId: addPondSecondStepCubit
+                                      .state.selectedDistrict?.id,
+                                  addressCityName: addPondSecondStepCubit
+                                      .state.selectedDistrict?.name,
+                                  addressSubdistrictId: addPondSecondStepCubit
+                                      .state.selectedSubDistrict?.id,
+                                  addressSubdistrictName: addPondSecondStepCubit
+                                      .state.selectedSubDistrict?.name,
+                                  addressVillageId: addPondSecondStepCubit
+                                      .state.selectedVillage?.id,
+                                  addressVillageName: addPondSecondStepCubit
+                                      .state.selectedVillage?.name,
+                                  imageUrl: "",
+                                ),
+                                pondCyclePayload: AddPondCyclePayload(
+                                  tebarDate:
+                                      addPondThirdStepCubit.dateController.text,
+                                  tebarFishTotal: int.parse(
+                                      addPondThirdStepCubit
+                                          .fishCountController.text),
+                                  tebarBobot: int.parse(addPondThirdStepCubit
+                                      .spreadController.text),
+                                  targetPanenBobot: int.parse(
+                                      addPondThirdStepCubit
+                                          .targetController.text),
+                                  srTarget: int.parse(addPondThirdStepCubit
+                                      .survivalRateController.text),
+                                  fishfoodJsonObject: FishfoodJsonObject(
+                                    starter: selecterStarterFinisher,
+                                    grower: selecterGrowerFinisher,
+                                    finisher: selecterFinisherFinisher,
+                                  ),
+                                  fishseedId:
+                                      int.parse(addPondThirdStepCubit.seedID),
+                                  estimationFishfoodEpp: 75,
+                                ),
+                              );
+                          // Navigator.of(context).popUntil(ModalRoute.withName(
+                          //     DashboardPage.routeSettings().name ?? ""));
                         }
                       },
                     ),

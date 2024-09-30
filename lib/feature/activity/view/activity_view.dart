@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/activity_header_data_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/view/add_bulk_feed_page.dart';
@@ -97,7 +103,18 @@ class _ActivityViewState extends State<ActivityView> {
         },
       ).then((value) {
         if (value != null) {
-          if (value is String) {}
+          if (value is String) {
+            pondController.text = value;
+            String pondId = context
+                    .read<ActivityCubit>()
+                    .state
+                    .pondReponse
+                    ?.data
+                    ?.firstWhere((element) => element.name == value)
+                    .id ??
+                "0";
+            context.read<ActivityCubit>().setDashboardWithPond(pondId);
+          }
         }
       });
     };
@@ -129,7 +146,7 @@ class _ActivityViewState extends State<ActivityView> {
                 legendIconType: LegendIconType.circle,
                 cornerStyle: CornerStyle.endCurve,
                 maximumValue: 100.0,
-                name: "Aktifitas",
+                name: "Aktivitas",
                 enableTooltip: true,
                 dataLabelMapper: (ChartDummy data, _) => data.name,
               )
@@ -192,6 +209,7 @@ class _ActivityViewState extends State<ActivityView> {
       required String title,
       required String value,
       required String percentage,
+      required bool isActive,
       void Function()? onTap,
     }) {
       return InkWell(
@@ -218,11 +236,25 @@ class _ActivityViewState extends State<ActivityView> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: appTextTheme(context).titleSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                      Row(
+                        children: [
+                          Text(
+                            title,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          const SizedBox(width: 12.0),
+                          Text(
+                            isActive ? "Aktif" : "Non Aktif",
+                            style: appTextTheme(context).labelLarge?.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: isActive
+                                      ? AppColor.green[400]
+                                      : AppColor.red[500],
+                                ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 12.0),
                       Row(
@@ -234,7 +266,7 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            "5 Kg",
+                            "$value Kg",
                             style: appTextTheme(context).titleSmall?.copyWith(
                                   color: const Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w400,
@@ -248,7 +280,7 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            "10 Kg",
+                            "$percentage Kg",
                             style: appTextTheme(context).titleSmall?.copyWith(
                                   color: const Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w400,
@@ -283,23 +315,41 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
-    List<Widget> listActivityItem() {
-      return List.generate(
-        3,
-        (index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: activityItem(
-              title: "Kolam $index",
-              value: "2500 Ekor",
-              percentage: "50%",
-              onTap: () {
-                Navigator.of(context).push(AppTransition.pushTransition(
-                  const DetailActivityPage(),
-                  DetailActivityPage.routeSettings(),
-                ));
-              },
-            ),
+    Widget listActivityItem() {
+      return BlocBuilder<ActivityCubit, ActivityState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.pondReponse?.data?.length ?? 0,
+            itemBuilder: (context, index) {
+              if (state.pondReponse?.data?[index].id == "0") {
+                return const SizedBox();
+              }
+
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: activityItem(
+                  title: state.pondReponse?.data?[index].name ?? "",
+                  value:
+                      state.pondReponse?.data?[index].totalFoodRecommendation ??
+                          "-",
+                  percentage:
+                      state.pondReponse?.data?[index].totalFoodActual ?? "-",
+                  isActive: state.pondReponse?.data?[index].activeBool ?? false,
+                  onTap: () {
+                    Navigator.of(context).push(AppTransition.pushTransition(
+                      DetailActivityPage(state.pondReponse!.data![index]),
+                      DetailActivityPage.routeSettings(),
+                    ));
+                  },
+                ),
+              );
+            },
           );
         },
       );
@@ -316,7 +366,7 @@ class _ActivityViewState extends State<ActivityView> {
               .then((value) {
             if (value != null && value is String) {
               if (value == "refresh") {
-                // Refresh the page
+                context.read<ActivityCubit>().init();
               }
             }
           });
@@ -597,56 +647,132 @@ class _ActivityViewState extends State<ActivityView> {
     }
 
     Widget headerData() {
-      return Container(
-        color: AppColor.neutral[100],
-        child: Column(
-          children: [
-            const SizedBox(height: 18.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: AppValidatorTextField(
-                controller: pondController,
-                isMandatory: false,
-                withUpperLabel: false,
-                readOnly: true,
-                hintText: "Semua kolam",
-                suffixWidget: const Padding(
-                  padding: EdgeInsets.only(right: 18.0),
-                  child: Icon(Icons.arrow_drop_down_rounded),
+      return BlocBuilder<ActivityCubit, ActivityState>(
+        builder: (context, state) {
+          return Container(
+            color: AppColor.neutral[100],
+            child: Column(
+              children: [
+                const SizedBox(height: 18.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: state.status.isLoading
+                      ? const AppShimmer(55, double.infinity, 8.0)
+                      : AppValidatorTextField(
+                          controller: pondController,
+                          isMandatory: false,
+                          withUpperLabel: false,
+                          readOnly: true,
+                          hintText: "Semua kolam",
+                          suffixWidget: const Padding(
+                            padding: EdgeInsets.only(right: 18.0),
+                            child: Icon(Icons.arrow_drop_down_rounded),
+                          ),
+                          suffixConstraints: const BoxConstraints(),
+                          validator: (value) {
+                            return null;
+                          },
+                          onTap: bottomSheetShowModal(
+                            context,
+                            "Pilih Kolam",
+                            state.pondReponse!.data!
+                                .map((element) => element.name ?? "-")
+                                .toList(),
+                          ),
+                        ),
                 ),
-                suffixConstraints: const BoxConstraints(),
-                validator: (value) {
-                  return null;
-                },
-                onTap: bottomSheetShowModal(
-                  context,
-                  "Pilih Kolam",
-                  ["Kolam 1", "Kolam 2", "Kolam 3"],
+                const SizedBox(height: 18.0),
+                BlocBuilder<ActivityCubit, ActivityState>(
+                  builder: (context, state) {
+                    if (state.status.isLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    return SizedBox(
+                      height: 258.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: activityHeaderDataWrappedList(
+                          biomassaValue: state
+                                  .pondDashboardResponse?.data?.totalBiomas
+                                  .toString() ??
+                              "",
+                          srValue: state
+                                  .pondDashboardResponse?.data?.avgSurvivalRate
+                                  .toString() ??
+                              "",
+                          pakanValue: state
+                                  .pondDashboardResponse?.data?.totalFeeding
+                                  .toString() ??
+                              "",
+                          estimasiJualValue: state
+                                  .pondDashboardResponse?.data?.salesEstimate
+                                  .toString() ??
+                              "",
+                        ).length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: activityHeaderDataWrappedList(
+                                          biomassaValue: state
+                                                  .pondDashboardResponse
+                                                  ?.data
+                                                  ?.totalBiomas
+                                                  .toString() ??
+                                              "",
+                                          srValue: state.pondDashboardResponse
+                                                  ?.data?.avgSurvivalRate
+                                                  .toString() ??
+                                              "",
+                                          pakanValue: state
+                                                  .pondDashboardResponse
+                                                  ?.data
+                                                  ?.totalFeeding
+                                                  .toString() ??
+                                              "",
+                                          estimasiJualValue: state
+                                                  .pondDashboardResponse
+                                                  ?.data
+                                                  ?.salesEstimate
+                                                  .toString() ??
+                                              "",
+                                        ).length -
+                                        1 ==
+                                    index
+                                ? const EdgeInsets.only(right: 18.0)
+                                : EdgeInsets.zero,
+                            child: wrappedHeaderItemData(
+                              activityHeaderDataWrappedList(
+                                biomassaValue: state.pondDashboardResponse?.data
+                                        ?.totalBiomas
+                                        .toString() ??
+                                    "",
+                                srValue: state.pondDashboardResponse?.data
+                                        ?.avgSurvivalRate
+                                        .toString() ??
+                                    "",
+                                pakanValue: state.pondDashboardResponse?.data
+                                        ?.totalFeeding
+                                        .toString() ??
+                                    "",
+                                estimasiJualValue: state.pondDashboardResponse
+                                        ?.data?.salesEstimate
+                                        .toString() ??
+                                    "",
+                              )[index],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
-              ),
+                const SizedBox(height: 18.0),
+              ],
             ),
-            const SizedBox(height: 18.0),
-            SizedBox(
-              height: 258.0,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                itemCount: activityHeaderDataWrappedList.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: activityHeaderDataWrappedList.length - 1 == index
-                        ? const EdgeInsets.only(right: 18.0)
-                        : EdgeInsets.zero,
-                    child: wrappedHeaderItemData(
-                        activityHeaderDataWrappedList[index]),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 18.0),
-          ],
-        ),
+          );
+        },
       );
       // ! Notes : Old data
       // return Container(
@@ -705,45 +831,55 @@ class _ActivityViewState extends State<ActivityView> {
     }
 
     Widget addPond() {
-      return Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
+      return BlocBuilder<ActivityCubit, ActivityState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(
-                  Icons.date_range_outlined,
-                  color: AppColor.primary,
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.date_range_outlined,
+                      color: AppColor.primary,
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: Text(
+                        AppConvertDateTime().edmy(DateTime.now()),
+                        style: appTextTheme(context).titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
+                      ),
+                    ),
+                    AppPrimaryGradientButton(
+                      "+ Pakan",
+                      () {
+                        Navigator.of(context).push(AppTransition.pushTransition(
+                          AddBulkFeedPage(
+                            state.pondReponse?.data
+                                    ?.map((element) => element.id)
+                                    .toList()
+                                    .join(",") ??
+                                "",
+                          ),
+                          AddBulkFeedPage.routeSettings(),
+                        ));
+                      },
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 8.0),
-                Expanded(
-                  child: Text(
-                    AppConvertDateTime().edmy(DateTime.now()),
-                    style: appTextTheme(context).titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                ),
-                AppPrimaryGradientButton(
-                  "+ Pakan",
-                  () {
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const AddBulkFeedPage(),
-                      AddBulkFeedPage.routeSettings(),
-                    ));
-                  },
+                const SizedBox(height: 18.0),
+                Divider(
+                  color: AppColor.neutral[200],
+                  thickness: 1.0,
+                  height: 0.0,
                 ),
               ],
             ),
-            const SizedBox(height: 18.0),
-            Divider(
-              color: AppColor.neutral[200],
-              thickness: 1.0,
-              height: 0.0,
-            ),
-          ],
-        ),
+          );
+        },
       );
     }
 
@@ -757,7 +893,7 @@ class _ActivityViewState extends State<ActivityView> {
         // seeAllText(),
         headerData(),
         addPond(),
-        ...listActivityItem(),
+        listActivityItem(),
         const SizedBox(height: 18.0),
         addButton(),
         const SizedBox(height: 18.0),

@@ -3,7 +3,7 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dar
 
 class MetaExceptionHanlder {
   final int errorCode;
-  final String responseBody;
+  final dynamic responseBody;
 
   MetaExceptionHanlder(
     this.errorCode,

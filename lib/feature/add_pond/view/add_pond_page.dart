@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/image/multiple_image_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
@@ -39,37 +40,44 @@ class AddPondPage extends StatelessWidget {
         BlocProvider(create: (context) => MultipleImageCubit()),
         BlocProvider(create: (context) => AddPondFirstStepCubit()),
         BlocProvider(
-          create: (context) =>
-              AddPondSecondStepCubit(RefServiceImpl.create())..init(),
+          create: (context) => AddPondSecondStepCubit(
+            RefServiceImpl.create(),
+            CdnServiceImpl.create(),
+          )..init(),
         ),
         BlocProvider(
             create: (context) =>
                 AddPondThirdStepCubit(FeedServiceImpl.create())..init()),
       ],
-      child: BlocListener<AddPondCubit, AddPondState>(
-        listener: (context, state) {
-          if (state.status.isShowDialogLoading) {
-            AppDialog().showLoadingDialog(context, dialog);
-          }
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<AddPondCubit, AddPondState>(
+            listener: (context, state) {
+              if (state.status.isShowDialogLoading) {
+                AppDialog().showLoadingDialog(context, dialog);
+              }
 
-          if (state.status.isHideDialogLoading) {
-            dialog.hide();
-          }
+              if (state.status.isHideDialogLoading) {
+                dialog.hide();
+              }
 
-          if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
-              RepositoryProvider.of<AuthenticationRepository>(context).logout();
-            } else {
-              AppTopSnackBar(context).showDanger(state.errorMessage);
-            }
-          }
+              if (state.status.isError) {
+                if (state.errorMessage == "TOKEN_EXPIRED") {
+                  RepositoryProvider.of<AuthenticationRepository>(context)
+                      .logout();
+                } else {
+                  AppTopSnackBar(context).showDanger(state.errorMessage);
+                }
+              }
 
-          if (state.status.isSuccessSubmit) {
-            AppTopSnackBar(context)
-                .showSuccess("Berhasil Membuat\nKolam Baru !");
-            Navigator.of(context).pop("refresh");
-          }
-        },
+              if (state.status.isSuccessSubmit) {
+                AppTopSnackBar(context)
+                    .showSuccess("Berhasil Membuat\nKolam Baru !");
+                Navigator.of(context).pop("refresh");
+              }
+            },
+          )
+        ],
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,

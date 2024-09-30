@@ -7,6 +7,7 @@ class AddPondThirdStepState extends Equatable {
     this.feedStarterData,
     this.feedGrowerData,
     this.feedFinisherData,
+    this.seedResponse,
   });
 
   final GlobalState status;
@@ -14,6 +15,7 @@ class AddPondThirdStepState extends Equatable {
   final FeedStarterResponse? feedStarterData;
   final FeedGrowerResponse? feedGrowerData;
   final FeedFinisherResponse? feedFinisherData;
+  final SeedResponse? seedResponse;
 
   AddPondThirdStepState copyWith({
     GlobalState? status,
@@ -21,6 +23,7 @@ class AddPondThirdStepState extends Equatable {
     FeedStarterResponse? feedStarterData,
     FeedGrowerResponse? feedGrowerData,
     FeedFinisherResponse? feedFinisherData,
+    SeedResponse? seedResponse,
   }) {
     return AddPondThirdStepState(
       status: status ?? this.status,
@@ -28,6 +31,7 @@ class AddPondThirdStepState extends Equatable {
       feedStarterData: feedStarterData ?? this.feedStarterData,
       feedGrowerData: feedGrowerData ?? this.feedGrowerData,
       feedFinisherData: feedFinisherData ?? this.feedFinisherData,
+      seedResponse: seedResponse ?? this.seedResponse,
     );
   }
 
@@ -38,5 +42,6 @@ class AddPondThirdStepState extends Equatable {
         feedStarterData,
         feedGrowerData,
         feedFinisherData,
+        seedResponse,
       ];
 }
