@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dar
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_water_quality/activity_water_quality_endpoint.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/water_quality_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/repositories/add_water_quality_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/repositories/update_water_quality_payload.dart';
 
 abstract class ActivityWaterQualityService {
   Future<BaseResponse<WaterQualityResponse>> dataWaterQuality(
@@ -13,6 +14,9 @@ abstract class ActivityWaterQualityService {
     String datetime,
   );
   Future<BaseResponse<bool>> addWaterQuality(AddWaterQualityPayload payload);
+  Future<BaseResponse<bool>> deleteWaterQuality(String id);
+  Future<BaseResponse<bool>> updateWaterQuality(
+      UpdateWaterQualityPayload payload);
 }
 
 class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
@@ -58,13 +62,39 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
       AddWaterQualityPayload payload) async {
     final url = endpoint.addWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.multipartPost(
-      url,
+    final response = await httpClient.postDio(
+      url.toString(),
       header,
-      {},
       payload.toMap(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final MetaResponse meta = MetaResponse.fromJson(response.data);
+    return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> deleteWaterQuality(String id) async {
+    final url = endpoint.deleteWaterQuality();
+    final header = await headerProvider.headers;
+    final response = await httpClient.postDio(
+      url.toString(),
+      header,
+      {"id": id},
+    );
+    final MetaResponse meta = MetaResponse.fromJson(response.data);
+    return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> updateWaterQuality(
+      UpdateWaterQualityPayload payload) async {
+    final url = endpoint.updateWaterQuality();
+    final header = await headerProvider.headers;
+    final response = await httpClient.postDio(
+      url.toString(),
+      header,
+      payload.toMap(),
+    );
+    final MetaResponse meta = MetaResponse.fromJson(response.data);
     return BaseResponse(meta: meta, data: true);
   }
 }

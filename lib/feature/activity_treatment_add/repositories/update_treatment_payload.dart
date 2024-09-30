@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-class AddTreatmentPayload {
-  int? fishpondId;
-  int? fishpondcycleId;
+class UpdateTreatmentPayload {
+  String? id;
   DateTime? datetime;
   int? fishAge;
   String? name;
@@ -10,9 +9,8 @@ class AddTreatmentPayload {
   int? cost;
   List<String>? attachmentJsonArray;
 
-  AddTreatmentPayload({
-    this.fishpondId,
-    this.fishpondcycleId,
+  UpdateTreatmentPayload({
+    this.id,
     this.datetime,
     this.fishAge,
     this.name,
@@ -21,15 +19,14 @@ class AddTreatmentPayload {
     this.attachmentJsonArray,
   });
 
-  factory AddTreatmentPayload.fromJson(String str) =>
-      AddTreatmentPayload.fromMap(json.decode(str));
+  factory UpdateTreatmentPayload.fromJson(String str) =>
+      UpdateTreatmentPayload.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory AddTreatmentPayload.fromMap(Map<String, dynamic> json) =>
-      AddTreatmentPayload(
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+  factory UpdateTreatmentPayload.fromMap(Map<String, dynamic> json) =>
+      UpdateTreatmentPayload(
+        id: json["id"],
         datetime: json["datetime"],
         fishAge: json["fish_age"],
         name: json["name"],
@@ -39,8 +36,7 @@ class AddTreatmentPayload {
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
+        "id": id,
         "datetime": datetime!.toIso8601String(),
         "fish_age": fishAge,
         "name": name,

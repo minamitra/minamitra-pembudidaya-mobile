@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
@@ -13,7 +13,18 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/v
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class TreatmentView extends StatefulWidget {
-  const TreatmentView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+  final DateTime dateDistribution;
+  final String datetime;
+
+  const TreatmentView(
+    this.fishpondId,
+    this.fishpondcycleId,
+    this.dateDistribution,
+    this.datetime, {
+    super.key,
+  });
 
   @override
   State<TreatmentView> createState() => _TreatmentViewState();
@@ -25,10 +36,20 @@ class _TreatmentViewState extends State<TreatmentView> {
     Widget itemCard(TreatmentResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            ActivityTreatmentDetailPage(data),
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
+            ActivityTreatmentDetailPage(data, widget.dateDistribution),
             ActivityTreatmentDetailPage.routeSettings(),
-          ));
+          ))
+              .then((value) {
+            if (value == "refresh") {
+              context.read<TreatmentCubit>().init(
+                    widget.fishpondId,
+                    widget.fishpondcycleId,
+                    widget.datetime,
+                  );
+            }
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -41,7 +62,7 @@ class _TreatmentViewState extends State<TreatmentView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        data.name ?? "",
+                        data.name ?? "-",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).titleMedium?.copyWith(
                               fontWeight: FontWeight.w600,
@@ -50,7 +71,7 @@ class _TreatmentViewState extends State<TreatmentView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : "",
+                        data.datetime != null ? data.datetime.toString() : "-",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -59,10 +80,30 @@ class _TreatmentViewState extends State<TreatmentView> {
                     ],
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColor.neutral[400],
-                  )
+                  InkWell(
+                    onTap: () {
+                      showDeleteBottomSheet(
+                        context,
+                        title: "Hapus Perlakuan",
+                        descriptions:
+                            "Apakah Anda yakin ingin menghapus perlakuan ini?",
+                        onTapDelete: () {
+                          context.read<TreatmentCubit>().deleteTreatment(
+                                data.id ?? "",
+                                widget.fishpondId,
+                                widget.fishpondcycleId,
+                                widget.datetime,
+                              );
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      AppAssets.trashIcon,
+                      height: 20.0,
+                      color: AppColor.neutral[400],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 18.0),
@@ -86,22 +127,8 @@ class _TreatmentViewState extends State<TreatmentView> {
     return BlocBuilder<TreatmentCubit, TreatmentState>(
       builder: (context, state) {
         if (state.status.isLoading) {
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: 6,
-            separatorBuilder: (context, index) => Container(
-              height: 16.0,
-              width: double.infinity,
-              color: AppColor.neutralBlueGrey[50],
-            ),
-            itemBuilder: (context, index) {
-              return const AppShimmer(
-                120,
-                double.infinity,
-                0,
-              );
-            },
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         }
 

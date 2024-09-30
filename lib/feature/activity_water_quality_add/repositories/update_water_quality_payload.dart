@@ -1,8 +1,7 @@
 import 'dart:convert';
 
-class AddWaterQualityPayload {
-  int? fishpondId;
-  int? fishpondcycleId;
+class UpdateWaterQualityPayload {
+  String? id;
   DateTime? datetime;
   double? level;
   double? ph;
@@ -16,9 +15,8 @@ class AddWaterQualityPayload {
   String? note;
   List<String>? attachmentJsonArray;
 
-  AddWaterQualityPayload({
-    this.fishpondId,
-    this.fishpondcycleId,
+  UpdateWaterQualityPayload({
+    this.id,
     this.datetime,
     this.level,
     this.ph,
@@ -33,15 +31,14 @@ class AddWaterQualityPayload {
     this.attachmentJsonArray,
   });
 
-  factory AddWaterQualityPayload.fromJson(String str) =>
-      AddWaterQualityPayload.fromMap(json.decode(str));
+  factory UpdateWaterQualityPayload.fromJson(String str) =>
+      UpdateWaterQualityPayload.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory AddWaterQualityPayload.fromMap(Map<String, dynamic> json) =>
-      AddWaterQualityPayload(
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+  factory UpdateWaterQualityPayload.fromMap(Map<String, dynamic> json) =>
+      UpdateWaterQualityPayload(
+        id: json["id"],
         datetime: json["datetime"],
         level: json["level"],
         ph: json["ph"],
@@ -57,8 +54,7 @@ class AddWaterQualityPayload {
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
+        "id": id,
         "datetime": datetime!.toIso8601String(),
         "level": level,
         "ph": ph,

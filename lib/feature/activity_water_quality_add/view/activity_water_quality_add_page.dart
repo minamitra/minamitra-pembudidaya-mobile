@@ -8,6 +8,7 @@ import 'package:minamitra_pembudidaya_mobile/core/logic/multi_image/multi_image_
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_water_quality/activity_water_quality_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/water_quality_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/logics/activity_water_quality_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/view/activity_water_quality_add_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -15,10 +16,14 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 class ActivityWaterQualityAddPage extends StatelessWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final bool isEdit;
+  final WaterQualityResponseData? data;
 
   const ActivityWaterQualityAddPage(
     this.fishpondId,
     this.fishpondcycleId, {
+    this.isEdit = false,
+    this.data,
     super.key,
   });
 
@@ -43,7 +48,7 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Tambah Kualitas Air",
+          isEdit ? "Edit Kualitas Air" : "Tambah Kualitas Air",
         ),
         body: BlocConsumer<ActivityWaterQualityAddCubit,
             ActivityWaterQualityAddState>(
@@ -66,9 +71,13 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
             }
 
             if (state.status.isSuccessSubmit) {
-              AppTopSnackBar(context)
-                  .showSuccess("Berhasil Membuat\nKolam Baru !");
-              Navigator.of(context).pop("refresh");
+              AppTopSnackBar(context).showSuccess(isEdit
+                  ? "Berhasil Edit\nKualitas Air!"
+                  : "Berhasil Membuat\nKualitas Air Baru!");
+              Navigator.of(context).pop();
+              if (isEdit) {
+                Navigator.of(context).pop("refresh");
+              }
             }
           },
           builder: (context, state) {
@@ -79,6 +88,8 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
             return ActivityWaterQualityAddView(
               fishpondId,
               fishpondcycleId,
+              isEdit,
+              data,
             );
           },
         ),

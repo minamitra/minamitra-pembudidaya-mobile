@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
@@ -21,10 +19,12 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/
 class ActivityActivitiesPage extends StatelessWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
 
   const ActivityActivitiesPage(
     this.fishpondId,
-    this.fishpondcycleId, {
+    this.fishpondcycleId,
+    this.dateDistribution, {
     super.key,
   });
 
@@ -35,7 +35,11 @@ class ActivityActivitiesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => ActivityActivitiesCubit()),
+        BlocProvider(
+            create: (context) => ActivityActivitiesCubit()
+              ..changeDatetime(
+                AppConvertDateTime().ymdDash(DateTime.now()),
+              )),
         BlocProvider(
           create: (context) => TreatmentCubit(
             ActivityTreatmentServiceImpl.create(),
@@ -83,20 +87,45 @@ class ActivityActivitiesPage extends StatelessWidget {
                     ));
                     break;
                   case 1:
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const ActivityTreatmentAddPage(1, 1),
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
+                      ActivityTreatmentAddPage(
+                          fishpondId, fishpondcycleId, dateDistribution),
                       ActivityTreatmentAddPage.routeSettings,
-                    ));
+                    ))
+                        .then((value) {
+                      context.read<TreatmentCubit>().init(
+                            fishpondId,
+                            fishpondcycleId,
+                            state.datetime,
+                          );
+                    });
                   case 2:
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const ActivitySamplingAddPage(1, 1),
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
+                      ActivitySamplingAddPage(fishpondId, fishpondcycleId),
                       ActivitySamplingAddPage.routeSettings,
-                    ));
+                    ))
+                        .then((value) {
+                      context.read<SamplingCubit>().init(
+                            fishpondId,
+                            fishpondcycleId,
+                            state.datetime,
+                          );
+                    });
                   case 3:
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      const ActivityWaterQualityAddPage(1, 1),
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
+                      ActivityWaterQualityAddPage(fishpondId, fishpondcycleId),
                       ActivityWaterQualityAddPage.routeSettings,
-                    ));
+                    ))
+                        .then((value) {
+                      context.read<WaterQualityCubit>().init(
+                            fishpondId,
+                            fishpondcycleId,
+                            state.datetime,
+                          );
+                    });
                     break;
                   default:
                     Navigator.of(context).push(AppTransition.pushTransition(
@@ -113,6 +142,7 @@ class ActivityActivitiesPage extends StatelessWidget {
         body: ActivityActivitiesView(
           fishpondId,
           fishpondcycleId,
+          dateDistribution,
         ),
       ),
     );

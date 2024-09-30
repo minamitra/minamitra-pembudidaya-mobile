@@ -25,28 +25,6 @@ class _ActivityTreatmentDetailViewState
     extends State<ActivityTreatmentDetailView> {
   @override
   Widget build(BuildContext context) {
-    Widget columnText(String title, String value) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  color: AppColor.neutral[500],
-                ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            value,
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).bodySmall!,
-          ),
-        ],
-      );
-    }
-
     Widget attachmentFile(List<String>? attachmentJsonArray) {
       if (attachmentJsonArray == null || attachmentJsonArray.isEmpty) {
         return Text(
@@ -59,15 +37,15 @@ class _ActivityTreatmentDetailViewState
         );
       } else {
         return SizedBox(
-          height: 100.0,
+          height: 140.0,
           width: double.infinity,
-          child: ListView(
+          child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: List.generate(
-              attachmentJsonArray.length,
-              (index) {
-                return AspectRatio(
+            itemCount: attachmentJsonArray.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: AspectRatio(
                   aspectRatio: 2 / 1,
                   child: AppNetworkImage(
                     attachmentJsonArray[index],
@@ -75,9 +53,12 @@ class _ActivityTreatmentDetailViewState
                     height: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(width: 16.0);
+            },
           ),
         );
       }
@@ -96,11 +77,11 @@ class _ActivityTreatmentDetailViewState
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Umur Ikan", widget.data.fishAge ?? ""),
+          AppWidgetSeparatedItem("Umur Ikan", widget.data.fishAge ?? "-"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Perlakuan", widget.data.name ?? ""),
+          AppWidgetSeparatedItem("Perlakuan", widget.data.name ?? "-"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
@@ -114,7 +95,7 @@ class _ActivityTreatmentDetailViewState
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
             "Catatan",
-            widget.data.note ?? "",
+            widget.data.note ?? "-",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),

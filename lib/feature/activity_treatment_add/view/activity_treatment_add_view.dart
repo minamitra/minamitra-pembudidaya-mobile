@@ -1,9 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
@@ -14,17 +14,25 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/logics/activity_treatment_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/add_treatment_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/update_treatment_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityTreatmentAddView extends StatefulWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final DateTime dateDistribution;
+  final bool isEdit;
+  final TreatmentResponseData? data;
 
   const ActivityTreatmentAddView(
     this.fishpondId,
-    this.fishpondcycleId, {
+    this.fishpondcycleId,
+    this.dateDistribution,
+    this.isEdit,
+    this.data, {
     super.key,
   });
 
@@ -45,6 +53,38 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
   DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.isEdit) {
+      if (widget.data != null) {
+        dateController.text = widget.data!.datetime != null
+            ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
+            : "";
+        hourController.text = widget.data!.datetime != null
+            ? AppConvertDateTime().jm24(widget.data!.datetime!)
+            : "";
+        fishAgeController.text =
+            widget.data!.fishAge != null ? widget.data!.fishAge.toString() : "";
+        treatmentController.text = widget.data!.name ?? "";
+        priceController.text =
+            widget.data!.cost != null ? widget.data!.cost.toString() : "";
+        noteController.text = widget.data!.note ?? "";
+        if (widget.data!.attachmentJsonArray != null &&
+            widget.data!.attachmentJsonArray!.isNotEmpty) {
+          convetAttachmentImage(widget.data!.attachmentJsonArray!);
+        }
+      }
+    }
+  }
+
+  Future<void> convetAttachmentImage(List<String> images) async {
+    Future.forEach(images, (element) async {
+      http.Response imagePath = await http.get(Uri.parse(element));
+      context.read<MultiImageCubit>().setImage(imagePath.bodyBytes);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +114,11 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
             setState(() {
               if (date != null) {
                 dateController.text = AppConvertDateTime().ymdDash(date);
+                fishAgeController.text =
+                    (date.difference(widget.dateDistribution).inHours / 24)
+                        .round()
+                        .toString();
+                // fishAgeController.text = "test";
               }
             });
           });
@@ -136,6 +181,8 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         labelText: "Umur Ikan",
         inputType: TextInputType.number,
         isMandatory: true,
+        readOnly: true,
+        fillColor: AppColor.neutral[100],
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
             return "Umur ikan tidak boleh kosong";
@@ -221,12 +268,6 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
               Text(
                 "Unggah Lampiran",
                 style: appTextTheme(context).bodyMedium,
-              ),
-              Text(
-                " *",
-                style: appTextTheme(context)
-                    .bodyMedium
-                    ?.copyWith(color: Colors.red),
               ),
             ],
           ),
@@ -346,21 +387,37 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                 .state
                 ?.map((e) => convertUint8ListToFile(e))
                 .toList();
-            AddTreatmentPayload payload = AddTreatmentPayload(
-              fishpondId: widget.fishpondId,
-              fishpondcycleId: widget.fishpondcycleId,
-              datetime: DateTime.parse(
-                "${dateController.text} ${hourController.text}",
-              ),
-              fishAge: int.parse(fishAgeController.text),
-              name: treatmentController.text,
-              cost: int.parse(priceController.text),
-              note: noteController.text,
-            );
-
-            context
-                .read<ActivityTreatmentAddCubit>()
-                .addTreatment(payload, attachment ?? []);
+            if (!widget.isEdit) {
+              AddTreatmentPayload payload = AddTreatmentPayload(
+                fishpondId: widget.fishpondId,
+                fishpondcycleId: widget.fishpondcycleId,
+                datetime: DateTime.parse(
+                  "${dateController.text} ${hourController.text}",
+                ),
+                fishAge: int.parse(fishAgeController.text),
+                name: treatmentController.text,
+                cost: int.parse(priceController.text),
+                note: noteController.text,
+              );
+              context
+                  .read<ActivityTreatmentAddCubit>()
+                  .addTreatment(payload, attachment ?? []);
+              return;
+            } else {
+              UpdateTreatmentPayload payload = UpdateTreatmentPayload(
+                id: widget.data?.id ?? "",
+                datetime: DateTime.parse(
+                  "${dateController.text} ${hourController.text}",
+                ),
+                fishAge: int.parse(fishAgeController.text),
+                name: treatmentController.text,
+                cost: int.parse(priceController.text),
+                note: noteController.text,
+              );
+              context
+                  .read<ActivityTreatmentAddCubit>()
+                  .updateTreatment(payload, attachment ?? []);
+            }
           },
         ),
       );

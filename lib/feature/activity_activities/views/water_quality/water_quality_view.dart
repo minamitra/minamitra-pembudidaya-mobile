@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
@@ -12,7 +12,16 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_deta
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class WaterQualityView extends StatefulWidget {
-  const WaterQualityView({super.key});
+  final int fishpondId;
+  final int fishpondcycleId;
+  final String datetime;
+
+  const WaterQualityView(
+    this.fishpondId,
+    this.fishpondcycleId,
+    this.datetime, {
+    super.key,
+  });
 
   @override
   State<WaterQualityView> createState() => _WaterQualityViewState();
@@ -24,10 +33,20 @@ class _WaterQualityViewState extends State<WaterQualityView> {
     Widget itemCard(WaterQualityResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
             ActivityWaterQualityDetailPage(data),
             ActivityWaterQualityDetailPage.routeSettings(),
-          ));
+          ))
+              .then((value) {
+            if (value == "refresh") {
+              context.read<WaterQualityCubit>().init(
+                    widget.fishpondId,
+                    widget.fishpondcycleId,
+                    widget.datetime,
+                  );
+            }
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -60,10 +79,67 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                     ],
                   ),
                   const Spacer(),
-                  Icon(
-                    Icons.delete_outline_rounded,
-                    color: AppColor.neutral[400],
-                  )
+                  InkWell(
+                    onTap: () {
+                      // showDialog(
+                      //   context: context,
+                      //   builder: (dialogContext) {
+                      //     return AppDialogComponent(
+                      //       title: "Hapus Kualitas Air",
+                      //       subTitle:
+                      //           "Apakah Anda yakin ingin menghapus kualitas air ini?",
+                      //       buttons: [
+                      //         Expanded(
+                      //           child: AppPrimaryOutlineFullButton(
+                      //             "Batal",
+                      //             () {
+                      //               Navigator.of(context).pop();
+                      //             },
+                      //           ),
+                      //         ),
+                      //         const SizedBox(width: 8),
+                      //         Expanded(
+                      //           child: AppPrimaryFullButton(
+                      //             "Hapus",
+                      //             () {
+                      //               context
+                      //                   .read<WaterQualityCubit>()
+                      //                   .deleteWaterQuality(
+                      //                     data.id ?? "",
+                      //                     widget.fishpondId,
+                      //                     widget.fishpondcycleId,
+                      //                     widget.datetime,
+                      //                   );
+                      //               Navigator.of(context).pop();
+                      //             },
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     );
+                      //   },
+                      // );
+                      showDeleteBottomSheet(
+                        context,
+                        title: "Hapus Kualitas Air",
+                        descriptions:
+                            "Apakah Anda yakin ingin menghapus kualitas air ini?",
+                        onTapDelete: () {
+                          context.read<WaterQualityCubit>().deleteWaterQuality(
+                                data.id ?? "",
+                                widget.fishpondId,
+                                widget.fishpondcycleId,
+                                widget.datetime,
+                              );
+                          Navigator.of(context).pop();
+                        },
+                      );
+                    },
+                    child: Image.asset(
+                      AppAssets.trashIcon,
+                      height: 20.0,
+                      color: AppColor.neutral[400],
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 18.0),
@@ -89,22 +165,8 @@ class _WaterQualityViewState extends State<WaterQualityView> {
     return BlocBuilder<WaterQualityCubit, WaterQualityState>(
       builder: (context, state) {
         if (state.status.isLoading) {
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const BouncingScrollPhysics(),
-            itemCount: 6,
-            separatorBuilder: (context, index) => Container(
-              height: 16.0,
-              width: double.infinity,
-              color: AppColor.neutralBlueGrey[50],
-            ),
-            itemBuilder: (context, index) {
-              return const AppShimmer(
-                120,
-                double.infinity,
-                0,
-              );
-            },
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         }
 

@@ -36,15 +36,15 @@ class _ActivitySamplingDetailViewState
         );
       } else {
         return SizedBox(
-          height: 100.0,
+          height: 140.0,
           width: double.infinity,
-          child: ListView(
+          child: ListView.separated(
             scrollDirection: Axis.horizontal,
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: List.generate(
-              attachmentJsonArray.length,
-              (index) {
-                return AspectRatio(
+            itemCount: attachmentJsonArray.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
+                child: AspectRatio(
                   aspectRatio: 2 / 1,
                   child: AppNetworkImage(
                     attachmentJsonArray[index],
@@ -52,9 +52,12 @@ class _ActivitySamplingDetailViewState
                     height: double.infinity,
                     fit: BoxFit.cover,
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(width: 16.0);
+            },
           ),
         );
       }
@@ -69,22 +72,22 @@ class _ActivitySamplingDetailViewState
               "Waktu  Perlakuan",
               widget.data.datetime != null
                   ? AppConvertDateTime().dmyName(widget.data.datetime!)
-                  : ""),
+                  : "-"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("MBW", widget.data.mbw ?? ""),
+          AppWidgetSeparatedItem("MBW", widget.data.mbw ?? "-"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "SR", widget.data.sr != null ? "${widget.data.sr}%" : ""),
+              "SR", widget.data.sr != null ? "${widget.data.sr}%" : "-"),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
             "Catatan",
-            widget.data.note ?? "",
+            widget.data.note ?? "-",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),

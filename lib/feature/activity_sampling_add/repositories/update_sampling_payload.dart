@@ -1,17 +1,15 @@
 import 'dart:convert';
 
-class AddSamplingPayload {
-  int? fishpondId;
-  int? fishpondcycleId;
+class UpdateSamplingPayload {
+  String? id;
   DateTime? datetime;
   double? mbw;
   double? sr;
   String? note;
   List<String>? attachmentJsonArray;
 
-  AddSamplingPayload({
-    this.fishpondId,
-    this.fishpondcycleId,
+  UpdateSamplingPayload({
+    this.id,
     this.datetime,
     this.mbw,
     this.sr,
@@ -19,15 +17,14 @@ class AddSamplingPayload {
     this.attachmentJsonArray,
   });
 
-  factory AddSamplingPayload.fromJson(String str) =>
-      AddSamplingPayload.fromMap(json.decode(str));
+  factory UpdateSamplingPayload.fromJson(String str) =>
+      UpdateSamplingPayload.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory AddSamplingPayload.fromMap(Map<String, dynamic> json) =>
-      AddSamplingPayload(
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+  factory UpdateSamplingPayload.fromMap(Map<String, dynamic> json) =>
+      UpdateSamplingPayload(
+        id: json["id"],
         datetime: json["datetime"],
         mbw: json["mbw"],
         sr: json["sr"],
@@ -36,8 +33,7 @@ class AddSamplingPayload {
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
+        "id": id,
         "datetime": datetime!.toIso8601String(),
         "mbw": mbw,
         "sr": sr,

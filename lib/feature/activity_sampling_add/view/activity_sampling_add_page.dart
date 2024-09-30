@@ -8,6 +8,7 @@ import 'package:minamitra_pembudidaya_mobile/core/logic/multi_image/multi_image_
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_sampling/activity_sampling_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/sampling_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/logics/activity_sampling_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_sampling_add/view/activity_sampling_add_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -15,10 +16,14 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 class ActivitySamplingAddPage extends StatelessWidget {
   final int fishpondId;
   final int fishpondcycleId;
+  final bool isEdit;
+  final SamplingResponseData? data;
 
   const ActivitySamplingAddPage(
     this.fishpondId,
     this.fishpondcycleId, {
+    this.isEdit = false,
+    this.data,
     super.key,
   });
 
@@ -45,9 +50,8 @@ class ActivitySamplingAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Tambah Sampling",
+          isEdit ? "Edit Sampling" : "Tambah Sampling",
         ),
-        // body: ActivitySamplingAddView(),
         body: BlocConsumer<ActivitySamplingAddCubit, ActivitySamplingAddState>(
           listener: (context, state) {
             if (state.status.isShowDialogLoading) {
@@ -68,9 +72,13 @@ class ActivitySamplingAddPage extends StatelessWidget {
             }
 
             if (state.status.isSuccessSubmit) {
-              AppTopSnackBar(context)
-                  .showSuccess("Berhasil Membuat\nKolam Baru !");
-              Navigator.of(context).pop("refresh");
+              AppTopSnackBar(context).showSuccess(isEdit
+                  ? "Berhasil Edit\nSampling!"
+                  : "Berhasil Membuat\nSampling Baru!");
+              Navigator.of(context).pop();
+              if (isEdit) {
+                Navigator.of(context).pop("refresh");
+              }
             }
           },
           builder: (context, state) {
@@ -81,6 +89,8 @@ class ActivitySamplingAddPage extends StatelessWidget {
             return ActivitySamplingAddView(
               fishpondId,
               fishpondcycleId,
+              isEdit,
+              data,
             );
           },
         ),

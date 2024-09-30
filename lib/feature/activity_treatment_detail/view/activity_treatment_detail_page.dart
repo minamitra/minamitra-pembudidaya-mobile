@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/view/activity_treatment_add_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_detail/view/activity_treatment_detail_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityTreatmentDetailPage extends StatelessWidget {
   final TreatmentResponseData data;
+  final DateTime dateDistribution;
 
-  const ActivityTreatmentDetailPage(this.data, {super.key});
+  const ActivityTreatmentDetailPage(this.data, this.dateDistribution,
+      {super.key});
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-treatment-detail-page");
@@ -20,7 +24,18 @@ class ActivityTreatmentDetailPage extends StatelessWidget {
         "Detail Perlakuan",
         actions: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.of(context).push(AppTransition.pushTransition(
+                ActivityTreatmentAddPage(
+                  int.parse(data.fishpondId ?? "1"),
+                  int.parse(data.fishpondcycleId ?? "1"),
+                  dateDistribution,
+                  isEdit: true,
+                  data: data,
+                ),
+                ActivityTreatmentAddPage.routeSettings,
+              ));
+            },
             child: Text(
               "Edit",
               style: appTextTheme(context)

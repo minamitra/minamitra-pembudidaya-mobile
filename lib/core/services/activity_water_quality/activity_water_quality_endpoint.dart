@@ -32,6 +32,10 @@ class ActivityWaterQualityEndpoint {
   }
 
   Uri deleteWaterQuality() {
-    return createUrl(path: "mitra/activity-water-quality/add");
+    return createUrl(path: "mitra/activity-water-quality/delete");
+  }
+
+  Uri updateWaterQuality() {
+    return createUrl(path: "mitra/activity-water-quality/update");
   }
 }
