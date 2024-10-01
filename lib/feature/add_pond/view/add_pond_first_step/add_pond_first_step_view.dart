@@ -99,7 +99,10 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           onChanged: (value) {
             firstStepCubit.pondWideController.text =
                 (double.parse(value.isEmpty ? "0" : value) *
-                        double.parse(firstStepCubit.pondWidthController.text))
+                        double.parse(
+                            firstStepCubit.pondWidthController.text.isEmpty
+                                ? "0"
+                                : firstStepCubit.pondWidthController.text))
                     .toStringAsFixed(0);
           },
           suffixConstraints: const BoxConstraints(),

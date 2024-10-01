@@ -15,4 +15,18 @@ class CycleEndpoint {
       },
     );
   }
+
+  Uri getFeedCycleHistory({
+    required String pondID,
+    required String status,
+  }) {
+    return createUrl(
+      path: "mitra/fishpondcycle/data",
+      queryParameters: {
+        "fishpond_id": pondID,
+        "status[neq]": status,
+        "pagination_bool": "false",
+      },
+    );
+  }
 }

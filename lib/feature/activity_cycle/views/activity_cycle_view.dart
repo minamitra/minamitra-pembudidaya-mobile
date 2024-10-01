@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/logic/activity_cycle_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/cycle_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_detail/views/activity_cycle_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -52,19 +57,52 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
   }
 
   Widget bodyTab() {
-    return Expanded(
-      child: TabBarView(
-        controller: _tabController,
-        children: [
-          listCard(listCycleActive),
-          listCard(listCycleOnBid),
-          listCard(listCycleDone),
-        ],
-      ),
+    return BlocBuilder<ActivityCycleCubit, ActivityCycleState>(
+      builder: (context, state) {
+        return Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              state.status.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : listCard(
+                      state.activeData?.data ?? [],
+                      false,
+                    ),
+              state.status.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : listCard(
+                      state.harvestData?.data ?? [],
+                      true,
+                    ),
+              state.status.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : listCard(
+                      state.doneData?.data ?? [],
+                      false,
+                    ),
+            ],
+          ),
+        );
+      },
     );
   }
 
-  Widget itemCard(Cycle cycle) {
+  Widget itemCard(
+      // Cycle cycle
+      {
+    required String dateTime,
+    required String status,
+    required String fishCount,
+    required String fishWeight,
+    required String fishWeightTarget,
+  }) {
     Widget itemDataCard(
       String asset,
       String value,
@@ -80,10 +118,10 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(AppTransition.pushTransition(
-          ActivityCycleDetailPage(cycle),
-          ActivityCycleDetailPage.routeSettings(),
-        ));
+        // Navigator.of(context).push(AppTransition.pushTransition(
+        //   ActivityCycleDetailPage(cycle),
+        //   ActivityCycleDetailPage.routeSettings(),
+        // ));
       },
       child: AppDefaultCard(
         backgroundCardColor: AppColor.white,
@@ -98,7 +136,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cycle.date,
+                      dateTime,
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).titleMedium?.copyWith(
                             fontWeight: FontWeight.w600,
@@ -130,12 +168,12 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
             const SizedBox(height: 18.0),
             itemDataCard(
               AppAssets.newFishIcon,
-              "100 Ekor",
+              "$fishCount Ekor",
             ),
             const SizedBox(height: 12.0),
             itemDataCard(
               AppAssets.weigherIconFill,
-              "250 gram/ekor",
+              "$fishWeight gram/ekor",
             ),
             const SizedBox(height: 12.0),
             Row(
@@ -149,7 +187,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                 // ),
                 itemDataCard(
                   AppAssets.targetIconFill,
-                  "100 gram/ekor",
+                  "$fishWeightTarget gram/ekor",
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -157,16 +195,17 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                     vertical: 4.0,
                   ),
                   decoration: BoxDecoration(
-                    color: cycleTypeColor(cycle.type).withOpacity(0.1),
+                    color: cycleTypeColor(convertToCycleType(status))
+                        .withOpacity(0.1),
                     borderRadius: BorderRadius.circular(4.0),
                     border: Border.all(
-                      color: cycleTypeColor(cycle.type),
+                      color: cycleTypeColor(convertToCycleType(status)),
                     ),
                   ),
                   child: Text(
-                    cycleTypeToString(cycle.type),
+                    cycleTypeToString(convertToCycleType(status)),
                     style: appTextTheme(context).titleSmall?.copyWith(
-                          color: cycleTypeColor(cycle.type),
+                          color: cycleTypeColor(convertToCycleType(status)),
                           fontWeight: FontWeight.w500,
                         ),
                   ),
@@ -179,15 +218,25 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
     );
   }
 
-  Widget listCard(List<Cycle> listCycle) {
+  Widget listCard(
+    List<FeedCycleHistoryResponseData>? data,
+    bool isOnBid,
+  ) {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       shrinkWrap: true,
       physics: const BouncingScrollPhysics(),
-      itemCount: listCycle.length,
+      itemCount: data?.length ?? 0,
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
-        return itemCard(listCycle[index]);
+        return itemCard(
+          dateTime: AppConvertDateTime()
+              .ddmmyyyyhhmm(data![index].tebarDate ?? DateTime.now()),
+          status: isOnBid ? "onBid" : (data[index].status ?? "active"),
+          fishCount: data[index].tebarFishTotal ?? "Unknown",
+          fishWeight: data[index].actualPanenBobot ?? "Unknown",
+          fishWeightTarget: data[index].targetPanenBobot ?? "Unknown",
+        );
       },
     );
   }

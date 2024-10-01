@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -94,12 +96,12 @@ class FeedActivityServiceImpl implements FeedActivityService {
       AddFishFeedBody addFishFeedBody) async {
     final uri = endpoint.postFishFeed();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      uri.toString(),
+    final response = await httpClient.post(
+      uri,
       header,
-      addFishFeedBody.toMap(),
+      addFishFeedBody.toJson(),
     );
-    final MetaResponse metaResponse = MetaResponse.fromMap(response.data);
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: metaResponse, data: true);
   }
 
@@ -107,14 +109,12 @@ class FeedActivityServiceImpl implements FeedActivityService {
   Future<BaseResponse<bool>> deleteFeedActivity(String id) async {
     final uri = endpoint.deleteFishActivity();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      uri.toString(),
+    final response = await httpClient.post(
+      uri,
       header,
-      {
-        "id": id,
-      },
+      json.encode({"id": id}),
     );
-    final MetaResponse metaResponse = MetaResponse.fromMap(response.data);
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: metaResponse, data: true);
   }
 
@@ -136,12 +136,12 @@ class FeedActivityServiceImpl implements FeedActivityService {
   Future<BaseResponse<bool>> saveFeedBulkData(SaveBulkBody saveBulkBody) async {
     final uri = endpoint.postBulkFeed();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      uri.toString(),
+    final response = await httpClient.post(
+      uri,
       header,
-      saveBulkBody.toMap(),
+      json.encode(saveBulkBody.toMap()),
     );
-    final MetaResponse metaResponse = MetaResponse.fromMap(response.data);
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: metaResponse, data: true);
   }
 }
