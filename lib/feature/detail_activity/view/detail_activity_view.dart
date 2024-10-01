@@ -123,7 +123,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppAssets.notebookIcon,
                 onTap: () {
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const ActivityIncidentPage(),
+                    ActivityIncidentPage(
+                      widget.pondData.id ?? "0",
+                      context
+                              .read<DetailActivityCubit>()
+                              .state
+                              .onGoingCycleFeedResponseData
+                              ?.data
+                              ?.first
+                              .id ??
+                          "0",
+                    ),
                     ActivityIncidentPage.routeSettings(),
                   ));
                 },
