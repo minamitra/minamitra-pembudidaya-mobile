@@ -20,6 +20,7 @@ class AppAssets {
   static const String targetIcon = "$iconPath/target-icon.png";
   static const String weightIcon = "$iconPath/weight-icon.png";
   static const String targetIconFill = "$iconPath/target-icon-fill.png";
+  static const String stickyNoteIcon = "$iconPath/sticky-note-icon.png";
 
   // Image
   static const String circleImage = "$imagePath/circle-image.png";
