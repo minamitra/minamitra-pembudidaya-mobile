@@ -30,6 +30,7 @@ class PondDashboardResponseData {
   double? totalFeeding;
   double? avgSurvivalRate;
   double? salesEstimate;
+  double? totalCost;
 
   PondDashboardResponseData({
     this.totalFishpondActive,
@@ -37,6 +38,7 @@ class PondDashboardResponseData {
     this.totalFeeding,
     this.avgSurvivalRate,
     this.salesEstimate,
+    this.totalCost,
   });
 
   factory PondDashboardResponseData.fromJson(String str) =>
@@ -53,6 +55,7 @@ class PondDashboardResponseData {
         avgSurvivalRate:
             double.parse(json["avg_survival_rate"]?.toString() ?? "0"),
         salesEstimate: double.parse(json["sales_estimate"]?.toString() ?? "0"),
+        totalCost: double.parse(json["total_cost"]?.toString() ?? "0"),
       );
 
   Map<String, dynamic> toMap() => {

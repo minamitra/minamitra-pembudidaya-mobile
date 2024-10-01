@@ -6,6 +6,9 @@ class RefEndpoint {
   Uri getProvince() {
     return createUrl(
       path: "public-access/ref_address/province/data",
+      queryParameters: {
+        "pagination_bool": "false",
+      },
     );
   }
 

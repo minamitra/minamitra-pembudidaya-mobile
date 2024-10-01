@@ -46,7 +46,7 @@ List<ActivityHeaderDataDummy> listActivtyHeaderDataDummy2(
         imageAsset: AppAssets.feedActivityIcon,
       ),
       ActivityHeaderDataDummy(
-        title: 'Est. Jual',
+        title: 'Est. Biaya',
         value: 'Rp $estimasiJualValue Juta',
         imageAsset: AppAssets.sellEstimationActivityIcon,
       ),

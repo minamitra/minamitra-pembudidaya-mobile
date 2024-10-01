@@ -24,6 +24,19 @@ String cycleTypeToString(CycleType type) {
   }
 }
 
+CycleType convertToCycleType(String status) {
+  switch (status.toLowerCase()) {
+    case "active":
+      return CycleType.active;
+    case "harvest":
+      return CycleType.ready;
+    case "onbid":
+      return CycleType.onBid;
+    default:
+      return CycleType.done;
+  }
+}
+
 Color cycleTypeColor(CycleType type) {
   switch (type) {
     case CycleType.active:

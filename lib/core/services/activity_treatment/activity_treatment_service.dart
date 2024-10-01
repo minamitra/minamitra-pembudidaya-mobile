@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -60,12 +62,12 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
   Future<BaseResponse<bool>> addTreatment(AddTreatmentPayload payload) async {
     final url = endpoint.addTreatment();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      url.toString(),
+    final response = await httpClient.post(
+      url,
       header,
-      payload.toMap(),
+      payload.toJson(),
     );
-    final MetaResponse meta = MetaResponse.fromMap(response.data);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -73,12 +75,12 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
   Future<BaseResponse<bool>> deleteTreatment(String id) async {
     final url = endpoint.deleteTreatment();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      url.toString(),
+    final response = await httpClient.post(
+      url,
       header,
-      {"id": id},
+      json.encode({"id": id}),
     );
-    final MetaResponse meta = MetaResponse.fromMap(response.data);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -87,12 +89,12 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
       UpdateTreatmentPayload payload) async {
     final url = endpoint.updateTreatment();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      url.toString(),
+    final response = await httpClient.post(
+      url,
       header,
-      payload.toMap(),
+      payload.toJson(),
     );
-    final MetaResponse meta = MetaResponse.fromMap(response.data);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }
 }

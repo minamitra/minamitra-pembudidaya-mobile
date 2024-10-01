@@ -708,7 +708,7 @@ class _ActivityViewState extends State<ActivityView> {
                                   .toString() ??
                               "",
                           estimasiJualValue: state
-                                  .pondDashboardResponse?.data?.salesEstimate
+                                  .pondDashboardResponse?.data?.totalCost
                                   .toString() ??
                               "",
                         ).length,
@@ -734,7 +734,7 @@ class _ActivityViewState extends State<ActivityView> {
                                           estimasiJualValue: state
                                                   .pondDashboardResponse
                                                   ?.data
-                                                  ?.salesEstimate
+                                                  ?.totalCost
                                                   .toString() ??
                                               "",
                                         ).length -
@@ -756,8 +756,8 @@ class _ActivityViewState extends State<ActivityView> {
                                         ?.totalFeeding
                                         .toString() ??
                                     "",
-                                estimasiJualValue: state.pondDashboardResponse
-                                        ?.data?.salesEstimate
+                                estimasiJualValue: state
+                                        .pondDashboardResponse?.data?.totalCost
                                         .toString() ??
                                     "",
                               )[index],

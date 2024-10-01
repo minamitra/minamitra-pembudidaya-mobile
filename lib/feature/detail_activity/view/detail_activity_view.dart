@@ -143,7 +143,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppAssets.cartIcon,
                 onTap: () {
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const ActivityCyclePage(),
+                    ActivityCyclePage(widget.pondData.id ?? ""),
                     ActivityCyclePage.routeSettings(),
                   ));
                 },

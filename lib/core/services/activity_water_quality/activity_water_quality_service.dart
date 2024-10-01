@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -62,12 +64,12 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
       AddWaterQualityPayload payload) async {
     final url = endpoint.addWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      url.toString(),
+    final response = await httpClient.post(
+      url,
       header,
-      payload.toMap(),
+      payload.toJson(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.data);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -75,12 +77,12 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
   Future<BaseResponse<bool>> deleteWaterQuality(String id) async {
     final url = endpoint.deleteWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      url.toString(),
+    final response = await httpClient.post(
+      url,
       header,
-      {"id": id},
+      json.encode({"id": id}),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.data);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }
 
@@ -89,12 +91,12 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
       UpdateWaterQualityPayload payload) async {
     final url = endpoint.updateWaterQuality();
     final header = await headerProvider.headers;
-    final response = await httpClient.postDio(
-      url.toString(),
+    final response = await httpClient.post(
+      url,
       header,
-      payload.toMap(),
+      payload.toJson(),
     );
-    final MetaResponse meta = MetaResponse.fromJson(response.data);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }
 }
