@@ -513,8 +513,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         info(),
         const SizedBox(height: 20.0),
         description(),
-        const SizedBox(height: 20.0),
-        review(),
+        // const SizedBox(height: 20.0),
+        // review(),
         const SizedBox(height: 98.0),
       ],
     );
