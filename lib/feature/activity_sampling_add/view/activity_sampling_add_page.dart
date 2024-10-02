@@ -75,7 +75,7 @@ class ActivitySamplingAddPage extends StatelessWidget {
               AppTopSnackBar(context).showSuccess(isEdit
                   ? "Berhasil Edit\nSampling!"
                   : "Berhasil Membuat\nSampling Baru!");
-              Navigator.of(context).pop();
+              Navigator.of(context).pop("refresh");
               if (isEdit) {
                 Navigator.of(context).pop("refresh");
               }

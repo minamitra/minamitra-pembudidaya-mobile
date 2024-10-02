@@ -74,7 +74,7 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
               AppTopSnackBar(context).showSuccess(isEdit
                   ? "Berhasil Edit\nKualitas Air!"
                   : "Berhasil Membuat\nKualitas Air Baru!");
-              Navigator.of(context).pop();
+              Navigator.of(context).pop("refresh");
               if (isEdit) {
                 Navigator.of(context).pop("refresh");
               }
