@@ -135,7 +135,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const ActivityIncidentPage(),
+                    ActivityIncidentPage(
+                      widget.pondData.id ?? "0",
+                      context
+                              .read<DetailActivityCubit>()
+                              .state
+                              .onGoingCycleFeedResponseData
+                              ?.data
+                              ?.first
+                              .id ??
+                          "0",
+                    ),
                     ActivityIncidentPage.routeSettings(),
                   ));
                 },

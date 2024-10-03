@@ -1,28 +1,34 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/view/checkout_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetailView extends StatefulWidget {
-  const ProductDetailView({super.key});
+  final ProductsResponseData data;
+
+  const ProductDetailView(this.data, {super.key});
 
   @override
   State<ProductDetailView> createState() => _ProductDetailViewState();
 }
 
 class _ProductDetailViewState extends State<ProductDetailView> {
-  List<String> listImage = [
-    AppAssets.productSlide1Image,
-    AppAssets.productSlide1Image,
-    AppAssets.productSlide1Image,
-  ];
-  int activeIndex = 0;
+  // List<String> listImage = [
+  //   AppAssets.productSlide1Image,
+  //   AppAssets.productSlide1Image,
+  //   AppAssets.productSlide1Image,
+  // ];
+  // int activeIndex = 0;
+  bool isHideDescription = true;
 
   Widget appbar() {
     return Padding(
@@ -40,7 +46,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColor.white.withOpacity(0.2),
+                color: AppColor.white.withOpacity(0.25),
               ),
               child: Image.asset(
                 AppAssets.arrowLeftIcon,
@@ -58,7 +64,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColor.white.withOpacity(0.2),
+                  color: AppColor.white.withOpacity(0.25),
                 ),
                 child: Image.asset(
                   AppAssets.shareIcon,
@@ -73,52 +79,62 @@ class _ProductDetailViewState extends State<ProductDetailView> {
   }
 
   Widget imageCarousel() {
-    return CarouselSlider.builder(
-      itemCount: listImage.length,
-      itemBuilder: (context, index, realIndex) {
-        return InkWell(
-          onTap: () {},
-          child: Image.asset(
-            listImage[index],
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        );
-      },
-      options: CarouselOptions(
-        viewportFraction: 1,
-        initialPage: 0,
+    // return CarouselSlider.builder(
+    //   itemCount: listImage.length,
+    //   itemBuilder: (context, index, realIndex) {
+    //     return InkWell(
+    //       onTap: () {},
+    //       child: Image.asset(
+    //         listImage[index],
+    //         width: double.infinity,
+    //         fit: BoxFit.cover,
+    //       ),
+    //     );
+    //   },
+    //   options: CarouselOptions(
+    //     viewportFraction: 1,
+    //     initialPage: 0,
+    //     aspectRatio: 375 / 262,
+    //     onPageChanged: (index, reason) {
+    //       setState(() {
+    //         activeIndex = index;
+    //       });
+    //     },
+    //   ),
+    // );
+    return SizedBox(
+      width: double.infinity,
+      child: AspectRatio(
         aspectRatio: 375 / 262,
-        onPageChanged: (index, reason) {
-          setState(() {
-            activeIndex = index;
-          });
-        },
-      ),
-    );
-  }
-
-  Widget imageIndicator() {
-    return Positioned(
-      bottom: 16,
-      child: AnimatedSmoothIndicator(
-        activeIndex: activeIndex,
-        count: listImage.length,
-        effect: const ExpandingDotsEffect(
-          dotHeight: 7,
-          dotWidth: 7,
-          activeDotColor: AppColor.white,
+        child: AppNetworkImage(
+          widget.data.imageUrl ?? "",
+          fit: BoxFit.cover,
         ),
       ),
     );
   }
+
+  // Widget imageIndicator() {
+  //   return Positioned(
+  //     bottom: 16,
+  //     child: AnimatedSmoothIndicator(
+  //       activeIndex: activeIndex,
+  //       count: listImage.length,
+  //       effect: const ExpandingDotsEffect(
+  //         dotHeight: 7,
+  //         dotWidth: 7,
+  //         activeDotColor: AppColor.white,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Widget header() {
     return Stack(
       alignment: Alignment.topCenter,
       children: [
         imageCarousel(),
-        imageIndicator(),
+        // imageIndicator(),
         appbar(),
       ],
     );
@@ -132,7 +148,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Pakan Siap Cetak (PSC) Mina Mitra Mandiri',
+            widget.data.name ?? "-",
             textAlign: TextAlign.start,
             style: appTextTheme(context).titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -140,7 +156,9 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           ),
           const SizedBox(height: 12.0),
           Text(
-            'Rp 190.000',
+            widget.data.sellPrice == null
+                ? "-"
+                : appConvertCurrency(double.parse(widget.data.sellPrice!)),
             textAlign: TextAlign.start,
             style: appTextTheme(context).headlineSmall?.copyWith(
                   color: AppColor.accent,
@@ -163,21 +181,27 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   ),
                   const SizedBox(width: 6.0),
                   Text(
-                    'Stok Tersedia',
+                    double.parse(widget.data.stock!).round() > 0
+                        ? 'Stok Tersedia'
+                        : 'Stok Habis',
                     textAlign: TextAlign.start,
                     style: appTextTheme(context).titleSmall?.copyWith(
-                          color: AppColor.green[500],
+                          color: double.parse(widget.data.stock!).round() > 0
+                              ? AppColor.green[500]
+                              : AppColor.neutral[400],
                         ),
                   ),
                 ],
               ),
-              Text(
-                '2700 Terjual',
-                textAlign: TextAlign.start,
-                style: appTextTheme(context).bodySmall?.copyWith(
-                      color: AppColor.neutral[500],
-                    ),
-              ),
+              // Text(
+              //   widget.data.stock != null
+              //       ? "${double.parse(widget.data.stock!).round().toString()} Tersedia"
+              //       : "-",
+              //   textAlign: TextAlign.start,
+              //   style: appTextTheme(context).bodySmall?.copyWith(
+              //         color: AppColor.neutral[500],
+              //       ),
+              // ),
             ],
           ),
           Divider(
@@ -195,7 +219,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
               ),
               const SizedBox(width: 16.0),
               Text(
-                'Mina Mitra Mandiri',
+                widget.data.supplierName ?? "-",
                 textAlign: TextAlign.start,
                 style: appTextTheme(context).titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -243,31 +267,84 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 ),
           ),
           const SizedBox(height: 20.0),
-          rowText('Kategori', 'Pakan Ikan'),
+          rowText('Kategori', widget.data.categoryName ?? "-"),
           Divider(
             color: AppColor.neutral[200],
             thickness: 1,
             height: 32,
           ),
-          rowText('Ukuran', '1 Sak (30,00 kg)'),
+          rowText('Satuan', widget.data.unitName ?? "-"),
           Divider(
             color: AppColor.neutral[200],
             thickness: 1,
             height: 32,
           ),
-          rowText('Protein', '32%'),
+          rowText(
+            'Protein',
+            widget.data.proteinPercent == null
+                ? "-"
+                : '${double.parse(widget.data.proteinPercent!).round()}%',
+          ),
           Divider(
             color: AppColor.neutral[200],
             thickness: 1,
             height: 32,
           ),
-          rowText('Lemak', '5%'),
+          rowText(
+            'Lemak',
+            widget.data.lemakPercent == null
+                ? "-"
+                : '${double.parse(widget.data.lemakPercent!).round()}%',
+          ),
+          isHideDescription
+              ? const SizedBox()
+              : Column(
+                  children: [
+                    Divider(
+                      color: AppColor.neutral[200],
+                      thickness: 1,
+                      height: 32,
+                    ),
+                    rowText(
+                      'Serat Kasar',
+                      widget.data.seratKasarPercent == null
+                          ? "-"
+                          : '${double.parse(widget.data.seratKasarPercent!).round()}%',
+                    ),
+                    Divider(
+                      color: AppColor.neutral[200],
+                      thickness: 1,
+                      height: 32,
+                    ),
+                    rowText(
+                      'Kadar Abu',
+                      widget.data.kadarAbuPercent == null
+                          ? "-"
+                          : '${double.parse(widget.data.kadarAbuPercent!).round()}%',
+                    ),
+                    Divider(
+                      color: AppColor.neutral[200],
+                      thickness: 1,
+                      height: 32,
+                    ),
+                    rowText(
+                        'Kadar Air',
+                        widget.data.kadarAirPercent == null
+                            ? "-"
+                            : '${double.parse(widget.data.kadarAirPercent!).round()}%'),
+                  ],
+                ),
           const SizedBox(height: 24.0),
           Align(
             alignment: Alignment.center,
             child: InkWell(
+              onTap: () {
+                setState(() {
+                  isHideDescription = !isHideDescription;
+                });
+              },
               child: Text(
-                "Lihat Selengkapnya",
+                isHideDescription ? "Lihat Selengkapnya" : "Sembunyikan",
                 textAlign: TextAlign.center,
                 style: appTextTheme(context).titleSmall?.copyWith(
                       color: AppColor.secondary[900],
@@ -434,10 +511,10 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       children: [
         header(),
         info(),
-        const SizedBox(height: 16.0),
+        const SizedBox(height: 20.0),
         description(),
-        const SizedBox(height: 16.0),
-        review(),
+        // const SizedBox(height: 20.0),
+        // review(),
         const SizedBox(height: 98.0),
       ],
     );

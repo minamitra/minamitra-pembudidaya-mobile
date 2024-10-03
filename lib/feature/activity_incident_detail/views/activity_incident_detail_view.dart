@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/repositories/incident_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/repositories/incident_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityIncidentDetailView extends StatefulWidget {
-  final Incident incident;
+  final IncidentResponseData incident;
   const ActivityIncidentDetailView(this.incident, {super.key});
 
   @override
@@ -16,12 +16,6 @@ class ActivityIncidentDetailView extends StatefulWidget {
 
 class _ActivityIncidentDetailViewState
     extends State<ActivityIncidentDetailView> {
-  List<String> listFile = [
-    AppAssets.dummyActivityIncidentImage,
-    AppAssets.dummyActivityIncidentImage,
-    AppAssets.dummyActivityIncidentImage,
-  ];
-
   @override
   Widget build(BuildContext context) {
     Widget columnText(String title, String value) {
@@ -59,27 +53,36 @@ class _ActivityIncidentDetailViewState
                 ),
           ),
           const SizedBox(height: 8.0),
-          SizedBox(
-            height: 160.0,
-            child: ListView.separated(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: listFile.length,
-              separatorBuilder: (context, index) => const SizedBox(width: 8.0),
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: AspectRatio(
-                    aspectRatio: 3 / 2,
-                    child: Image.asset(
-                      listFile[index],
-                      fit: BoxFit.cover,
-                    ),
+          widget.incident.attachmentJsonArray!.isEmpty
+              ? Text(
+                  '-',
+                  textAlign: TextAlign.center,
+                  style: appTextTheme(context).bodySmall?.copyWith(
+                        color: AppColor.neutral[500],
+                      ),
+                )
+              : SizedBox(
+                  height: 160.0,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: widget.incident.attachmentJsonArray!.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 8.0),
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: AspectRatio(
+                          aspectRatio: 3 / 2,
+                          child: Image.asset(
+                            widget.incident.attachmentJsonArray![index],
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
+                ),
         ],
       );
     }
@@ -90,12 +93,12 @@ class _ActivityIncidentDetailViewState
         padding: const EdgeInsets.all(12.0),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: incidentTypeColor(widget.incident.type),
+          color: incidentStatusColor(widget.incident.status!),
           borderRadius: BorderRadius.circular(8.0),
         ),
         alignment: Alignment.center,
         child: Text(
-          'Status Laporan ${incidentTypeToString(widget.incident.type)}',
+          'Status Laporan ${incidentStatusToString(widget.incident.status!)}',
           textAlign: TextAlign.start,
           style: appTextTheme(context).titleSmall?.copyWith(
                 color: AppColor.white,
@@ -116,19 +119,23 @@ class _ActivityIncidentDetailViewState
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                columnText("Judul Laporan", widget.incident.title),
+                columnText("Judul Laporan", widget.incident.incident ?? "-"),
                 Divider(
                   height: 32.0,
                   thickness: 1,
                   color: AppColor.neutral[100],
                 ),
-                columnText("Tanggal", widget.incident.date),
+                columnText(
+                    "Tanggal",
+                    widget.incident.datetime != null
+                        ? widget.incident.datetime.toString()
+                        : '-'),
                 Divider(
                   height: 32.0,
                   thickness: 1,
                   color: AppColor.neutral[100],
                 ),
-                columnText("Catatan", widget.incident.description),
+                columnText("Catatan", widget.incident.note ?? "-"),
                 Divider(
                   height: 32.0,
                   thickness: 1,
@@ -189,7 +196,7 @@ class _ActivityIncidentDetailViewState
       alignment: Alignment.bottomCenter,
       children: [
         body(),
-        button(),
+        // button(),
       ],
     );
   }

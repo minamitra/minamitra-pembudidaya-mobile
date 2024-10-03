@@ -76,7 +76,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
               AppTopSnackBar(context).showSuccess(isEdit
                   ? "Berhasil Edit\nPerlakuan!"
                   : "Berhasil Membuat\nPerlakuan Baru!");
-              Navigator.of(context).pop();
+              Navigator.of(context).pop("refresh");
               if (isEdit) {
                 Navigator.of(context).pop("refresh");
               }
