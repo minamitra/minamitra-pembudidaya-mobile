@@ -14,7 +14,9 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_detail/
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class FeedingView extends StatefulWidget {
-  const FeedingView({super.key});
+  const FeedingView(this.tebarDate, {super.key});
+
+  final DateTime tebarDate;
 
   @override
   State<FeedingView> createState() => _FeedingViewState();
@@ -27,7 +29,7 @@ class _FeedingViewState extends State<FeedingView> {
       return InkWell(
         onTap: () {
           Navigator.of(context).push(AppTransition.pushTransition(
-            ActivityActivitiesDetailPage(data),
+            ActivityActivitiesDetailPage(data, widget.tebarDate),
             ActivityActivitiesDetailPage.routeSettings(),
           ));
         },

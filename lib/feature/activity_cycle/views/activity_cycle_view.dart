@@ -13,7 +13,8 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_detail/views
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityCycleView extends StatefulWidget {
-  const ActivityCycleView({super.key});
+  const ActivityCycleView(this.pondID, {super.key});
+  final String pondID;
 
   @override
   State<ActivityCycleView> createState() => _ActivityCycleViewState();
@@ -67,9 +68,19 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : listCard(
-                      state.activeData?.data ?? [],
-                      false,
+                  : ListView(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        listCard(
+                          state.activeData?.data ?? [],
+                          false,
+                        ),
+                        listCard(
+                          state.readyHarvestData?.data ?? [],
+                          true,
+                        ),
+                      ],
                     ),
               state.status.isLoading
                   ? const Center(
@@ -77,7 +88,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                     )
                   : listCard(
                       state.harvestData?.data ?? [],
-                      true,
+                      false,
                     ),
               state.status.isLoading
                   ? const Center(
@@ -94,9 +105,8 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
     );
   }
 
-  Widget itemCard(
-      // Cycle cycle
-      {
+  Widget itemCard({
+    required FeedCycleHistoryResponseData data,
     required String dateTime,
     required String status,
     required String fishCount,
@@ -118,10 +128,21 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
     return InkWell(
       onTap: () {
-        // Navigator.of(context).push(AppTransition.pushTransition(
-        //   ActivityCycleDetailPage(cycle),
-        //   ActivityCycleDetailPage.routeSettings(),
-        // ));
+        if (status != "harvest") {
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
+            ActivityCycleDetailPage(
+              data,
+              isReadyHarvest: status == "ready",
+            ),
+            ActivityCycleDetailPage.routeSettings(),
+          ))
+              .then((value) {
+            context.read<ActivityCycleCubit>().init(widget.pondID);
+          });
+        } else {
+          // Navigate to edit panen
+        }
       },
       child: AppDefaultCard(
         backgroundCardColor: AppColor.white,
@@ -220,7 +241,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
   Widget listCard(
     List<FeedCycleHistoryResponseData>? data,
-    bool isOnBid,
+    bool isReadyHarvest,
   ) {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -230,9 +251,10 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
       separatorBuilder: (context, index) => const SizedBox(height: 16),
       itemBuilder: (context, index) {
         return itemCard(
+          data: data![index],
           dateTime: AppConvertDateTime()
-              .ddmmyyyyhhmm(data![index].tebarDate ?? DateTime.now()),
-          status: isOnBid ? "onBid" : (data[index].status ?? "active"),
+              .ddmmyyyyhhmm(data[index].tebarDate ?? DateTime.now()),
+          status: isReadyHarvest ? "ready" : (data[index].status ?? "active"),
           fishCount: data[index].tebarFishTotal ?? "Unknown",
           fishWeight: data[index].actualPanenBobot ?? "Unknown",
           fishWeightTarget: data[index].targetPanenBobot ?? "Unknown",

@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/views/activity_activities_add_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
@@ -15,12 +16,15 @@ class ActivityActivitiesAddPage extends StatelessWidget {
     this.fishPondID,
     this.fishPondCycleID,
     this.tebarDate, {
+    this.editData,
     super.key,
   });
 
   final String fishPondID;
   final String fishPondCycleID;
   final DateTime tebarDate;
+
+  final FeedActivityResponseData? editData;
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-activities-add");
@@ -37,6 +41,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
               fishPondID,
               fishPondCycleID,
               tebarDate,
+              selectedDate: editData?.datetime,
             ),
       child:
           BlocConsumer<ActivityActivitiesAddCubit, ActivityActivitiesAddState>(
@@ -58,9 +63,16 @@ class ActivityActivitiesAddPage extends StatelessWidget {
           }
 
           if (state.status.isSuccessSubmit) {
-            AppTopSnackBar(context)
-                .showSuccess("Berhasil menambahkan aktivitas");
-            Navigator.of(context).pop("refresh");
+            if (editData != null) {
+              AppTopSnackBar(context)
+                  .showSuccess("Berhasil mengubah aktivitas");
+              Navigator.of(context).pop("refresh");
+              Navigator.of(context).pop("refresh");
+            } else {
+              AppTopSnackBar(context)
+                  .showSuccess("Berhasil menambahkan aktivitas");
+              Navigator.of(context).pop("refresh");
+            }
           }
         },
         builder: (context, state) {
@@ -71,7 +83,10 @@ class ActivityActivitiesAddPage extends StatelessWidget {
             ),
             backgroundColor: Colors.white,
             // resizeToAvoidBottomInset: false,
-            body: ActivityActivitiesAddView(tebarDate),
+            body: ActivityActivitiesAddView(
+              tebarDate,
+              editData: editData,
+            ),
           );
         },
       ),

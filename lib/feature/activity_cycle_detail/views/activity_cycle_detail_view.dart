@@ -5,12 +5,19 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/cycle_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/views/activity_cycle_add_harvest_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityCycleDetailView extends StatefulWidget {
-  final Cycle cycle;
-  const ActivityCycleDetailView(this.cycle, {super.key});
+  final FeedCycleHistoryResponseData data;
+  final bool isReadyHarvest;
+
+  const ActivityCycleDetailView(
+    this.data, {
+    required this.isReadyHarvest,
+    super.key,
+  });
 
   @override
   State<ActivityCycleDetailView> createState() =>
@@ -30,13 +37,16 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: cycleTypeColor(widget.cycle.type),
+        color: cycleTypeColor(convertToCycleType(
+            widget.isReadyHarvest ? "ready" : widget.data.status ?? "active")),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Text(
-        widget.cycle.type == CycleType.done
+        convertToCycleType(widget.data.status ?? "active") == CycleType.done
             ? "Siklus Selesai"
-            : "Siklus Sedang ${cycleTypeToString(widget.cycle.type)}",
+            : widget.isReadyHarvest
+                ? "Siklus siap panen"
+                : "Siklus Sedang ${cycleTypeToString(convertToCycleType(widget.data.status ?? "active"))}",
         textAlign: TextAlign.center,
         style: appTextTheme(context).bodySmall?.copyWith(
               fontWeight: FontWeight.w500,
@@ -90,13 +100,13 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Jumlah Tebar", "${widget.cycle.amount} ekor"),
+          textRow("Jumlah Tebar", "${widget.data.tebarFishTotal} ekor"),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Bobot Tebar", "${widget.cycle.amount} gram/ekor"),
+          textRow("Bobot Tebar", "${widget.data.tebarBobot} gram/ekor"),
           Divider(
             height: 32.0,
             thickness: 1,
@@ -108,8 +118,8 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow(
-              "Target Bobot Panen Tebar", "${widget.cycle.amount} gram/ekor"),
+          textRow("Target Bobot Panen Tebar",
+              "${widget.data.targetPanenBobot} gram/ekor"),
           Divider(
             height: 32.0,
             thickness: 1,
@@ -313,7 +323,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         "Panen Sekarang",
         () {
           Navigator.of(context).push(AppTransition.pushTransition(
-            const ActivityCycleAddHarvestPage(),
+            ActivityCycleAddHarvestPage(widget.data.id ?? ""),
             ActivityCycleAddHarvestPage.routeSettings(),
           ));
         },
@@ -332,19 +342,20 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             statusBar(context),
             const SizedBox(height: 16.0),
             cycleInfo(),
-            widget.cycle.type == CycleType.done
+            convertToCycleType(widget.data.status ?? "active") == CycleType.done
                 ? harvestInfo()
                 : const SizedBox(),
-            widget.cycle.type == CycleType.done
+            convertToCycleType(widget.data.status ?? "active") == CycleType.done
                 ? transactionInfo()
                 : const SizedBox(),
-            widget.cycle.type == CycleType.done
+            convertToCycleType(widget.data.status ?? "active") == CycleType.done
                 ? const SizedBox(height: 24.0)
                 : const SizedBox(height: 98.0),
           ],
         ),
-        widget.cycle.type == CycleType.done ||
-                widget.cycle.type == CycleType.onBid
+        convertToCycleType(widget.data.status ?? "active") == CycleType.done ||
+                convertToCycleType(widget.data.status ?? "active") ==
+                    CycleType.onBid
             ? const SizedBox()
             : button(),
       ],

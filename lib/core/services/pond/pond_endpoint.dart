@@ -26,4 +26,8 @@ class PondEndpoint {
       queryParameters: {if (pondID != null) "fishpond_id": pondID},
     );
   }
+
+  Uri deletePond() {
+    return createUrl(path: "mitra/fishpond/delete");
+  }
 }

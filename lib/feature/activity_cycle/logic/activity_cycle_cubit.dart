@@ -19,6 +19,15 @@ class ActivityCycleCubit extends Cubit<ActivityCycleState> {
         pondID: pondID,
         status: "active",
       );
+      final readyHarvestData = await service.getFeedCycleHistory(
+        pondID: pondID,
+        status: "ready",
+      );
+      // Cleaning active data
+      readyHarvestData.data.data?.forEach((element) {
+        activeData.data.data
+            ?.removeWhere((element2) => element2.id == element.id);
+      });
       final harvestData = await service.getFeedCycleHistory(
         pondID: pondID,
         status: "harvest",
@@ -29,6 +38,7 @@ class ActivityCycleCubit extends Cubit<ActivityCycleState> {
       );
       emit(state.copyWith(
         activeData: activeData.data,
+        readyHarvestData: readyHarvestData.data,
         harvestData: harvestData.data,
         doneData: doneData.data,
         status: GlobalState.loaded,

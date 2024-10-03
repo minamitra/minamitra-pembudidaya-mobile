@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
@@ -19,9 +20,10 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DetailActivityView extends StatefulWidget {
-  const DetailActivityView(this.pondData, {super.key});
+  const DetailActivityView(this.pondData, this.isCanAccessFeature, {super.key});
 
   final PondResponseData pondData;
+  final bool isCanAccessFeature;
 
   @override
   State<DetailActivityView> createState() => _DetailActivityViewState();
@@ -95,6 +97,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 'Aktivitas',
                 AppAssets.documentAddIcon,
                 onTap: () {
+                  if (!widget.isCanAccessFeature) {
+                    AppTopSnackBar(context).showInfo(
+                        "Maaf data sedang\nDiproses atau telah ditolak");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityActivitiesPage(
                       widget.pondData.id ?? "0",
@@ -122,6 +129,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 'Kejadian',
                 AppAssets.notebookIcon,
                 onTap: () {
+                  if (!widget.isCanAccessFeature) {
+                    AppTopSnackBar(context).showInfo(
+                        "Maaf data sedang\nDiproses atau telah ditolak");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     const ActivityIncidentPage(),
                     ActivityIncidentPage.routeSettings(),
@@ -132,6 +144,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 'Monitoring',
                 AppAssets.pulseIcon,
                 onTap: () {
+                  if (!widget.isCanAccessFeature) {
+                    AppTopSnackBar(context).showInfo(
+                        "Maaf data sedang\nDiproses atau telah ditolak");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     const MonitoringPage(),
                     MonitoringPage.route,
@@ -142,6 +159,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 'Siklus',
                 AppAssets.cartIcon,
                 onTap: () {
+                  if (!widget.isCanAccessFeature) {
+                    AppTopSnackBar(context).showInfo(
+                        "Maaf data sedang\nDiproses atau telah ditolak");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityCyclePage(widget.pondData.id ?? ""),
                     ActivityCyclePage.routeSettings(),
@@ -257,7 +279,13 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                         title: "Hapus Kolam ?",
                                         descriptions:
                                             "Data yang sudah terhapus\ntidak dapat dipulihkan kembali!",
-                                        onTapDelete: () {},
+                                        onTapDelete: () {
+                                          context
+                                              .read<DetailActivityCubit>()
+                                              .deletePond(
+                                                  widget.pondData.id ?? "");
+                                          Navigator.of(context).pop();
+                                        },
                                       );
                                     },
                                   ),

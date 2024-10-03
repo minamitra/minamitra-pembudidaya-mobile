@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
@@ -211,6 +212,7 @@ class _ActivityViewState extends State<ActivityView> {
       required String percentage,
       required bool isActive,
       void Function()? onTap,
+      required String pondStatus,
     }) {
       return InkWell(
         onTap: onTap,
@@ -246,12 +248,18 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 12.0),
                           Text(
-                            isActive ? "Aktif" : "Non Aktif",
+                            pondStatus.toLowerCase() != "approved"
+                                ? pondStatus.convertPondStatus()
+                                : isActive
+                                    ? "Aktif"
+                                    : "Non Aktif",
                             style: appTextTheme(context).labelLarge?.copyWith(
                                   fontWeight: FontWeight.w400,
-                                  color: isActive
-                                      ? AppColor.green[400]
-                                      : AppColor.red[500],
+                                  color: pondStatus.toLowerCase() != "approved"
+                                      ? pondStatus.convertPondStatusColor()
+                                      : isActive
+                                          ? AppColor.green[400]
+                                          : AppColor.red[500],
                                 ),
                           ),
                         ],
@@ -334,20 +342,27 @@ class _ActivityViewState extends State<ActivityView> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: activityItem(
-                  title: state.pondReponse?.data?[index].name ?? "",
-                  value:
-                      state.pondReponse?.data?[index].totalFoodRecommendation ??
-                          "-",
-                  percentage:
-                      state.pondReponse?.data?[index].totalFoodActual ?? "-",
-                  isActive: state.pondReponse?.data?[index].activeBool ?? false,
-                  onTap: () {
-                    Navigator.of(context).push(AppTransition.pushTransition(
-                      DetailActivityPage(state.pondReponse!.data![index]),
-                      DetailActivityPage.routeSettings(),
-                    ));
-                  },
-                ),
+                    title: state.pondReponse?.data?[index].name ?? "",
+                    value: state.pondReponse?.data?[index]
+                            .totalFoodRecommendation ??
+                        "-",
+                    percentage:
+                        state.pondReponse?.data?[index].totalFoodActual ?? "-",
+                    isActive:
+                        state.pondReponse?.data?[index].activeBool ?? false,
+                    onTap: () {
+                      Navigator.of(context).push(AppTransition.pushTransition(
+                        DetailActivityPage(
+                          state.pondReponse!.data![index],
+                          isCanAccessFeature: state
+                                  .pondReponse!.data![index].status
+                                  ?.isCanSeeDetail() ??
+                              false,
+                        ),
+                        DetailActivityPage.routeSettings(),
+                      ));
+                    },
+                    pondStatus: state.pondReponse?.data?[index].status ?? ""),
               );
             },
           );
@@ -603,7 +618,12 @@ class _ActivityViewState extends State<ActivityView> {
                         ),
                   ),
                   const Spacer(),
-                  Text(value, style: appTextTheme(context).headlineMedium),
+                  Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: appTextTheme(context).headlineMedium,
+                  ),
                   const Spacer(),
                   Text(
                     "dari 3 kolam aktif",
