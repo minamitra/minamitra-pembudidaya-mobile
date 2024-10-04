@@ -10,6 +10,7 @@ class AddFishFeedBody {
   double? total;
   int? fishfoodId;
   String? note;
+  String? dataID;
 
   AddFishFeedBody({
     this.fishpondId,
@@ -21,12 +22,15 @@ class AddFishFeedBody {
     this.total,
     this.fishfoodId,
     this.note,
+    this.dataID,
   });
 
   factory AddFishFeedBody.fromJson(String str) =>
       AddFishFeedBody.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+
+  String toEditJson() => json.encode(toEditMap());
 
   factory AddFishFeedBody.fromMap(Map<String, dynamic> json) => AddFishFeedBody(
         fishpondId: json["fishpond_id"],
@@ -44,6 +48,17 @@ class AddFishFeedBody {
   Map<String, dynamic> toMap() => {
         "fishpond_id": fishpondId,
         "fishpondcycle_id": fishpondcycleId,
+        "datetime": datetime?.toIso8601String(),
+        "fish_age": fishAge,
+        "recommendation": recommendation,
+        "actual": actual,
+        "total": total,
+        "fishfood_id": fishfoodId,
+        "note": note,
+      };
+
+  Map<String, dynamic> toEditMap() => {
+        "id": dataID,
         "datetime": datetime?.toIso8601String(),
         "fish_age": fishAge,
         "recommendation": recommendation,

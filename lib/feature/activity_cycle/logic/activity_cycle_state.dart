@@ -5,6 +5,7 @@ class ActivityCycleState extends Equatable {
     this.status = GlobalState.initial,
     this.errorMessage = "",
     this.activeData,
+    this.readyHarvestData,
     this.harvestData,
     this.doneData,
   });
@@ -12,6 +13,7 @@ class ActivityCycleState extends Equatable {
   final GlobalState status;
   final String errorMessage;
   final FeedCycleHistoryResponse? activeData;
+  final FeedCycleHistoryResponse? readyHarvestData;
   final FeedCycleHistoryResponse? harvestData;
   final FeedCycleHistoryResponse? doneData;
 
@@ -19,6 +21,7 @@ class ActivityCycleState extends Equatable {
     GlobalState? status,
     String? errorMessage,
     FeedCycleHistoryResponse? activeData,
+    FeedCycleHistoryResponse? readyHarvestData,
     FeedCycleHistoryResponse? harvestData,
     FeedCycleHistoryResponse? doneData,
   }) {
@@ -26,6 +29,7 @@ class ActivityCycleState extends Equatable {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       activeData: activeData ?? this.activeData,
+      readyHarvestData: readyHarvestData ?? this.readyHarvestData,
       harvestData: harvestData ?? this.harvestData,
       doneData: doneData ?? this.doneData,
     );
@@ -36,6 +40,7 @@ class ActivityCycleState extends Equatable {
         status,
         errorMessage,
         activeData,
+        readyHarvestData,
         harvestData,
         doneData,
       ];

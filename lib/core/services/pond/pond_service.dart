@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -15,6 +17,7 @@ abstract class PondService {
   Future<BaseResponse<PondResponse>> getPonds();
   Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
       {String? pondID});
+  Future<BaseResponse<bool>> deletePond(String pondID);
 }
 
 class PondServiceImpl implements PondService {
@@ -83,5 +86,18 @@ class PondServiceImpl implements PondService {
     final PondDashboardResponse data =
         PondDashboardResponse.fromMap(meta.result!);
     return BaseResponse(meta: meta, data: data);
+  }
+
+  @override
+  Future<BaseResponse<bool>> deletePond(String pondID) async {
+    final url = endpoint.deletePond();
+    final header = await headerProvider.headers;
+    final response = await httpClient.post(
+      url,
+      header,
+      json.encode({"id": int.parse(pondID)}),
+    );
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    return BaseResponse(meta: meta, data: true);
   }
 }

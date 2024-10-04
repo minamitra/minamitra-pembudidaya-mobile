@@ -23,11 +23,14 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
   Future<void> init(
     String fishPondID,
     String fishPondCycleID,
-    DateTime tebarDate,
-  ) async {
+    DateTime tebarDate, {
+    DateTime? selectedDate,
+  }) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      int diferentInDays = DateTime.now().difference(tebarDate).inDays;
+      int diferentInDays = selectedDate != null
+          ? selectedDate.difference(tebarDate).inDays
+          : DateTime.now().difference(tebarDate).inDays;
       final response = await service.getRecommendation(
         fishPondCycleID,
         diferentInDays.toString(),
@@ -85,10 +88,12 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
     }
   }
 
-  void changeTimeFeed(String time) {
-    final timeSplit = time.split(":");
-    feedHour = timeSplit[0];
-    feedMinute = timeSplit[1];
+  void changeTimeFeed(
+    int hour,
+    int minute,
+  ) {
+    feedHour = hour.toString();
+    feedMinute = minute.toString();
   }
 
   void cahngeFishFoodID(int fishFoodID) {
@@ -98,7 +103,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
   Future<void> addFishFeed(AddFishFeedBody body) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
-      await service.postAddFishFeed(body);
+      await service.postAddFishFeed(body, isCreateData: body.dataID == null);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {

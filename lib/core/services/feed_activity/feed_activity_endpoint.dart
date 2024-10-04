@@ -36,8 +36,12 @@ class FeedActivityEndpoint {
     );
   }
 
-  Uri postFishFeed() {
-    return createUrl(path: "mitra/activity-feeding/add");
+  Uri postFishFeed(bool isCreateData) {
+    return createUrl(
+      path: isCreateData
+          ? "mitra/activity-feeding/add"
+          : "/mitra/activity-feeding/update",
+    );
   }
 
   Uri deleteFishActivity() {

@@ -36,7 +36,7 @@ class ActivityCyclePage extends StatelessWidget {
             context,
             "Siklus",
           ),
-          body: const ActivityCycleView(),
+          body: ActivityCycleView(pondID),
         ),
       ),
     );

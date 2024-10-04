@@ -89,7 +89,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
                     Center(child: CircularProgressIndicator()),
                   ]
                 : [
-                    const FeedingView(),
+                    FeedingView(widget.dateDistribution),
                     TreatmentView(
                       widget.fishpondId,
                       widget.fishpondcycleId,

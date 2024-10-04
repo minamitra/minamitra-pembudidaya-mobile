@@ -14,7 +14,7 @@ String cycleTypeToString(CycleType type) {
     case CycleType.active:
       return 'Berjalan';
     case CycleType.onBid:
-      return 'Berjalan';
+      return 'Dalam Lelang';
     case CycleType.done:
       return 'Panen Berhasil';
     case CycleType.ready:
@@ -28,8 +28,10 @@ CycleType convertToCycleType(String status) {
   switch (status.toLowerCase()) {
     case "active":
       return CycleType.active;
-    case "harvest":
+    case "ready":
       return CycleType.ready;
+    case "harvest":
+      return CycleType.onBid;
     case "onbid":
       return CycleType.onBid;
     default:
@@ -42,7 +44,7 @@ Color cycleTypeColor(CycleType type) {
     case CycleType.active:
       return AppColor.secondary[900]!;
     case CycleType.onBid:
-      return AppColor.secondary[900]!;
+      return AppColor.accent[900]!;
     case CycleType.done:
       return AppColor.green[500]!;
     case CycleType.ready:

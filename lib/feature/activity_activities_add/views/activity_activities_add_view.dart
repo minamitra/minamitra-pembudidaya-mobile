@@ -11,15 +11,17 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/view/add_new_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesAddView extends StatefulWidget {
-  const ActivityActivitiesAddView(this.tebarDate, {super.key});
+  const ActivityActivitiesAddView(this.tebarDate, {this.editData, super.key});
 
   final DateTime tebarDate;
+  final FeedActivityResponseData? editData;
 
   @override
   State<ActivityActivitiesAddView> createState() =>
@@ -47,8 +49,27 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   @override
   void initState() {
     super.initState();
-    firstDate = widget.tebarDate;
-    dateController.text = AppConvertDateTime().dmyName(dateNow);
+    if (widget.editData != null) {
+      firstDate = widget.tebarDate;
+      dateController.text =
+          AppConvertDateTime().dmyName(widget.editData!.datetime!);
+      context.read<ActivityActivitiesAddCubit>().changeTimeFeed(
+            widget.editData!.datetime!.hour,
+            widget.editData!.datetime!.minute,
+          );
+      hourController.text =
+          AppConvertDateTime().jm24(widget.editData!.datetime!);
+      amountController.text = widget.editData!.actual ?? "0";
+      brandController.text = widget.editData!.fishfoodName ?? "";
+      context
+          .read<ActivityActivitiesAddCubit>()
+          .cahngeFishFoodID(int.parse(widget.editData!.fishfoodId ?? "0"));
+      noteController.text = widget.editData!.note ?? "";
+    } else {
+      firstDate = widget.tebarDate;
+      dateController.text = AppConvertDateTime().dmyName(dateNow);
+    }
+
     // fishAgeController.text =
   }
 
@@ -441,10 +462,10 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         ).then((time) {
           setState(() {
             if (time != null) {
-              final String timeOfFeed = "${time.hour}:${time.minute}:00";
+              // final String timeOfFeed = "${time.hour}:${time.minute}:00";
               context
                   .read<ActivityActivitiesAddCubit>()
-                  .changeTimeFeed(timeOfFeed);
+                  .changeTimeFeed(time.hour, time.minute);
               hourController.text = time.format(context);
             }
           });
@@ -565,6 +586,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                     total: double.parse(amountController.text),
                     fishfoodId: activityCubit.state.fishFoodID,
                     note: noteController.text,
+                    dataID: widget.editData?.id,
                   ),
                 );
           },

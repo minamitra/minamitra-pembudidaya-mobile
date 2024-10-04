@@ -1,4 +1,5 @@
 import 'package:minamitra_pembudidaya_mobile/core/network/url_builder.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 
 class CycleEndpoint {
   CycleEndpoint();
@@ -19,14 +20,22 @@ class CycleEndpoint {
   Uri getFeedCycleHistory({
     required String pondID,
     required String status,
+    String? firstDate,
+    String? lastDate,
   }) {
     return createUrl(
       path: "mitra/fishpondcycle/data",
       queryParameters: {
         "fishpond_id": pondID,
-        "status[neq]": status,
+        "status[eq]": status,
         "pagination_bool": "false",
+        if (firstDate != null) "estimation_panen_date[gte]": firstDate,
+        if (lastDate != null) "estimation_panen_date[lte]": lastDate,
       },
     );
+  }
+
+  Uri postHarvest() {
+    return createUrl(path: "mitra/fishpondcycle/update-panen");
   }
 }
