@@ -14,12 +14,12 @@ class MethodPaymentData {
 
 List<MethodPaymentData> listMethodPayment = [
   MethodPaymentData(
-    icon: AppAssets.walletIcon,
+    icon: AppAssets.walletSquareIcon,
     name: 'Plafon',
     description: 'Sisa Saldo: Rp 2.5000.000',
   ),
   MethodPaymentData(
-    icon: AppAssets.cashIcon,
+    icon: AppAssets.cashSquareIcon,
     name: 'Tunai',
     description: 'Bayar Menggunakan Uang Tunai',
   ),

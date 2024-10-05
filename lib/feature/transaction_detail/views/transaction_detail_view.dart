@@ -1,13 +1,43 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/adress_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/method_payment_data.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
-class TransactionDetailView extends StatelessWidget {
-  const TransactionDetailView({super.key});
+class TransactionDetailView extends StatefulWidget {
+  final List<ProductsResponseData> listProduct;
+  final List<int> listAmountItem;
+  final Address address;
+  final MethodPaymentData methodPayment;
+
+  const TransactionDetailView(
+    this.listProduct,
+    this.listAmountItem,
+    this.address,
+    this.methodPayment, {
+    super.key,
+  });
+
+  @override
+  State<TransactionDetailView> createState() => _TransactionDetailViewState();
+}
+
+class _TransactionDetailViewState extends State<TransactionDetailView> {
+  final TextEditingController noteController = TextEditingController();
+  List<Uint8List> listImage = [];
 
   Widget statusBar(BuildContext context) {
     return Container(
@@ -47,16 +77,12 @@ class TransactionDetailView extends StatelessWidget {
           const SizedBox(height: 16.0),
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: AppColor.primary[50],
-                  borderRadius: BorderRadius.circular(4),
-                ),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8.0),
                 child: Image.asset(
-                  AppAssets.walletIcon,
-                  width: 24,
-                  height: 24,
+                  widget.methodPayment.icon,
+                  width: 40,
+                  height: 40,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -66,7 +92,7 @@ class TransactionDetailView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Plafon",
+                      widget.methodPayment.name,
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
@@ -74,7 +100,7 @@ class TransactionDetailView extends StatelessWidget {
                           ),
                     ),
                     Text(
-                      "Bayar menggunakan plafon",
+                      widget.methodPayment.description,
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w400,
@@ -91,7 +117,7 @@ class TransactionDetailView extends StatelessWidget {
     );
   }
 
-  Widget address(BuildContext context) {
+  Widget addressWidget(BuildContext context) {
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -169,7 +195,7 @@ class TransactionDetailView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Alamat Pengiriman",
+                        widget.address.title,
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w700,
@@ -177,7 +203,7 @@ class TransactionDetailView extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        "Jl. Raya Bunga Matahari",
+                        widget.address.address,
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w400,
@@ -192,6 +218,77 @@ class TransactionDetailView extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget productItem(
+    BuildContext context,
+    ProductsResponseData data,
+    int amountItem,
+  ) {
+    return Row(
+      children: [
+        Flexible(
+          flex: 1,
+          child: AspectRatio(
+            aspectRatio: 1.0,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: AppNetworkImage(
+                data.imageUrl ?? "",
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(width: 18.0),
+        Expanded(
+          flex: 3,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                data.name ?? "-",
+                style: appTextTheme(context)
+                    .bodySmall
+                    ?.copyWith(fontWeight: FontWeight.w700),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              const SizedBox(height: 6.0),
+              Text(
+                data.categoryName ?? "-",
+                style: appTextTheme(context)
+                    .bodySmall
+                    ?.copyWith(color: AppColor.neutral[400]),
+              ),
+              const SizedBox(height: 18.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    data.sellPrice != null
+                        ? appConvertCurrency(double.parse(data.sellPrice!))
+                        : "-",
+                    style: appTextTheme(context)
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    "x$amountItem",
+                    style: appTextTheme(context)
+                        .bodySmall
+                        ?.copyWith(fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 
@@ -213,70 +310,21 @@ class TransactionDetailView extends StatelessWidget {
           const SizedBox(height: 8.0),
           const AppDottedLine(),
           const SizedBox(height: 16.0),
-          Row(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Image.asset(
-                  AppAssets.product1Image,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                flex: 4,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Pakan Siap Cetak (PSC) Mina Mitra Mandiri",
-                      textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodySmall?.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: AppColor.black,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      "Pakan",
-                      textAlign: TextAlign.start,
-                      style: appTextTheme(context).bodySmall?.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: AppColor.black[400],
-                          ),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            appConvertCurrency(200000),
-                            textAlign: TextAlign.start,
-                            style: appTextTheme(context).bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColor.black,
-                                ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "x1",
-                            textAlign: TextAlign.end,
-                            style: appTextTheme(context).bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColor.black,
-                                ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: widget.listProduct.length,
+            separatorBuilder: (context, index) => const Padding(
+              padding: EdgeInsets.symmetric(vertical: 18.0),
+              child: AppDottedLine(),
+            ),
+            itemBuilder: (context, index) {
+              return productItem(
+                context,
+                widget.listProduct[index],
+                widget.listAmountItem[index],
+              );
+            },
           ),
         ],
       ),
@@ -368,13 +416,13 @@ class TransactionDetailView extends StatelessWidget {
           rowText(
             context,
             "Harga",
-            "200.000",
+            "Rp 300.000",
           ),
           const SizedBox(height: 12.0),
           rowText(
             context,
             "Potongan Harga",
-            "10.000",
+            "Rp 0",
           ),
           const SizedBox(height: 16.0),
           const AppDottedLine(),
@@ -391,7 +439,7 @@ class TransactionDetailView extends StatelessWidget {
                     ),
               ),
               Text(
-                "Rp 190.000",
+                "Rp 300.000",
                 textAlign: TextAlign.end,
                 style: appTextTheme(context).titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -405,19 +453,149 @@ class TransactionDetailView extends StatelessWidget {
     );
   }
 
+  Widget paymentProof(void Function(void Function()) setModalState) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          children: [
+            Text(
+              "Unggah Bukti Bayar",
+              style: appTextTheme(context).bodyMedium,
+            ),
+            Text(
+              " *",
+              style:
+                  appTextTheme(context).bodyMedium?.copyWith(color: Colors.red),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8.0),
+        AppPickImageCard(
+          () {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+              ),
+              builder: (bottomSheetContext) {
+                return AppImagePickerMenu(
+                  "Upload Gambar",
+                  (type) async {
+                    switch (type) {
+                      case PhotoSource.camera:
+                        final document = await pickDocumentImage(
+                          bottomSheetContext,
+                          ImageSource.camera,
+                        );
+                        if (document != null) {
+                          await document.readAsBytes().then((image) {
+                            setModalState(() {
+                              listImage.add(image);
+                            });
+                            Navigator.of(bottomSheetContext).pop();
+                          });
+                        }
+                        break;
+                      case PhotoSource.gallery:
+                        final document = await pickDocumentImage(
+                          bottomSheetContext,
+                          ImageSource.gallery,
+                        );
+                        if (document != null) {
+                          await document.readAsBytes().then((image) {
+                            setModalState(() {
+                              listImage.add(image);
+                            });
+                            Navigator.of(bottomSheetContext).pop();
+                          });
+                        }
+                        break;
+                    }
+                  },
+                );
+              },
+            );
+          },
+          listImage: listImage,
+          onTapImage: (value) {
+            setState(() {
+              listImage.removeAt(value);
+            });
+          },
+        ),
+        const SizedBox(height: 8.0),
+        Text(
+          "Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB",
+          style: appTextTheme(context).labelLarge?.copyWith(
+                color: AppColor.neutral[500],
+              ),
+        )
+      ],
+    );
+  }
+
+  Widget noteTextField() {
+    return AppValidatorTextField(
+      controller: noteController,
+      hintText: "Masukan catatan",
+      labelText: "Catatan",
+      maxLines: 3,
+    );
+  }
+
+  Function() donePaymentShowModal(BuildContext context) {
+    return () {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (modalContext) {
+          return StatefulBuilder(
+            builder: (stateContext, setModalState) {
+              return AppBottomSheet(
+                "Bukti Pembayaran",
+                height: MediaQuery.of(context).size.height * 0.7,
+                ListView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  children: [
+                    paymentProof(setModalState),
+                    const SizedBox(height: 16),
+                    noteTextField(),
+                    const SizedBox(height: 36),
+                    AppPrimaryFullButton(
+                      "Konfirmasi",
+                      () {
+                        Navigator.of(context).pop();
+                      },
+                      height: 56,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+      );
+    };
+  }
+
   Widget button(BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           AppPrimaryFullButton(
-            "Tutup Halaman",
+            "Saya Sudah Bayar",
+            donePaymentShowModal(context),
+          ),
+          const SizedBox(height: 16.0),
+          AppPrimaryOutlineFullButton(
+            "Batalkan Pesanan",
             () {
               Navigator.of(context).pop();
             },
           ),
-          const SizedBox(height: 16.0),
-          AppPrimaryOutlineFullButton("Laporkan", () {}),
         ],
       ),
     );
@@ -432,7 +610,7 @@ class TransactionDetailView extends StatelessWidget {
         const SizedBox(height: 16.0),
         paymentMethod(context),
         const SizedBox(height: 16.0),
-        address(context),
+        addressWidget(context),
         const SizedBox(height: 16.0),
         orderItems(context),
         const SizedBox(height: 16.0),

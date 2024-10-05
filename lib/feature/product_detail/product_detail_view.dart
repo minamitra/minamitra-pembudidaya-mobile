@@ -283,7 +283,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             'Protein',
             widget.data.proteinPercent == null
                 ? "-"
-                : '${double.parse(widget.data.proteinPercent!).round()}%',
+                : '${widget.data.proteinPercent}%',
           ),
           Divider(
             color: AppColor.neutral[200],
@@ -299,6 +299,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           isHideDescription
               ? const SizedBox()
               : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Divider(
                       color: AppColor.neutral[200],
@@ -332,6 +333,24 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                         widget.data.kadarAirPercent == null
                             ? "-"
                             : '${double.parse(widget.data.kadarAirPercent!).round()}%'),
+                    Divider(
+                      color: AppColor.neutral[200],
+                      thickness: 1,
+                      height: 32,
+                    ),
+                    Text(
+                      "Keterangan",
+                      textAlign: TextAlign.start,
+                      style: appTextTheme(context).bodySmall?.copyWith(
+                            color: AppColor.neutral[500],
+                          ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      widget.data.note ?? "-",
+                      textAlign: TextAlign.start,
+                      style: appTextTheme(context).bodySmall,
+                    ),
                   ],
                 ),
           const SizedBox(height: 24.0),
@@ -536,7 +555,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         "Beli Sekarang",
         () {
           Navigator.of(context).push(AppTransition.pushTransition(
-            const CheckoutPage(),
+            CheckoutPage(widget.data),
             CheckoutPage.route,
           ));
         },
