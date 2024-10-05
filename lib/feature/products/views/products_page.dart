@@ -8,7 +8,9 @@ import 'package:minamitra_pembudidaya_mobile/feature/products/logics/products_cu
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_view.dart';
 
 class ProductsPage extends StatelessWidget {
-  const ProductsPage({super.key});
+  final bool isPick;
+
+  const ProductsPage({this.isPick = false, super.key});
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/products");
@@ -47,7 +49,7 @@ class ProductsPage extends StatelessWidget {
             )..getCategoryProduct(),
           ),
         ],
-        child: const ProductsView(),
+        child: ProductsView(isPick),
       ),
     );
   }
