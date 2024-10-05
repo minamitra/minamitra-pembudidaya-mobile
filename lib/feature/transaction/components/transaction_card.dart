@@ -5,8 +5,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/adress_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/method_payment_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/transaction_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/transaction_dummy_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/views/transaction_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -263,7 +265,12 @@ class _TransactionCardState extends State<TransactionCard> {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(AppTransition.pushTransition(
-          const TransactionDetailPage(),
+          TransactionDetailPage(
+            listProduct,
+            listAmountItem,
+            listAddress[0],
+            listMethodPayment[0],
+          ),
           TransactionDetailPage.routeSettings(),
         ));
       },
