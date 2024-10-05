@@ -13,6 +13,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/activity_activities_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/views/activity_cycle_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/views/activity_cycle_add_harvest_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/views/activity_incident_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/logic/detail_activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/view/monitoring_page.dart';
@@ -381,7 +382,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
             ),
             const SizedBox(height: 12.0),
             Text(
-              widget.pondData.address.handlingEmptyString(),
+              "${widget.pondData.addressVillageName.handlingEmptyString()}, ${widget.pondData.addressCityName.handlingEmptyString()}, ${widget.pondData.addressProvinceName.handlingEmptyString()}",
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: appTextTheme(context).bodySmall?.copyWith(
@@ -423,8 +424,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 Expanded(
                     child: headerInformationsItem(
-                        "${state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum} Kg",
-                        "Total Pakan")),
+                  "${state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum.handlingEmptyString()} Kg",
+                  "Total Pakan",
+                )),
               ],
             ),
           );
@@ -464,7 +466,85 @@ class _DetailActivityViewState extends State<DetailActivityView> {
       );
     }
 
+    Widget detailPakanItem(
+      String title,
+      String value,
+    ) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Row(
+          children: [
+            Text(
+              title,
+              maxLines: 2,
+              style: appTextTheme(context)
+                  .bodySmall
+                  ?.copyWith(color: AppColor.neutral[500]),
+            ),
+            const SizedBox(width: 8.0),
+            Expanded(
+              child: Text(
+                value,
+                textAlign: TextAlign.end,
+                maxLines: 3,
+                style: appTextTheme(context).bodySmall?.copyWith(
+                      color: AppColor.neutral[800],
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget feedSection() {
+      Widget actionButton(String lastActiveStatus, String id) {
+        switch (lastActiveStatus.toLowerCase()) {
+          case "active":
+            return AppGreenGradientButton(
+              "Panen",
+              () {
+                if (!widget.isCanAccessFeature) {
+                  AppTopSnackBar(context).showInfo(
+                      "Maaf data sedang\nDiproses atau telah ditolak");
+                  return;
+                }
+                Navigator.of(context)
+                    .push(AppTransition.pushTransition(
+                  ActivityCycleAddHarvestPage(
+                    id,
+                    // state.onGoingCycleFeedResponseData?.data?[0].id ?? "",
+                    isFromCycleDetail: false,
+                  ),
+                  ActivityCycleAddHarvestPage.routeSettings(),
+                ))
+                    .then((value) {
+                  if (value != null && value == "refresh") {
+                    Navigator.of(context).pop("refresh");
+                  }
+                });
+              },
+            );
+          case "harvest":
+            return AppPrimaryGradientButton(
+              "Sedang Panen",
+              () {
+                AppTopSnackBar(context).showInfo(
+                    "Siklus sedang Panen\nsilahkan ke menu siklus\nntuk edit data");
+                return;
+              },
+            );
+          case "done":
+            return AppPrimaryGradientButton(
+              "Mulai Siklus",
+              () {},
+            );
+          default:
+            return const SizedBox();
+        }
+      }
+
       return BlocBuilder<DetailActivityCubit, DetailActivityState>(
         builder: (context, state) {
           return Padding(
@@ -484,15 +564,41 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    widget.pondData.activeBool ?? false
-                        ? AppGreenGradientButton(
-                            "Panen",
-                            () {},
-                          )
-                        : AppPrimaryGradientButton(
-                            "Mulai SIklus",
-                            () {},
-                          ),
+                    actionButton(
+                      widget.pondData.lastFishpondcycleStatus
+                          .handlingEmptyString(),
+                      state.onGoingCycleFeedResponseData?.data?[0].id ?? "",
+                    ),
+                    // widget.pondData.activeBool ?? false
+                    //     ? AppGreenGradientButton(
+                    //         "Panen",
+                    //         () {
+                    //           if (!widget.isCanAccessFeature) {
+                    //             AppTopSnackBar(context).showInfo(
+                    //                 "Maaf data sedang\nDiproses atau telah ditolak");
+                    //             return;
+                    //           }
+                    //           Navigator.of(context)
+                    //               .push(AppTransition.pushTransition(
+                    //             ActivityCycleAddHarvestPage(
+                    //               state.onGoingCycleFeedResponseData?.data?[0]
+                    //                       .id ??
+                    //                   "",
+                    //               isFromCycleDetail: false,
+                    //             ),
+                    //             ActivityCycleAddHarvestPage.routeSettings(),
+                    //           ))
+                    //               .then((value) {
+                    //             if (value != null && value == "refresh") {
+                    //               Navigator.of(context).pop("refresh");
+                    //             }
+                    //           });
+                    //         },
+                    //       )
+                    //     : AppPrimaryGradientButton(
+                    //         "Mulai SIklus",
+                    //         () {},
+                    //       ),
                   ],
                 ),
                 const SizedBox(height: 18.0),
@@ -561,7 +667,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 const SizedBox(height: 18.0),
                 AppDividerSmall(),
-                detailItem(
+                detailPakanItem(
                   "Starter",
                   state.onGoingCycleFeedResponseData?.data?.first
                           .fishfoodJsonObject?.starter
@@ -570,7 +676,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                           .join(", ") ??
                       "-",
                 ),
-                detailItem(
+                detailPakanItem(
                   "Grower",
                   state.onGoingCycleFeedResponseData?.data?.first
                           .fishfoodJsonObject?.grower
@@ -580,7 +686,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                       "-",
                 ),
                 AppDividerSmall(),
-                detailItem(
+                detailPakanItem(
                   "Finisher",
                   state.onGoingCycleFeedResponseData?.data?.first
                           .fishfoodJsonObject?.finisher

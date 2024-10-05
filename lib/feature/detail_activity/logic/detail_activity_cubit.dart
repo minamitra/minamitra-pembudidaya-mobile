@@ -17,10 +17,16 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
   final CycleService service;
   final PondService pondService;
 
-  Future<void> init(String pondID) async {
+  Future<void> init(
+    String pondID,
+    String lastPondCycleID,
+  ) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      final response = await service.getOngoingCycle(fishpondID: pondID);
+      final response = await service.getOngoingCycle(
+        fishpondID: pondID,
+        lastPondCycleID: lastPondCycleID,
+      );
       emit(state.copyWith(
         status: GlobalState.loaded,
         onGoingCycleFeedResponseData: response.data,

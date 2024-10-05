@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/buyer_data.dart';
+
 class FeedCycleHistoryResponse {
   List<FeedCycleHistoryResponseData>? data;
 
@@ -41,7 +43,7 @@ class FeedCycleHistoryResponseData {
   String? estimationPanenTonase;
   String? actualPanenTonase;
   String? panenNote;
-  List<dynamic>? panenAttachmentJsonArray;
+  List<String>? panenAttachmentJsonArray;
   String? status;
   DateTime? createDatetime;
   String? createById;
@@ -53,6 +55,7 @@ class FeedCycleHistoryResponseData {
   String? fishpondName;
   String? fishfoodTotalSum;
   FishfoodJsonObject? fishfoodJsonObject;
+  List<BuyerData>? buyerJsonArray;
 
   FeedCycleHistoryResponseData({
     this.id,
@@ -83,6 +86,7 @@ class FeedCycleHistoryResponseData {
     this.fishpondName,
     this.fishfoodTotalSum,
     this.fishfoodJsonObject,
+    this.buyerJsonArray,
   });
 
   factory FeedCycleHistoryResponseData.fromJson(String str) =>
@@ -114,7 +118,7 @@ class FeedCycleHistoryResponseData {
         panenNote: json["panen_note"],
         panenAttachmentJsonArray: json["panen_attachment_json_array"] == null
             ? []
-            : List<dynamic>.from(
+            : List<String>.from(
                 json["panen_attachment_json_array"]!.map((x) => x)),
         status: json["status"],
         createDatetime: json["create_datetime"] == null
@@ -131,6 +135,10 @@ class FeedCycleHistoryResponseData {
         fishfoodJsonObject: json["fishfood_json_object"] == null
             ? null
             : FishfoodJsonObject.fromMap(json["fishfood_json_object"]),
+        buyerJsonArray: json["buyer_json_array"] == null
+            ? []
+            : List<BuyerData>.from(
+                json["buyer_json_array"].map((x) => BuyerData.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {

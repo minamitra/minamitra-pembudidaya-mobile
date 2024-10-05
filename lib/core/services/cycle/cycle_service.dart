@@ -7,18 +7,20 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dar
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_endpoint.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/harvest_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/repositories/ongoing_cycle_feed_response.dart';
 
 abstract class CycleService {
   Future<BaseResponse<OnGoingCycleFeedResponse>> getOngoingCycle({
     String status = "active",
     String? fishpondID,
+    String? lastPondCycleID,
   });
   Future<BaseResponse<FeedCycleHistoryResponse>> getFeedCycleHistory({
     required String pondID,
     String status = "active",
   });
-  Future<BaseResponse<bool>> addHarvest();
+  Future<BaseResponse<bool>> addHarvest({required HarvestBody body});
 }
 
 class CycleServiceImpl implements CycleService {
@@ -44,10 +46,12 @@ class CycleServiceImpl implements CycleService {
   Future<BaseResponse<OnGoingCycleFeedResponse>> getOngoingCycle({
     String status = "active",
     String? fishpondID,
+    String? lastPondCycleID,
   }) async {
     final uri = endpoint.getOngoingCycle(
       status: status,
       fishpondID: fishpondID,
+      lastPondCycleID: lastPondCycleID,
     );
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
@@ -83,10 +87,10 @@ class CycleServiceImpl implements CycleService {
   }
 
   @override
-  Future<BaseResponse<bool>> addHarvest() async {
+  Future<BaseResponse<bool>> addHarvest({required HarvestBody body}) async {
     final uri = endpoint.postHarvest();
     final header = await headerProvider.headers;
-    final response = await httpClient.post(uri, header, jsonEncode({}));
+    final response = await httpClient.post(uri, header, body.toJson());
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }

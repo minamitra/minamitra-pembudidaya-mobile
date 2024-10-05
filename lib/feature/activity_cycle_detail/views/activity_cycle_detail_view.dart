@@ -3,6 +3,8 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/cycle_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
@@ -94,61 +96,100 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
                 ),
           ),
           const SizedBox(height: 24.0),
-          textRow("Tanggal Tebar", "7 September 2024"),
+          textRow(
+              "Tanggal Tebar",
+              AppConvertDateTime()
+                  .dmy(widget.data.tebarDate ?? DateTime.now())),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Jumlah Tebar", "${widget.data.tebarFishTotal} ekor"),
+          textRow(
+            "Jumlah Tebar",
+            "${widget.data.tebarFishTotal} ekor",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Bobot Tebar", "${widget.data.tebarBobot} gram/ekor"),
+          textRow(
+            "Bobot Tebar",
+            "${widget.data.tebarBobot} gram/ekor",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Asal Benih", "Yogyakarta"),
+          textRow(
+            "Asal Benih",
+            widget.data.fishpondName.handlingEmptyString(),
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Target Bobot Panen Tebar",
-              "${widget.data.targetPanenBobot} gram/ekor"),
+          textRow(
+            "Target Bobot Panen Tebar",
+            "${widget.data.targetPanenBobot} gram/ekor",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Survival Rate", "90%"),
+          textRow(
+            "Survival Rate",
+            "${widget.data.srTarget} %",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Pakan Starter", "PF 500, PF 800, NH 632-0.5"),
+          textRow(
+            "Pakan Starter",
+            widget.data.fishfoodJsonObject?.starter
+                    ?.map((element) => element.name ?? "-")
+                    .toList()
+                    .join(", ") ??
+                "-",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Pakan Grower", "NH 835-3, NH 835-3 Hi-Pro 783-3"),
+          textRow(
+            "Pakan Grower",
+            widget.data.fishfoodJsonObject?.grower
+                    ?.map((element) => element.name ?? "-")
+                    .toList()
+                    .join(", ") ??
+                "-",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Pakan Finisher", "NH 835-3, Hi-Pro 783-3, Super Patin"),
+          textRow(
+            "Pakan Finisher",
+            widget.data.fishfoodJsonObject?.finisher
+                    ?.map((element) => element.name ?? "-")
+                    .toList()
+                    .join(", ") ??
+                "-",
+          ),
         ],
       ),
     );
   }
 
+  // ! please make sure API
   Widget fileAttachment() {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -203,13 +244,19 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
                 ),
           ),
           const SizedBox(height: 24.0),
-          textRow("Tanggal Panen", "18 Oktober 2024"),
+          textRow(
+              "Tanggal Panen",
+              AppConvertDateTime().edmy(DateTime.parse(
+                  widget.data.actualPanenDate ?? DateTime.now().toString()))),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow("Total Panen", "100 kg"),
+          textRow(
+            "Total Panen",
+            "${widget.data.actualPanenBobot} kg",
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
@@ -223,7 +270,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           const SizedBox(height: 8.0),
           Text(
-            "Figma ipsum component variant main layer. Export team scrolling comment prototype edit undo. Follower inspect rotate pixel duplicate asset.",
+            widget.data.panenNote ?? "Tidak ada catatan",
             style: appTextTheme(context).bodySmall,
           ),
           Divider(

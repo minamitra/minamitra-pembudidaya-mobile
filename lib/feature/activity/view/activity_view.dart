@@ -210,9 +210,9 @@ class _ActivityViewState extends State<ActivityView> {
       required String title,
       required String value,
       required String percentage,
-      required bool isActive,
       void Function()? onTap,
       required String pondStatus,
+      required String imageAsset,
     }) {
       return InkWell(
         onTap: onTap,
@@ -227,10 +227,15 @@ class _ActivityViewState extends State<ActivityView> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8.0),
                     color: AppColor.primary,
-                    image: const DecorationImage(
-                      image: AssetImage(AppAssets.dymmyActivityImage),
-                      fit: BoxFit.cover,
-                    ),
+                    image: imageAsset.isEmpty
+                        ? const DecorationImage(
+                            image: AssetImage(AppAssets.dymmyActivityImage),
+                            fit: BoxFit.cover,
+                          )
+                        : DecorationImage(
+                            image: NetworkImage(imageAsset),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
                 const SizedBox(width: 18.0),
@@ -240,26 +245,21 @@ class _ActivityViewState extends State<ActivityView> {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            title,
-                            style: appTextTheme(context).titleSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
+                          Flexible(
+                            child: Text(
+                              title,
+                              maxLines: 2,
+                              style: appTextTheme(context).titleSmall?.copyWith(
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
                           ),
                           const SizedBox(width: 12.0),
                           Text(
-                            pondStatus.toLowerCase() != "approved"
-                                ? pondStatus.convertPondStatus()
-                                : isActive
-                                    ? "Aktif"
-                                    : "Non Aktif",
+                            pondStatus.convertPondStatus(),
                             style: appTextTheme(context).labelLarge?.copyWith(
                                   fontWeight: FontWeight.w400,
-                                  color: pondStatus.toLowerCase() != "approved"
-                                      ? pondStatus.convertPondStatusColor()
-                                      : isActive
-                                          ? AppColor.green[400]
-                                          : AppColor.red[500],
+                                  color: pondStatus.convertPondStatusColor(),
                                 ),
                           ),
                         ],
@@ -342,27 +342,34 @@ class _ActivityViewState extends State<ActivityView> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: activityItem(
-                    title: state.pondReponse?.data?[index].name ?? "",
-                    value: state.pondReponse?.data?[index]
-                            .totalFoodRecommendation ??
-                        "-",
-                    percentage:
-                        state.pondReponse?.data?[index].totalFoodActual ?? "-",
-                    isActive:
-                        state.pondReponse?.data?[index].activeBool ?? false,
-                    onTap: () {
-                      Navigator.of(context).push(AppTransition.pushTransition(
-                        DetailActivityPage(
-                          state.pondReponse!.data![index],
-                          isCanAccessFeature: state
-                                  .pondReponse!.data![index].status
-                                  ?.isCanSeeDetail() ??
-                              false,
-                        ),
-                        DetailActivityPage.routeSettings(),
-                      ));
-                    },
-                    pondStatus: state.pondReponse?.data?[index].status ?? ""),
+                  title: state.pondReponse?.data?[index].name ?? "",
+                  value:
+                      state.pondReponse?.data?[index].totalFoodRecommendation ??
+                          "-",
+                  percentage:
+                      state.pondReponse?.data?[index].totalFoodActual ?? "-",
+                  // isActive: state.pondReponse?.data?[index].activeBool ?? false,
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
+                      DetailActivityPage(
+                        state.pondReponse!.data![index],
+                        isCanAccessFeature: state
+                                .pondReponse!.data![index].status
+                                ?.isCanSeeDetail() ??
+                            false,
+                      ),
+                      DetailActivityPage.routeSettings(),
+                    ))
+                        .then((value) {
+                      if (value != null && value == "refresh") {
+                        context.read<ActivityCubit>().init();
+                      }
+                    });
+                  },
+                  pondStatus: state.pondReponse?.data?[index].status ?? "",
+                  imageAsset: state.pondReponse?.data?[index].imageUrl ?? "",
+                ),
               );
             },
           );

@@ -35,7 +35,10 @@ class DetailActivityPage extends StatelessWidget {
       create: (context) => DetailActivityCubit(
         CycleServiceImpl.create(),
         PondServiceImpl.create(),
-      )..init(pondData.id ?? "0"),
+      )..init(
+          pondData.id ?? "0",
+          pondData.lastFishpondcycleId ?? "",
+        ),
       child: BlocBuilder<DetailActivityCubit, DetailActivityState>(
         builder: (context, state) {
           return BlocListener<DetailActivityCubit, DetailActivityState>(

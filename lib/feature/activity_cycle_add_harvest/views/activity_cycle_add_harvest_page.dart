@@ -7,6 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.da
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/views/activity_cycle_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/logics/activity_cycle_add_harvest_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/logics/activity_cycle_picture_cubit.dart';
@@ -14,9 +15,16 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class ActivityCycleAddHarvestPage extends StatelessWidget {
-  const ActivityCycleAddHarvestPage(this.id, {super.key});
+  const ActivityCycleAddHarvestPage(
+    this.id, {
+    this.isFromCycleDetail = true,
+    this.data,
+    super.key,
+  });
 
   final String id;
+  final bool isFromCycleDetail;
+  final FeedCycleHistoryResponseData? data;
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: "/activity-cycle-add-harvest");
@@ -29,12 +37,13 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
       providers: [
         BlocProvider<ActivityCyclePictureCubit>(
           create: (BuildContext context) =>
-              ActivityCyclePictureCubit(CdnServiceImpl.create()),
+              ActivityCyclePictureCubit(CdnServiceImpl.create())
+                ..initImage(image: data?.panenAttachmentJsonArray),
         ),
         BlocProvider<ActivityCycleAddHarvestCubit>(
-            create: (BuildContext context) =>
-                ActivityCycleAddHarvestCubit(CycleServiceImpl.create())
-                  ..init()),
+            create: (BuildContext context) => ActivityCycleAddHarvestCubit(
+                  CycleServiceImpl.create(),
+                )..init(data: data)),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -62,9 +71,13 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
                 //! please correct the route
                 AppTopSnackBar(context)
                     .showSuccess("Berhasil menambahkan panen");
-                Navigator.of(context).popUntil(ModalRoute.withName(
-                    ActivityCyclePage.routeSettings().name ?? ""));
-                Navigator.of(context).pop();
+                if (isFromCycleDetail) {
+                  Navigator.of(context).popUntil(ModalRoute.withName(
+                      ActivityCyclePage.routeSettings().name ?? ""));
+                } else {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop("refresh");
+                }
               }
             },
           ),
@@ -95,7 +108,10 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
             "Panen",
           ),
           backgroundColor: Colors.white,
-          body: ActivityCycleAddHarvestView(id),
+          body: ActivityCycleAddHarvestView(
+            id,
+            data: data,
+          ),
         ),
       ),
     );
