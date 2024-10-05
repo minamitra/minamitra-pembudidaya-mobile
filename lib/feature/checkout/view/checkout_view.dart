@@ -2,43 +2,64 @@ import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/adress_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/method_payment_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/views/transaction_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class CheckoutView extends StatefulWidget {
-  const CheckoutView({super.key});
+  final ProductsResponseData data;
+
+  const CheckoutView(this.data, {super.key});
 
   @override
   State<CheckoutView> createState() => _CheckoutViewState();
 }
 
 class _CheckoutViewState extends State<CheckoutView> {
-  int? selectedPaymentMethod;
-  int? selectedAddress;
+  final TextEditingController noteController = TextEditingController();
+  MethodPaymentData? selectedPaymentMethod;
+  MethodPaymentData? tempSelectedPaymentMethod;
+  Address? selectedAddress;
+  Address? tempSelectedAddress;
+  List<ProductsResponseData> listProduct = [];
+  List<int> listAmountItem = [];
+
+  @override
+  void initState() {
+    super.initState();
+    listProduct.add(widget.data);
+    listAmountItem.add(1);
+  }
 
   @override
   Widget build(BuildContext context) {
     Widget addressItem(
-        int index, void Function(void Function()) setModalState) {
+      int index,
+      void Function(void Function()) setModalState,
+    ) {
       return InkWell(
         onTap: () {
           setModalState(() {
-            selectedAddress = index;
+            tempSelectedAddress = listAddress[index];
           });
         },
         child: Row(
           children: [
-            Radio<int>(
-              value: index,
-              groupValue: selectedAddress,
-              onChanged: (int? value) {
+            Radio<Address>(
+              value: listAddress[index],
+              groupValue: tempSelectedAddress,
+              onChanged: (Address? value) {
                 setModalState(() {
-                  selectedAddress = value;
+                  tempSelectedAddress = value;
                 });
               },
             ),
@@ -109,7 +130,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             return StatefulBuilder(
               builder: (stateContext, setModalState) {
                 return AppBottomSheet(
-                  "Metode Pembayaran",
+                  "Alamat Pengiriman",
                   height: MediaQuery.of(context).size.height * 0.7,
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -143,7 +164,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                               ),
                               child: AppPrimaryFullButton(
                                 "Simpan",
-                                () {},
+                                () {
+                                  if (tempSelectedAddress != null) {
+                                    setState(() {
+                                      selectedAddress = tempSelectedAddress;
+                                    });
+                                    Navigator.of(context).pop();
+                                  }
+                                },
                                 height: 56,
                               ),
                             ),
@@ -204,14 +232,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            "Rumah 1",
+                            selectedAddress?.title ?? "Alamat Pengiriman",
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            "806 George Isle, Port Andreaneworth 22495-6645",
+                            selectedAddress?.address ?? "-",
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   color: AppColor.neutral[500],
                                 ),
@@ -230,7 +258,7 @@ class _CheckoutViewState extends State<CheckoutView> {
       );
     }
 
-    Column productItem() {
+    Column productItem(ProductsResponseData data, int index) {
       return Column(
         children: [
           Row(
@@ -239,10 +267,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                 flex: 1,
                 child: AspectRatio(
                   aspectRatio: 1.0,
-                  child: Image.asset(
-                    AppAssets.product1Image,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: AppNetworkImage(
+                      data.imageUrl ?? "",
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
@@ -254,7 +286,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Pakan Siap Cetak (PSC) Mina Mitra Mandirin",
+                      data.name ?? "-",
                       style: appTextTheme(context)
                           .bodySmall
                           ?.copyWith(fontWeight: FontWeight.w700),
@@ -263,14 +295,16 @@ class _CheckoutViewState extends State<CheckoutView> {
                     ),
                     const SizedBox(height: 6.0),
                     Text(
-                      "Pakan Ikan",
+                      data.categoryName ?? "-",
                       style: appTextTheme(context)
                           .bodySmall
                           ?.copyWith(color: AppColor.neutral[400]),
                     ),
                     const SizedBox(height: 18.0),
                     Text(
-                      "Rp 190.000",
+                      data.sellPrice != null
+                          ? appConvertCurrency(double.parse(data.sellPrice!))
+                          : "-",
                       style: appTextTheme(context)
                           .bodySmall
                           ?.copyWith(fontWeight: FontWeight.w500),
@@ -283,27 +317,53 @@ class _CheckoutViewState extends State<CheckoutView> {
           const SizedBox(height: 10.0),
           Row(
             children: [
-              Image.asset(
-                AppAssets.trashIcon,
-                width: 24,
-                color: AppColor.red,
-              ),
+              index != 0 || listProduct.length > 1
+                  ? InkWell(
+                      onTap: () {
+                        setState(() {
+                          listProduct.removeAt(index);
+                          listAmountItem.removeAt(index);
+                        });
+                      },
+                      child: Image.asset(
+                        AppAssets.trashIcon,
+                        width: 24,
+                        color: AppColor.red,
+                      ),
+                    )
+                  : const SizedBox(),
               const Spacer(),
-              Icon(
-                Icons.remove_circle_outline_rounded,
-                color: AppColor.primary[600],
+              InkWell(
+                onTap: () {
+                  if (listAmountItem[index] > 1) {
+                    setState(() {
+                      listAmountItem[index]--;
+                    });
+                  }
+                },
+                child: Icon(
+                  Icons.remove_circle_outline_rounded,
+                  color: AppColor.primary[600],
+                ),
               ),
               const SizedBox(width: 8.0),
               Text(
-                "1",
+                listAmountItem[index].toString(),
                 style: appTextTheme(context)
                     .bodySmall
                     ?.copyWith(fontWeight: FontWeight.w700),
               ),
               const SizedBox(width: 8.0),
-              Icon(
-                Icons.add_circle_outline_rounded,
-                color: AppColor.primary[600],
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    listAmountItem[index]++;
+                  });
+                },
+                child: Icon(
+                  Icons.add_circle_outline_rounded,
+                  color: AppColor.primary[600],
+                ),
               )
             ],
           ),
@@ -328,7 +388,19 @@ class _CheckoutViewState extends State<CheckoutView> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context)
+                        .push(AppTransition.pushTransition(
+                      const ProductsPage(isPick: true),
+                      ProductsPage.routeSettings(),
+                    ))
+                        .then((value) {
+                      setState(() {
+                        listProduct.add(value as ProductsResponseData);
+                        listAmountItem.add(1);
+                      });
+                    });
+                  },
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 12.0,
@@ -359,15 +431,15 @@ class _CheckoutViewState extends State<CheckoutView> {
             ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: 2,
+              itemCount: listProduct.length,
               separatorBuilder: (context, index) => const Padding(
                 padding: EdgeInsets.symmetric(vertical: 18.0),
                 child: AppDottedLine(),
               ),
               itemBuilder: (context, index) {
-                return productItem();
+                return productItem(listProduct[index], index);
               },
-            )
+            ),
           ],
         ),
       );
@@ -460,110 +532,139 @@ class _CheckoutViewState extends State<CheckoutView> {
       );
     }
 
+    Widget paymentItem(
+      MethodPaymentData data,
+      void Function(void Function()) setModalState,
+    ) {
+      return InkWell(
+        onTap: () {
+          setModalState(() {
+            tempSelectedPaymentMethod = data;
+          });
+        },
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColor.primary[50],
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Image.asset(
+                data.icon,
+                width: 24,
+                height: 24,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    data.name,
+                    textAlign: TextAlign.start,
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColor.black,
+                        ),
+                  ),
+                  Text(
+                    data.description,
+                    textAlign: TextAlign.start,
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          fontWeight: FontWeight.w400,
+                          color: AppColor.black[400],
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            Radio<MethodPaymentData>(
+              value: data,
+              groupValue: tempSelectedPaymentMethod,
+              onChanged: (value) {
+                setModalState(() {
+                  tempSelectedPaymentMethod = value;
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     Function() paymentShowModal(BuildContext context) {
       return () {
         showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           builder: (modalContext) {
             return StatefulBuilder(
               builder: (stateContext, setModalState) {
                 return AppBottomSheet(
                   "Metode Pembayaran",
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  Padding(
+                  height: MediaQuery.of(context).size.height * 0.7,
+                  ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Rekomendasi',
-                          textAlign: TextAlign.start,
-                          style: appTextTheme(context).titleMedium?.copyWith(
-                                fontWeight: FontWeight.w700,
-                                color: AppColor.black,
-                              ),
-                        ),
-                        const SizedBox(height: 16),
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemCount: listMethodPayment.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 16),
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                setModalState(() {
-                                  selectedPaymentMethod = index;
-                                });
-                              },
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                      color: AppColor.primary[50],
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    child: Image.asset(
-                                      listMethodPayment[index].icon,
-                                      width: 24,
-                                      height: 24,
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          listMethodPayment[index].name,
-                                          textAlign: TextAlign.start,
-                                          style: appTextTheme(context)
-                                              .bodySmall
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w600,
-                                                color: AppColor.black,
-                                              ),
-                                        ),
-                                        Text(
-                                          listMethodPayment[index].description,
-                                          textAlign: TextAlign.start,
-                                          style: appTextTheme(context)
-                                              .bodySmall
-                                              ?.copyWith(
-                                                fontWeight: FontWeight.w400,
-                                                color: AppColor.black[400],
-                                              ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Radio<int>(
-                                    value: index,
-                                    groupValue: selectedPaymentMethod,
-                                    onChanged: (int? value) {
-                                      setModalState(() {
-                                        selectedPaymentMethod = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        const Spacer(),
-                        AppPrimaryFullButton(
-                          "Konfirmasi",
-                          () {},
-                          height: 56,
-                        ),
-                        const SizedBox(height: 16),
-                      ],
-                    ),
+                    children: [
+                      Text(
+                        'Rekomendasi',
+                        textAlign: TextAlign.start,
+                        style: appTextTheme(context).titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColor.black,
+                            ),
+                      ),
+                      const SizedBox(height: 16),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: listMethodPayment.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
+                        itemBuilder: (context, index) {
+                          return paymentItem(
+                              listMethodPayment[index], setModalState);
+                        },
+                      ),
+                      const SizedBox(height: 24),
+                      Text(
+                        'Transfer Bank',
+                        textAlign: TextAlign.start,
+                        style: appTextTheme(context).titleMedium?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColor.black,
+                            ),
+                      ),
+                      const SizedBox(height: 16),
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: listMethodBank.length,
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 16),
+                        itemBuilder: (context, index) {
+                          return paymentItem(
+                              listMethodBank[index], setModalState);
+                        },
+                      ),
+                      const SizedBox(height: 36),
+                      AppPrimaryFullButton(
+                        "Konfirmasi",
+                        () {
+                          if (tempSelectedPaymentMethod != null) {
+                            setState(() {
+                              selectedPaymentMethod = tempSelectedPaymentMethod;
+                            });
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        height: 56,
+                      ),
+                      const SizedBox(height: 16),
+                    ],
                   ),
                 );
               },
@@ -601,16 +702,12 @@ class _CheckoutViewState extends State<CheckoutView> {
               const SizedBox(height: 16.0),
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: AppColor.primary[50],
-                      borderRadius: BorderRadius.circular(4),
-                    ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
                     child: Image.asset(
-                      AppAssets.walletIcon,
-                      width: 24,
-                      height: 24,
+                      selectedPaymentMethod?.icon ?? AppAssets.walletSquareIcon,
+                      width: 40,
+                      height: 40,
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -620,7 +717,8 @@ class _CheckoutViewState extends State<CheckoutView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Plafon",
+                          selectedPaymentMethod?.name ??
+                              "Pilih Metode Pembayaran",
                           textAlign: TextAlign.start,
                           style: appTextTheme(context).bodySmall?.copyWith(
                                 fontWeight: FontWeight.w600,
@@ -628,7 +726,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                               ),
                         ),
                         Text(
-                          "Bayar menggunakan plafon",
+                          selectedPaymentMethod?.description ?? "-",
                           textAlign: TextAlign.start,
                           style: appTextTheme(context).bodySmall?.copyWith(
                                 fontWeight: FontWeight.w400,
@@ -686,8 +784,19 @@ class _CheckoutViewState extends State<CheckoutView> {
               child: AppPrimaryFullButton(
                 "Buat Pesanan",
                 () {
+                  if (selectedAddress == null ||
+                      selectedPaymentMethod == null) {
+                    AppTopSnackBar(context).showDanger(
+                        "Pilih alamat dan metode pembayaran terlebih dahulu");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const TransactionDetailPage(),
+                    TransactionDetailPage(
+                      listProduct,
+                      listAmountItem,
+                      selectedAddress!,
+                      selectedPaymentMethod!,
+                    ),
                     TransactionDetailPage.routeSettings(),
                   ));
                 },
