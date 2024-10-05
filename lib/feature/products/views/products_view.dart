@@ -15,7 +15,9 @@ import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/produ
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ProductsView extends StatefulWidget {
-  const ProductsView({super.key});
+  final bool isPick;
+
+  const ProductsView(this.isPick, {super.key});
 
   @override
   State<ProductsView> createState() => _ProductsViewState();
@@ -165,10 +167,14 @@ class _ProductsViewState extends State<ProductsView> {
     Widget itemProduct(ProductsResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            ProductDetailPage(data),
-            ProductDetailPage.routeSettings(),
-          ));
+          if (widget.isPick) {
+            Navigator.of(context).pop(data);
+          } else {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              ProductDetailPage(data),
+              ProductDetailPage.routeSettings(),
+            ));
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(4.0),
