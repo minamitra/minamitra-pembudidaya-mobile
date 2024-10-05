@@ -118,6 +118,8 @@ class AppAssets {
   static const String starSingleIcon = "$iconPath/star-single-icon.png";
   static const String dummyPerson1Image = "$imagePath/dummy-person-1-image.png";
   static const String dummyPerson2Image = "$imagePath/dummy-person-2-image.png";
+  static const String walletSquareIcon = "$iconPath/wallet-square-icon.png";
+  static const String cashSquareIcon = "$iconPath/cash-square-icon.png";
 
   // add bulk feed
   static const String handStarsIcon = "$iconPath/hand-stars-icon.png";
