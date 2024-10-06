@@ -456,28 +456,24 @@ class _ProfileViewState extends State<ProfileView> {
                   title: "Keluar",
                   subTitle: "Yakin ingin keluar?",
                   buttons: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: AppWhiteButton(
-                            "Batal",
-                            () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 8.0),
-                        Expanded(
-                          child: AppPrimaryButton(
-                            "Keluar",
-                            () {
-                              RepositoryProvider.of<AuthenticationRepository>(
-                                      context)
-                                  .logout();
-                            },
-                          ),
-                        ),
-                      ],
+                    Expanded(
+                      child: AppWhiteButton(
+                        "Batal",
+                        () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 8.0),
+                    Expanded(
+                      child: AppPrimaryButton(
+                        "Keluar",
+                        () {
+                          RepositoryProvider.of<AuthenticationRepository>(
+                                  context)
+                              .logout();
+                        },
+                      ),
                     ),
                   ],
                 );

@@ -90,7 +90,8 @@ class _FeedingViewState extends State<FeedingView> {
                 children: [
                   Image.asset(AppAssets.weigherIconFill, height: 20.0),
                   const SizedBox(width: 12.0),
-                  Text("${data.actual} gram",
+                  Text(
+                      "${double.parse(data.actual ?? "0").toStringAsFixed(0)} gram",
                       style: appTextTheme(context).titleSmall),
                 ],
               ),

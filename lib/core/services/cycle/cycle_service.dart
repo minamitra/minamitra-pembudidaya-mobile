@@ -21,6 +21,7 @@ abstract class CycleService {
     String status = "active",
   });
   Future<BaseResponse<bool>> addHarvest({required HarvestBody body});
+  Future<BaseResponse<bool>> updateHarvestDone({required String id});
 }
 
 class CycleServiceImpl implements CycleService {
@@ -91,6 +92,24 @@ class CycleServiceImpl implements CycleService {
     final uri = endpoint.postHarvest();
     final header = await headerProvider.headers;
     final response = await httpClient.post(uri, header, body.toJson());
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> updateHarvestDone({required String id}) async {
+    final uri = endpoint.updateHarvestDone();
+    final header = await headerProvider.headers;
+    final response = await httpClient.post(
+      uri,
+      header,
+      json.encode(
+        {
+          "id": id,
+          "status": "done",
+        },
+      ),
+    );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
   }

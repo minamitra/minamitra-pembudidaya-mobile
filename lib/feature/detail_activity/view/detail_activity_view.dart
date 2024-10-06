@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,6 +17,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/a
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/views/activity_cycle_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/views/activity_cycle_add_harvest_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/views/activity_incident_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/logic/detail_activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/view/monitoring_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -414,8 +417,12 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 Expanded(
                     child: headerInformationsItem(
-                  state.onGoingCycleFeedResponseData?.data?[0].tebarFishTotal ??
-                      "-",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?[0]
+                              .tebarFishTotal ??
+                          "-",
                   "Jumlah Ikan",
                 )),
                 SizedBox(
@@ -424,7 +431,10 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 Expanded(
                     child: headerInformationsItem(
-                  "${state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum.handlingEmptyString()} Kg",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : "${(double.parse(state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(3)} Kg",
                   "Total Pakan",
                 )),
               ],
@@ -538,7 +548,22 @@ class _DetailActivityViewState extends State<DetailActivityView> {
           case "done":
             return AppPrimaryGradientButton(
               "Mulai Siklus",
-              () {},
+              () {
+                log("pond id ${widget.pondData.id}");
+                Navigator.of(context)
+                    .push(AppTransition.pushTransition(
+                  AddPondPage(
+                    behaviourPage: BehaviourPage.addNewCycle,
+                    pondID: widget.pondData.id,
+                  ),
+                  AddPondPage.routeSettings(),
+                ))
+                    .then((value) {
+                  if (value != null && value == "refresh") {
+                    Navigator.of(context).pop("refresh");
+                  }
+                });
+              },
             );
           default:
             return const SizedBox();
@@ -604,42 +629,60 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 const SizedBox(height: 18.0),
                 detailItem(
                   "Tanggal Tebar",
-                  AppConvertDateTime().dmyName(
-                      state.onGoingCycleFeedResponseData!.data![0].tebarDate!),
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : AppConvertDateTime().dmyName(state
+                          .onGoingCycleFeedResponseData!.data![0].tebarDate!),
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Ukuran Tebar",
-                  "${state.onGoingCycleFeedResponseData!.data!.first.tebarBobot} gr/ekor",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : "${state.onGoingCycleFeedResponseData!.data!.first.tebarBobot} gr/ekor",
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Asal Benih",
-                  state.onGoingCycleFeedResponseData!.data!.first
-                          .fishseedName ??
-                      "-",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData!.data!.first
+                              .fishseedName ??
+                          "-",
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Target Bobot Panen",
-                  "${state.onGoingCycleFeedResponseData!.data!.first.targetPanenBobot} gr/ekor",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : "${double.parse(state.onGoingCycleFeedResponseData!.data!.first.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(0)} gr/ekor",
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Estimasi Perkiraan Waktu Panen",
-                  AppConvertDateTime().dmyName(state
-                          .onGoingCycleFeedResponseData!
-                          .data!
-                          .first
-                          .estimationPanenDate ??
-                      DateTime.now()),
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : AppConvertDateTime().dmyName(state
+                              .onGoingCycleFeedResponseData!
+                              .data!
+                              .first
+                              .estimationPanenDate ??
+                          DateTime.now()),
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Estimasi Perkiraan Tonase Panen",
-                  state.onGoingCycleFeedResponseData!.data!.first
-                          .estimationPanenTonase ??
-                      "-",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData!.data!.first
+                              .estimationPanenTonase ??
+                          "-",
                 ),
                 const SizedBox(height: 36.0),
               ],
@@ -669,31 +712,40 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppDividerSmall(),
                 detailPakanItem(
                   "Starter",
-                  state.onGoingCycleFeedResponseData?.data?.first
-                          .fishfoodJsonObject?.starter
-                          ?.map((element) => element.name)
-                          .toList()
-                          .join(", ") ??
-                      "-",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.starter
+                              ?.map((element) => element.name)
+                              .toList()
+                              .join(", ") ??
+                          "-",
                 ),
                 detailPakanItem(
                   "Grower",
-                  state.onGoingCycleFeedResponseData?.data?.first
-                          .fishfoodJsonObject?.grower
-                          ?.map((element) => element.name)
-                          .toList()
-                          .join(", ") ??
-                      "-",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.grower
+                              ?.map((element) => element.name)
+                              .toList()
+                              .join(", ") ??
+                          "-",
                 ),
                 AppDividerSmall(),
                 detailPakanItem(
                   "Finisher",
-                  state.onGoingCycleFeedResponseData?.data?.first
-                          .fishfoodJsonObject?.finisher
-                          ?.map((element) => element.name)
-                          .toList()
-                          .join(", ") ??
-                      "-",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.finisher
+                              ?.map((element) => element.name)
+                              .toList()
+                              .join(", ") ??
+                          "-",
                 ),
                 const SizedBox(height: 36.0),
               ],

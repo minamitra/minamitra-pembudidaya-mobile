@@ -165,6 +165,8 @@ Future showDeleteBottomSheet(
   required String title,
   required String descriptions,
   required Function() onTapDelete,
+  IconData? icon,
+  String? buttonTitle,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -182,7 +184,7 @@ Future showDeleteBottomSheet(
                   color: AppColor.red[50],
                 ),
                 child: Icon(
-                  Icons.delete_outline_rounded,
+                  icon ?? Icons.delete_outline_rounded,
                   color: AppColor.red[500],
                 ),
               ),
@@ -197,7 +199,11 @@ Future showDeleteBottomSheet(
               const SizedBox(height: 24.0),
               AppDividerSmall(),
               const SizedBox(height: 18.0),
-              AppDangerFullButton(context, "Ya Hapus Permanen", onTapDelete),
+              AppDangerFullButton(
+                context,
+                buttonTitle ?? "Ya Hapus Permanen",
+                onTapDelete,
+              ),
               const SizedBox(height: 18.0),
               AppWhiteFullButton(
                 "Batalkan",

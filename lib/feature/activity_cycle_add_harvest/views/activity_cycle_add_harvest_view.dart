@@ -7,6 +7,7 @@ import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
@@ -490,7 +491,7 @@ class _ActivityCycleAddHarvestViewState
           fileAttachment(),
           const SizedBox(height: 24.0),
           listBuyer(),
-          const SizedBox(height: 98.0),
+          const SizedBox(height: 180.0),
         ],
       ),
     );
@@ -508,23 +509,54 @@ class _ActivityCycleAddHarvestViewState
           ),
         ),
       ),
-      child: AppPrimaryFullButton(
-        "Simpan",
-        () {
-          if (formKey.currentState!.validate()) {
-            context.read<ActivityCycleAddHarvestCubit>().createHarvest(
-                  id: widget.id,
-                  harvestDate: harvestDate!,
-                  harvestFishWeight: int.parse(sizeController.text),
-                  totalHarvestActual: int.parse(totalController.text),
-                  harvestNotes: noteController.text,
-                  images:
-                      context.read<ActivityCyclePictureCubit>().state.images ??
-                          [],
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppPrimaryOutlineFullButton(
+            "Selesaikan Panen",
+            () {
+              if (formKey.currentState!.validate()) {
+                showDeleteBottomSheet(
+                  context,
+                  title: "Selesaikan Panen",
+                  descriptions:
+                      "Dengan menyelesaikan panen, maka panen ini akan"
+                      " dianggap selesai dan tidak dapat diubah lagi.",
+                  onTapDelete: () {
+                    Navigator.of(context).pop();
+                    context
+                        .read<ActivityCycleAddHarvestCubit>()
+                        .doneHarvest(widget.data?.id ?? "");
+                  },
+                  icon: Icons.info_outline,
+                  buttonTitle: "Selesaikan Panen",
                 );
-            return;
-          }
-        },
+                return;
+              }
+            },
+          ),
+          const SizedBox(height: 16.0),
+          AppPrimaryFullButton(
+            "Simpan",
+            () {
+              if (formKey.currentState!.validate()) {
+                context.read<ActivityCycleAddHarvestCubit>().createHarvest(
+                      id: widget.id,
+                      harvestDate: harvestDate!,
+                      harvestFishWeight: int.parse(sizeController.text),
+                      totalHarvestActual: int.parse(totalController.text),
+                      harvestNotes: noteController.text,
+                      images: context
+                              .read<ActivityCyclePictureCubit>()
+                              .state
+                              .images ??
+                          [],
+                    );
+                return;
+              }
+            },
+          ),
+        ],
       ),
     );
   }

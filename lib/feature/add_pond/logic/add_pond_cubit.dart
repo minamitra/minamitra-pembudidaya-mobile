@@ -70,4 +70,29 @@ class AddPondCubit extends Cubit<AddPondState> {
       ));
     }
   }
+
+  Future<void> addNewCycle({
+    required String pondID,
+    required AddPondCyclePayload pondCyclePayload,
+  }) async {
+    emit(state.copyWith(status: GlobalState.showDialogLoading));
+    try {
+      pondCyclePayload.fishpondId = int.parse(pondID);
+      await pondService.addPondCycle(pondCyclePayload);
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(status: GlobalState.successSubmit));
+    } on AppException catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
 }
