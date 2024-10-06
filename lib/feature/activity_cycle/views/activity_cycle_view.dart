@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/logic/activity_cycle_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/cycle_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/views/activity_cycle_add_harvest_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_detail/views/activity_cycle_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -142,6 +143,17 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
           });
         } else {
           // Navigate to edit panen
+          Navigator.of(context)
+              .push(AppTransition.pushTransition(
+            ActivityCycleAddHarvestPage(
+              data.id ?? "",
+              data: data,
+            ),
+            ActivityCycleAddHarvestPage.routeSettings(),
+          ))
+              .then((value) {
+            context.read<ActivityCycleCubit>().init(widget.pondID);
+          });
         }
       },
       child: AppDefaultCard(

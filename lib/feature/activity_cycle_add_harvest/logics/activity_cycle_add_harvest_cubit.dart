@@ -4,17 +4,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/buyer_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/harvest_body.dart';
 
 part 'activity_cycle_add_harvest_state.dart';
 
 class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
-  ActivityCycleAddHarvestCubit(this.service)
-      : super(const ActivityCycleAddHarvestState());
+  ActivityCycleAddHarvestCubit(
+    this.service,
+  ) : super(const ActivityCycleAddHarvestState());
 
   final CycleService service;
 
-  void init() {
+  void init({FeedCycleHistoryResponseData? data}) {
     emit(state.copyWith(status: GlobalState.loading));
     final BuyerData initData = BuyerData(
       isBuyerFrom3m: false,
@@ -30,7 +33,7 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     );
     emit(state.copyWith(
       status: GlobalState.loaded,
-      buyerData: [initData],
+      buyerData: data != null ? data.buyerJsonArray : [initData],
     ));
   }
 
@@ -96,10 +99,46 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     required String harvestNotes,
     required List<String> images,
   }) async {
+    // Validate every data
+    for (var element in state.buyerData) {
+      if (element.buyerName.isEmpty) {
+        emit(state.copyWith(
+          status: GlobalState.error,
+          errorMessage: "Nama pembeli tidak boleh kosong",
+        ));
+        return;
+      }
+
+      if (element.sellRequest == 0) {
+        emit(state.copyWith(
+          status: GlobalState.error,
+          errorMessage: "Jumlah permintaan tidak boleh kosong",
+        ));
+        return;
+      }
+
+      if (element.sellUnitPrice == 0) {
+        emit(state.copyWith(
+          status: GlobalState.error,
+          errorMessage: "Harga satuan tidak boleh kosong",
+        ));
+        return;
+      }
+    }
+
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
+      HarvestBody body = HarvestBody(
+        id: int.parse(id),
+        actualPanenDate: harvestDate.toIso8601String(),
+        actualPanenBobot: harvestFishWeight.toDouble(),
+        actualPanenTonase: totalHarvestActual.toDouble(),
+        panenNote: harvestNotes,
+        panenAttachmentJsonArray: images,
+        buyerJsonArray: state.buyerData,
+      );
+      await service.addHarvest(body: body);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      await service.addHarvest();
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));

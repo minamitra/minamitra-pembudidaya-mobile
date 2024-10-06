@@ -17,8 +17,19 @@ import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_thi
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
+enum BehaviourPage {
+  editPond,
+  addNewCycle,
+  addNewPond,
+}
+
 class AddPondPage extends StatelessWidget {
-  const AddPondPage({super.key});
+  const AddPondPage({
+    this.behaviourPage = BehaviourPage.addNewPond,
+    super.key,
+  });
+
+  final BehaviourPage behaviourPage;
 
   static RouteSettings routeSettings() {
     return const RouteSettings(name: '/add-pond-first-step-page');

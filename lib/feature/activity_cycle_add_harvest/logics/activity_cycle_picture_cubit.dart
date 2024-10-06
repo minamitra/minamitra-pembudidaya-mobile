@@ -6,10 +6,19 @@ import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart'
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 
 class ActivityCyclePictureCubit extends Cubit<ActivityCyclePictureState> {
-  ActivityCyclePictureCubit(this.cdnService)
-      : super(ActivityCyclePictureState());
+  ActivityCyclePictureCubit(
+    this.cdnService,
+  ) : super(ActivityCyclePictureState());
 
   final CdnService cdnService;
+
+  void initImage({List<String>? image}) {
+    emit(state.copyWith(status: GlobalState.onUpdating));
+    emit(state.copyWith(
+      status: GlobalState.loaded,
+      images: image != null ? [...image] : [],
+    ));
+  }
 
   Future<void> setImage(File image) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));

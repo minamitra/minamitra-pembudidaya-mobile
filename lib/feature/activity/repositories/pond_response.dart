@@ -49,7 +49,7 @@ class PondResponseData {
   String? addressSubdistrictName;
   String? addressVillageId;
   String? addressVillageName;
-  bool? activeBool;
+  // bool? activeBool;
   String? imageUrl;
   String? status;
   DateTime? statusDatetime;
@@ -78,6 +78,7 @@ class PondResponseData {
   String? lastFishpondcycleStatus;
   String? totalFoodActual;
   String? totalFoodRecommendation;
+  String? lastFishpondcycleId;
 
   PondResponseData({
     this.id,
@@ -97,7 +98,7 @@ class PondResponseData {
     this.addressSubdistrictName,
     this.addressVillageId,
     this.addressVillageName,
-    this.activeBool,
+    // this.activeBool,
     this.imageUrl,
     this.status,
     this.statusDatetime,
@@ -126,6 +127,7 @@ class PondResponseData {
     this.lastFishpondcycleStatus,
     this.totalFoodActual,
     this.totalFoodRecommendation,
+    this.lastFishpondcycleId,
   });
 
   factory PondResponseData.fromJson(String str) =>
@@ -152,7 +154,7 @@ class PondResponseData {
         addressSubdistrictName: json["address_subdistrict_name"],
         addressVillageId: json["address_village_id"],
         addressVillageName: json["address_village_name"],
-        activeBool: json["active_bool"],
+        // activeBool: json["active_bool"],
         imageUrl: json["image_url"],
         status: json["status"],
         statusDatetime: json["status_datetime"] == null
@@ -188,6 +190,7 @@ class PondResponseData {
         lastFishpondcycleStatus: json["last_fishpondcycle_status"],
         totalFoodActual: json["total_food_actual"],
         totalFoodRecommendation: json["total_food_recommendation"],
+        lastFishpondcycleId: json["last_fishpondcycle_id"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -208,7 +211,7 @@ class PondResponseData {
         "address_subdistrict_name": addressSubdistrictName,
         "address_village_id": addressVillageId,
         "address_village_name": addressVillageName,
-        "active_bool": activeBool,
+        // "active_bool": activeBool,
         "image_url": imageUrl,
         "status": status,
         "status_datetime": statusDatetime?.toIso8601String(),

@@ -7,12 +7,14 @@ class CycleEndpoint {
   Uri getOngoingCycle({
     String status = "active",
     String? fishpondID,
+    String? lastPondCycleID,
   }) {
     return createUrl(
       path: "mitra/fishpondcycle/data",
       queryParameters: {
         // "status": status,
         if (fishpondID != null) "fishpond_id": fishpondID,
+        if (lastPondCycleID != null) "id": lastPondCycleID,
       },
     );
   }

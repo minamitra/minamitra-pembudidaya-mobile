@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/add_pond_cycle_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_finisher_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_grower_response.dart';
@@ -679,6 +680,16 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                             duration: const Duration(milliseconds: 300),
                             curve: Curves.easeInOut,
                           );
+                          final int? survivalRaate = int.tryParse(
+                              addPondThirdStepCubit
+                                  .survivalRateController.text);
+                          if (survivalRaate == null ||
+                              survivalRaate < 0 ||
+                              survivalRaate > 100) {
+                            AppTopSnackBar(context).showDanger(
+                                "Survival Rate harus\nangka antara 0 - 100");
+                            return;
+                          }
 
                           // Mapping data
 
@@ -745,7 +756,8 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                       .state.selectedVillage?.id,
                                   addressVillageName: addPondSecondStepCubit
                                       .state.selectedVillage?.name,
-                                  imageUrl: "",
+                                  imageUrl:
+                                      addPondSecondStepCubit.state.urlImage,
                                 ),
                                 pondCyclePayload: AddPondCyclePayload(
                                   tebarDate:

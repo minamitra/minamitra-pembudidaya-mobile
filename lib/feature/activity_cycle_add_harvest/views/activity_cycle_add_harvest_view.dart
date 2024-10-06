@@ -17,14 +17,16 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/logics/activity_cycle_add_harvest_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/logics/activity_cycle_picture_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityCycleAddHarvestView extends StatefulWidget {
-  const ActivityCycleAddHarvestView(this.id, {super.key});
+  const ActivityCycleAddHarvestView(this.id, {this.data, super.key});
 
   final String id;
+  final FeedCycleHistoryResponseData? data;
 
   @override
   State<ActivityCycleAddHarvestView> createState() =>
@@ -45,6 +47,22 @@ class _ActivityCycleAddHarvestViewState
   DateTime? harvestDate;
 
   List<String> listBuyerType = ['Mitra3M', 'Lainnya'];
+
+  @override
+  void initState() {
+    log("data: ${widget.data}");
+    super.initState();
+    if (widget.data != null) {
+      dateController.text = AppConvertDateTime().dmyName(DateTime.parse(
+          widget.data?.actualPanenDate ?? DateTime.now().toString()));
+      sizeController.text =
+          double.parse(widget.data!.actualPanenBobot ?? "0").toStringAsFixed(0);
+      totalController.text = double.parse(widget.data!.actualPanenTonase ?? "0")
+          .toStringAsFixed(0);
+      noteController.text = widget.data!.panenNote!;
+      harvestDate = DateTime.parse(widget.data!.actualPanenDate!);
+    }
+  }
 
   AppValidatorTextField dateTextField(BuildContext context) {
     return AppValidatorTextField(
@@ -506,7 +524,6 @@ class _ActivityCycleAddHarvestViewState
                 );
             return;
           }
-          // Navigator.of(context).pop();
         },
       ),
     );
