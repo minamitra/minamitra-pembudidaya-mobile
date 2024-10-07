@@ -5,8 +5,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/adress_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/method_payment_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/transaction_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/transaction_dummy_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/views/transaction_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -22,6 +24,7 @@ class TransactionCard extends StatefulWidget {
 
 class _TransactionCardState extends State<TransactionCard> {
   int? selectedPaymentMethod;
+  int? selectedPaymentBank;
 
   Function() unpaidShowModal(BuildContext context) {
     return () {
@@ -36,88 +39,210 @@ class _TransactionCardState extends State<TransactionCard> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Rekomendasi Metode Pembayaran',
-                        textAlign: TextAlign.start,
-                        style: appTextTheme(context).titleMedium?.copyWith(
-                              color: AppColor.black,
-                            ),
-                      ),
-                      const SizedBox(height: 16),
-                      ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: listMethodPayment.length,
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(height: 16),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              setModalState(() {
-                                selectedPaymentMethod = index;
-                              });
-                            },
-                            child: Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: AppColor.primary[50],
-                                    borderRadius: BorderRadius.circular(4),
-                                  ),
-                                  child: Image.asset(
-                                    listMethodPayment[index].icon,
-                                    width: 24,
-                                    height: 24,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        listMethodPayment[index].name,
-                                        textAlign: TextAlign.start,
-                                        style: appTextTheme(context)
-                                            .bodySmall
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w600,
-                                              color: AppColor.black,
-                                            ),
+                      Expanded(
+                        child: ListView(
+                          children: [
+                            Text(
+                              'Rekomendasi Metode Pembayaran',
+                              textAlign: TextAlign.start,
+                              style:
+                                  appTextTheme(context).titleMedium?.copyWith(
+                                        color: AppColor.black,
                                       ),
-                                      Text(
-                                        listMethodPayment[index].description,
-                                        textAlign: TextAlign.start,
-                                        style: appTextTheme(context)
-                                            .bodySmall
-                                            ?.copyWith(
-                                              fontWeight: FontWeight.w400,
-                                              color: AppColor.black[400],
+                            ),
+                            const SizedBox(height: 16),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: listMethodPayment.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 16),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    setModalState(() {
+                                      selectedPaymentBank = null;
+                                      selectedPaymentMethod = index;
+                                    });
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                          color: AppColor.primary[50],
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Image.asset(
+                                          listMethodPayment[index].icon,
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              listMethodPayment[index].name,
+                                              textAlign: TextAlign.start,
+                                              style: appTextTheme(context)
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: AppColor.black,
+                                                  ),
                                             ),
+                                            Text(
+                                              listMethodPayment[index]
+                                                  .description,
+                                              textAlign: TextAlign.start,
+                                              style: listMethodPayment[index]
+                                                          .name ==
+                                                      "Plafon"
+                                                  ? appTextTheme(context)
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        color: AppColor
+                                                            .primary[500],
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )
+                                                  : appTextTheme(context)
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            AppColor.black[400],
+                                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Radio<int>(
+                                        value: index,
+                                        groupValue: selectedPaymentMethod,
+                                        onChanged: (int? value) {
+                                          setModalState(() {
+                                            selectedPaymentBank = null;
+                                            selectedPaymentMethod = value;
+                                          });
+                                        },
                                       ),
                                     ],
                                   ),
-                                ),
-                                Radio<int>(
-                                  value: index,
-                                  groupValue: selectedPaymentMethod,
-                                  onChanged: (int? value) {
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Transfer Bank',
+                              textAlign: TextAlign.start,
+                              style:
+                                  appTextTheme(context).titleMedium?.copyWith(
+                                        color: AppColor.black,
+                                      ),
+                            ),
+                            const SizedBox(height: 16),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: listMethodBank.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 16),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
                                     setModalState(() {
-                                      selectedPaymentMethod = value;
+                                      selectedPaymentMethod = null;
+                                      selectedPaymentBank = index;
                                     });
                                   },
-                                ),
-                              ],
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 4.0),
+                                        decoration: BoxDecoration(
+                                          color: AppColor.primary[50],
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                        ),
+                                        child: Image.asset(
+                                          listMethodBank[index].icon,
+                                          width: 40,
+                                          height: 40,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              listMethodBank[index].name,
+                                              textAlign: TextAlign.start,
+                                              style: appTextTheme(context)
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                    fontWeight: FontWeight.w600,
+                                                    color: AppColor.black,
+                                                  ),
+                                            ),
+                                            Text(
+                                              listMethodBank[index].description,
+                                              textAlign: TextAlign.start,
+                                              style: listMethodBank[index]
+                                                          .name ==
+                                                      "Plafon"
+                                                  ? appTextTheme(context)
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        color: AppColor
+                                                            .primary[500],
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      )
+                                                  : appTextTheme(context)
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color:
+                                                            AppColor.black[400],
+                                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Radio<int>(
+                                        value: index,
+                                        groupValue: selectedPaymentBank,
+                                        onChanged: (int? value) {
+                                          setModalState(() {
+                                            selectedPaymentMethod = null;
+                                            selectedPaymentBank = value;
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
-                          );
-                        },
+                          ],
+                        ),
                       ),
-                      const Spacer(),
+                      const SizedBox(height: 16),
                       AppPrimaryFullButton(
                         "Konfirmasi",
                         () {},
@@ -140,7 +265,12 @@ class _TransactionCardState extends State<TransactionCard> {
     return InkWell(
       onTap: () {
         Navigator.of(context).push(AppTransition.pushTransition(
-          const TransactionDetailPage(),
+          TransactionDetailPage(
+            listProduct,
+            listAmountItem,
+            listAddress[0],
+            listMethodPayment[0],
+          ),
           TransactionDetailPage.routeSettings(),
         ));
       },

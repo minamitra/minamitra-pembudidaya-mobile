@@ -3,14 +3,18 @@
 /// @create date 2024-03-24 14:22:18
 /// @modify date 2024-03-24 14:22:18
 
+import 'dart:developer';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_key.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/login/repositories/login_response.dart';
 
 abstract class SharedPreferenceService {
   Future<void> setSharedPreference(String key, String value);
   Future<String?> getSharedPreference(String key);
   Future<void> clearSharedPreference(String key);
   Future<void> clearSecureStorage();
-  // Future<LoginResponse> getUserData();
+  Future<UserData> getUserData();
 }
 
 class SharedPreferenceServiceImpl implements SharedPreferenceService {
@@ -38,21 +42,20 @@ class SharedPreferenceServiceImpl implements SharedPreferenceService {
     return _secureStorage.write(key: key, value: value);
   }
 
-  // @override
-  // Future<LoginResponse> getUserData() async {
-  //   try {
-  //     var userDataJson =
-  //         await _secureStorage.read(key: AppSharedPrefKey.loginResponseKey);
-  //     log(userDataJson.toString());
-  //     if (userDataJson == null) {
-  //       throw Exception("User data not found");
-  //     }
-  //     return LoginResponse.fromJson(userDataJson);
-  //   } catch (e) {
-  //     log(e.toString());
-  //     throw Exception("User data not found");
-  //   }
-  // }
+  @override
+  Future<UserData> getUserData() async {
+    try {
+      var userDataJson =
+          await _secureStorage.read(key: AppSharedPrefKey.userProfileKey);
+      log(userDataJson.toString());
+      if (userDataJson == null) {
+        throw Exception("User data not found");
+      }
+      return UserData.fromJson(userDataJson);
+    } catch (e) {
+      throw Exception("User data not found");
+    }
+  }
 
   factory SharedPreferenceServiceImpl.create() {
     return const SharedPreferenceServiceImpl(FlutterSecureStorage());

@@ -28,6 +28,8 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_localizations:
+    sdk: flutter
   flutter:
     sdk: flutter
 
@@ -62,6 +64,9 @@ dependencies:
   geolocator: ^13.0.1
   fluttertoast: ^8.2.8
   percent_indicator: ^4.2.3
+  flutter_localization: ^0.2.2
+  dotted_border: ^2.1.0
+  dio: ^5.7.0
 
 dev_dependencies:
   flutter_test:

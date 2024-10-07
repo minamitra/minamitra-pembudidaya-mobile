@@ -9,21 +9,21 @@ class AppTopSnackBar {
 
   showDanger(String message) {
     showTopSnackBar(
-      Overlay.of(context)!,
+      Overlay.of(context),
       CustomSnackBar.error(message: message),
     );
   }
 
   showInfo(String message) {
     showTopSnackBar(
-      Overlay.of(context)!,
+      Overlay.of(context),
       CustomSnackBar.info(message: message),
     );
   }
 
   showSuccess(String message) {
     showTopSnackBar(
-      Overlay.of(context)!,
+      Overlay.of(context),
       CustomSnackBar.success(message: message),
     );
   }

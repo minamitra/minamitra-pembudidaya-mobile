@@ -5,19 +5,25 @@ class AuthenticationEndpoint {
 
   Uri login() {
     return createUrl(
-      path: "pos/auth/login",
+      path: "mitra/auth/login",
     );
   }
 
   Uri register() {
     return createUrl(
-      path: "api/auth/register",
+      path: "mitra/auth/register",
     );
   }
 
   Uri userMe() {
     return createUrl(
-      path: "api/user/me",
+      path: "mitra/profile/detail",
+    );
+  }
+
+  Uri logout() {
+    return createUrl(
+      path: "mitra/auth/logout",
     );
   }
 

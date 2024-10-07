@@ -27,7 +27,7 @@ abstract class HttpClient<T> {
   Future<T> post(
     Uri url,
     Map<String, String>? headers,
-    Object? body, {
+    String body, {
     StackTrace? stackTrace,
     List<int>? customAllowedStatusCode,
   });
@@ -53,16 +53,22 @@ abstract class HttpClient<T> {
     StackTrace? stackTrace,
     List<int>? customAllowedStatusCode,
   });
+  // Future<T> postDio(
+  //   String url,
+  //   Map<String, String> headers,
+  //   Object? fields,
+  // );
 }
 
 class AppHttpClient implements HttpClient {
   final http.Client _client;
+
   // final AppCrashlytic _crashlytic;
 
-  AppHttpClient(
-    this._client,
-    // this._crashlytic,
-  );
+  AppHttpClient(this._client
+
+      // this._crashlytic,
+      );
 
   @override
   Future<http.Response> delete(
@@ -170,16 +176,20 @@ class AppHttpClient implements HttpClient {
   Future<http.Response> post(
     Uri url,
     Map<String, String>? headers,
-    Object? body, {
+    String body, {
     StackTrace? stackTrace,
     List<int>? customAllowedStatusCode,
   }) async {
     try {
-      final response = await _client.post(
-        url,
-        headers: headers,
-        body: body,
-      );
+      http.Request request = http.Request('POST', url);
+      request.body = body;
+      request.headers['Content-Type'] = "application/json";
+      request.headers['Accept'] = "application/json";
+      request.headers['token'] = headers!["token"]!;
+
+      final sendData = await request.send();
+      final response = await http.Response.fromStream(sendData);
+
       appNetworkLogger(
         endpoint: "POST ENDPOINT => ${url.toString()}",
         payload: body.toString(),
@@ -211,6 +221,7 @@ class AppHttpClient implements HttpClient {
     } on AppException {
       rethrow;
     } catch (exception) {
+      log(exception.toString());
       throw AppException(exception.toString());
     }
   }
@@ -368,9 +379,70 @@ class AppHttpClient implements HttpClient {
   }
 
   factory AppHttpClient.create() {
-    return AppHttpClient(
-      http.Client(),
-      // AppCrashlyticImpl(),
-    );
+    return AppHttpClient(http.Client()
+        // AppCrashlyticImpl(),
+        );
   }
+
+  // @override
+  // Future postDio(
+  //   String url,
+  //   Map<String, String> headers,
+  //   Object? fields,
+  // ) async {
+  //   try {
+  //     _dio.interceptors.addAll([
+  //       LogInterceptor(
+  //         responseBody: true,
+  //         requestBody: true,
+  //         logPrint: (object) => log(
+  //           object.toString(),
+  //           name: "KAJ DIO",
+  //         ),
+  //       ),
+  //     ]);
+  //     final response = await _dio.post(
+  //       url,
+  //       data: fields,
+  //       options: Options(
+  //         headers: headers,
+  //         contentType: "application/json",
+  //       ),
+  //     );
+  //     appNetworkLogger(
+  //       endpoint: "POST ENDPOINT => ${url.toString()}",
+  //       payload: fields.toString(),
+  //       response: response.data.toString(),
+  //     );
+  //     MetaResponse metaResponse = MetaResponse.fromMap(response.data);
+  //     if (response.statusCode != 200 || metaResponse.status != 200) {
+  //       MetaExceptionHanlder(
+  //         response.statusCode ?? 200,
+  //         response.data,
+  //       ).handleByErrorCodeDio();
+  //     }
+  //     // if (!kIsWeb) {
+  //     //   if (customAllowedStatusCode != null
+  //     //       ? !(customAllowedStatusCode.contains(response.statusCode))
+  //     //       : !(response.statusCode == 200 || response.statusCode == 201)) {
+  //     //     FirebaseCrashlytics.instance.recordError(
+  //     //       _crashlytic.exception(response),
+  //     //       stackTrace ?? StackTrace.current,
+  //     //       reason: _crashlytic.reason(response),
+  //     //       fatal: true,
+  //     //     );
+  //     //     await FirebaseCrashlytics.instance.sendUnsentReports();
+  //     //   }
+  //     // }
+
+  //     // if (alice != null) alice!.onHttpResponse(response);
+  //     // response.data
+  //     return response;
+  //   } on AppException {
+  //     rethrow;
+  //   } catch (exception) {
+  //     log(exception.toString());
+  //     throw AppException(exception.toString());
+  //   }
+  // }
 }

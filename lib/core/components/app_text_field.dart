@@ -234,9 +234,9 @@ class AppValidatorTextField extends StatelessWidget {
   }
 
   String? defaultValidator(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Silahkan isi data';
-    }
+    // if (value == null || value.isEmpty) {
+    //   return 'Silahkan isi data';
+    // }
     return null;
   }
 
@@ -318,6 +318,7 @@ class AppValidatorTextField extends StatelessWidget {
                 ),
             counterText: "",
             prefix: prefixWidget,
+            prefixIconConstraints: suffixConstraints,
           ),
           validator: validator ?? defaultValidator,
           onSaved: onSaved ?? (value) {},

@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/logic/add_bulk_feed_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddBulkFeedView extends StatefulWidget {
@@ -102,49 +107,66 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
   @override
   Widget build(BuildContext context) {
     Widget dateTextField() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: AppValidatorTextField(
-          readOnly: true,
-          controller: dateController,
-          hintText: "Pilih Tanggal",
-          labelText: "Tanggal",
-          suffixConstraints: const BoxConstraints(
-            maxHeight: 50,
-            maxWidth: 50,
-          ),
-          suffixWidget: SizedBox(
-            width: 66,
-            child: Center(
-              child: Image.asset(
-                AppAssets.calendarIcon,
-                height: 24,
-                fit: BoxFit.cover,
+      return BlocBuilder<AddBulkFeedCubit, AddBulkFeedState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              50,
+              double.infinity,
+              8.0,
+              margin: EdgeInsets.symmetric(horizontal: 16.0),
+            );
+          }
+
+          if (state.status.isLoaded) {
+            dateController.text = AppConvertDateTime()
+                .dmyName(state.pickedDate ?? DateTime.now());
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            child: AppValidatorTextField(
+              readOnly: true,
+              controller: dateController,
+              hintText: "Pilih Tanggal",
+              labelText: "Tanggal",
+              suffixConstraints: const BoxConstraints(
+                maxHeight: 50,
+                maxWidth: 50,
               ),
-            ),
-          ),
-          isMandatory: true,
-          onTap: () {
-            showDatePicker(
-              context: context,
-              initialDate: dateNow,
-              firstDate: firstDate,
-              lastDate: lastDate,
-            ).then((date) {
-              setState(() {
-                if (date != null) {
-                  dateController.text = AppConvertDateTime().dmyName(date);
+              suffixWidget: SizedBox(
+                width: 66,
+                child: Center(
+                  child: Image.asset(
+                    AppAssets.calendarIcon,
+                    height: 24,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              isMandatory: true,
+              onTap: () {
+                showDatePicker(
+                  context: context,
+                  initialDate: dateNow,
+                  firstDate: firstDate,
+                  lastDate: lastDate,
+                ).then((date) {
+                  if (date != null) {
+                    // dateController.text = AppConvertDateTime().dmyName(date);
+                    context.read<AddBulkFeedCubit>().changeDateTime(date);
+                  }
+                });
+              },
+              validator: (String? value) {
+                if (value!.isEmpty) {
+                  return "Tanggal tidak boleh kosong";
                 }
-              });
-            });
-          },
-          validator: (String? value) {
-            if (value!.isEmpty) {
-              return "Tanggal tidak boleh kosong";
-            }
-            return null;
-          },
-        ),
+                return null;
+              },
+            ),
+          );
+        },
       );
     }
 
@@ -176,11 +198,9 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
               context: context,
               initialTime: TimeOfDay.now(),
             ).then((time) {
-              setState(() {
-                if (time != null) {
-                  hourController.text = time.format(context);
-                }
-              });
+              if (time != null) {
+                hourController.text = time.format(context);
+              }
             });
           },
           validator: (String? value) {
@@ -195,15 +215,16 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
 
     Widget pondCard(
       String title,
+      String feedValue,
       Function(bool isShow) onTapShow,
       bool isShow,
-      int recommendation,
+      double recommendation,
       Function(String)? onChangedFeedAmount,
       Function(String) onChangedFeedGiven,
       List<String> listFeedType,
+      TextEditingController fishFeedValuecontroller,
+      TextEditingController fishFeedNameController,
     ) {
-      final TextEditingController selectFeed = TextEditingController();
-
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 18.0),
         decoration: BoxDecoration(
@@ -237,7 +258,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     const SizedBox(width: 8.0),
                     Text(
-                      "0 Gram",
+                      "$feedValue Gram",
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -283,23 +304,50 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                             ),
                       ),
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12.0,
-                        vertical: 8.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.accent[900],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Text(
-                        "Terapkan",
-                        style: appTextTheme(context).titleSmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                            ),
+                    InkWell(
+                      onTap: () {
+                        log("recommendation : $recommendation");
+                        onChangedFeedAmount!(recommendation.toString());
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12.0,
+                          vertical: 8.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColor.accent[900],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Text(
+                          "Terapkan",
+                          style: appTextTheme(context).titleSmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
                       ),
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.error,
+                      size: 16.0,
+                      color: AppColor.accent[900],
+                    ),
+                    const SizedBox(width: 8.0),
+                    Text(
+                      "Pemberian pakan 2-3 kali per hari",
+                      style: appTextTheme(context).labelLarge?.copyWith(
+                            color: AppColor.accent[900],
+                            fontWeight: FontWeight.w500,
+                          ),
+                    )
                   ],
                 ),
               ),
@@ -307,19 +355,23 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: AppValidatorTextField(
+                  controller: fishFeedValuecontroller,
                   labelText: "Jumlah Pakan",
                   hintText: "0",
                   withUpperLabel: true,
                   isMandatory: true,
                   suffixText: "gram",
-                  onChanged: onChangedFeedAmount,
+                  onChanged: (value) {
+                    onChangedFeedAmount!(value);
+                    fishFeedValuecontroller.text = value;
+                  },
                 ),
               ),
               const SizedBox(height: 24.0),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: AppValidatorTextField(
-                  controller: selectFeed,
+                  controller: fishFeedNameController,
                   labelText: "Pakan Diberikan",
                   hintText: "Pilih Pakan",
                   withUpperLabel: true,
@@ -332,23 +384,13 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                   onTap: () {
                     bottomSheetShowModal(
                       context,
-                      "Pilih Provinsi",
-                      [
-                        "contoh",
-                        "contoh",
-                        "contoh",
-                        "contoh",
-                        "contoh",
-                        "contoh",
-                        "contoh",
-                        "contoh",
-                        "contoh"
-                      ],
+                      "Pilih Pakan",
+                      listFeedType,
                       (value) {
-                        selectFeed.text = value;
-                        onChangedFeedAmount!(value);
+                        fishFeedNameController.text = value;
+                        onChangedFeedGiven(value);
                       },
-                    );
+                    )();
                   },
                 ),
               ),
@@ -356,6 +398,77 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
             ]
           ],
         ),
+      );
+    }
+
+    Widget pondsItem() {
+      return BlocBuilder<AddBulkFeedCubit, AddBulkFeedState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return ListView.builder(
+              itemCount: 3,
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 8.0,
+              ),
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return const AppShimmer(
+                  150,
+                  double.infinity,
+                  8.0,
+                );
+              },
+            );
+          }
+
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.recommendationFeedBulk?.data?.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: pondCard(
+                  state.recommendationFeedBulk?.data?[index].fishpondName ??
+                      "-",
+                  state.recommendationFeedBulk?.data?[index].feedAmount
+                          ?.toString() ??
+                      "0",
+                  (bool value) {
+                    context.read<AddBulkFeedCubit>().onChangeShowingPond(
+                          index,
+                          value,
+                        );
+                  },
+                  state.recommendationFeedBulk?.data?[index].isShow ?? false,
+                  state.recommendationFeedBulk?.data?[index].suggestFeed ?? 0.0,
+                  (value) {
+                    context.read<AddBulkFeedCubit>().onChangeFeedAmount(
+                          index,
+                          double.tryParse(value) ?? 0.0,
+                        );
+                  },
+                  (value) {
+                    context.read<AddBulkFeedCubit>().onChangeFeedName(
+                          index,
+                          value,
+                        );
+                  },
+                  state.recommendationFeedBulk?.data?[index].fishfoods
+                          ?.map((element) => element.name ?? "-")
+                          .toList() ??
+                      [],
+                  state.recommendationFeedBulk!.data![index]
+                      .feedValuecontroller!,
+                  state.recommendationFeedBulk!.data![index]
+                      .fishFeedIDController!,
+                ),
+              );
+            },
+          );
+        },
       );
     }
 
@@ -405,29 +518,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
             ),
           ),
           const SizedBox(height: 18.0),
-          pondCard(
-            "Kolam 1",
-            (bool value) {
-              setState(() {
-                isShow = value;
-              });
-            },
-            isShow,
-            100,
-            (value) {},
-            (value) {},
-            [
-              "Pakan 1",
-              "Pakan 2",
-              "Pakan 3",
-              "Pakan 4",
-              "Pakan 5",
-              "Pakan 6",
-              "Pakan 7",
-              "Pakan 8",
-              "Pakan 9",
-            ],
-          ),
+          pondsItem(),
         ],
       );
     }
@@ -437,7 +528,9 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
         padding: const EdgeInsets.all(18),
         child: AppPrimaryFullButton(
           "Simpan",
-          () {},
+          () {
+            context.read<AddBulkFeedCubit>().saveFeed();
+          },
         ),
       );
     }

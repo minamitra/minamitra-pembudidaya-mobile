@@ -19,7 +19,9 @@ class MetaResponse {
   factory MetaResponse.fromMap(Map<String, dynamic> json) => MetaResponse(
         status: json["status"],
         message: json["message"],
-        errorCode: json["error_code"],
+        errorCode: json["error_code"] is List<dynamic>
+            ? (json["error_code"] as List<dynamic>).join(", ").toString()
+            : json["error_code"],
         result: json["results"] ?? json["data"],
       );
 }

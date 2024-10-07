@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 enum _CustomButtonStyle {
   primary,
+  primaryDisable,
   primaryOutline,
   white,
   accent,
   accentOutline,
+  danger,
 }
 
 extension _CustomButtonStyleExtension on _CustomButtonStyle {
@@ -18,6 +21,18 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
           padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
           foregroundColor: WidgetStateProperty.all(AppColor.primary),
           backgroundColor: WidgetStateProperty.all(AppColor.primary),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+          elevation: WidgetStateProperty.all(0),
+        );
+      case _CustomButtonStyle.primaryDisable:
+        return ButtonStyle(
+          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor:
+              WidgetStateProperty.all(AppColor.primary.withOpacity(0.3)),
+          backgroundColor:
+              WidgetStateProperty.all(AppColor.primary.withOpacity(0.3)),
           shape: WidgetStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
@@ -66,6 +81,16 @@ extension _CustomButtonStyleExtension on _CustomButtonStyle {
               borderRadius: BorderRadius.circular(10),
               side: const BorderSide(color: AppColor.accent, width: 1.5),
             ),
+          ),
+          elevation: WidgetStateProperty.all(0),
+        );
+      case _CustomButtonStyle.danger:
+        return ButtonStyle(
+          padding: WidgetStateProperty.all(const EdgeInsets.all(0)),
+          foregroundColor: WidgetStateProperty.all(AppColor.red[500]),
+          backgroundColor: WidgetStateProperty.all(AppColor.red[500]),
+          shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           ),
           elevation: WidgetStateProperty.all(0),
         );
@@ -138,6 +163,7 @@ class AppPrimaryFullButton extends _CustomButton {
     Function() onPressed, {
     double height = 53.0,
     Widget? prefixIcon,
+    bool isActive = true,
   }) : super(
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -156,7 +182,9 @@ class AppPrimaryFullButton extends _CustomButton {
             ],
           ),
           onPressed,
-          buttonStyle: _CustomButtonStyle.primary,
+          buttonStyle: isActive
+              ? _CustomButtonStyle.primary
+              : _CustomButtonStyle.primaryDisable,
           isFull: true,
           height: height,
         );
@@ -215,7 +243,7 @@ class AppWhiteButton extends _CustomButton {
           Text(
             text,
             style: AppTextStyle.primarySmallBoldText.copyWith(
-              color: AppColor.primary[700],
+              color: AppColor.primary[500],
             ),
           ),
           onPressed,
@@ -277,4 +305,122 @@ class AppAccentOutlineButton extends _CustomButton {
           buttonStyle: _CustomButtonStyle.accentOutline,
           height: height,
         );
+}
+
+class AppDangerFullButton extends _CustomButton {
+  AppDangerFullButton(
+    BuildContext context,
+    String text,
+    Function() onPressed, {
+    double height = 53.0,
+    Widget? prefixIcon,
+    bool isActive = true,
+  }) : super(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              prefixIcon != null
+                  ? Container(
+                      margin: const EdgeInsets.only(right: 8.0),
+                      child: prefixIcon,
+                    )
+                  : const SizedBox(),
+              Text(
+                text,
+                style: appTextTheme(context).titleMedium?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+            ],
+          ),
+          onPressed,
+          buttonStyle:
+              isActive ? _CustomButtonStyle.danger : _CustomButtonStyle.danger,
+          isFull: true,
+          height: height,
+        );
+}
+
+class AppPrimaryGradientButton extends StatelessWidget {
+  const AppPrimaryGradientButton(this.text, this.onTap, {super.key});
+
+  final String text;
+  final Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.0),
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF155ED0),
+              Color(0xFF1049A2),
+            ],
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF000000),
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          style:
+              appTextTheme(context).titleSmall?.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
+class AppGreenGradientButton extends StatelessWidget {
+  const AppGreenGradientButton(this.text, this.onTap, {super.key});
+
+  final String text;
+  final Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 8.0,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100.0),
+          gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF14B8A6),
+              Color(0xFF0D9488),
+            ],
+          ),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0xFF000000),
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          style:
+              appTextTheme(context).titleSmall?.copyWith(color: Colors.white),
+        ),
+      ),
+    );
+  }
 }

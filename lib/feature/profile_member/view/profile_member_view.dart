@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/logic/profile_member_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/attachment/attachment_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/biodata/biodata_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ProfileMemberView extends StatefulWidget {
@@ -11,223 +13,64 @@ class ProfileMemberView extends StatefulWidget {
   State<ProfileMemberView> createState() => _ProfileMemberViewState();
 }
 
-class _ProfileMemberViewState extends State<ProfileMemberView> {
-  bool isEditable = false;
+class _ProfileMemberViewState extends State<ProfileMemberView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
-  final TextEditingController numberKTAController = TextEditingController();
-  final TextEditingController numberNIKController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController jobController = TextEditingController();
-  final TextEditingController birthDateController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
-  final TextEditingController addressController = TextEditingController();
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      context.read<ProfileMemberCubit>().changeTabIndex(_tabController.index);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Widget dataStatic(
-      String label,
-      String value,
-    ) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 18.0),
-          Text(
-            label,
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  color: AppColor.neutral[400],
-                ),
-          ),
-          const SizedBox(height: 12.0),
-          Text(
-            value,
-            style: appTextTheme(context).titleSmall?.copyWith(
-                  fontWeight: FontWeight.w500,
-                ),
-          ),
-          const SizedBox(height: 18.0),
-          Divider(color: AppColor.neutral[100]),
-        ],
+    Widget tabBar() {
+      return Container(
+        height: 60,
+        decoration: BoxDecoration(color: AppColor.neutral[50]),
+        child: TabBar(
+          controller: _tabController,
+          dividerColor: Colors.white,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorColor: AppColor.primary,
+          indicatorWeight: 2.5,
+          padding: EdgeInsets.zero,
+          labelColor: AppColor.primary,
+          unselectedLabelColor: AppColor.neutral[400],
+          labelStyle:
+              appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
+          unselectedLabelStyle:
+              appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
+          labelPadding: const EdgeInsets.all(0),
+          isScrollable: false,
+          tabs: const [
+            Tab(text: 'Personal'),
+            Tab(text: 'Lampiran'),
+          ],
+        ),
       );
     }
 
-    Widget numberKTA() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: numberKTAController,
-          labelText: "Nomor KTA",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText: "Contoh. 2420039",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Nomor KTA Tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Nomor KTA",
-        "003112313214",
+    Widget bodyTab() {
+      return Expanded(
+        child: TabBarView(
+          controller: _tabController,
+          children: [
+            BiodataView(),
+            AttachmentView(),
+          ],
+        ),
       );
     }
 
-    Widget numberNIK() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: numberNIKController,
-          labelText: "Nomor NIK",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText: "Contoh. 3520069991220",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Nomor NIK Tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Nomor NIK",
-        "3520069991220",
-      );
-    }
-
-    Widget numberPhone() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: phoneController,
-          labelText: "Nomor Handphone",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText: "Contoh. 089221023392",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Nomor Handphone Tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Nomor Handphone",
-        "089221023392",
-      );
-    }
-
-    Widget job() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: jobController,
-          labelText: "Pekerjaan",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText: "Contoh. Petani Tambak Boyo",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Pekerjaan Tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Pekerjaan",
-        "Petani Tambak Boyo",
-      );
-    }
-
-    Widget birthDate() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: birthDateController,
-          labelText: "Tempat, Tanggal Lahir",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText: "Contoh. Yogyakarta, 12 Desember 2024",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Tempat Tanggal Lahir tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Tempat, Tanggal Lahir",
-        "Yogyakarta, 12 Desember 2024",
-      );
-    }
-
-    Widget gender() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: genderController,
-          labelText: "Jenis Kelamin",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText: "Contoh. Laki-Laki",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Jenis kelamin tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Jenis Kelamin",
-        "Laki-Laki",
-      );
-    }
-
-    Widget address() {
-      if (isEditable) {
-        return AppValidatorTextField(
-          controller: addressController,
-          labelText: "Alamat",
-          withUpperLabel: true,
-          isMandatory: true,
-          hintText:
-              "Contoh. Kelompok Budidaya, Kelurahan, Kecamatan,  Kabupaten, Provinsi",
-          validator: (String? value) {
-            if (value?.isEmpty ?? true) {
-              return "Alamat tidak boleh kosong";
-            }
-            return null;
-          },
-        );
-      }
-      return dataStatic(
-        "Alamat",
-        "Kelompok Budidaya, Kelurahan, Kecamatan,  Kabupaten, Provinsi",
-      );
-    }
-
-    Widget editButton() {
-      if (!isEditable) {
-        return const SizedBox();
-      }
-      return AppPrimaryFullButton(
-        "Simpan",
-        () {},
-      );
-    }
-
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    return Column(
       children: [
-        numberKTA(),
-        numberNIK(),
-        numberPhone(),
-        job(),
-        birthDate(),
-        gender(),
-        address(),
-        editButton(),
-        const SizedBox(height: 18.0),
+        tabBar(),
+        bodyTab(),
       ],
     );
   }

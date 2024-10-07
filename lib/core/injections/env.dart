@@ -28,7 +28,7 @@ extension EnvironmentExtension on Environment {
   String get baseURL {
     switch (this) {
       case Environment.development:
-        return 'xxxx';
+        return 'api-dev.mitra3m.id';
       case Environment.production:
         return 'xxxx';
       case Environment.staging:

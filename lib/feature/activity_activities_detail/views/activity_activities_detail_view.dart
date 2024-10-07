@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/widget_desctiption_item.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/widget_separated_item.dart';
 
 class ActivityActivitiesDetailView extends StatelessWidget {
-  const ActivityActivitiesDetailView({super.key});
+  const ActivityActivitiesDetailView(this.data, {super.key});
+
+  final FeedActivityResponseData data;
 
   @override
   Widget build(BuildContext context) {
@@ -35,26 +43,43 @@ class ActivityActivitiesDetailView extends StatelessWidget {
       return ListView(
         padding: const EdgeInsets.all(16.0),
         children: [
-          columnText("Waktu Pakan", "Pakan Pagi"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
+          const SizedBox(height: 2.0),
+          AppWidgetSeparatedItem(
+            "Waktu Pakan",
+            AppConvertDateTime().ddmmyyyyhhmm(data.datetime ?? DateTime.now()),
           ),
-          columnText("Tanggal", "05 Agustus 2024 17:00"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+            "Umur Ikan",
+            "${data.fishAge} hari",
           ),
-          columnText("Merk Pakan", "Merk ABC"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+            "Jumlah Pakan",
+            "${double.parse(data.actual?.handleEmptyStringToZero() ?? "0").toStringAsFixed(0)} gram",
           ),
-          columnText("Catatan",
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+            "Merk Pakan",
+            data.fishfoodName ?? "-",
+          ),
+          // const SizedBox(height: 18.0),
+          // AppDividerSmall(),
+          // const SizedBox(height: 18.0),
+          // AppWidgetSeparatedItem("Total Pakan", "4500 gram"),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetDecriptionItem(
+            "Catatan",
+            data.note ?? "-",
+          ),
           const SizedBox(height: 98.0),
         ],
       );
@@ -106,7 +131,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       children: [
         body(),
-        button(),
+        // button(),
       ],
     );
   }
