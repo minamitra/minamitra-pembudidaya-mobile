@@ -40,10 +40,10 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       districtData: null,
       subDistrictData: null,
       villageData: null,
-      selectedProvince: null,
-      selectedDistrict: null,
-      selectedSubDistrict: null,
-      selectedVillage: null,
+      selectedProvince: state.selectedProvince,
+      selectedDistrict: state.selectedDistrict,
+      selectedSubDistrict: state.selectedSubDistrict,
+      selectedVillage: state.selectedVillage,
     ));
   }
 
@@ -104,6 +104,39 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       selectedVillage: village,
       status: GlobalState.loaded,
     ));
+  }
+
+  void setAddress(
+    String provinceId,
+    String provinceName,
+    String districtId,
+    String districtName,
+    String subDistrictId,
+    String subDistrictName,
+    String villageId,
+    String villageName,
+  ) {
+    print("address ID: $provinceId");
+    emit(state.copyWith(
+      selectedProvince: ProvinceResponseData(
+        id: provinceId,
+        name: provinceName,
+      ),
+      selectedDistrict: DistrictResponseData(
+        id: districtId,
+        name: districtName,
+      ),
+      selectedSubDistrict: SubDistrictResponseData(
+        id: subDistrictId,
+        name: subDistrictName,
+      ),
+      selectedVillage: VillageResponseData(
+        id: villageId,
+        name: villageName,
+      ),
+      status: GlobalState.loaded,
+    ));
+    print("state selectedProvince: ${state.selectedProvince?.name}");
   }
 
   void changeLocationOnMap(
