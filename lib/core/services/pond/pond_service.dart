@@ -10,6 +10,8 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/add_pond_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/add_pond_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/update_pond_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/update_pond_response.dart';
 
 abstract class PondService {
   Future<BaseResponse<AddPondResponse>> addPond(AddPondPayload payload);
@@ -18,6 +20,8 @@ abstract class PondService {
   Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
       {String? pondID});
   Future<BaseResponse<bool>> deletePond(String pondID);
+  Future<BaseResponse<UpdatePondResponse>> updatePond(
+      UpdatePondPayload payload);
 }
 
 class PondServiceImpl implements PondService {
@@ -99,5 +103,20 @@ class PondServiceImpl implements PondService {
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<UpdatePondResponse>> updatePond(
+      UpdatePondPayload payload) async {
+    final url = endpoint.updatePond();
+    final header = await headerProvider.headers;
+    final response = await httpClient.post(
+      url,
+      header,
+      payload.toJson(),
+    );
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final UpdatePondResponse data = UpdatePondResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
   }
 }

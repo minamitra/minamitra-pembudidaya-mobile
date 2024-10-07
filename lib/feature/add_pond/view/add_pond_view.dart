@@ -4,7 +4,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.d
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_first_step/add_pond_first_step_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_second_step/add_pond_second_step_view.dart';
@@ -12,10 +15,12 @@ import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_thir
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondView extends StatefulWidget {
-  const AddPondView(this.behaviourPage, {this.pondID, super.key});
+  const AddPondView(this.behaviourPage,
+      {this.pondID, this.pondData, super.key});
 
   final BehaviourPage behaviourPage;
   final String? pondID;
+  final PondResponseData? pondData;
 
   @override
   State<AddPondView> createState() => _AddPondViewState();
@@ -39,8 +44,9 @@ class _AddPondViewState extends State<AddPondView> {
       int index,
       String title,
       bool isActive,
-      bool isReached,
-    ) {
+      bool isReached, {
+      int maxLenght = 3,
+    }) {
       return Row(
         children: [
           SizedBox(width: index > 1 ? 8.0 : 0.0),
@@ -80,8 +86,8 @@ class _AddPondViewState extends State<AddPondView> {
                           : AppColor.black,
                 ),
           ),
-          SizedBox(width: index < 3 ? 8.0 : 0),
-          if (index < 3)
+          SizedBox(width: index < maxLenght ? 8.0 : 0),
+          if (index < maxLenght)
             Expanded(
               child: Divider(
                 color: isReached ? AppColor.green[500] : AppColor.neutral[400],
@@ -97,32 +103,52 @@ class _AddPondViewState extends State<AddPondView> {
           return Container(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             color: Colors.transparent,
-            child: Row(
-              children: [
-                Expanded(
-                  child: stepSection(
-                    1,
-                    "Kolam",
-                    state.index == 0,
-                    state.index > 0,
+            child: widget.behaviourPage == BehaviourPage.addNewPond
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: stepSection(
+                          1,
+                          "Kolam",
+                          state.index == 0,
+                          state.index > 0,
+                        ),
+                      ),
+                      Expanded(
+                        child: stepSection(
+                          2,
+                          "Lokasi",
+                          state.index == 1,
+                          state.index > 1,
+                        ),
+                      ),
+                      stepSection(
+                        3,
+                        "Siklus",
+                        state.index == 2,
+                        false,
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      Expanded(
+                        child: stepSection(
+                          1,
+                          "Kolam",
+                          state.index == 0,
+                          state.index > 0,
+                        ),
+                      ),
+                      stepSection(
+                        2,
+                        "Lokasi",
+                        state.index == 1,
+                        state.index > 1,
+                        maxLenght: 2,
+                      ),
+                    ],
                   ),
-                ),
-                Expanded(
-                  child: stepSection(
-                    2,
-                    "Lokasi",
-                    state.index == 1,
-                    state.index > 1,
-                  ),
-                ),
-                stepSection(
-                  3,
-                  "Lokasi",
-                  state.index == 2,
-                  false,
-                ),
-              ],
-            ),
           );
         },
       );
@@ -134,6 +160,29 @@ class _AddPondViewState extends State<AddPondView> {
           pageController,
           widget.behaviourPage,
           pondID: widget.pondID,
+        );
+      }
+
+      if (BehaviourPage.editPond == widget.behaviourPage) {
+        return BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
+          builder: (context, secondStepstate) {
+            return PageView(
+              controller: pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                AddPondFirstStepView(
+                  pageController,
+                  pondData: widget.pondData,
+                ),
+                secondStepstate.status.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : AddPondSecondStepView(
+                        pageController,
+                        pondData: widget.pondData,
+                      ),
+              ],
+            );
+          },
         );
       }
 
