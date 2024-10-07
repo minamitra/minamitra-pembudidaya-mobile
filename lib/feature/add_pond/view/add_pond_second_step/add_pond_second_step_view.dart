@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
@@ -16,16 +17,23 @@ import 'package:minamitra_pembudidaya_mobile/core/logic/image/multiple_image_cub
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/update_pond_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/repositories/map_callback_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_location_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondSecondStepView extends StatefulWidget {
-  const AddPondSecondStepView(this.rootPageController, {super.key});
+  const AddPondSecondStepView(
+    this.rootPageController, {
+    this.pondData,
+    super.key,
+  });
 
   final PageController rootPageController;
+  final PondResponseData? pondData;
 
   @override
   State<AddPondSecondStepView> createState() => _AddPondSecondStepViewState();
@@ -33,6 +41,72 @@ class AddPondSecondStepView extends StatefulWidget {
 
 class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
   final GlobalKey<FormState> formSecondStepKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    final AddPondSecondStepCubit addPondSecondStepCubit =
+        context.read<AddPondSecondStepCubit>();
+
+    if (widget.pondData != null) {
+      // addPondSecondStepCubit.selectProvince(
+      //   ProvinceResponseData(
+      //     id: widget.pondData!.addressProvinceId!,
+      //     name: widget.pondData!.addressProvinceName!,
+      //   ),
+      // );
+      // addPondSecondStepCubit.selectDistrict(
+      //   DistrictResponseData(
+      //     id: widget.pondData!.addressCityId!,
+      //     name: widget.pondData!.addressCityName!,
+      //   ),
+      // );
+      // addPondSecondStepCubit.selectSubDistrict(
+      //   SubDistrictResponseData(
+      //     id: widget.pondData!.addressSubdistrictId!,
+      //     name: widget.pondData!.addressSubdistrictName!,
+      //   ),
+      // );
+      // addPondSecondStepCubit.selectVillage(
+      //   VillageResponseData(
+      //     id: widget.pondData!.addressVillageId!,
+      //     name: widget.pondData!.addressVillageName!,
+      //   ),
+      // );
+      // addPondSecondStepCubit.changeLocationOnMap(
+      //   widget.pondData!.addressLatitude ?? "",
+      //   widget.pondData!.addressLongitude ?? "",
+      //   null,
+      // );
+      addPondSecondStepCubit.setAddress(
+        widget.pondData!.addressProvinceId!,
+        widget.pondData!.addressProvinceName!,
+        widget.pondData!.addressCityId!,
+        widget.pondData!.addressCityName!,
+        widget.pondData!.addressSubdistrictId!,
+        widget.pondData!.addressSubdistrictName!,
+        widget.pondData!.addressVillageId!,
+        widget.pondData!.addressVillageName!,
+      );
+      addPondSecondStepCubit.provinceController.text =
+          widget.pondData!.addressProvinceName!;
+      addPondSecondStepCubit.districtController.text =
+          widget.pondData!.addressCityName!;
+      addPondSecondStepCubit.subdisctrictController.text =
+          widget.pondData!.addressSubdistrictName!;
+      addPondSecondStepCubit.villageController.text =
+          widget.pondData!.addressVillageName!;
+      if (widget.pondData!.imageUrl != "" ||
+          widget.pondData!.imageUrl != null) {
+        convertImageUrl(widget.pondData!.imageUrl!);
+      }
+    }
+  }
+
+  Future<void> convertImageUrl(String imageUrl) async {
+    final http.Response imagePath = await http.get(Uri.parse(imageUrl));
+    context.read<MultipleImageCubit>().setImage(imagePath.bodyBytes);
+  }
 
   Function() bottomSheetShowModal(
     BuildContext context,
@@ -514,7 +588,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       ];
     }
 
-    Widget bottomButton() {
+    Widget bottomButton(AddPondSecondStepState stateSecondStep) {
       return BlocBuilder<AddPondCubit, AddPondState>(
         builder: (context, state) {
           return Padding(
@@ -541,7 +615,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                   child: AppAnimatedSize(
                     isShow: true,
                     child: AppPrimaryFullButton(
-                      "Selanjutnya",
+                      widget.pondData == null ? "Selanjutnya" : "Simpan",
                       () {
                         if (context.read<MultipleImageCubit>().state?.isEmpty ??
                             true) {
@@ -551,11 +625,39 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                         }
                         if (formSecondStepKey.currentState?.validate() ??
                             false) {
-                          widget.rootPageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
-                          context.read<AddPondCubit>().changeStep(2);
+                          if (widget.pondData == null) {
+                            widget.rootPageController.nextPage(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeInOut,
+                            );
+                            context.read<AddPondCubit>().changeStep(2);
+                          } else {
+                            UpdatePondPayload payload = UpdatePondPayload(
+                              addressProvinceId:
+                                  stateSecondStep.selectedProvince?.id,
+                              addressProvinceName:
+                                  stateSecondStep.selectedProvince?.name,
+                              addressCityId:
+                                  stateSecondStep.selectedDistrict?.id,
+                              addressCityName:
+                                  stateSecondStep.selectedDistrict?.name,
+                              addressSubdistrictId:
+                                  stateSecondStep.selectedSubDistrict?.id,
+                              addressSubdistrictName:
+                                  stateSecondStep.selectedSubDistrict?.name,
+                              addressVillageId:
+                                  stateSecondStep.selectedVillage?.id,
+                              addressVillageName:
+                                  stateSecondStep.selectedVillage?.name,
+                              addressLatitude:
+                                  stateSecondStep.latitude.toString(),
+                              addressLongitude:
+                                  stateSecondStep.longitude.toString(),
+                            );
+                            context
+                                .read<AddPondCubit>()
+                                .updatePond(pondPayload: payload);
+                          }
                         }
                       },
                     ),
@@ -588,7 +690,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                 ),
               ),
             ),
-            bottomButton(),
+            bottomButton(state),
           ],
         );
       },
