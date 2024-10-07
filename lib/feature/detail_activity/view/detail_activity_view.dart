@@ -281,7 +281,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                 children: [
                                   AppPrimaryFullButton(
                                     "Edit Data",
-                                    () {},
+                                    () {
+                                      Navigator.of(context)
+                                          .push(AppTransition.pushTransition(
+                                        AddPondPage(
+                                          behaviourPage: BehaviourPage.editPond,
+                                          pondID: widget.pondData.id,
+                                          pondData: widget.pondData,
+                                        ),
+                                        AddPondPage.routeSettings(),
+                                      ));
+                                    },
                                   ),
                                   const SizedBox(height: 15.0),
                                   AppPrimaryOutlineFullButton(
@@ -306,7 +316,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                 ],
                               ),
                             ),
-                            height: MediaQuery.of(context).size.height * 0.3,
+                            height: MediaQuery.of(context).size.height * 0.32,
                             actions: [
                               InkWell(
                                 onTap: () {
