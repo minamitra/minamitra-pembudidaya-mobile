@@ -10,6 +10,7 @@ import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_service.dar
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
@@ -27,11 +28,13 @@ class AddPondPage extends StatelessWidget {
   const AddPondPage({
     this.behaviourPage = BehaviourPage.addNewPond,
     this.pondID,
+    this.pondData,
     super.key,
   });
 
   final BehaviourPage behaviourPage;
   final String? pondID;
+  final PondResponseData? pondData;
 
   static RouteSettings routeSettings() {
     return const RouteSettings(name: '/add-pond-first-step-page');
@@ -91,6 +94,13 @@ class AddPondPage extends StatelessWidget {
                 } else if (behaviourPage == BehaviourPage.addNewCycle) {
                   AppTopSnackBar(context)
                       .showSuccess("Berhasil Membuat\nSiklus Baru");
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop("refresh");
+                } else if (behaviourPage == BehaviourPage.editPond) {
+                  AppTopSnackBar(context).showSuccess("Berhasil Edit\nKolam");
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop("refresh");
                 }
               }
@@ -114,6 +124,7 @@ class AddPondPage extends StatelessWidget {
               return AddPondView(
                 behaviourPage,
                 pondID: pondID,
+                pondData: pondData,
               );
             },
           ),
