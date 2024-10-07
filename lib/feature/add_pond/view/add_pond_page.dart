@@ -56,10 +56,28 @@ class AddPondPage extends StatelessWidget {
         BlocProvider(create: (context) => MultipleImageCubit()),
         BlocProvider(create: (context) => AddPondFirstStepCubit()),
         BlocProvider(
-          create: (context) => AddPondSecondStepCubit(
-            RefServiceImpl.create(),
-            CdnServiceImpl.create(),
-          )..init(),
+          create: (context) {
+            return pondData != null
+                ? (AddPondSecondStepCubit(
+                    RefServiceImpl.create(),
+                    CdnServiceImpl.create(),
+                  )..initWithExistData(
+                    provinceId: pondData!.addressProvinceId!,
+                    provinceName: pondData!.addressProvinceName!,
+                    districtId: pondData!.addressCityId!,
+                    districtName: pondData!.addressCityName!,
+                    subDistrictId: pondData!.addressSubdistrictId!,
+                    subDistrictName: pondData!.addressSubdistrictName!,
+                    villageId: pondData!.addressVillageId!,
+                    villageName: pondData!.addressVillageName!,
+                    latitude: pondData!.addressLatitude ?? "",
+                    longitude: pondData!.addressLongitude ?? "",
+                  ))
+                : (AddPondSecondStepCubit(
+                    RefServiceImpl.create(),
+                    CdnServiceImpl.create(),
+                  )..init());
+          },
         ),
         BlocProvider(
             create: (context) =>

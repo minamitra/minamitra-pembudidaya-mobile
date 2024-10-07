@@ -49,45 +49,6 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
         context.read<AddPondSecondStepCubit>();
 
     if (widget.pondData != null) {
-      // addPondSecondStepCubit.selectProvince(
-      //   ProvinceResponseData(
-      //     id: widget.pondData!.addressProvinceId!,
-      //     name: widget.pondData!.addressProvinceName!,
-      //   ),
-      // );
-      // addPondSecondStepCubit.selectDistrict(
-      //   DistrictResponseData(
-      //     id: widget.pondData!.addressCityId!,
-      //     name: widget.pondData!.addressCityName!,
-      //   ),
-      // );
-      // addPondSecondStepCubit.selectSubDistrict(
-      //   SubDistrictResponseData(
-      //     id: widget.pondData!.addressSubdistrictId!,
-      //     name: widget.pondData!.addressSubdistrictName!,
-      //   ),
-      // );
-      // addPondSecondStepCubit.selectVillage(
-      //   VillageResponseData(
-      //     id: widget.pondData!.addressVillageId!,
-      //     name: widget.pondData!.addressVillageName!,
-      //   ),
-      // );
-      // addPondSecondStepCubit.changeLocationOnMap(
-      //   widget.pondData!.addressLatitude ?? "",
-      //   widget.pondData!.addressLongitude ?? "",
-      //   null,
-      // );
-      addPondSecondStepCubit.setAddress(
-        widget.pondData!.addressProvinceId!,
-        widget.pondData!.addressProvinceName!,
-        widget.pondData!.addressCityId!,
-        widget.pondData!.addressCityName!,
-        widget.pondData!.addressSubdistrictId!,
-        widget.pondData!.addressSubdistrictName!,
-        widget.pondData!.addressVillageId!,
-        widget.pondData!.addressVillageName!,
-      );
       addPondSecondStepCubit.provinceController.text =
           widget.pondData!.addressProvinceName!;
       addPondSecondStepCubit.districtController.text =

@@ -4,8 +4,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.d
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_first_step/add_pond_first_step_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_second_step/add_pond_second_step_view.dart';
@@ -162,19 +164,25 @@ class _AddPondViewState extends State<AddPondView> {
       }
 
       if (BehaviourPage.editPond == widget.behaviourPage) {
-        return PageView(
-          controller: pageController,
-          physics: const NeverScrollableScrollPhysics(),
-          children: [
-            AddPondFirstStepView(
-              pageController,
-              pondData: widget.pondData,
-            ),
-            AddPondSecondStepView(
-              pageController,
-              pondData: widget.pondData,
-            ),
-          ],
+        return BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
+          builder: (context, secondStepstate) {
+            return PageView(
+              controller: pageController,
+              physics: const NeverScrollableScrollPhysics(),
+              children: [
+                AddPondFirstStepView(
+                  pageController,
+                  pondData: widget.pondData,
+                ),
+                secondStepstate.status.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : AddPondSecondStepView(
+                        pageController,
+                        pondData: widget.pondData,
+                      ),
+              ],
+            );
+          },
         );
       }
 
