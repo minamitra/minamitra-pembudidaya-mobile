@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/section/barcode_label.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/section/button_scanner.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan_summary/view/qr_scan_summary_page.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -14,40 +16,17 @@ class QrScanView extends StatefulWidget {
 }
 
 class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
-  final MobileScannerController controller = MobileScannerController(
-      // required options for the scanner
-      );
+  final MobileScannerController controller =
+      MobileScannerController(cameraResolution: const Size(480, 640));
 
+  @override
   Future<void> dispose() async {
-    // // Stop listening to lifecycle changes.
-    // WidgetsBinding.instance.removeObserver(this);
-    // // Stop listening to the barcode events.
-    // unawaited(_subscription?.cancel());
-    // _subscription = null;
-    // // Dispose the widget itself.
     super.dispose();
-    // // Finally, dispose of the controller.
     await controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildBarcode(Barcode? value) {
-      if (value == null) {
-        return const Text(
-          'Scan something!',
-          overflow: TextOverflow.fade,
-          style: TextStyle(color: Colors.white),
-        );
-      }
-
-      return Text(
-        value.displayValue ?? 'No display value.',
-        overflow: TextOverflow.fade,
-        style: const TextStyle(color: Colors.white),
-      );
-    }
-
     final scanWindow = Rect.fromCenter(
       center: MediaQuery.sizeOf(context).center(Offset.zero),
       width: 200,
@@ -74,10 +53,17 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
               return Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Align(
-                  alignment: Alignment.bottomCenter,
+                  alignment: Alignment.topCenter,
                   child: ScannedBarcodeLabel(barcodes: controller.barcodes),
                 ),
               );
+            },
+            onDetect: (barcode) {
+              Navigator.of(context)
+                  .pushReplacement(AppTransition.pushTransition(
+                const QrScanSummaryPage(),
+                QrScanSummaryPage.route(),
+              ));
             },
           ),
         ),

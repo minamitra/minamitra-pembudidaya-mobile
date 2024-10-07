@@ -18,6 +18,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dum
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan_summary/view/qr_scan_summary_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
