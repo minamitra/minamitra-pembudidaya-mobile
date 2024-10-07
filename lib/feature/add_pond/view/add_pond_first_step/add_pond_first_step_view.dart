@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/update_pond_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondFirstStepView extends StatefulWidget {
-  const AddPondFirstStepView(this.rootPageController, {super.key});
+  const AddPondFirstStepView(
+    this.rootPageController, {
+    this.pondData,
+    super.key,
+  });
 
   final PageController rootPageController;
+  final PondResponseData? pondData;
 
   @override
   State<AddPondFirstStepView> createState() => _AddPondFirstStepViewState();
@@ -26,6 +32,24 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
   // final TextEditingController pondDeepController = TextEditingController();
 
   final GlobalKey<FormState> formFirstStepKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    final AddPondFirstStepCubit firstStepCubit =
+        context.read<AddPondFirstStepCubit>();
+
+    if (widget.pondData != null) {
+      firstStepCubit.pondNameController.text = widget.pondData!.name!;
+      firstStepCubit.pondlengthController.text = widget.pondData!.areaLength!;
+      firstStepCubit.pondWidthController.text = widget.pondData!.areaWidth!;
+      firstStepCubit.pondWideController.text =
+          (double.parse(widget.pondData!.areaLength!) *
+                  double.parse(widget.pondData!.areaWidth!))
+              .toStringAsFixed(0);
+      firstStepCubit.pondDeepController.text = widget.pondData!.areaDepth ?? "";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -216,6 +240,19 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
                     );
                     context.read<AddPondCubit>().changeStep(1);
                     context.read<AddPondFirstStepCubit>().onChangeData();
+                    if (widget.pondData != null) {
+                      UpdatePondPayload payload = UpdatePondPayload(
+                        id: widget.pondData!.id,
+                        name: firstStepCubit.pondNameController.text,
+                        areaLength: double.parse(
+                            firstStepCubit.pondlengthController.text),
+                        areaWidth: double.parse(
+                            firstStepCubit.pondWidthController.text),
+                        areaDepth: double.parse(
+                            firstStepCubit.pondDeepController.text),
+                      );
+                      context.read<AddPondCubit>().setUpdatePond(payload);
+                    }
                   }
                 },
               ),

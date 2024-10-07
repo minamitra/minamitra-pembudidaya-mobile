@@ -11,6 +11,10 @@ class PondEndpoint {
     return createUrl(path: "mitra/fishpondcycle/add");
   }
 
+  Uri updatePond() {
+    return createUrl(path: "mitra/fishpond/update");
+  }
+
   Uri getPond() {
     return createUrl(
       path: "mitra/fishpond/data",

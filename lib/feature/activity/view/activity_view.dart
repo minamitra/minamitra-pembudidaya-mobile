@@ -213,6 +213,7 @@ class _ActivityViewState extends State<ActivityView> {
       void Function()? onTap,
       required String pondStatus,
       required String imageAsset,
+      required bool isLastStatusDone,
     }) {
       return InkWell(
         onTap: onTap,
@@ -274,7 +275,7 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            "$value Kg",
+                            isLastStatusDone ? "-" : "$value Kg",
                             style: appTextTheme(context).titleSmall?.copyWith(
                                   color: const Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w400,
@@ -288,7 +289,7 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            "$percentage Kg",
+                            isLastStatusDone ? "-" : "$percentage Kg",
                             style: appTextTheme(context).titleSmall?.copyWith(
                                   color: const Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w400,
@@ -343,12 +344,18 @@ class _ActivityViewState extends State<ActivityView> {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: activityItem(
                   title: state.pondReponse?.data?[index].name ?? "",
-                  value:
-                      state.pondReponse?.data?[index].totalFoodRecommendation ??
-                          "-",
-                  percentage:
-                      state.pondReponse?.data?[index].totalFoodActual ?? "-",
-                  // isActive: state.pondReponse?.data?[index].activeBool ?? false,
+                  value: (double.parse(state.pondReponse?.data?[index]
+                                  .totalFoodRecommendation
+                                  .handleEmptyStringToZero() ??
+                              "0") /
+                          1000)
+                      .toStringAsFixed(3),
+                  percentage: (double.parse(state
+                                  .pondReponse?.data?[index].totalFoodActual
+                                  .handleEmptyStringToZero() ??
+                              "0") /
+                          1000)
+                      .toStringAsFixed(3),
                   onTap: () {
                     Navigator.of(context)
                         .push(AppTransition.pushTransition(
@@ -369,6 +376,10 @@ class _ActivityViewState extends State<ActivityView> {
                   },
                   pondStatus: state.pondReponse?.data?[index].status ?? "",
                   imageAsset: state.pondReponse?.data?[index].imageUrl ?? "",
+                  isLastStatusDone: state
+                          .pondReponse?.data?[index].lastFishpondcycleStatus
+                          ?.toLowerCase() ==
+                      "done",
                 ),
               );
             },
@@ -599,6 +610,8 @@ class _ActivityViewState extends State<ActivityView> {
       required String title,
       required String value,
       required String imageAsset,
+      required String allPondItemsLength,
+      bool isShowingAllPonds = true,
     }) {
       return Container(
         decoration: BoxDecoration(
@@ -633,7 +646,9 @@ class _ActivityViewState extends State<ActivityView> {
                   ),
                   const Spacer(),
                   Text(
-                    "dari 3 kolam aktif",
+                    isShowingAllPonds
+                        ? "dari $allPondItemsLength kolam aktif"
+                        : "dari 1 kolam aktif",
                     style: appTextTheme(context)
                         .labelLarge
                         ?.copyWith(color: AppColor.neutralBlueGrey[400]),
@@ -652,7 +667,11 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
-    Widget wrappedHeaderItemData(ActivityHeaderDataWrapped data) {
+    Widget wrappedHeaderItemData(
+      ActivityHeaderDataWrapped data,
+      bool isShowingAllPonds,
+      String allPondItemsLength,
+    ) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -661,6 +680,8 @@ class _ActivityViewState extends State<ActivityView> {
             title: data.listActivtyHeaderDataDummy[0].title,
             value: data.listActivtyHeaderDataDummy[0].value,
             imageAsset: data.listActivtyHeaderDataDummy[0].imageAsset,
+            isShowingAllPonds: isShowingAllPonds,
+            allPondItemsLength: allPondItemsLength,
           ),
           const SizedBox(height: 18.0),
           if (data.listActivtyHeaderDataDummy.length > 1)
@@ -668,6 +689,8 @@ class _ActivityViewState extends State<ActivityView> {
               title: data.listActivtyHeaderDataDummy[1].title,
               value: data.listActivtyHeaderDataDummy[1].value,
               imageAsset: data.listActivtyHeaderDataDummy[1].imageAsset,
+              isShowingAllPonds: isShowingAllPonds,
+              allPondItemsLength: allPondItemsLength,
             ),
         ],
       );
@@ -788,6 +811,11 @@ class _ActivityViewState extends State<ActivityView> {
                                         .toString() ??
                                     "",
                               )[index],
+                              (state.selectedPondID ?? "0") == "0",
+                              state.pondReponse?.data?.length == 1
+                                  ? "0"
+                                  : ((state.pondReponse?.data?.length ?? 1) - 1)
+                                      .toString(),
                             ),
                           );
                         },

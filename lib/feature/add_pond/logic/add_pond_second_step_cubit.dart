@@ -44,6 +44,51 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       selectedDistrict: null,
       selectedSubDistrict: null,
       selectedVillage: null,
+      status: GlobalState.loaded,
+    ));
+  }
+
+  Future<void> initWithExistData({
+    required String provinceId,
+    required String provinceName,
+    required String districtId,
+    required String districtName,
+    required String subDistrictId,
+    required String subDistrictName,
+    required String villageId,
+    required String villageName,
+    required String latitude,
+    required String longitude,
+  }) async {
+    emit(state.copyWith(status: GlobalState.loading));
+    final provinceResponse = await refService.province();
+    final districtResponse = await refService.district(provinceId);
+    final subDistrictResponse = await refService.subDistrict(districtId);
+    final villageResponse = await refService.village(subDistrictId);
+    emit(state.copyWith(
+      provinceData: provinceResponse.data,
+      districtData: districtResponse.data,
+      subDistrictData: subDistrictResponse.data,
+      villageData: villageResponse.data,
+      selectedProvince: ProvinceResponseData(
+        id: provinceId,
+        name: provinceName,
+      ),
+      selectedDistrict: DistrictResponseData(
+        id: districtId,
+        name: districtName,
+      ),
+      selectedSubDistrict: SubDistrictResponseData(
+        id: subDistrictId,
+        name: subDistrictName,
+      ),
+      selectedVillage: VillageResponseData(
+        id: villageId,
+        name: villageName,
+      ),
+      latitude: latitude,
+      longitude: longitude,
+      status: GlobalState.loaded,
     ));
   }
 

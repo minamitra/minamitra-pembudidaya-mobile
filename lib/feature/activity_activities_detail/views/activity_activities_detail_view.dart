@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_desctiption_item.dart';
@@ -59,7 +60,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
             "Jumlah Pakan",
-            "${data.actual} gram",
+            "${double.parse(data.actual?.handleEmptyStringToZero() ?? "0").toStringAsFixed(0)} gram",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),

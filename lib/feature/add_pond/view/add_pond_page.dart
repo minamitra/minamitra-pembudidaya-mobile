@@ -10,6 +10,7 @@ import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_service.dar
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_first_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_second_step_cubit.dart';
@@ -26,10 +27,14 @@ enum BehaviourPage {
 class AddPondPage extends StatelessWidget {
   const AddPondPage({
     this.behaviourPage = BehaviourPage.addNewPond,
+    this.pondID,
+    this.pondData,
     super.key,
   });
 
   final BehaviourPage behaviourPage;
+  final String? pondID;
+  final PondResponseData? pondData;
 
   static RouteSettings routeSettings() {
     return const RouteSettings(name: '/add-pond-first-step-page');
@@ -51,10 +56,28 @@ class AddPondPage extends StatelessWidget {
         BlocProvider(create: (context) => MultipleImageCubit()),
         BlocProvider(create: (context) => AddPondFirstStepCubit()),
         BlocProvider(
-          create: (context) => AddPondSecondStepCubit(
-            RefServiceImpl.create(),
-            CdnServiceImpl.create(),
-          )..init(),
+          create: (context) {
+            return pondData != null
+                ? (AddPondSecondStepCubit(
+                    RefServiceImpl.create(),
+                    CdnServiceImpl.create(),
+                  )..initWithExistData(
+                    provinceId: pondData!.addressProvinceId!,
+                    provinceName: pondData!.addressProvinceName!,
+                    districtId: pondData!.addressCityId!,
+                    districtName: pondData!.addressCityName!,
+                    subDistrictId: pondData!.addressSubdistrictId!,
+                    subDistrictName: pondData!.addressSubdistrictName!,
+                    villageId: pondData!.addressVillageId!,
+                    villageName: pondData!.addressVillageName!,
+                    latitude: pondData!.addressLatitude ?? "",
+                    longitude: pondData!.addressLongitude ?? "",
+                  ))
+                : (AddPondSecondStepCubit(
+                    RefServiceImpl.create(),
+                    CdnServiceImpl.create(),
+                  )..init());
+          },
         ),
         BlocProvider(
             create: (context) =>
@@ -82,9 +105,22 @@ class AddPondPage extends StatelessWidget {
               }
 
               if (state.status.isSuccessSubmit) {
-                AppTopSnackBar(context)
-                    .showSuccess("Berhasil Membuat\nKolam Baru !");
-                Navigator.of(context).pop("refresh");
+                if (behaviourPage == BehaviourPage.addNewPond) {
+                  AppTopSnackBar(context)
+                      .showSuccess("Berhasil Membuat\nKolam Baru");
+                  Navigator.of(context).pop("refresh");
+                } else if (behaviourPage == BehaviourPage.addNewCycle) {
+                  AppTopSnackBar(context)
+                      .showSuccess("Berhasil Membuat\nSiklus Baru");
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop("refresh");
+                } else if (behaviourPage == BehaviourPage.editPond) {
+                  AppTopSnackBar(context).showSuccess("Berhasil Edit\nKolam");
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop("refresh");
+                }
               }
             },
           )
@@ -103,7 +139,11 @@ class AddPondPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return AddPondView();
+              return AddPondView(
+                behaviourPage,
+                pondID: pondID,
+                pondData: pondData,
+              );
             },
           ),
         ),
