@@ -6,12 +6,16 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_first_step/add_pond_first_step_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_second_step/add_pond_second_step_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_third_step/add_pond_third_step_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondView extends StatefulWidget {
-  const AddPondView({super.key});
+  const AddPondView(this.behaviourPage, {this.pondID, super.key});
+
+  final BehaviourPage behaviourPage;
+  final String? pondID;
 
   @override
   State<AddPondView> createState() => _AddPondViewState();
@@ -125,13 +129,24 @@ class _AddPondViewState extends State<AddPondView> {
     }
 
     Widget body() {
+      if (BehaviourPage.addNewCycle == widget.behaviourPage) {
+        return AddPondThirdStepView(
+          pageController,
+          widget.behaviourPage,
+          pondID: widget.pondID,
+        );
+      }
+
       return PageView(
         controller: pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           AddPondFirstStepView(pageController),
           AddPondSecondStepView(pageController),
-          AddPondThirdStepView(pageController),
+          AddPondThirdStepView(
+            pageController,
+            widget.behaviourPage,
+          ),
         ],
       );
     }
@@ -194,8 +209,9 @@ class _AddPondViewState extends State<AddPondView> {
       padding: const EdgeInsets.symmetric(vertical: 18.0),
       child: Column(
         children: [
-          const SizedBox(height: 18.0),
-          currentStep(),
+          if (widget.behaviourPage != BehaviourPage.addNewCycle)
+            const SizedBox(height: 18.0),
+          if (widget.behaviourPage != BehaviourPage.addNewCycle) currentStep(),
           Expanded(child: body()),
           // bottomButton(),
         ],

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -21,13 +23,21 @@ import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_sec
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_third_step_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/add_pond_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/pakan_starter_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondThirdStepView extends StatefulWidget {
-  const AddPondThirdStepView(this.rootPageController, {super.key});
+  const AddPondThirdStepView(
+    this.rootPageController,
+    this.behaviourPage, {
+    this.pondID,
+    super.key,
+  });
 
   final PageController rootPageController;
+  final BehaviourPage behaviourPage;
+  final String? pondID;
 
   @override
   State<AddPondThirdStepView> createState() => _AddPondThirdStepViewState();
@@ -647,22 +657,24 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Row(
               children: [
-                Expanded(
-                  child: AppAnimatedSize(
-                    isShow: state.index > 0,
-                    child: AppPrimaryOutlineFullButton(
-                      "Kembali",
-                      () {
-                        widget.rootPageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                        context.read<AddPondCubit>().changeStep(2);
-                      },
+                if (widget.behaviourPage != BehaviourPage.addNewCycle)
+                  Expanded(
+                    child: AppAnimatedSize(
+                      isShow: state.index > 0,
+                      child: AppPrimaryOutlineFullButton(
+                        "Kembali",
+                        () {
+                          widget.rootPageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeInOut,
+                          );
+                          context.read<AddPondCubit>().changeStep(2);
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 16.0),
+                if (widget.behaviourPage != BehaviourPage.addNewCycle)
+                  const SizedBox(width: 16.0),
                 Expanded(
                   child: AppAnimatedSize(
                     isShow: true,
@@ -676,10 +688,10 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
                         if (formThirdStepKey.currentState?.validate() ??
                             false) {
-                          widget.rootPageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeInOut,
-                          );
+                          // widget.rootPageController.nextPage(
+                          //   duration: const Duration(milliseconds: 300),
+                          //   curve: Curves.easeInOut,
+                          // );
                           final int? survivalRaate = int.tryParse(
                               addPondThirdStepCubit
                                   .survivalRateController.text);
@@ -725,63 +737,98 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                   .map((element) => element.toFinisherObject())
                                   .toList();
 
-                          context.read<AddPondCubit>().addPond(
-                                pondPayload: AddPondPayload(
-                                  name: addPondFirstStepCubit
-                                      .pondNameController.text,
-                                  areaLength: double.parse(addPondFirstStepCubit
-                                      .pondlengthController.text),
-                                  areaWidth: double.parse(addPondFirstStepCubit
-                                      .pondWidthController.text),
-                                  areaDepth: double.parse(addPondFirstStepCubit
-                                      .pondDeepController.text),
-                                  address: "",
-                                  addressLatitude:
-                                      addPondSecondStepCubit.state.latitude,
-                                  addressLongitude:
-                                      addPondSecondStepCubit.state.longitude,
-                                  addressProvinceId: addPondSecondStepCubit
-                                      .state.selectedProvince?.id,
-                                  addressProvinceName: addPondSecondStepCubit
-                                      .state.selectedProvince?.name,
-                                  addressCityId: addPondSecondStepCubit
-                                      .state.selectedDistrict?.id,
-                                  addressCityName: addPondSecondStepCubit
-                                      .state.selectedDistrict?.name,
-                                  addressSubdistrictId: addPondSecondStepCubit
-                                      .state.selectedSubDistrict?.id,
-                                  addressSubdistrictName: addPondSecondStepCubit
-                                      .state.selectedSubDistrict?.name,
-                                  addressVillageId: addPondSecondStepCubit
-                                      .state.selectedVillage?.id,
-                                  addressVillageName: addPondSecondStepCubit
-                                      .state.selectedVillage?.name,
-                                  imageUrl:
-                                      addPondSecondStepCubit.state.urlImage,
-                                ),
-                                pondCyclePayload: AddPondCyclePayload(
-                                  tebarDate:
-                                      addPondThirdStepCubit.dateController.text,
-                                  tebarFishTotal: int.parse(
-                                      addPondThirdStepCubit
-                                          .fishCountController.text),
-                                  tebarBobot: int.parse(addPondThirdStepCubit
-                                      .spreadController.text),
-                                  targetPanenBobot: int.parse(
-                                      addPondThirdStepCubit
-                                          .targetController.text),
-                                  srTarget: int.parse(addPondThirdStepCubit
-                                      .survivalRateController.text),
-                                  fishfoodJsonObject: FishfoodJsonObject(
-                                    starter: selecterStarterFinisher,
-                                    grower: selecterGrowerFinisher,
-                                    finisher: selecterFinisherFinisher,
+                          if (widget.behaviourPage ==
+                              BehaviourPage.addNewCycle) {
+                            log("add new cycle ${widget.pondID}");
+                            context.read<AddPondCubit>().addNewCycle(
+                                  pondID: widget.pondID ?? "",
+                                  pondCyclePayload: AddPondCyclePayload(
+                                    tebarDate: addPondThirdStepCubit
+                                        .dateController.text,
+                                    tebarFishTotal: int.parse(
+                                        addPondThirdStepCubit
+                                            .fishCountController.text),
+                                    tebarBobot: int.parse(addPondThirdStepCubit
+                                        .spreadController.text),
+                                    targetPanenBobot: int.parse(
+                                        addPondThirdStepCubit
+                                            .targetController.text),
+                                    srTarget: int.parse(addPondThirdStepCubit
+                                        .survivalRateController.text),
+                                    fishfoodJsonObject: FishfoodJsonObject(
+                                      starter: selecterStarterFinisher,
+                                      grower: selecterGrowerFinisher,
+                                      finisher: selecterFinisherFinisher,
+                                    ),
+                                    fishseedId:
+                                        int.parse(addPondThirdStepCubit.seedID),
+                                    estimationFishfoodEpp: 75,
                                   ),
-                                  fishseedId:
-                                      int.parse(addPondThirdStepCubit.seedID),
-                                  estimationFishfoodEpp: 75,
-                                ),
-                              );
+                                );
+                          } else {
+                            context.read<AddPondCubit>().addPond(
+                                  pondPayload: AddPondPayload(
+                                    name: addPondFirstStepCubit
+                                        .pondNameController.text,
+                                    areaLength: double.parse(
+                                        addPondFirstStepCubit
+                                            .pondlengthController.text),
+                                    areaWidth: double.parse(
+                                        addPondFirstStepCubit
+                                            .pondWidthController.text),
+                                    areaDepth: double.parse(
+                                        addPondFirstStepCubit
+                                            .pondDeepController.text),
+                                    address: "",
+                                    addressLatitude:
+                                        addPondSecondStepCubit.state.latitude,
+                                    addressLongitude:
+                                        addPondSecondStepCubit.state.longitude,
+                                    addressProvinceId: addPondSecondStepCubit
+                                        .state.selectedProvince?.id,
+                                    addressProvinceName: addPondSecondStepCubit
+                                        .state.selectedProvince?.name,
+                                    addressCityId: addPondSecondStepCubit
+                                        .state.selectedDistrict?.id,
+                                    addressCityName: addPondSecondStepCubit
+                                        .state.selectedDistrict?.name,
+                                    addressSubdistrictId: addPondSecondStepCubit
+                                        .state.selectedSubDistrict?.id,
+                                    addressSubdistrictName:
+                                        addPondSecondStepCubit
+                                            .state.selectedSubDistrict?.name,
+                                    addressVillageId: addPondSecondStepCubit
+                                        .state.selectedVillage?.id,
+                                    addressVillageName: addPondSecondStepCubit
+                                        .state.selectedVillage?.name,
+                                    imageUrl:
+                                        addPondSecondStepCubit.state.urlImage,
+                                  ),
+                                  pondCyclePayload: AddPondCyclePayload(
+                                    tebarDate: addPondThirdStepCubit
+                                        .dateController.text,
+                                    tebarFishTotal: int.parse(
+                                        addPondThirdStepCubit
+                                            .fishCountController.text),
+                                    tebarBobot: int.parse(addPondThirdStepCubit
+                                        .spreadController.text),
+                                    targetPanenBobot: int.parse(
+                                        addPondThirdStepCubit
+                                            .targetController.text),
+                                    srTarget: int.parse(addPondThirdStepCubit
+                                        .survivalRateController.text),
+                                    fishfoodJsonObject: FishfoodJsonObject(
+                                      starter: selecterStarterFinisher,
+                                      grower: selecterGrowerFinisher,
+                                      finisher: selecterFinisherFinisher,
+                                    ),
+                                    fishseedId:
+                                        int.parse(addPondThirdStepCubit.seedID),
+                                    estimationFishfoodEpp: 75,
+                                  ),
+                                );
+                          }
+
                           // Navigator.of(context).popUntil(ModalRoute.withName(
                           //     DashboardPage.routeSettings().name ?? ""));
                         }
@@ -806,7 +853,8 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               shrinkWrap: true,
               physics: const AlwaysScrollableScrollPhysics(),
               children: [
-                const SizedBox(height: 18.0),
+                if (widget.behaviourPage != BehaviourPage.addNewCycle)
+                  const SizedBox(height: 18.0),
                 ...pondInformation(),
                 ...form(),
                 const SizedBox(height: 18.0),

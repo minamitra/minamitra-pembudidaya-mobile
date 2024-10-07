@@ -40,4 +40,10 @@ class CycleEndpoint {
   Uri postHarvest() {
     return createUrl(path: "mitra/fishpondcycle/update-panen");
   }
+
+  Uri updateHarvestDone() {
+    return createUrl(
+      path: "mitra/fishpondcycle/update-panen-selesai",
+    );
+  }
 }

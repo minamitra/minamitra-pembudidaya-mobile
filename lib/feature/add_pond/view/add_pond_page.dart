@@ -26,10 +26,12 @@ enum BehaviourPage {
 class AddPondPage extends StatelessWidget {
   const AddPondPage({
     this.behaviourPage = BehaviourPage.addNewPond,
+    this.pondID,
     super.key,
   });
 
   final BehaviourPage behaviourPage;
+  final String? pondID;
 
   static RouteSettings routeSettings() {
     return const RouteSettings(name: '/add-pond-first-step-page');
@@ -82,9 +84,15 @@ class AddPondPage extends StatelessWidget {
               }
 
               if (state.status.isSuccessSubmit) {
-                AppTopSnackBar(context)
-                    .showSuccess("Berhasil Membuat\nKolam Baru !");
-                Navigator.of(context).pop("refresh");
+                if (behaviourPage == BehaviourPage.addNewPond) {
+                  AppTopSnackBar(context)
+                      .showSuccess("Berhasil Membuat\nKolam Baru");
+                  Navigator.of(context).pop("refresh");
+                } else if (behaviourPage == BehaviourPage.addNewCycle) {
+                  AppTopSnackBar(context)
+                      .showSuccess("Berhasil Membuat\nSiklus Baru");
+                  Navigator.of(context).pop("refresh");
+                }
               }
             },
           )
@@ -103,7 +111,10 @@ class AddPondPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
 
-              return AddPondView();
+              return AddPondView(
+                behaviourPage,
+                pondID: pondID,
+              );
             },
           ),
         ),

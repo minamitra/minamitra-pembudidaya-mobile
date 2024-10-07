@@ -154,4 +154,23 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       ));
     }
   }
+
+  Future<void> doneHarvest(String id) async {
+    emit(state.copyWith(status: GlobalState.showDialogLoading));
+    try {
+      await service.updateHarvestDone(id: id);
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(state.copyWith(status: GlobalState.successSubmit));
+    } on AppException catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.message,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: GlobalState.error,
+        errorMessage: e.toString(),
+      ));
+    }
+  }
 }
