@@ -17,6 +17,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -234,26 +235,35 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                         ),
-                        Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: AppColor.primary,
-                                borderRadius: BorderRadius.circular(10.0),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(AppTransition.pushTransition(
+                              const QrScanPage(),
+                              QrScanPage.route(),
+                            ));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppColor.primary,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Image.asset(
+                                  AppAssets.scanIcon,
+                                  height: 20.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              child: Image.asset(
-                                AppAssets.scanIcon,
-                                height: 20.0,
-                                fit: BoxFit.cover,
+                              const SizedBox(height: 4.0),
+                              Text(
+                                "Bayar",
+                                style: AppTextStyle.blackExtraSmallText,
                               ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              "Bayar",
-                              style: AppTextStyle.blackExtraSmallText,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(width: 12.0),
                         Column(
