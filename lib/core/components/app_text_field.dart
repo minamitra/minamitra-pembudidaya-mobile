@@ -399,7 +399,7 @@ class AppSearchField extends AppValidatorTextField {
             ),
           ),
           onFieldSubmitted: onFieldSubmitted,
-          fillColor: AppColor.neutral[200],
+          fillColor: fillColor ?? AppColor.neutral[200],
           textColor: textColor,
           withUpperLabel: false,
           isMandatory: isMandatory,
