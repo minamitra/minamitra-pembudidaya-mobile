@@ -157,7 +157,7 @@ class _PointViewState extends State<PointView>
         ),
         const SizedBox(height: 16.0),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: SizedBox(
             height: 16.0,
             width: double.infinity,
@@ -165,9 +165,9 @@ class _PointViewState extends State<PointView>
               alignment: Alignment.center,
               children: [
                 LinearPercentIndicator(
-                  padding: const EdgeInsets.all(0),
+                  // padding: const EdgeInsets.symmetric(horizontal: 14.0),
                   animation: true,
-                  lineHeight: 12.0,
+                  lineHeight: 8.0,
                   animationDuration: 1000,
                   percent: 0.4,
                   barRadius: const Radius.circular(8.0),
@@ -194,6 +194,25 @@ class _PointViewState extends State<PointView>
           ),
         ),
         const SizedBox(height: 16.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ...List.generate(
+                listLevel.length,
+                (index) {
+                  return Text(
+                    listLevel[index].name,
+                    style: appTextTheme(context)
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w500),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ];
     }
 
