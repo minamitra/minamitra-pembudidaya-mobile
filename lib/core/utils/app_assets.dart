@@ -144,4 +144,6 @@ class AppAssets {
   static const String bcaBankIcon = "$iconPath/bca-bank-icon.png";
   static const String mandiriBankIcon = "$iconPath/mandiri-bank-icon.png";
   static const String briBankIcon = "$iconPath/bri-bank-icon.png";
+  static const String walletOutlineIcon = "$iconPath/wallet-outline-icon.png";
+  static const String qrCodeIcon = "$iconPath/qr-code-icon.png";
 }
