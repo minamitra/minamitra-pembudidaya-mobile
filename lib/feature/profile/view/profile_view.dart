@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
@@ -39,16 +40,22 @@ class _ProfileViewState extends State<ProfileView> {
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Row(
               children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.profileImageDummy),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(30.0),
+                  child: (state.userData?.imageUrl != null &&
+                          state.userData?.imageUrl != "")
+                      ? AppNetworkImage(
+                          state.userData!.imageUrl!,
+                          width: 60.0,
+                          height: 60.0,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.asset(
+                          AppAssets.profileImageDummy,
+                          width: 60,
+                          height: 60,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 const SizedBox(width: 18.0),
                 Column(

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/logic/profile_member_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/attachment/attachment_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/biodata/biodata_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class ProfileMemberView extends StatefulWidget {
   const ProfileMemberView({super.key});
@@ -28,6 +33,9 @@ class _ProfileMemberViewState extends State<ProfileMemberView>
 
   @override
   Widget build(BuildContext context) {
+    final SimpleFontelicoProgressDialog dialog =
+        SimpleFontelicoProgressDialog(context: context);
+
     Widget tabBar() {
       return Container(
         height: 60,
@@ -57,12 +65,43 @@ class _ProfileMemberViewState extends State<ProfileMemberView>
 
     Widget bodyTab() {
       return Expanded(
-        child: TabBarView(
-          controller: _tabController,
-          children: [
-            BiodataView(),
-            AttachmentView(),
-          ],
+        child: BlocConsumer<ProfileMemberCubit, ProfileMemberState>(
+          listener: (context, state) {
+            if (state.status.isShowDialogLoading) {
+              AppDialog().showLoadingDialog(context, dialog);
+            }
+
+            if (state.status.isHideDialogLoading) {
+              dialog.hide();
+            }
+
+            if (state.status.isError) {
+              if (state.errorMessage == "TOKEN_EXPIRED") {
+                RepositoryProvider.of<AuthenticationRepository>(context)
+                    .logout();
+              } else {
+                AppTopSnackBar(context).showDanger(state.errorMessage);
+              }
+            }
+          },
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            if (state.status.isLoaded) {
+              return TabBarView(
+                controller: _tabController,
+                children: [
+                  BiodataView(state.profile!),
+                  AttachmentView(),
+                ],
+              );
+            }
+
+            return const SizedBox();
+          },
         ),
       );
     }
