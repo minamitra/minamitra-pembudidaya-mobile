@@ -65,7 +65,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
 
-  List<String> selectedPakanStarter = [];
+  List<String> selectedPakanStarter1 = [];
+  List<String> selectedPakanStarter2 = [];
+  List<String> selectedPakanStarter3 = [];
   List<String> selectedPakanGrower = [];
   List<String> selectedPakanFinisher = [];
 
@@ -326,6 +328,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           ),
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Benih tidak boleh kosong";
+            }
             return null;
           },
           onTap: radioShowModal(
@@ -430,7 +435,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         AppValidatorTextField(
           controller: addPondThirdStepCubit.targetController,
           inputType: TextInputType.phone,
-          isMandatory: false,
+          isMandatory: true,
           withUpperLabel: true,
           labelText: "Target Bobot Panen",
           hintText: "0",
@@ -446,6 +451,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
           ),
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Target bobot panen tidak boleh kosong";
+            }
             return null;
           },
         ),
@@ -474,6 +482,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               ),
               suffixConstraints: const BoxConstraints(),
               validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Asal benih tidak boleh kosong";
+                }
                 return null;
               },
               onTap: appBottomSheetShowModal(
@@ -530,12 +541,12 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             }
 
             return AppValidatorTextField(
-              controller: addPondThirdStepCubit.pakanStarterController,
+              controller: addPondThirdStepCubit.pakanStarter1Controller,
               inputType: TextInputType.phone,
               isMandatory: true,
               withUpperLabel: true,
               readOnly: true,
-              labelText: "Pakan Starter",
+              labelText: "Pakan Starter 1",
               hintText: "Pilih Pakan",
               suffixWidget: const Padding(
                 padding: EdgeInsets.only(right: 18.0),
@@ -543,18 +554,113 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               ),
               suffixConstraints: const BoxConstraints(),
               validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Pakan starter 1 tidak boleh kosong";
+                }
                 return null;
               },
               onTap: appBottomSheetShowModalChecklist(
                 context: context,
-                title: "Pakan Starter",
-                data: addPondThirdStepCubit.state.feedStarterData?.data
+                title: "Pakan Starter 1",
+                data: addPondThirdStepCubit.state.feedStarter1Data?.data
                         ?.map((element) => element.name ?? "")
                         .toList() ??
                     [],
-                selectedData: selectedPakanStarter,
+                selectedData: selectedPakanStarter1,
                 onSelected: (value) {
-                  addPondThirdStepCubit.pakanStarterController.text =
+                  addPondThirdStepCubit.pakanStarter1Controller.text =
+                      value.join(", ");
+                },
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 18.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.pakanStarter2Controller,
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: "Pakan Starter 2",
+              hintText: "Pilih Pakan",
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Pakan starter 2 tidak boleh kosong";
+                }
+                return null;
+              },
+              onTap: appBottomSheetShowModalChecklist(
+                context: context,
+                title: "Pakan Starter 2",
+                data: addPondThirdStepCubit.state.feedStarter2Data?.data
+                        ?.map((element) => element.name ?? "")
+                        .toList() ??
+                    [],
+                selectedData: selectedPakanStarter2,
+                onSelected: (value) {
+                  addPondThirdStepCubit.pakanStarter2Controller.text =
+                      value.join(", ");
+                },
+              ),
+            );
+          },
+        ),
+        const SizedBox(height: 18.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.pakanStarter3Controller,
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: "Pakan Starter 3",
+              hintText: "Pilih Pakan",
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Pakan starter 3 tidak boleh kosong";
+                }
+                return null;
+              },
+              onTap: appBottomSheetShowModalChecklist(
+                context: context,
+                title: "Pakan Starter 3",
+                data: addPondThirdStepCubit.state.feedStarter3Data?.data
+                        ?.map((element) => element.name ?? "")
+                        .toList() ??
+                    [],
+                selectedData: selectedPakanStarter3,
+                onSelected: (value) {
+                  addPondThirdStepCubit.pakanStarter3Controller.text =
                       value.join(", ");
                 },
               ),
@@ -586,6 +692,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               ),
               suffixConstraints: const BoxConstraints(),
               validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Pakan grower tidak boleh kosong";
+                }
                 return null;
               },
               onTap: appBottomSheetShowModalChecklist(
@@ -629,6 +738,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               ),
               suffixConstraints: const BoxConstraints(),
               validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return "Pakan finisher 1 tidak boleh kosong";
+                }
                 return null;
               },
               onTap: appBottomSheetShowModalChecklist(
@@ -705,9 +817,21 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
                           // Mapping data
 
-                          List<FeedStarterResponseData> selectedStarterData =
-                              addPondThirdStepCubit.state.feedStarterData?.data
-                                      ?.where((element) => selectedPakanStarter
+                          List<FeedStarterResponseData> selectedStarter1Data =
+                              addPondThirdStepCubit.state.feedStarter1Data?.data
+                                      ?.where((element) => selectedPakanStarter1
+                                          .contains(element.name))
+                                      .toList() ??
+                                  [];
+                          List<FeedStarterResponseData> selectedStarter2Data =
+                              addPondThirdStepCubit.state.feedStarter2Data?.data
+                                      ?.where((element) => selectedPakanStarter2
+                                          .contains(element.name))
+                                      .toList() ??
+                                  [];
+                          List<FeedStarterResponseData> selectedStarter3Data =
+                              addPondThirdStepCubit.state.feedStarter3Data?.data
+                                      ?.where((element) => selectedPakanStarter3
                                           .contains(element.name))
                                       .toList() ??
                                   [];
@@ -724,8 +848,16 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                       .toList() ??
                                   [];
 
-                          List<Finisher> selecterStarterFinisher =
-                              selectedStarterData
+                          List<Finisher> selecterStarter1Finisher =
+                              selectedStarter1Data
+                                  .map((element) => element.toFinisherObject())
+                                  .toList();
+                          List<Finisher> selecterStarter2Finisher =
+                              selectedStarter2Data
+                                  .map((element) => element.toFinisherObject())
+                                  .toList();
+                          List<Finisher> selecterStarter3Finisher =
+                              selectedStarter3Data
                                   .map((element) => element.toFinisherObject())
                                   .toList();
                           List<Finisher> selecterGrowerFinisher =
@@ -739,7 +871,6 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
                           if (widget.behaviourPage ==
                               BehaviourPage.addNewCycle) {
-                            log("add new cycle ${widget.pondID}");
                             context.read<AddPondCubit>().addNewCycle(
                                   pondID: widget.pondID ?? "",
                                   pondCyclePayload: AddPondCyclePayload(
@@ -756,7 +887,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                     srTarget: int.parse(addPondThirdStepCubit
                                         .survivalRateController.text),
                                     fishfoodJsonObject: FishfoodJsonObject(
-                                      starter: selecterStarterFinisher,
+                                      starter1: selecterStarter1Finisher,
+                                      starter2: selecterStarter2Finisher,
+                                      starter3: selecterStarter3Finisher,
                                       grower: selecterGrowerFinisher,
                                       finisher: selecterFinisherFinisher,
                                     ),
@@ -818,7 +951,9 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                     srTarget: int.parse(addPondThirdStepCubit
                                         .survivalRateController.text),
                                     fishfoodJsonObject: FishfoodJsonObject(
-                                      starter: selecterStarterFinisher,
+                                      starter1: selecterStarter1Finisher,
+                                      starter2: selecterStarter2Finisher,
+                                      starter3: selecterStarter3Finisher,
                                       grower: selecterGrowerFinisher,
                                       finisher: selecterFinisherFinisher,
                                     ),

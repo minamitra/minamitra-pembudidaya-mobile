@@ -49,6 +49,7 @@ class FeedActivityResponseData {
   String? createById;
   String? createByType;
   String? createByName;
+  String? timeSheet;
 
   FeedActivityResponseData({
     this.id,
@@ -67,6 +68,7 @@ class FeedActivityResponseData {
     this.createById,
     this.createByType,
     this.createByName,
+    this.timeSheet,
   });
 
   factory FeedActivityResponseData.fromJson(String str) =>
@@ -95,6 +97,7 @@ class FeedActivityResponseData {
         createById: json["create_by_id"],
         createByType: json["create_by_type"],
         createByName: json["create_by_name"],
+        timeSheet: json["time_sheet"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -114,6 +117,7 @@ class FeedActivityResponseData {
         "create_by_id": createById,
         "create_by_type": createByType,
         "create_by_name": createByName,
+        "time_sheet": timeSheet,
       };
 }
 

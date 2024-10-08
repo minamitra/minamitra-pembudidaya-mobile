@@ -721,12 +721,36 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 const SizedBox(height: 18.0),
                 AppDividerSmall(),
                 detailPakanItem(
-                  "Starter",
+                  "Starter 1",
                   widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                           "done"
                       ? "-"
                       : state.onGoingCycleFeedResponseData?.data?.first
-                              .fishfoodJsonObject?.starter
+                              .fishfoodJsonObject?.starter1
+                              ?.map((element) => element.name)
+                              .toList()
+                              .join(", ") ??
+                          "-",
+                ),
+                detailPakanItem(
+                  "Starter 2",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.starter2
+                              ?.map((element) => element.name)
+                              .toList()
+                              .join(", ") ??
+                          "-",
+                ),
+                detailPakanItem(
+                  "Starter 3",
+                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                          "done"
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.starter3
                               ?.map((element) => element.name)
                               .toList()
                               .join(", ") ??

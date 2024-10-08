@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
@@ -13,6 +11,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/get_hour_time.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/view/add_new_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -44,7 +43,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 45));
   DateTime lastDate = DateTime.now();
 
-  List<String> listType = ['Pakan Pagi', 'Pakan Sore', 'Lainnya'];
+  List<String> listType = ["Pagi", "Siang", "Sore", "Malam"];
 
   @override
   void initState() {
@@ -59,6 +58,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           );
       hourController.text =
           AppConvertDateTime().jm24(widget.editData!.datetime!);
+      typeController.text = widget.editData!.timeSheet ?? "";
       amountController.text = widget.editData!.actual ?? "0";
       brandController.text = widget.editData!.fishfoodName ?? "";
       context
@@ -132,7 +132,37 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
     );
   }
 
-  Widget typeTextField() {
+  Widget typeTextFormField() {
+    return AppValidatorTextField(
+      labelText: "Waktu Kegiatan",
+      controller: typeController,
+      isMandatory: true,
+      withUpperLabel: true,
+      readOnly: true,
+      hintText: "Pilih waktu kegiatan",
+      suffixWidget: const Padding(
+        padding: EdgeInsets.only(right: 18.0),
+        child: Icon(Icons.arrow_drop_down_rounded),
+      ),
+      suffixConstraints: const BoxConstraints(),
+      validator: (value) {
+        if (value?.isEmpty ?? true) {
+          return "Waktu kegiatan tidak boleh kosong";
+        }
+        return null;
+      },
+      onTap: appBottomSheetShowModal(
+        context,
+        "Pilih waktu kegiatan",
+        listType,
+        (value) {
+          typeController.text = value;
+        },
+      ),
+    );
+  }
+
+  Widget typeDialogField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -533,7 +563,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         children: [
           dateTextField(context),
           const SizedBox(height: 16.0),
-          hourTextField(context),
+          // hourTextField(context),
+          typeTextFormField(),
           const SizedBox(height: 16.0),
           fishAge(),
           const SizedBox(height: 16.0),
@@ -541,8 +572,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           amountTextField(),
           const SizedBox(height: 16.0),
           brandName(),
-          const SizedBox(height: 16.0),
-          totalAmountFeedFromInit(),
+          // const SizedBox(height: 16.0),
+          // totalAmountFeedFromInit(),
           const SizedBox(height: 16.0),
           noteTextField(),
           const SizedBox(height: 98.0),
@@ -565,20 +596,18 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         child: AppPrimaryFullButton(
           "Simpan",
           () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
+            final int getHourTime = typeController.text.getHourTime();
             final activityCubit = context.read<ActivityActivitiesAddCubit>();
             context.read<ActivityActivitiesAddCubit>().addFishFeed(
                   AddFishFeedBody(
                     fishpondId: int.parse(activityCubit.fishPondID ?? "0"),
                     fishpondcycleId:
                         int.parse(activityCubit.fishPondCycleID ?? "0"),
-                    datetime: activityCubit.state.selectedDate?.copyWith(
-                      hour: activityCubit.feedHour != null
-                          ? int.parse(activityCubit.feedHour!)
-                          : 0,
-                      minute: activityCubit.feedMinute != null
-                          ? int.parse(activityCubit.feedMinute!)
-                          : 0,
-                    ),
+                    datetime: activityCubit.state.selectedDate
+                        ?.copyWith(hour: getHourTime),
                     fishAge: activityCubit.state.fishAge,
                     recommendation: activityCubit
                         .state.feedRecomendationResponse?.data?.suggestFeed,
@@ -587,6 +616,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                     fishfoodId: activityCubit.state.fishFoodID,
                     note: noteController.text,
                     dataID: widget.editData?.id,
+                    timeSheet: typeController.text.toLowerCase(),
                   ),
                 );
           },
@@ -594,12 +624,15 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       );
     }
 
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        body(),
-        button(),
-      ],
+    return Form(
+      key: formKey,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          body(),
+          button(),
+        ],
+      ),
     );
   }
 }
