@@ -10,7 +10,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image%20copy.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/logic/profile_member_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/repositories/profile_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/repositories/update_profile_payload.dart';
