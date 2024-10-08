@@ -5,12 +5,19 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AppEmptyData extends StatelessWidget {
   final String text;
+  final bool isCenter;
 
-  const AppEmptyData(this.text, {super.key});
+  const AppEmptyData(
+    this.text, {
+    this.isCenter = false,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment:
+          isCenter ? MainAxisAlignment.center : MainAxisAlignment.start,
       children: [
         Image.asset(
           AppAssets.emptyDataImage,
