@@ -24,6 +24,16 @@ class SeedResponse {
             : Pagination.fromMap(json["pagination"]),
       );
 
+  SeedResponse copyWith({
+    List<SeedResponseData>? data,
+    Pagination? pagination,
+  }) {
+    return SeedResponse(
+      data: data ?? this.data,
+      pagination: pagination ?? this.pagination,
+    );
+  }
+
   Map<String, dynamic> toMap() => {
         "data":
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),

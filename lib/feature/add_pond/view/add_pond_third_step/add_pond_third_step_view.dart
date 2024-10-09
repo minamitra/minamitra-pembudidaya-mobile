@@ -374,6 +374,51 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
       ];
     }
 
+    Widget customSeedName() {
+      return AppValidatorTextField(
+        controller: seedOriginNameController,
+        isMandatory: true,
+        withUpperLabel: true,
+        labelText: "Nama Benih",
+        hintText: "Masukan nama benih",
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Nama benih tidak boleh kosong";
+          }
+
+          return null;
+        },
+      );
+    }
+
+    Widget customSeedPrice() {
+      return AppValidatorTextField(
+        controller: seedOriginPriceController,
+        inputType: TextInputType.phone,
+        isMandatory: true,
+        withUpperLabel: true,
+        labelText: "Harga Benih",
+        hintText: "0",
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(left: 18.0),
+          child: Text(
+            "Rp ",
+            style: appTextTheme(context).bodySmall?.copyWith(
+                  fontWeight: FontWeight.w500,
+                ),
+          ),
+        ),
+        suffixConstraints: const BoxConstraints(),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return "Harga benih tidak boleh kosong";
+          }
+
+          return null;
+        },
+      );
+    }
+
     List<Widget> form() {
       return [
         dateTextField(),
@@ -500,12 +545,25 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                           ?.firstWhere((element) => element.name == value)
                           .id ??
                       "";
+                  setState(() {});
                 },
               ),
             );
           },
         ),
         // ...seedOrignOtherChildren(),
+        addPondThirdStepCubit.seedID == "-1"
+            ? Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: customSeedName(),
+              )
+            : const SizedBox(),
+        addPondThirdStepCubit.seedID == "-1"
+            ? Padding(
+                padding: const EdgeInsets.only(top: 18.0),
+                child: customSeedPrice(),
+              )
+            : const SizedBox(),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
           controller: addPondThirdStepCubit.survivalRateController,
@@ -894,9 +952,17 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                       finisher: selecterFinisherFinisher,
                                     ),
                                     fishseedId:
-                                        int.parse(addPondThirdStepCubit.seedID),
+                                        addPondThirdStepCubit.seedID == "-1"
+                                            ? null
+                                            : int.parse(
+                                                addPondThirdStepCubit.seedID),
                                     estimationFishfoodEpp: 75,
                                   ),
+                                  name: seedOriginNameController.text,
+                                  price: int.parse(
+                                      seedOriginPriceController.text.isEmpty
+                                          ? "0"
+                                          : seedOriginPriceController.text),
                                 );
                           } else {
                             context.read<AddPondCubit>().addPond(
@@ -958,9 +1024,17 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                       finisher: selecterFinisherFinisher,
                                     ),
                                     fishseedId:
-                                        int.parse(addPondThirdStepCubit.seedID),
+                                        addPondThirdStepCubit.seedID == "-1"
+                                            ? null
+                                            : int.parse(
+                                                addPondThirdStepCubit.seedID),
                                     estimationFishfoodEpp: 75,
                                   ),
+                                  seedName: seedOriginNameController.text,
+                                  seedPrice: int.parse(
+                                      seedOriginPriceController.text.isEmpty
+                                          ? "0"
+                                          : seedOriginPriceController.text),
                                 );
                           }
 

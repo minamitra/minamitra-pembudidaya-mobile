@@ -51,6 +51,7 @@ class AddPondPage extends StatelessWidget {
           create: (context) => AddPondCubit(
             RefServiceImpl.create(),
             PondServiceImpl.create(),
+            FeedServiceImpl.create(),
           )..init(),
         ),
         BlocProvider(create: (context) => MultipleImageCubit()),
