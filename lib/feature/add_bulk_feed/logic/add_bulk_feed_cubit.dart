@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/get_hour_time.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/repositories/recommendation_feed_bulk_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/repositories/save_bulk_body.dart';
 
@@ -125,24 +126,23 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
     ));
   }
 
-  Future<void> saveFeed() async {
+  Future<void> saveFeed(String type) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       // Cleaning data
-      log("test1");
       final List<RecommendationFeedBulkData> bulkDataCleaning = state
           .recommendationFeedBulk!.data!
           .where((element) =>
               (element.feedAmount ?? 0) > 0 || element.selectedFishfood != null)
           .toList();
-      log("test2");
       for (var element in bulkDataCleaning) {
-        if ((element.feedAmount ?? 0) < 1) {
+        log(element.feedAmount.toString());
+        if ((element.feedAmount ?? 0) < 0) {
           emit(state.copyWith(status: GlobalState.hideDialogLoading));
           emit(state.copyWith(
             status: GlobalState.error,
             errorMessage:
-                "Jumlah pakan di kolam ${element.fishpondName} tidak boleh kurang dari 1",
+                "Jumlah pakan di kolam ${element.fishpondName} tidak boleh kurang dari 0",
           ));
           return;
         }
@@ -163,8 +163,10 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
         ));
         return;
       }
+      final int getHourTime = type.getHourTime();
       SaveBulkBody saveBulkBody = SaveBulkBody(
-        date: state.pickedDate!,
+        date: state.pickedDate!.copyWith(hour: getHourTime),
+        timeSheet: type,
         data: bulkDataCleaning,
       );
       await service.saveFeedBulkData(saveBulkBody);

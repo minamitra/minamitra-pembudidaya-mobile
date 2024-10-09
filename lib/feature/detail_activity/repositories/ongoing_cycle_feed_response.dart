@@ -178,12 +178,16 @@ class OnGoingCycleFeedResponseData {
 }
 
 class FishfoodJsonObject {
-  List<Finisher>? starter;
+  List<Finisher>? starter1;
+  List<Finisher>? starter2;
+  List<Finisher>? starter3;
   List<Finisher>? grower;
   List<Finisher>? finisher;
 
   FishfoodJsonObject({
-    this.starter,
+    this.starter1,
+    this.starter2,
+    this.starter3,
     this.grower,
     this.finisher,
   });
@@ -195,10 +199,18 @@ class FishfoodJsonObject {
 
   factory FishfoodJsonObject.fromMap(Map<String, dynamic> json) =>
       FishfoodJsonObject(
-        starter: json["starter"] == null
+        starter1: json["starter1"] == null
             ? []
             : List<Finisher>.from(
-                json["starter"]!.map((x) => Finisher.fromMap(x))),
+                json["starter1"]!.map((x) => Finisher.fromMap(x))),
+        starter2: json["starter2"] == null
+            ? []
+            : List<Finisher>.from(
+                json["starter2"]!.map((x) => Finisher.fromMap(x))),
+        starter3: json["starter3"] == null
+            ? []
+            : List<Finisher>.from(
+                json["starter3"]!.map((x) => Finisher.fromMap(x))),
         grower: json["grower"] == null
             ? []
             : List<Finisher>.from(
@@ -210,9 +222,15 @@ class FishfoodJsonObject {
       );
 
   Map<String, dynamic> toMap() => {
-        "starter": starter == null
+        "starter1": starter1 == null
             ? []
-            : List<dynamic>.from(starter!.map((x) => x.toMap())),
+            : List<dynamic>.from(starter1!.map((x) => x.toMap())),
+        "starter2": starter2 == null
+            ? []
+            : List<dynamic>.from(starter2!.map((x) => x.toMap())),
+        "starter3": starter3 == null
+            ? []
+            : List<dynamic>.from(starter3!.map((x) => x.toMap())),
         "grower": grower == null
             ? []
             : List<dynamic>.from(grower!.map((x) => x.toMap())),

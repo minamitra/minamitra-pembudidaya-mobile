@@ -11,6 +11,7 @@ class AddFishFeedBody {
   int? fishfoodId;
   String? note;
   String? dataID;
+  String? timeSheet;
 
   AddFishFeedBody({
     this.fishpondId,
@@ -23,6 +24,7 @@ class AddFishFeedBody {
     this.fishfoodId,
     this.note,
     this.dataID,
+    this.timeSheet,
   });
 
   factory AddFishFeedBody.fromJson(String str) =>
@@ -43,6 +45,7 @@ class AddFishFeedBody {
         total: json["total"]?.toDouble(),
         fishfoodId: json["fishfood_id"],
         note: json["note"],
+        timeSheet: json["time_sheet"],
       );
 
   Map<String, dynamic> toMap() => {
@@ -55,6 +58,7 @@ class AddFishFeedBody {
         "total": total,
         "fishfood_id": fishfoodId,
         "note": note,
+        "time_sheet": timeSheet,
       };
 
   Map<String, dynamic> toEditMap() => {
@@ -66,5 +70,6 @@ class AddFishFeedBody {
         "total": total,
         "fishfood_id": fishfoodId,
         "note": note,
+        "time_sheet": timeSheet,
       };
 }
