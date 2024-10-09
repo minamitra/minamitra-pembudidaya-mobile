@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/cycle_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/buyer_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/views/activity_cycle_add_harvest_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -27,11 +28,17 @@ class ActivityCycleDetailView extends StatefulWidget {
 }
 
 class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
-  List<String> listFile = [
-    AppAssets.dummyActivityIncidentImage,
-    AppAssets.dummyActivityIncidentImage,
-    AppAssets.dummyActivityIncidentImage,
-  ];
+  int totalTransaction = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.data.buyerJsonArray != null) {
+      totalTransaction = widget.data.buyerJsonArray!
+          .map((e) => e.sellTotalPrice)
+          .reduce((value, element) => value + element);
+    }
+  }
 
   Widget statusBar(BuildContext context) {
     return Container(
@@ -208,15 +215,21 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           child: ListView.separated(
             shrinkWrap: true,
             scrollDirection: Axis.horizontal,
-            itemCount: listFile.length,
+            itemCount: widget.data.panenAttachmentJsonArray?.length ?? 0,
             separatorBuilder: (context, index) => const SizedBox(width: 8.0),
             itemBuilder: (context, index) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
                 child: AspectRatio(
                   aspectRatio: 3 / 2,
-                  child: Image.asset(
-                    listFile[index],
+                  // child: Image.asset(
+                  //   listFile[index],
+                  //   fit: BoxFit.cover,
+                  // ),
+                  child: AppNetworkImage(
+                    widget.data.panenAttachmentJsonArray?[index] ?? "",
+                    width: double.infinity,
+                    height: double.infinity,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -284,6 +297,29 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
     );
   }
 
+  Widget transactionItem(BuyerData data) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          data.buyerName,
+          style: appTextTheme(context).bodySmall,
+        ),
+        const SizedBox(height: 16.0),
+        textRow("${data.sellRequest} kg",
+            appConvertCurrency(data.sellUnitPrice.toDouble())),
+        const SizedBox(height: 8.0),
+        textRow(
+            "Sub Total", appConvertCurrency(data.sellTotalPrice.toDouble())),
+        Divider(
+          height: 32.0,
+          thickness: 1,
+          color: AppColor.neutral[100],
+        ),
+      ],
+    );
+  }
+
   Widget transactionInfo() {
     return Container(
       color: AppColor.white,
@@ -302,31 +338,9 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           const SizedBox(height: 16.0),
           const AppDottedLine(),
           const SizedBox(height: 16.0),
-          Text(
-            "Mitra3M",
-            style: appTextTheme(context).bodySmall,
-          ),
-          const SizedBox(height: 16.0),
-          textRow("100 kg", "Rp 100,000"),
-          const SizedBox(height: 8.0),
-          textRow("Sub Total", "Rp 10.000.000"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
-          ),
-          Text(
-            "Pak Supriyanto",
-            style: appTextTheme(context).bodySmall,
-          ),
-          const SizedBox(height: 16.0),
-          textRow("100 g", "Rp 100,000"),
-          const SizedBox(height: 8.0),
-          textRow("Sub Total", "Rp 10.000.000"),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
+          ...List.generate(
+            widget.data.buyerJsonArray?.length ?? 0,
+            (index) => transactionItem(widget.data.buyerJsonArray![index]),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -341,7 +355,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
               ),
               Flexible(
                 child: Text(
-                  "Rp 20.000.000",
+                  appConvertCurrency(totalTransaction.toDouble()),
                   style: appTextTheme(context).titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
