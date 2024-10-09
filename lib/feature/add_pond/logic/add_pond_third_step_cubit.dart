@@ -39,13 +39,20 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
       final feedGrowerResponse = await feedService.getFeedGrower();
       final feedFinisherResponse = await feedService.getFeedFinisher();
       final seedResponse = await feedService.getSeed();
+      SeedResponse seedCleaningData = seedResponse.data;
+      seedCleaningData = seedCleaningData.copyWith(
+        data: [
+          ...seedCleaningData.data ?? [],
+          SeedResponseData(id: "-1", name: "Benih Baru"),
+        ],
+      );
       emit(state.copyWith(
         feedStarter1Data: feedStarter1Response.data,
         feedStarter2Data: feedStarter2Response.data,
         feedStarter3Data: feedStarter3Response.data,
         feedGrowerData: feedGrowerResponse.data,
         feedFinisherData: feedFinisherResponse.data,
-        seedResponse: seedResponse.data,
+        seedResponse: seedCleaningData,
         status: GlobalState.loaded,
       ));
     } on AppException catch (e) {
