@@ -101,6 +101,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 'Aktivitas',
                 AppAssets.documentAddIcon,
                 onTap: () {
+                  log(widget.isCanAccessFeature.toString());
+                  log(widget.pondData.lastFishpondcycleStatus.toString());
                   if (!widget.isCanAccessFeature) {
                     AppTopSnackBar(context).showInfo(
                         "Maaf data sedang\nDiproses atau telah ditolak");
@@ -112,6 +114,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                       "done") {
                     AppTopSnackBar(context)
                         .showInfo("Maaf siklus anda\nTelah berakhir");
+                    return;
+                  }
+                  if (context
+                          .read<DetailActivityCubit>()
+                          .state
+                          .onGoingCycleFeedResponseData
+                          ?.data
+                          ?.isEmpty ??
+                      true) {
+                    AppTopSnackBar(context).showDanger(
+                        "Siklus tidak ditemukan\nSilahkan tambah siklus");
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
@@ -146,6 +159,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                         "Maaf data sedang\nDiproses atau telah ditolak");
                     return;
                   }
+                  if (context
+                          .read<DetailActivityCubit>()
+                          .state
+                          .onGoingCycleFeedResponseData
+                          ?.data
+                          ?.isEmpty ??
+                      true) {
+                    AppTopSnackBar(context).showDanger(
+                        "Siklus tidak ditemukan\nSilahkan tambah siklus");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityIncidentPage(
                       widget.pondData.id ?? "0",
@@ -169,6 +193,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   if (!widget.isCanAccessFeature) {
                     AppTopSnackBar(context).showInfo(
                         "Maaf data sedang\nDiproses atau telah ditolak");
+                    return;
+                  }
+                  if (context
+                          .read<DetailActivityCubit>()
+                          .state
+                          .onGoingCycleFeedResponseData
+                          ?.data
+                          ?.isEmpty ??
+                      true) {
+                    AppTopSnackBar(context).showDanger(
+                        "Siklus tidak ditemukan\nSilahkan tambah siklus");
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(

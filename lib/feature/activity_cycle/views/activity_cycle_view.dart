@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
@@ -69,36 +72,76 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                   ? const Center(
                       child: CircularProgressIndicator(),
                     )
-                  : ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        listCard(
-                          state.activeData?.data ?? [],
+                  : (state.activeData?.data?.isEmpty ?? true) &&
+                          (state.readyHarvestData?.data?.isEmpty ?? true)
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              16,
+                              MediaQuery.sizeOf(context).height * 0.35,
+                              16,
+                              0,
+                            ),
+                            child: const AppEmptyData(
+                                "Belum ada data siklus aktif terbaru"),
+                          ),
+                        )
+                      : ListView(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            listCard(
+                              state.activeData?.data ?? [],
+                              false,
+                            ),
+                            listCard(
+                              state.readyHarvestData?.data ?? [],
+                              true,
+                            ),
+                          ],
+                        ),
+              state.status.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : (state.harvestData?.data?.isEmpty ?? true)
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              16,
+                              MediaQuery.sizeOf(context).height * 0.35,
+                              16,
+                              0,
+                            ),
+                            child: const AppEmptyData(
+                                "Belum ada data siklus lelang terbaru"),
+                          ),
+                        )
+                      : listCard(
+                          state.harvestData?.data ?? [],
                           false,
                         ),
-                        listCard(
-                          state.readyHarvestData?.data ?? [],
-                          true,
+              state.status.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : (state.doneData?.data?.isEmpty ?? true)
+                      ? Center(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(
+                              16,
+                              MediaQuery.sizeOf(context).height * 0.35,
+                              16,
+                              0,
+                            ),
+                            child: const AppEmptyData(
+                                "Belum ada data siklus riwayat terbaru"),
+                          ),
+                        )
+                      : listCard(
+                          state.doneData?.data ?? [],
+                          false,
                         ),
-                      ],
-                    ),
-              state.status.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : listCard(
-                      state.harvestData?.data ?? [],
-                      false,
-                    ),
-              state.status.isLoading
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : listCard(
-                      state.doneData?.data ?? [],
-                      false,
-                    ),
             ],
           ),
         );

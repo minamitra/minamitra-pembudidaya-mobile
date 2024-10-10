@@ -13,6 +13,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/call_center/view/call_center_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
@@ -396,7 +397,12 @@ class _ProfileViewState extends State<ProfileView> {
         actionMenu(
           "Pengaturan Rekening",
           "Alamat rekening untuk penarikan saldo",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage("Pengaturan Rekening"),
+              CommingSoonPage.route(),
+            ));
+          },
         ),
         actionMenu(
           "Informasi Point",
