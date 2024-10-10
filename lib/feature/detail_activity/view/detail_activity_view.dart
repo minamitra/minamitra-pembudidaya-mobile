@@ -106,6 +106,14 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                         "Maaf data sedang\nDiproses atau telah ditolak");
                     return;
                   }
+                  if (widget.pondData.lastFishpondcycleStatus
+                          .handlingEmptyString()
+                          .toLowerCase() ==
+                      "done") {
+                    AppTopSnackBar(context)
+                        .showInfo("Maaf siklus anda\nTelah berakhir");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityActivitiesPage(
                       widget.pondData.id ?? "0",
@@ -427,10 +435,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 Expanded(
                     child: headerInformationsItem(
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
-                      : state.onGoingCycleFeedResponseData?.data?[0]
+                      : state.onGoingCycleFeedResponseData!.data![0]
                               .tebarFishTotal ??
                           "-",
                   "Jumlah Ikan",
@@ -441,8 +450,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 Expanded(
                     child: headerInformationsItem(
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : "${(double.parse(state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(3)} Kg",
                   "Total Pakan",
@@ -555,6 +565,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 return;
               },
             );
+          case "-":
           case "done":
             return AppPrimaryGradientButton(
               "Mulai Siklus",
@@ -602,7 +613,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     actionButton(
                       widget.pondData.lastFishpondcycleStatus
                           .handlingEmptyString(),
-                      state.onGoingCycleFeedResponseData?.data?[0].id ?? "",
+                      state.onGoingCycleFeedResponseData!.data!.isEmpty
+                          ? ""
+                          : state.onGoingCycleFeedResponseData!.data![0].id!,
                     ),
                     // widget.pondData.activeBool ?? false
                     //     ? AppGreenGradientButton(
@@ -639,8 +652,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 const SizedBox(height: 18.0),
                 detailItem(
                   "Tanggal Tebar",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : AppConvertDateTime().dmyName(state
                           .onGoingCycleFeedResponseData!.data![0].tebarDate!),
@@ -648,16 +662,18 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppDividerSmall(),
                 detailItem(
                   "Ukuran Tebar",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : "${state.onGoingCycleFeedResponseData!.data!.first.tebarBobot} gr/ekor",
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Asal Benih",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData!.data!.first
                               .fishseedName ??
@@ -666,16 +682,18 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppDividerSmall(),
                 detailItem(
                   "Target Bobot Panen",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : "${double.parse(state.onGoingCycleFeedResponseData!.data!.first.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(0)} gr/ekor",
                 ),
                 AppDividerSmall(),
                 detailItem(
                   "Estimasi Perkiraan Waktu Panen",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : AppConvertDateTime().dmyName(state
                               .onGoingCycleFeedResponseData!
@@ -687,8 +705,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppDividerSmall(),
                 detailItem(
                   "Estimasi Perkiraan Tonase Panen",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData!.data!.first
                               .estimationPanenTonase ??
@@ -722,8 +741,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppDividerSmall(),
                 detailPakanItem(
                   "Starter 1",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.starter1
@@ -734,8 +754,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 detailPakanItem(
                   "Starter 2",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.starter2
@@ -746,8 +767,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 detailPakanItem(
                   "Starter 3",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.starter3
@@ -758,8 +780,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 detailPakanItem(
                   "Grower",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.grower
@@ -771,8 +794,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 AppDividerSmall(),
                 detailPakanItem(
                   "Finisher",
-                  widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                          "done"
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.finisher
