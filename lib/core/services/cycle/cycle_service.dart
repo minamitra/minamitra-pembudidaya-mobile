@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dar
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/harvest_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/repositories/ongoing_cycle_feed_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
 
 abstract class CycleService {
   Future<BaseResponse<OnGoingCycleFeedResponse>> getOngoingCycle({
@@ -22,6 +23,10 @@ abstract class CycleService {
   });
   Future<BaseResponse<bool>> addHarvest({required HarvestBody body});
   Future<BaseResponse<bool>> updateHarvestDone({required String id});
+  Future<BaseResponse<GraphResponse>> getGraphData({
+    required String pondCycleID,
+    required String filterName,
+  });
 }
 
 class CycleServiceImpl implements CycleService {
@@ -112,5 +117,21 @@ class CycleServiceImpl implements CycleService {
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<GraphResponse>> getGraphData({
+    required String pondCycleID,
+    required String filterName,
+  }) async {
+    final uri = endpoint.getGraph(
+      pondCycleID: pondCycleID,
+      filterName: filterName,
+    );
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(uri, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final GraphResponse data = GraphResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
   }
 }

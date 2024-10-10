@@ -72,7 +72,7 @@ class _HomeViewState extends State<HomeView> {
       AppAssets.speakerIcon,
     ),
     NameIconEntity(
-      "Lapak Ikan",
+      "Pasar Ikan",
       AppAssets.locationIcon,
     ),
     NameIconEntity(
@@ -467,7 +467,7 @@ class _HomeViewState extends State<HomeView> {
         switch (entity.name) {
           case "Promo 3M":
             break;
-          case "Lapak Ikan":
+          case "Pasar Ikan":
             break;
           case "Acara 3M":
             break;
