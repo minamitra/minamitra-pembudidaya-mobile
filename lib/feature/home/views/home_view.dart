@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +13,16 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/information_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
@@ -416,6 +421,14 @@ class _HomeViewState extends State<HomeView> {
       child: Stack(
         alignment: Alignment.bottomRight,
         children: [
+          Align(
+            alignment: Alignment.bottomRight,
+            child: Image.asset(
+              AppAssets.circleBackdropImage,
+              height: 72.0,
+              fit: BoxFit.fill,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
@@ -440,18 +453,15 @@ class _HomeViewState extends State<HomeView> {
                   width: 120,
                   child: AppWhiteButton(
                     "Lengkapi Data",
-                    () {},
+                    () {
+                      Navigator.of(context).push(AppTransition.pushTransition(
+                        const ProfileMemberPage(),
+                        ProfileMemberPage.routeSettings,
+                      ));
+                    },
                   ),
                 ),
               ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Image.asset(
-              AppAssets.circleBackdropImage,
-              height: 72.0,
-              fit: BoxFit.fill,
             ),
           ),
         ],
@@ -466,10 +476,22 @@ class _HomeViewState extends State<HomeView> {
       () {
         switch (entity.name) {
           case "Promo 3M":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage("Promo 3M"),
+              CommingSoonPage.route(),
+            ));
             break;
           case "Pasar Ikan":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage("Pasar Ikan"),
+              CommingSoonPage.route(),
+            ));
             break;
           case "Acara 3M":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage("Acara 3M"),
+              CommingSoonPage.route(),
+            ));
             break;
           case "Belanja":
             Navigator.of(context).push(AppTransition.pushTransition(
@@ -533,7 +555,12 @@ class _HomeViewState extends State<HomeView> {
             ),
             AppWidgetSecondaryChip(
               text: "Lihat Semua",
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(AppTransition.pushTransition(
+                  const CommingSoonPage("Acara 3M"),
+                  CommingSoonPage.route(),
+                ));
+              },
             ),
           ],
         ),
@@ -570,15 +597,23 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget referral() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 18.0),
-      height: 72.0,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.0),
-        image: const DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(AppAssets.referralImage),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(AppTransition.pushTransition(
+          const ReferralPage(),
+          ReferralPage.routeSettings,
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 18.0),
+        height: 72.0,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          image: const DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(AppAssets.referralImage),
+          ),
         ),
       ),
     );

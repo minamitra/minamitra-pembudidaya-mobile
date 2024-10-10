@@ -350,6 +350,17 @@ class _CultivationViewState extends State<CultivationView> {
     Widget xSetter() {
       return BlocBuilder<CultivationCubit, CultivationState>(
         builder: (context, state) {
+          if (state.status.isLoading) {
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: AppShimmer(
+                70.0,
+                double.infinity,
+                12.0,
+              ),
+            );
+          }
+
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -477,7 +488,6 @@ class _CultivationViewState extends State<CultivationView> {
                         "DoC akhir tidak boleh lebih besar dari DoC terakhir");
                     return;
                   }
-                  setState(() {});
                   context.read<CultivationCubit>().cahngeDOC();
                 },
                 child: const Icon(Icons.refresh_outlined),

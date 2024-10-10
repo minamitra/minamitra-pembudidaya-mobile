@@ -328,7 +328,22 @@ class _ActivityViewState extends State<ActivityView> {
       return BlocBuilder<ActivityCubit, ActivityState>(
         builder: (context, state) {
           if (state.status.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return const AppShimmer(
+                  75,
+                  double.infinity,
+                  8.0,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 18.0,
+                    vertical: 8.0,
+                  ),
+                );
+              },
+            );
           }
 
           return ListView.builder(
@@ -735,7 +750,12 @@ class _ActivityViewState extends State<ActivityView> {
                 BlocBuilder<ActivityCubit, ActivityState>(
                   builder: (context, state) {
                     if (state.status.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const AppShimmer(
+                        180,
+                        double.infinity,
+                        8.0,
+                        margin: EdgeInsets.symmetric(horizontal: 18.0),
+                      );
                     }
 
                     return SizedBox(
