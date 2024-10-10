@@ -106,6 +106,14 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                         "Maaf data sedang\nDiproses atau telah ditolak");
                     return;
                   }
+                  if (widget.pondData.lastFishpondcycleStatus
+                          .handlingEmptyString()
+                          .toLowerCase() ==
+                      "done") {
+                    AppTopSnackBar(context)
+                        .showInfo("Maaf siklus anda\nTelah berakhir");
+                    return;
+                  }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityActivitiesPage(
                       widget.pondData.id ?? "0",
