@@ -46,4 +46,17 @@ class CycleEndpoint {
       path: "mitra/fishpondcycle/update-panen-selesai",
     );
   }
+
+  Uri getGraph({
+    required String pondCycleID,
+    required String filterName,
+  }) {
+    return createUrl(
+      path: "mitra/fishpondcycle/data-grafik",
+      queryParameters: {
+        "fishpondcycle_id": pondCycleID,
+        "filter": filterName,
+      },
+    );
+  }
 }

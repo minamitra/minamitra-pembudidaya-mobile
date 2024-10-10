@@ -73,3 +73,47 @@ extension PondStatusConverter on String {
     }
   }
 }
+
+extension ParameterCultivation on String {
+  String parameter() {
+    switch (this) {
+      case "MBW (Mean Body Weight) (gram)":
+        return "mbw";
+      case "Total Biomass (kg)":
+        return "biomas";
+      case "Pakan Harian":
+        return "pakan_harian";
+      case "Pakan Kumulatif":
+        return "pakan_kumulatif";
+      case "SR (Survival Rate) (%)":
+        return "sr";
+      case "FCR (Feed Convertion Ratio)":
+        return "fr";
+      case "ADG (Average Daily Growth) (gram)":
+        return "adg";
+      default:
+        return "mbw";
+    }
+  }
+
+  String convertFilterToTitle() {
+    switch (this) {
+      case "mbw":
+        return "MBW (gram)";
+      case "biomas":
+        return "Total Biomass (kg)";
+      case "pakan_harian":
+        return "Pakan Harian";
+      case "pakan_kumulatif":
+        return "Pakan Kumulatif";
+      case "sr":
+        return "SR (Survival Rate) (%)";
+      case "fr":
+        return "FCR (Feed Convertion Ratio)";
+      case "adg":
+        return "ADG (gram)";
+      default:
+        return "MBW (gram)";
+    }
+  }
+}

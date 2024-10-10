@@ -164,7 +164,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const MonitoringPage(),
+                    MonitoringPage(widget.pondData.lastFishpondcycleId ?? "0"),
                     MonitoringPage.route,
                   ));
                 },
