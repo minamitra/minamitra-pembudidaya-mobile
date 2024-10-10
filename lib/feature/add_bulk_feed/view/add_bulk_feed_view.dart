@@ -262,6 +262,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
       List<String> listFeedType,
       TextEditingController fishFeedValuecontroller,
       TextEditingController fishFeedNameController,
+      String fishAge,
     ) {
       return Container(
         margin: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -394,6 +395,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: AppValidatorTextField(
                   controller: fishFeedValuecontroller,
+                  inputType: TextInputType.phone,
                   labelText: "Jumlah Pakan",
                   hintText: "0",
                   withUpperLabel: true,
@@ -430,6 +432,19 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                       },
                     )();
                   },
+                ),
+              ),
+              const SizedBox(height: 24.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: AppValidatorTextField(
+                  initialText: fishAge,
+                  labelText: "Umur Ikan",
+                  hintText: "0",
+                  withUpperLabel: true,
+                  suffixText: "hari",
+                  readOnly: true,
+                  fillColor: AppColor.neutral[100],
                 ),
               ),
               const SizedBox(height: 18.0),
@@ -502,6 +517,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                       .feedValuecontroller!,
                   state.recommendationFeedBulk!.data![index]
                       .fishFeedIDController!,
+                  state.recommendationFeedBulk!.data![index].fishAge ?? "-",
                 ),
               );
             },

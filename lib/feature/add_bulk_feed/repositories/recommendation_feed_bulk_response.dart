@@ -49,6 +49,7 @@ class RecommendationFeedBulkData {
   List<Fishfood>? fishfoods;
   TextEditingController? fishFeedIDController;
   Fishfood? selectedFishfood;
+  String? fishAge;
 
   RecommendationFeedBulkData({
     this.fishpondId,
@@ -62,6 +63,7 @@ class RecommendationFeedBulkData {
     this.fishfoods,
     this.fishFeedIDController,
     this.selectedFishfood,
+    this.fishAge,
   });
 
   factory RecommendationFeedBulkData.fromJson(String str) =>
@@ -83,6 +85,7 @@ class RecommendationFeedBulkData {
             : List<Fishfood>.from(
                 json["fishfoods"]!.map((x) => Fishfood.fromMap(x))),
         fishpondName: json["fishpond_name"],
+        fishAge: json["fish_age"],
       );
 
   RecommendationFeedBulkData copyWith({
@@ -97,6 +100,7 @@ class RecommendationFeedBulkData {
     String? fishpondName,
     List<Fishfood>? fishfoods,
     Fishfood? selectedFishfood,
+    String? fishAge,
   }) {
     return RecommendationFeedBulkData(
       fishpondId: fishpondId ?? this.fishpondId,
@@ -111,6 +115,7 @@ class RecommendationFeedBulkData {
       fishpondName: fishpondName ?? this.fishpondName,
       fishfoods: fishfoods ?? this.fishfoods,
       selectedFishfood: selectedFishfood ?? this.selectedFishfood,
+      fishAge: fishAge ?? this.fishAge,
     );
   }
 
