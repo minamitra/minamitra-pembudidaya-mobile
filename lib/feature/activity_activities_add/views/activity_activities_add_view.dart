@@ -308,7 +308,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      "Saran Pakan: ${state.feedRecomendationResponse?.data?.suggestFeed} gram",
+                      "Saran Pakan: ${state.feedRecomendationResponse?.data?.suggestFeed?.toStringAsFixed(5)} gram",
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -318,7 +318,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                     onTap: () {
                       amountController.text = state
                               .feedRecomendationResponse?.data?.suggestFeed
-                              .toString() ??
+                              ?.toStringAsFixed(5) ??
                           "";
                     },
                     child: Container(
@@ -408,22 +408,24 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                 }
               });
             },
-            buttonWidget: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add,
-                  color: AppColor.primary[600],
-                ),
-                const SizedBox(width: 8.0),
-                Text(
-                  "Tambah Pakan Baru",
-                  style: appTextTheme(context).titleSmall?.copyWith(
-                        color: AppColor.primary[600],
-                      ),
-                ),
-              ],
-            ),
+            buttonWidget: const SizedBox(),
+            // ! Note : Currently disable.
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Icon(
+            //       Icons.add,
+            //       color: AppColor.primary[600],
+            //     ),
+            //     const SizedBox(width: 8.0),
+            //     Text(
+            //       "Tambah Pakan Baru",
+            //       style: appTextTheme(context).titleSmall?.copyWith(
+            //             color: AppColor.primary[600],
+            //           ),
+            //     ),
+            //   ],
+            // ),
             onTapButtonBottom: () {
               Navigator.of(context).pop();
               // Navigator.of(context).push(AppTransition.pushTransition(

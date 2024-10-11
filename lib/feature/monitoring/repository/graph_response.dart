@@ -96,10 +96,10 @@ class GraphResponseDataItem {
 
   factory GraphResponseDataItem.fromMap(Map<String, dynamic> json) =>
       GraphResponseDataItem(
-        doc: int.tryParse(json["doc"]) ?? 0,
+        doc: int.tryParse(json["doc"].toString()) ?? 0,
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        target: double.tryParse(json["target"]) ?? 0.0,
-        actual: double.tryParse(json["actual"]) ?? 0.0,
+        target: double.tryParse(json["target"].toString()) ?? 0.0,
+        actual: double.tryParse(json["actual"].toString()) ?? 0.0,
       );
 
   Map<String, dynamic> toMap() => {

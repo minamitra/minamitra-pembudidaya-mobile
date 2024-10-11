@@ -1,4 +1,5 @@
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
 
 class ActivityHeaderDataDummy {
   final String title;
@@ -47,7 +48,8 @@ List<ActivityHeaderDataDummy> listActivtyHeaderDataDummy2(
       ),
       ActivityHeaderDataDummy(
         title: 'Est. Biaya',
-        value: 'Rp $estimasiJualValue Juta',
+        value: AppCurrencyFormatter.format(
+            double.tryParse(estimasiJualValue) ?? 0.0),
         imageAsset: AppAssets.sellEstimationActivityIcon,
       ),
     ];

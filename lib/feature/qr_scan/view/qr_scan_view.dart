@@ -1,10 +1,15 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/logic/qrscan_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/section/barcode_label.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/section/button_scanner.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan_summary/view/qr_scan_summary_page.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -33,68 +38,217 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
       height: 200,
     );
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Center(
-          child: MobileScanner(
-            fit: BoxFit.cover,
-            controller: controller,
-            scanWindow: scanWindow,
-            errorBuilder: (context, error, child) {
-              return Center(
-                child: Text(
-                  'Error: $error',
-                  style: const TextStyle(color: Colors.red),
+    List<Widget> qrScanner(bool isShow) {
+      return isShow
+          ? [
+              Center(
+                child: MobileScanner(
+                  fit: BoxFit.cover,
+                  controller: controller,
+                  scanWindow: scanWindow,
+                  errorBuilder: (context, error, child) {
+                    return Center(
+                      child: Text(
+                        'Error: $error',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  },
+                  overlayBuilder: (context, constraints) {
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child:
+                            ScannedBarcodeLabel(barcodes: controller.barcodes),
+                      ),
+                    );
+                  },
+                  onDetect: (barcode) {
+                    Navigator.of(context)
+                        .pushReplacement(AppTransition.pushTransition(
+                      const QrScanSummaryPage(),
+                      QrScanSummaryPage.route(),
+                    ));
+                  },
                 ),
-              );
-            },
-            overlayBuilder: (context, constraints) {
-              return Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: ScannedBarcodeLabel(barcodes: controller.barcodes),
-                ),
-              );
-            },
-            onDetect: (barcode) {
-              Navigator.of(context)
-                  .pushReplacement(AppTransition.pushTransition(
-                const QrScanSummaryPage(),
-                QrScanSummaryPage.route(),
-              ));
-            },
-          ),
-        ),
-        ValueListenableBuilder(
-          valueListenable: controller,
-          builder: (context, value, child) {
-            if (!value.isInitialized ||
-                !value.isRunning ||
-                value.error != null) {
-              return const SizedBox();
-            }
+              ),
+              ValueListenableBuilder(
+                valueListenable: controller,
+                builder: (context, value, child) {
+                  if (!value.isInitialized ||
+                      !value.isRunning ||
+                      value.error != null) {
+                    return const SizedBox();
+                  }
 
-            return CustomPaint(
-              painter: ScannerOverlay(scanWindow: scanWindow),
-            );
-          },
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ToggleFlashlightButton(controller: controller),
-                SwitchCameraButton(controller: controller),
-              ],
+                  return CustomPaint(
+                    painter: ScannerOverlay(scanWindow: scanWindow),
+                  );
+                },
+              ),
+            ]
+          : [];
+    }
+
+    Widget buildQrCode(bool isShow) {
+      return isShow
+          ? Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Silahkan Scan QR Code\nDibawah Ini",
+                      textAlign: TextAlign.center,
+                      style: appTextTheme(context).titleLarge?.copyWith(
+                            color: AppColor.neutral[900],
+                          ),
+                    ),
+                    const SizedBox(
+                      height: 24.0,
+                    ),
+                    QrImageView(
+                      padding: const EdgeInsets.all(8.0),
+                      data: '3M1N4M1TR4-12000-210924',
+                      version: QrVersions.auto,
+                      backgroundColor: AppColor.neutral[200]!,
+                      eyeStyle: QrEyeStyle(
+                        eyeShape: QrEyeShape.square,
+                        color: AppColor.primary[700],
+                      ),
+                      dataModuleStyle: QrDataModuleStyle(
+                        dataModuleShape: QrDataModuleShape.square,
+                        color: AppColor.primary[800],
+                      ),
+                      size: 320,
+                      gapless: false,
+                      embeddedImage: AssetImage(AppAssets.newLogoIcon2),
+                      embeddedImageStyle:
+                          QrEmbeddedImageStyle(size: Size(547 / 3, 112 / 3)),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : const SizedBox();
+    }
+
+    return BlocBuilder<QrscanCubit, QrscanState>(
+      builder: (context, state) {
+        return Stack(
+          fit: StackFit.expand,
+          children: [
+            ...qrScanner(state.qrScanType == QRScanType.scan),
+            buildQrCode(state.qrScanType == QRScanType.generate),
+            state.qrScanType == QRScanType.scan
+                ? Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ToggleFlashlightButton(controller: controller),
+                          SwitchCameraButton(controller: controller),
+                        ],
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(18.0),
+                    decoration: BoxDecoration(
+                      color: AppColor.primary[500],
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(16.0),
+                        topRight: Radius.circular(16.0),
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              if (state.qrScanType == QRScanType.generate) {
+                                context
+                                    .read<QrscanCubit>()
+                                    .setQRScanType(QRScanType.scan);
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.document_scanner_outlined,
+                                  color: AppColor.white,
+                                  size: 28.0,
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  'Bayar dengan QR',
+                                  style: appTextTheme(context)
+                                      .titleSmall
+                                      ?.copyWith(
+                                        color: AppColor.white,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 55.0,
+                          child: VerticalDivider(
+                            color: AppColor.white,
+                            thickness: 1,
+                          ),
+                        ),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              if (state.qrScanType == QRScanType.scan) {
+                                context
+                                    .read<QrscanCubit>()
+                                    .setQRScanType(QRScanType.generate);
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.qr_code_2,
+                                  color: AppColor.white,
+                                  size: 28.0,
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  'Tampilkan QR Code',
+                                  style: appTextTheme(context)
+                                      .titleSmall
+                                      ?.copyWith(
+                                        color: AppColor.white,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
