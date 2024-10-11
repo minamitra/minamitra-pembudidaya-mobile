@@ -72,6 +72,7 @@ dependencies:
   flutter_widget_from_html: ^0.15.2
   path_provider: ^2.1.4
   easy_image_viewer: ^1.5.1
+  share_plus: ^10.0.3
 
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,13 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/image/multiple_image_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/logic/add_pond_cubit.dart';
@@ -178,6 +177,53 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       ];
     }
 
+    Function() onImageTap() {
+      return () {
+        showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+          ),
+          builder: (bottomSheetContext) {
+            return AppImagePickerMenu(
+              "Upload Gambar",
+              (type) async {
+                switch (type) {
+                  case PhotoSource.camera:
+                    final document = await pickDocumentImage(
+                      bottomSheetContext,
+                      ImageSource.camera,
+                    );
+                    if (document != null) {
+                      await document.readAsBytes().then((image) {
+                        context.read<MultipleImageCubit>().setImage(image);
+                        Navigator.of(bottomSheetContext).pop();
+                      });
+                    }
+                    break;
+                  case PhotoSource.gallery:
+                    final document = await pickDocumentImage(
+                      bottomSheetContext,
+                      ImageSource.gallery,
+                    );
+                    if (document != null) {
+                      await document.readAsBytes().then((image) {
+                        context.read<MultipleImageCubit>().setImage(image);
+                        context
+                            .read<AddPondSecondStepCubit>()
+                            .uploadImage(File(document.path));
+                        Navigator.of(bottomSheetContext).pop();
+                      });
+                    }
+                    break;
+                }
+              },
+            );
+          },
+        );
+      };
+    }
+
     Widget fileAttachment() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,69 +245,136 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           const SizedBox(height: 8.0),
           BlocBuilder<MultipleImageCubit, List<Uint8List>?>(
             builder: (context, state) {
-              return AppPickImageCard(
-                () {
-                  showModalBottomSheet(
-                    context: context,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(20.0)),
+              return AppAnimatedSize(
+                isShow: true,
+                child: SizedBox(
+                  height: 170,
+                  width: double.infinity,
+                  child: InkWell(
+                    onTap: onImageTap(),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(color: AppColor.neutral[200]!),
+                      ),
+                      child: state == null || state.isEmpty
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  AppAssets.galleryIcon,
+                                  height: 32,
+                                ),
+                                const SizedBox(height: 18.0),
+                                Text(
+                                  "Tambah Gambar",
+                                  style:
+                                      appTextTheme(context).bodySmall?.copyWith(
+                                            color: AppColor.neutral[500],
+                                          ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            )
+                          : Image.memory(
+                              state.last,
+                              fit: BoxFit.cover,
+                            ),
                     ),
-                    builder: (bottomSheetContext) {
-                      return AppImagePickerMenu(
-                        "Upload Gambar",
-                        (type) async {
-                          switch (type) {
-                            case PhotoSource.camera:
-                              final document = await pickDocumentImage(
-                                bottomSheetContext,
-                                ImageSource.camera,
-                              );
-                              if (document != null) {
-                                await document.readAsBytes().then((image) {
-                                  context
-                                      .read<MultipleImageCubit>()
-                                      .setImage(image);
-                                  context
-                                      .read<AddPondSecondStepCubit>()
-                                      .uploadImage(File(document.path));
-                                  Navigator.of(bottomSheetContext).pop();
-                                });
-                              }
-                              break;
-                            case PhotoSource.gallery:
-                              final document = await pickDocumentImage(
-                                bottomSheetContext,
-                                ImageSource.gallery,
-                              );
-                              if (document != null) {
-                                await document.readAsBytes().then((image) {
-                                  context
-                                      .read<MultipleImageCubit>()
-                                      .setImage(image);
-                                  context
-                                      .read<AddPondSecondStepCubit>()
-                                      .uploadImage(File(document.path));
-                                  Navigator.of(bottomSheetContext).pop();
-                                });
-                              }
-                              break;
-                          }
-                        },
-                      );
-                    },
-                  );
-                },
-                listImage: state ?? [],
-                onTapImage: (value) {
-                  context.read<MultipleImageCubit>().removeImage(value);
-                },
+                  ),
+                ),
               );
             },
           ),
         ],
       );
     }
+
+    // Widget fileAttachment() {
+    //   return Column(
+    //     crossAxisAlignment: CrossAxisAlignment.start,
+    //     children: [
+    //       Wrap(
+    //         children: [
+    //           Text(
+    //             "Unggah Lampiran",
+    //             style: appTextTheme(context).bodyMedium,
+    //           ),
+    //           Text(
+    //             " *",
+    //             style: appTextTheme(context)
+    //                 .bodyMedium
+    //                 ?.copyWith(color: Colors.red),
+    //           ),
+    //         ],
+    //       ),
+    //       const SizedBox(height: 8.0),
+    //       BlocBuilder<MultipleImageCubit, List<Uint8List>?>(
+    //         builder: (context, state) {
+    //           return AppPickImageCard(
+    //             () {
+    //               showModalBottomSheet(
+    //                 context: context,
+    //                 shape: const RoundedRectangleBorder(
+    //                   borderRadius:
+    //                       BorderRadius.vertical(top: Radius.circular(20.0)),
+    //                 ),
+    //                 builder: (bottomSheetContext) {
+    //                   return AppImagePickerMenu(
+    //                     "Upload Gambar",
+    //                     (type) async {
+    //                       switch (type) {
+    //                         case PhotoSource.camera:
+    //                           final document = await pickDocumentImage(
+    //                             bottomSheetContext,
+    //                             ImageSource.camera,
+    //                           );
+    //                           if (document != null) {
+    //                             await document.readAsBytes().then((image) {
+    //                               context
+    //                                   .read<MultipleImageCubit>()
+    //                                   .setImage(image);
+    //                               context
+    //                                   .read<AddPondSecondStepCubit>()
+    //                                   .uploadImage(File(document.path));
+    //                               Navigator.of(bottomSheetContext).pop();
+    //                             });
+    //                           }
+    //                           break;
+    //                         case PhotoSource.gallery:
+    //                           final document = await pickDocumentImage(
+    //                             bottomSheetContext,
+    //                             ImageSource.gallery,
+    //                           );
+    //                           if (document != null) {
+    //                             await document.readAsBytes().then((image) {
+    //                               context
+    //                                   .read<MultipleImageCubit>()
+    //                                   .setImage(image);
+    //                               context
+    //                                   .read<AddPondSecondStepCubit>()
+    //                                   .uploadImage(File(document.path));
+    //                               Navigator.of(bottomSheetContext).pop();
+    //                             });
+    //                           }
+    //                           break;
+    //                       }
+    //                     },
+    //                   );
+    //                 },
+    //               );
+    //             },
+    //             listImage: state ?? [],
+    //             onTapImage: (value) {
+    //               context.read<MultipleImageCubit>().removeImage(value);
+    //             },
+    //           );
+    //         },
+    //       ),
+    //     ],
+    //   );
+    // }
 
     Widget location() {
       return BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
