@@ -71,6 +71,7 @@ dependencies:
   flutter_widget_from_html: ^0.15.2
   path_provider: ^2.1.4
   easy_image_viewer: ^1.5.1
+  share_plus: ^10.0.3
   money_formatter: ^0.0.6
   currency_text_input_formatter: ^2.2.3
 

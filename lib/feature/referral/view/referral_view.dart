@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ReferralView extends StatefulWidget {
   const ReferralView({super.key});
@@ -235,8 +236,11 @@ class _ReferralViewState extends State<ReferralView> {
         padding: const EdgeInsets.all(18.0),
         child: AppPrimaryFullButton(
           "Bagikan",
-          () {},
-          prefixIcon: Icon(
+          () {
+            Share.share(
+                'Yuk ikut gabung Mitra3M \nPakai kode berikut ini untuk dapatkan keuntungan menarik lainnya :\nABC1234\nhttps://commander.mitra3m.id/ ');
+          },
+          prefixIcon: const Icon(
             Icons.share_outlined,
             color: Colors.white,
           ),
