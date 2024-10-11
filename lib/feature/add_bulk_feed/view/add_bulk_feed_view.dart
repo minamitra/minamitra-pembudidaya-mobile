@@ -337,7 +337,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        "Saran pakan : $recommendation gram",
+                        "Saran pakan : ${recommendation.toStringAsFixed(5)} gram",
                         style: appTextTheme(context).titleSmall?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
@@ -345,8 +345,9 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     InkWell(
                       onTap: () {
-                        log("recommendation : $recommendation");
-                        onChangedFeedAmount!(recommendation.toString());
+                        log("recommendation : ${recommendation.toStringAsFixed(5)}");
+
+                        onChangedFeedAmount!(recommendation.toStringAsFixed(5));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(

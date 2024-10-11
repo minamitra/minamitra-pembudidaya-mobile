@@ -4,6 +4,7 @@ class AppAssets {
 
   // General
   static const String appIcon = "";
+  static const String newLogoIcon2 = "$iconPath/mitra3m-new-logo-icon.png";
   static const String newLogoWhiteIcon = "$iconPath/3m-whte-icon.png";
   static const String logoIcon = "$iconPath/logo-icon.png";
   static const String rupiahIcon = "$iconPath/rupiah-icon.png";

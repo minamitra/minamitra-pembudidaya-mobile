@@ -14,6 +14,8 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/logics/activity_treatment_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/add_treatment_payload.dart';
@@ -241,6 +243,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                 ),
           ),
         ),
+        inputFormatters: [AppCurrencyFormatter.currency],
       );
     }
 
@@ -396,7 +399,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                 ),
                 fishAge: int.parse(fishAgeController.text),
                 name: treatmentController.text,
-                cost: int.parse(priceController.text),
+                cost: int.parse(priceController.text.unFormatedCurrency()),
                 note: noteController.text,
               );
               context
@@ -411,7 +414,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                 ),
                 fishAge: int.parse(fishAgeController.text),
                 name: treatmentController.text,
-                cost: int.parse(priceController.text),
+                cost: int.parse(priceController.text.unFormatedCurrency()),
                 note: noteController.text,
               );
               context
