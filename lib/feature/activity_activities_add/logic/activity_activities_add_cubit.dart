@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/feed_data_by_cycle_response.dart';
@@ -35,8 +36,10 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
         fishPondCycleID,
         diferentInDays.toString(),
       );
-      final fishFeedByCycleResponse =
-          await service.getFeedDataByCycle(fishPondCycleID);
+      final fishFeedByCycleResponse = await service.getFeedDataByCycle(
+        fishPondCycleID,
+        AppConvertDateTime().ymdDash(DateTime.now()),
+      );
       this.fishPondID = fishPondID;
       this.fishPondCycleID = fishPondCycleID;
       this.tebarDate = tebarDate;
@@ -61,7 +64,10 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
   }
 
   Future<void> changeDateTime(DateTime dateTime) async {
-    emit(state.copyWith(status: GlobalState.loading));
+    emit(state.copyWith(
+      status: GlobalState.loading,
+      fishFoodID: null,
+    ));
     try {
       int diferentInDays =
           dateTime.difference(tebarDate ?? DateTime.now()).inDays;
@@ -69,10 +75,15 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
         fishPondCycleID ?? "",
         diferentInDays.toString(),
       );
+      final fishFeedByCycleResponse = await service.getFeedDataByCycle(
+        fishPondCycleID ?? "",
+        AppConvertDateTime().ymdDash(dateTime),
+      );
       emit(state.copyWith(
         status: GlobalState.loaded,
         selectedDate: dateTime,
         feedRecomendationResponse: response.data,
+        feedDataByCycleResponse: fishFeedByCycleResponse.data,
         fishAge: diferentInDays,
       ));
     } on AppException catch (e) {

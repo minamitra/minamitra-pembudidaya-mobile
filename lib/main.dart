@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication
 import 'package:minamitra_pembudidaya_mobile/core/injections/env.dart';
 import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/dashboard/dashboard_bottom_nav_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
 
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
               authenticationRepository,
               SharedPreferenceServiceImpl.create(),
             ),
-          )
+          ),
+          BlocProvider(create: (context) => DashboardBottomNavCubit()),
           // BlocProvider<UserCubit>(
           //   create: (context) => UserCubit(
           //     SharedPreferenceServiceImpl.create(),

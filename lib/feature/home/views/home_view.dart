@@ -9,10 +9,12 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_module_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/dashboard/dashboard_bottom_nav_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/information_dummy.dart';
@@ -413,59 +415,77 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget poinCard() {
-    return AppDefaultCard(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      padding: const EdgeInsets.only(),
-      borderRadius: 16.0,
-      backgroundCardColor: AppColor.primary,
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Image.asset(
-              AppAssets.circleBackdropImage,
-              height: 72.0,
-              fit: BoxFit.fill,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
+    return BlocBuilder<ActivityCubit, ActivityState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return const AppShimmer(
+            80,
+            double.infinity,
+            16,
+            margin: EdgeInsets.symmetric(horizontal: 16.0),
+          );
+        }
+
+        log(state.pondReponse?.data?.length.toString() ?? "no");
+
+        if ((state.pondReponse?.data?.length ?? 1) <= 1) {
+          return AppDefaultCard(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.only(),
+            borderRadius: 16.0,
+            backgroundCardColor: AppColor.primary,
+            child: Stack(
+              alignment: Alignment.bottomRight,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Image.asset(
+                    AppAssets.circleBackdropImage,
+                    height: 72.0,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
                     children: [
-                      Text(
-                        "0 Poin",
-                        style: AppTextStyle.whiteBoldText,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "0 Poin",
+                              style: AppTextStyle.whiteBoldText,
+                            ),
+                            Text(
+                              "Lengkapi data kolam sekarang!",
+                              style: AppTextStyle.whiteExtraSmallText,
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "Lengkapi data kolam sekarang!",
-                        style: AppTextStyle.whiteExtraSmallText,
+                      SizedBox(
+                        height: 32,
+                        width: 120,
+                        child: AppWhiteButton(
+                          "Lengkapi Data",
+                          () {
+                            context
+                                .read<DashboardBottomNavCubit>()
+                                .changeIndex(2);
+                          },
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 32,
-                  width: 120,
-                  child: AppWhiteButton(
-                    "Lengkapi Data",
-                    () {
-                      Navigator.of(context).push(AppTransition.pushTransition(
-                        const ProfileMemberPage(),
-                        ProfileMemberPage.routeSettings,
-                      ));
-                    },
-                  ),
-                ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        }
+
+        return const SizedBox();
+      },
     );
   }
 

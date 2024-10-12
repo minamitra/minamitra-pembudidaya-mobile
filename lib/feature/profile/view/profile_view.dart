@@ -18,6 +18,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/privacy_policy/views/privacy_policy_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile/logic/profile_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/term_condition/views/term_condition_page.dart';
@@ -504,9 +505,7 @@ class _ProfileViewState extends State<ProfileView> {
                       child: AppPrimaryButton(
                         "Keluar",
                         () {
-                          RepositoryProvider.of<AuthenticationRepository>(
-                                  context)
-                              .logout();
+                          context.read<ProfileCubit>().logout();
                         },
                       ),
                     ),

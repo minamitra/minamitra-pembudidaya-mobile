@@ -114,6 +114,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
               setState(() {
                 if (date != null) {
                   dateController.text = AppConvertDateTime().dmyName(date);
+                  brandController.clear();
                   context
                       .read<ActivityActivitiesAddCubit>()
                       .changeDateTime(date);
