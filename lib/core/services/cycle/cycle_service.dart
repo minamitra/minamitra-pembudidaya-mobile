@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dar
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories/feed_cycle_history_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/harvest_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/repositories/ongoing_cycle_feed_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
 
 abstract class CycleService {
@@ -26,6 +27,12 @@ abstract class CycleService {
   Future<BaseResponse<GraphResponse>> getGraphData({
     required String pondCycleID,
     required String filterName,
+  });
+  Future<BaseResponse<CompanionNotesResponse>> getCompanionNotes({
+    required String pondCycleID,
+    String? filterStartDate,
+    String? filterEndDate,
+    String? companionName,
   });
 }
 
@@ -132,6 +139,27 @@ class CycleServiceImpl implements CycleService {
     final response = await httpClient.get(uri, header);
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     final GraphResponse data = GraphResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
+  }
+
+  @override
+  Future<BaseResponse<CompanionNotesResponse>> getCompanionNotes({
+    required String pondCycleID,
+    String? filterStartDate,
+    String? filterEndDate,
+    String? companionName,
+  }) async {
+    final uri = endpoint.getCompanionNotes(
+      pondCycleID,
+      filterStartDate: filterStartDate,
+      filterEndDate: filterEndDate,
+      companionName: companionName,
+    );
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(uri, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final CompanionNotesResponse data =
+        CompanionNotesResponse.fromMap(meta.result!);
     return BaseResponse(meta: meta, data: data);
   }
 }
