@@ -325,6 +325,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                   AppPrimaryFullButton(
                                     "Edit Data",
                                     () {
+                                      Navigator.of(context).pop();
                                       Navigator.of(context)
                                           .push(AppTransition.pushTransition(
                                         AddPondPage(
