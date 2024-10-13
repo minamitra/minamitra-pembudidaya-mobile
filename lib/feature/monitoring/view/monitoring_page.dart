@@ -20,7 +20,7 @@ class MonitoringPage extends StatelessWidget {
             create: (context) => CultivationCubit(CycleServiceImpl.create())
               ..init(
                 pondCycleID,
-                "mbw",
+                "pakan_harian",
               ))
       ],
       child: Scaffold(

@@ -35,10 +35,10 @@ class _CultivationViewState extends State<CultivationView> {
   final TextEditingController parameterController = TextEditingController();
 
   List<String> dataBudidayDummy = [
-    "MBW (Mean Body Weight) (gram)",
-    "Total Biomass (kg)",
     "Pakan Harian",
     "Pakan Kumulatif",
+    "MBW (Mean Body Weight) (gram)",
+    "Total Biomass (kg)",
     "SR (Survival Rate) (%)",
     "FCR (Feed Convertion Ratio)",
     "ADG (Average Daily Growth) (gram)",

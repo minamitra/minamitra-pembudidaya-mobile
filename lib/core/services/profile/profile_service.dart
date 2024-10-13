@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -9,6 +11,10 @@ import 'package:minamitra_pembudidaya_mobile/feature/profile_member/repositories
 abstract class ProfileService {
   Future<BaseResponse<ProfileResponse>> detailProfile();
   Future<BaseResponse<bool>> updateProfile(UpdateProfilePayload payload);
+  Future<BaseResponse<bool>> updatePassword(
+    String oldPassword,
+    String newPassword,
+  );
 }
 
 class ProfileServiceImpl implements ProfileService {
@@ -52,5 +58,24 @@ class ProfileServiceImpl implements ProfileService {
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: metaResponse, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> updatePassword(
+    String oldPassword,
+    String newPassword,
+  ) async {
+    final url = endpoint.postUpdatePassword();
+    final header = await headerProvider.headers;
+    final repsonse = await httpClient.post(
+      url,
+      header,
+      json.encode({
+        "old_password": oldPassword,
+        "new_password": newPassword,
+      }),
+    );
+    final MetaResponse meta = MetaResponse.fromJson(repsonse.body);
+    return BaseResponse(meta: meta, data: true);
   }
 }
