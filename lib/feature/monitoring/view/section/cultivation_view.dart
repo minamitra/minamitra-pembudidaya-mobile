@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
@@ -633,7 +634,12 @@ class _CultivationViewState extends State<CultivationView> {
       );
     }
 
-    Widget itemNote() {
+    Widget itemNote({
+      required String companionImage,
+      required String companionName,
+      required String dateTime,
+      required String companionNotes,
+    }) {
       return Column(
         children: [
           const SizedBox(height: 18.0),
@@ -641,9 +647,19 @@ class _CultivationViewState extends State<CultivationView> {
             children: [
               CircleAvatar(
                 radius: 18.0,
-                child: Image.asset(
-                  AppAssets.profileImageDummy,
+                child: Image.network(
+                  companionImage,
                   fit: BoxFit.cover,
+                  errorBuilder: (
+                    BuildContext context,
+                    Object obj,
+                    StackTrace? trace,
+                  ) {
+                    return Image.asset(
+                      AppAssets.profileImageDummy,
+                      fit: BoxFit.cover,
+                    );
+                  },
                 ),
               ),
               const SizedBox(width: 12.0),
@@ -652,12 +668,12 @@ class _CultivationViewState extends State<CultivationView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Jacob Jones",
+                      companionName,
                       style: appTextTheme(context).titleSmall,
                     ),
                     const SizedBox(height: 4.0),
                     Text(
-                      "Senin, 12 Sept 2024, 14:30",
+                      dateTime,
                       style: appTextTheme(context)
                           .labelLarge
                           ?.copyWith(color: AppColor.neutral[400]),
@@ -687,8 +703,8 @@ class _CultivationViewState extends State<CultivationView> {
           ),
           const SizedBox(height: 18.0),
           Text(
-            "Pada tanggal 12 September 2024, dilakukan pengecekan kualitas air di Kolam 1. Ditemukan bahwa tingkat pH air menunjukkan fluktuasi yang cukup signifikan, dengan penurunan di bawah batas optimal. Kondisi ini dapat mempengaruhi kesehatan ikan, terutama dalam hal pertumbuhan dan daya tahan mereka terhadap penyakit. Setelah berkonsultasi dengan tim teknis, dilakukan penambahan buffer pH untuk menstabilkan kondisi air. Selain itu, pendamping merekomendasikan pemantauan harian untuk memastikan bahwa kondisi air tetap stabil dan tidak memburuk. Langkah selanjutnya adalah melakukan pengecekan lanjutan dalam 3 hari ke depan guna memastikan efektivitas dari penambahan buffer pH.",
-            maxLines: 3,
+            companionNotes,
+            maxLines: 2,
             style: appTextTheme(context).bodySmall,
           ),
           const SizedBox(height: 18.0),
@@ -703,40 +719,97 @@ class _CultivationViewState extends State<CultivationView> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          Row(
-            children: [
-              Text(
-                "Catatan Pendamping",
-                style: appTextTheme(context)
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const Spacer(),
-              AppWidgetSecondaryChip(
-                text: "Lihat Semua",
-                onTap: () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const CultivationNoteAllPage(),
-                    CultivationNoteAllPage.routeSettings,
-                  ));
-                },
-              ),
-            ],
+          BlocBuilder<CultivationCubit, CultivationState>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  Text(
+                    "Catatan Pendamping",
+                    style: appTextTheme(context)
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  const Spacer(),
+                  state.status.isLoading
+                      ? const AppShimmer(33, 100, 18)
+                      : AppWidgetSecondaryChip(
+                          text: "Lihat Semua",
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(AppTransition.pushTransition(
+                              CultivationNoteAllPage(
+                                  context.read<CultivationCubit>().pondCycleID,
+                                  state.companionNotesData?.data),
+                              CultivationNoteAllPage.routeSettings,
+                            ));
+                          },
+                        ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 18.0),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const CultivationNoteDetailPage(),
-                    CultivationNoteDetailPage.routeSettings,
-                  ));
+          BlocBuilder<CultivationCubit, CultivationState>(
+            builder: (context, state) {
+              if (state.status.isLoading) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return const AppShimmer(
+                      100,
+                      double.infinity,
+                      8.0,
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                    );
+                  },
+                );
+              }
+
+              if (state.companionNotesData?.data?.isEmpty ?? true) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 24.0),
+                  child: AppEmptyData(
+                    "Belum ada catatan\ndari pendamping",
+                    isCenter: true,
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: ((state.companionNotesData?.data?.length ?? 0) > 7)
+                    ? 7
+                    : state.companionNotesData?.data?.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(AppTransition.pushTransition(
+                        CultivationNoteDetailPage(
+                            state.companionNotesData!.data![index]),
+                        CultivationNoteDetailPage.routeSettings,
+                      ));
+                    },
+                    child: itemNote(
+                      companionImage: state
+                          .companionNotesData!.data![index].userImageUrl
+                          .handlingEmptyString(),
+                      companionName: state
+                          .companionNotesData!.data![index].userName
+                          .handlingEmptyString(),
+                      dateTime: AppConvertDateTime().edmy(state
+                              .companionNotesData!
+                              .data![index]
+                              .createDatetime ??
+                          DateTime.now()),
+                      companionNotes: state
+                          .companionNotesData!.data![index].content
+                          .handlingEmptyString(),
+                    ),
+                  );
                 },
-                child: itemNote(),
               );
             },
           )

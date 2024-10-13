@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
 
 part 'cultivation_state.dart';
@@ -28,6 +29,8 @@ class CultivationCubit extends Cubit<CultivationState> {
         pondCycleID: pondCycleID,
         filterName: filterName,
       );
+      final companionNotesResponse =
+          await service.getCompanionNotes(pondCycleID: pondCycleID);
       this.pondCycleID = pondCycleID;
       GraphResponseData data = response.data.data?.copyWith(
         data: [
@@ -55,6 +58,7 @@ class CultivationCubit extends Cubit<CultivationState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         data: data,
+        companionNotesData: companionNotesResponse.data,
       ));
     } on AppException catch (e) {
       emit(state.copyWith(

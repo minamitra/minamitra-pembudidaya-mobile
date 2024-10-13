@@ -5,21 +5,25 @@ class CultivationState extends Equatable {
     this.status = GlobalState.initial,
     this.errorMessage = "",
     this.data,
+    this.companionNotesData,
   });
 
   final GlobalState status;
   final String errorMessage;
   final GraphResponseData? data;
+  final CompanionNotesResponse? companionNotesData;
 
   CultivationState copyWith({
     GlobalState? status,
     String? errorMessage,
     GraphResponseData? data,
+    CompanionNotesResponse? companionNotesData,
   }) {
     return CultivationState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       data: data ?? this.data,
+      companionNotesData: companionNotesData ?? this.companionNotesData,
     );
   }
 
@@ -28,5 +32,6 @@ class CultivationState extends Equatable {
         status,
         errorMessage,
         data ?? GraphResponseData(),
+        companionNotesData ?? CompanionNotesResponse(),
       ];
 }

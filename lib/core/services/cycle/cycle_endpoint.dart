@@ -59,4 +59,22 @@ class CycleEndpoint {
       },
     );
   }
+
+  Uri getCompanionNotes(
+    String pondCycleID, {
+    String? filterStartDate,
+    String? filterEndDate,
+    String? companionName,
+  }) {
+    return createUrl(
+      path: "mitra/assistant-note/data",
+      queryParameters: {
+        "fishpondcycle_id": pondCycleID,
+        "pagination_bool": "false",
+        if (filterStartDate != null) "create_datetime[gte]": filterStartDate,
+        if (filterEndDate != null) "create_datetime[lte]": filterEndDate,
+        if (companionName != null) "user_name": companionName,
+      },
+    );
+  }
 }

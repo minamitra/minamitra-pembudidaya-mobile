@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class CultivationNoteDetailView extends StatefulWidget {
-  const CultivationNoteDetailView({super.key});
+  const CultivationNoteDetailView(this.data, {super.key});
+
+  final CompanionNotesResponseData data;
 
   @override
   State<CultivationNoteDetailView> createState() =>
@@ -30,12 +36,13 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Jacob Jones",
+                widget.data.userName.handlingEmptyString(),
                 style: appTextTheme(context).titleSmall,
               ),
               const SizedBox(height: 4.0),
               Text(
-                "Senin, 12 Sept 2024, 14:30",
+                AppConvertDateTime()
+                    .edmy(widget.data.createDatetime ?? DateTime.now()),
                 style: appTextTheme(context)
                     .labelLarge
                     ?.copyWith(color: AppColor.neutral[400]),
@@ -46,6 +53,41 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
       );
     }
 
+    List<Widget> attachment() {
+      return (widget.data.attachmentJsonArray?.isEmpty ?? true)
+          ? [
+              const Padding(
+                padding: EdgeInsets.only(top: 24.0),
+                child: AppEmptyData(
+                  "Belum ada catatan\ndari pendamping",
+                  isCenter: true,
+                ),
+              ),
+            ]
+          : List.generate(
+              widget.data.attachmentJsonArray?.length ?? 0,
+              (index) {
+                return Container(
+                  height: 150.0,
+                  width: double.infinity,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+                  child: Image.network(
+                    widget.data.attachmentJsonArray?[index],
+                    errorBuilder: (
+                      BuildContext context,
+                      Object obj,
+                      StackTrace? trace,
+                    ) {
+                      return const SizedBox();
+                    },
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
+            );
+    }
+
     return ListView(
       padding: const EdgeInsets.symmetric(horizontal: 18.0),
       children: [
@@ -53,16 +95,17 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
         header(),
         const SizedBox(height: 18.0),
         Text(
-          "PIC: Margareth",
+          "PIC: Unknown",
           style: appTextTheme(context).bodySmall,
         ),
         const SizedBox(height: 18.0),
         AppDividerSmall(),
         const SizedBox(height: 18.0),
         Text(
-          "Pada tanggal 12 September 2024, dilakukan pengecekan kualitas air di Kolam 1. Ditemukan bahwa tingkat pH air menunjukkan fluktuasi yang cukup signifikan, dengan penurunan di bawah batas optimal. Kondisi ini dapat mempengaruhi kesehatan ikan, terutama dalam hal pertumbuhan dan daya tahan mereka terhadap penyakit. Setelah berkonsultasi dengan tim teknis, dilakukan penambahan buffer pH untuk menstabilkan kondisi air. Selain itu, pendamping merekomendasikan pemantauan harian untuk memastikan bahwa kondisi air tetap stabil dan tidak memburuk. Langkah selanjutnya adalah melakukan pengecekan lanjutan dalam 3 hari ke depan guna memastikan efektivitas dari penambahan buffer pH.",
+          widget.data.content.handlingEmptyString(),
           style: appTextTheme(context).bodySmall,
         ),
+        ...attachment(),
       ],
     );
   }
