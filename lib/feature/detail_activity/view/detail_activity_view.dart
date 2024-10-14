@@ -464,7 +464,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
               children: [
                 Expanded(
                     child: headerInformationsItem(
-                        "${widget.pondData.areaWidth} m", "Luas Lahan")),
+                        "${(double.parse(widget.pondData.areaLength ?? "0") * double.parse(widget.pondData.areaWidth ?? "0")).toStringAsFixed(1)} m",
+                        "Luas Lahan")),
                 SizedBox(
                   height: 38.0,
                   child: VerticalDivider(color: AppColor.neutral[200]),
