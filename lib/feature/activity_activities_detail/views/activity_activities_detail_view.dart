@@ -60,7 +60,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
             "Jumlah Pakan",
-            "${double.parse(data.actual?.handleEmptyStringToZero() ?? "0")} gram",
+            "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(7)} gram",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),

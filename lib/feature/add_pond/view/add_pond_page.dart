@@ -114,11 +114,9 @@ class AddPondPage extends StatelessWidget {
                   AppTopSnackBar(context)
                       .showSuccess("Berhasil Membuat\nSiklus Baru");
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
                   Navigator.of(context).pop("refresh");
                 } else if (behaviourPage == BehaviourPage.editPond) {
                   AppTopSnackBar(context).showSuccess("Berhasil Edit\nKolam");
-                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop("refresh");
                 }

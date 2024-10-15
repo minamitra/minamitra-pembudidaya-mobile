@@ -1,9 +1,12 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/feed_data_by_cycle_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/feer_recomendation_response.dart';
@@ -21,11 +24,16 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
   String? feedHour;
   String? feedMinute;
 
+  final TextEditingController totalAmountFeedFromInitController =
+      TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+
   Future<void> init(
     String fishPondID,
     String fishPondCycleID,
     DateTime tebarDate, {
     DateTime? selectedDate,
+    FeedActivityResponseData? editData,
   }) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
@@ -43,6 +51,19 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       this.fishPondID = fishPondID;
       this.fishPondCycleID = fishPondCycleID;
       this.tebarDate = tebarDate;
+
+      if (editData != null) {
+        amountController.text =
+            (double.parse(editData.actual ?? "0") / 1000).toString();
+      }
+
+      totalAmountFeedFromInitController.text =
+          (((response.data.data?.accumulationTotalFeedBefore ?? 0) +
+                      double.parse(
+                          amountController.text.handleEmptyStringToZero())) /
+                  1000)
+              .toStringAsFixed(7);
+
       emit(state.copyWith(
         status: GlobalState.loaded,
         selectedDate: DateTime.now(),
@@ -79,6 +100,9 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
         fishPondCycleID ?? "",
         AppConvertDateTime().ymdDash(dateTime),
       );
+      totalAmountFeedFromInitController.text =
+          ((response.data.data?.accumulationTotalFeedBefore ?? 0) / 1000)
+              .toStringAsFixed(7);
       emit(state.copyWith(
         status: GlobalState.loaded,
         selectedDate: dateTime,

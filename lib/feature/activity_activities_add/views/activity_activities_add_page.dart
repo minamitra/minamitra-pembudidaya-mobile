@@ -23,7 +23,6 @@ class ActivityActivitiesAddPage extends StatelessWidget {
   final String fishPondID;
   final String fishPondCycleID;
   final DateTime tebarDate;
-
   final FeedActivityResponseData? editData;
 
   static RouteSettings routeSettings() =>
@@ -42,6 +41,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
               fishPondCycleID,
               tebarDate,
               selectedDate: editData?.datetime,
+              editData: editData,
             ),
       child:
           BlocConsumer<ActivityActivitiesAddCubit, ActivityActivitiesAddState>(
