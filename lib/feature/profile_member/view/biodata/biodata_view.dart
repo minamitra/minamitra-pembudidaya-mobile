@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
@@ -37,7 +38,6 @@ class _BiodataViewState extends State<BiodataView> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController birthPlaceController = TextEditingController();
   final TextEditingController birthDateController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
   final TextEditingController jobController = TextEditingController();
 
   Uint8List? picture;
@@ -45,8 +45,8 @@ class _BiodataViewState extends State<BiodataView> {
   GenderData? selectedGender;
 
   DateTime dateNow = DateTime.now();
-  DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
-  DateTime lastDate = DateTime.now().add(const Duration(days: 365));
+  DateTime firstDate = DateTime.now().subtract(const Duration(days: 365 * 100));
+  DateTime lastDate = DateTime.now();
 
   @override
   void initState() {
@@ -62,8 +62,14 @@ class _BiodataViewState extends State<BiodataView> {
     birthDateController.text = widget.profile.birthDate == null
         ? ""
         : AppConvertDateTime().ymdDash(widget.profile.birthDate!);
-    genderController.text = widget.profile.gender ?? "";
     jobController.text = widget.profile.job ?? "";
+    if (widget.profile.gender != null && widget.profile.gender != "") {
+      selectedGender = listGender.firstWhere(
+        (element) {
+          return element.value == widget.profile.gender;
+        },
+      );
+    }
   }
 
   void convertImageUrl(String image) async {
@@ -357,7 +363,7 @@ class _BiodataViewState extends State<BiodataView> {
             Wrap(
               children: [
                 Text(
-                  "Jenis Kegiatan",
+                  "Jenis Kelamin",
                   style: appTextTheme(context).bodyMedium,
                 ),
                 Text(
@@ -409,7 +415,7 @@ class _BiodataViewState extends State<BiodataView> {
       } else {
         return dataStatic(
           "Jenis Kelamin",
-          convertGenderName(genderController.text),
+          selectedGender?.name ?? "-",
         );
       }
     }
@@ -454,13 +460,19 @@ class _BiodataViewState extends State<BiodataView> {
           if (!_formKey.currentState!.validate()) {
             return;
           }
-          File tempFile;
+          if (picture == null && pictureFile == null) {
+            AppTopSnackBar(context)
+                .showDanger("Foto Profil tidak boleh kosong");
+            return;
+          }
 
+          File tempFile;
           if (pictureFile != null) {
             tempFile = pictureFile!;
           } else {
             tempFile = await appConvertImage(picture!);
           }
+
           UpdateProfilePayload payload = UpdateProfilePayload(
             nik: nikController.text,
             name: nameController.text,
