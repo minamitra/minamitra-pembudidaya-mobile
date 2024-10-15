@@ -33,7 +33,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
   @override
   void initState() {
     super.initState();
-    if (widget.data.buyerJsonArray != null) {
+    if (widget.data.buyerJsonArray?.isNotEmpty ?? false) {
       totalTransaction = widget.data.buyerJsonArray!
           .map((e) => e.sellTotalPrice)
           .reduce((value, element) => value + element);
