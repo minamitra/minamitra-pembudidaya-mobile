@@ -86,9 +86,9 @@ class ProfileResponseData {
         email: json["email"],
         mobilephone: json["mobilephone"],
         birthPlace: json["birth_place"],
-        birthDate: json["birth_date"] != null
-            ? DateTime.parse(json["birth_date"])
-            : null,
+        birthDate: (json["birth_date"] == null || json["birth_date"] == "")
+            ? null
+            : DateTime.parse(json["birth_date"]),
         gender: json["gender"],
         job: json["job"],
         imageUrl: json["image_url"],
