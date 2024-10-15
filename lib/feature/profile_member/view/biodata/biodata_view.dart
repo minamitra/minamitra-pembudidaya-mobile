@@ -10,8 +10,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/logic/profile_member_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/repositories/gender_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/repositories/profile_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/repositories/update_profile_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -28,19 +30,23 @@ class BiodataView extends StatefulWidget {
 class _BiodataViewState extends State<BiodataView> {
   bool isEditable = false;
 
-  // final TextEditingController numberKTAController = TextEditingController();
-  // final TextEditingController numberNIKController = TextEditingController();
-  // final TextEditingController jobController = TextEditingController();
-  // final TextEditingController birthDateController = TextEditingController();
-  // final TextEditingController genderController = TextEditingController();
-  // final TextEditingController addressController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final TextEditingController nikController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
+  final TextEditingController birthPlaceController = TextEditingController();
+  final TextEditingController birthDateController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+  final TextEditingController jobController = TextEditingController();
 
   Uint8List? picture;
   File? pictureFile;
+  GenderData? selectedGender;
+
+  DateTime dateNow = DateTime.now();
+  DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
+  DateTime lastDate = DateTime.now().add(const Duration(days: 365));
 
   @override
   void initState() {
@@ -48,9 +54,16 @@ class _BiodataViewState extends State<BiodataView> {
     if (widget.profile.imageUrl != null && widget.profile.imageUrl != "") {
       convertImageUrl(widget.profile.imageUrl!);
     }
+    nikController.text = widget.profile.nik ?? "";
     nameController.text = widget.profile.name ?? "";
     emailController.text = widget.profile.email ?? "";
     phoneController.text = widget.profile.mobilephone ?? "";
+    birthPlaceController.text = widget.profile.birthPlace ?? "";
+    birthDateController.text = widget.profile.birthDate == null
+        ? ""
+        : AppConvertDateTime().ymdDash(widget.profile.birthDate!);
+    genderController.text = widget.profile.gender ?? "";
+    jobController.text = widget.profile.job ?? "";
   }
 
   void convertImageUrl(String image) async {
@@ -88,139 +101,6 @@ class _BiodataViewState extends State<BiodataView> {
         ],
       );
     }
-
-    // Widget numberKTA() {
-    //   if (isEditable) {
-    //     return AppValidatorTextField(
-    //       controller: numberKTAController,
-    //       labelText: "Nomor KTA",
-    //       withUpperLabel: true,
-    //       isMandatory: true,
-    //       hintText: "Contoh. 2420039",
-    //       validator: (String? value) {
-    //         if (value?.isEmpty ?? true) {
-    //           return "Nomor KTA Tidak boleh kosong";
-    //         }
-    //         return null;
-    //       },
-    //     );
-    //   }
-    //   return dataStatic(
-    //     "Nomor KTA",
-    //     "003112313214",
-    //   );
-    // }
-
-    // Widget numberNIK() {
-    //   if (isEditable) {
-    //     return AppValidatorTextField(
-    //       controller: numberNIKController,
-    //       labelText: "Nomor NIK",
-    //       withUpperLabel: true,
-    //       isMandatory: true,
-    //       hintText: "Contoh. 3520069991220",
-    //       validator: (String? value) {
-    //         if (value?.isEmpty ?? true) {
-    //           return "Nomor NIK Tidak boleh kosong";
-    //         }
-    //         return null;
-    //       },
-    //     );
-    //   }
-    //   return dataStatic(
-    //     "Nomor NIK",
-    //     "3520069991220",
-    //   );
-    // }
-
-    // Widget job() {
-    //   if (isEditable) {
-    //     return AppValidatorTextField(
-    //       controller: jobController,
-    //       labelText: "Pekerjaan",
-    //       withUpperLabel: true,
-    //       isMandatory: true,
-    //       hintText: "Contoh. Petani Tambak Boyo",
-    //       validator: (String? value) {
-    //         if (value?.isEmpty ?? true) {
-    //           return "Pekerjaan Tidak boleh kosong";
-    //         }
-    //         return null;
-    //       },
-    //     );
-    //   }
-    //   return dataStatic(
-    //     "Pekerjaan",
-    //     "Petani Tambak Boyo",
-    //   );
-    // }
-
-    // Widget birthDate() {
-    //   if (isEditable) {
-    //     return AppValidatorTextField(
-    //       controller: birthDateController,
-    //       labelText: "Tempat, Tanggal Lahir",
-    //       withUpperLabel: true,
-    //       isMandatory: true,
-    //       hintText: "Contoh. Yogyakarta, 12 Desember 2024",
-    //       validator: (String? value) {
-    //         if (value?.isEmpty ?? true) {
-    //           return "Tempat Tanggal Lahir tidak boleh kosong";
-    //         }
-    //         return null;
-    //       },
-    //     );
-    //   }
-    //   return dataStatic(
-    //     "Tempat, Tanggal Lahir",
-    //     "Yogyakarta, 12 Desember 2024",
-    //   );
-    // }
-
-    // Widget gender() {
-    //   if (isEditable) {
-    //     return AppValidatorTextField(
-    //       controller: genderController,
-    //       labelText: "Jenis Kelamin",
-    //       withUpperLabel: true,
-    //       isMandatory: true,
-    //       hintText: "Contoh. Laki-Laki",
-    //       validator: (String? value) {
-    //         if (value?.isEmpty ?? true) {
-    //           return "Jenis kelamin tidak boleh kosong";
-    //         }
-    //         return null;
-    //       },
-    //     );
-    //   }
-    //   return dataStatic(
-    //     "Jenis Kelamin",
-    //     "Laki-Laki",
-    //   );
-    // }
-
-    // Widget address() {
-    //   if (isEditable) {
-    //     return AppValidatorTextField(
-    //       controller: addressController,
-    //       labelText: "Alamat",
-    //       withUpperLabel: true,
-    //       isMandatory: true,
-    //       hintText:
-    //           "Contoh. Kelompok Budidaya, Kelurahan, Kecamatan,  Kabupaten, Provinsi",
-    //       validator: (String? value) {
-    //         if (value?.isEmpty ?? true) {
-    //           return "Alamat tidak boleh kosong";
-    //         }
-    //         return null;
-    //       },
-    //     );
-    //   }
-    //   return dataStatic(
-    //     "Alamat",
-    //     "Kelompok Budidaya, Kelurahan, Kecamatan,  Kabupaten, Provinsi",
-    //   );
-    // }
 
     Widget profilePicture() {
       return Center(
@@ -309,15 +189,38 @@ class _BiodataViewState extends State<BiodataView> {
             );
     }
 
+    Widget nikField() {
+      if (isEditable) {
+        return AppValidatorTextField(
+          controller: nikController,
+          labelText: "NIK",
+          withUpperLabel: true,
+          isMandatory: true,
+          inputType: TextInputType.number,
+          hintText: "Masukkan NIK",
+          validator: (String? value) {
+            if (value?.isEmpty ?? true) {
+              return "NIK Tidak boleh kosong";
+            }
+            return null;
+          },
+        );
+      }
+      return dataStatic(
+        "NIK",
+        nikController.text,
+      );
+    }
+
     Widget nameField() {
       if (isEditable) {
         return AppValidatorTextField(
           controller: nameController,
-          labelText: "Nama",
+          labelText: "Nama Lengkap",
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.name,
-          hintText: "Contoh. Andi Budi Santoso",
+          hintText: "Masukkan Nama Lengkap",
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
               return "Nama Tidak boleh kosong";
@@ -340,7 +243,7 @@ class _BiodataViewState extends State<BiodataView> {
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.emailAddress,
-          hintText: "Contoh. andi@gmail.com",
+          hintText: "Masukkan Email",
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
               return "Email Tidak boleh kosong";
@@ -363,7 +266,7 @@ class _BiodataViewState extends State<BiodataView> {
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.phone,
-          hintText: "Contoh. 089221023392",
+          hintText: "Masukkan Nomor Handphone",
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
               return "Nomor Handphone Tidak boleh kosong";
@@ -375,6 +278,162 @@ class _BiodataViewState extends State<BiodataView> {
       return dataStatic(
         "Nomor Handphone",
         phoneController.text,
+      );
+    }
+
+    Widget birthPlaceField() {
+      if (isEditable) {
+        return AppValidatorTextField(
+          controller: birthPlaceController,
+          labelText: "Tempat Lahir (Sesuai KTP)",
+          withUpperLabel: true,
+          isMandatory: true,
+          inputType: TextInputType.text,
+          hintText: "Masukkan Tempat Lahir",
+          validator: (String? value) {
+            if (value?.isEmpty ?? true) {
+              return "Tempat Lahir Tidak boleh kosong";
+            }
+            return null;
+          },
+        );
+      }
+      return dataStatic(
+        "Tempat Lahir",
+        birthPlaceController.text,
+      );
+    }
+
+    Widget birthDateField() {
+      if (isEditable) {
+        return AppValidatorTextField(
+          readOnly: true,
+          controller: birthDateController,
+          labelText: "Tanggal Lahir (Sesuai KTP)",
+          hintText: "Pilih Tanggal Lahir",
+          suffixConstraints: const BoxConstraints(),
+          suffixWidget: Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Image.asset(
+              AppAssets.calendarIcon,
+              height: 24,
+              fit: BoxFit.cover,
+            ),
+          ),
+          isMandatory: true,
+          onTap: () {
+            showDatePicker(
+              context: context,
+              initialDate: dateNow,
+              firstDate: firstDate,
+              lastDate: lastDate,
+            ).then((date) {
+              setState(() {
+                if (date != null) {
+                  birthDateController.text = AppConvertDateTime().ymdDash(date);
+                }
+              });
+            });
+          },
+          validator: (String? value) {
+            if (value!.isEmpty) {
+              return "Tanggal tidak boleh kosong";
+            }
+            return null;
+          },
+        );
+      }
+      return dataStatic(
+        "Tanggal Lahir",
+        birthDateController.text,
+      );
+    }
+
+    Widget genderField() {
+      if (isEditable) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Wrap(
+              children: [
+                Text(
+                  "Jenis Kegiatan",
+                  style: appTextTheme(context).bodyMedium,
+                ),
+                Text(
+                  " *",
+                  style: appTextTheme(context)
+                      .bodyMedium
+                      ?.copyWith(color: Colors.red),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0),
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) {
+                return const SizedBox(height: 8.0);
+              },
+              itemCount: listGender.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColor.neutral[200]!,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  child: RadioListTile<GenderData>(
+                    contentPadding: const EdgeInsets.all(0),
+                    title: Text(
+                      listGender[index].name,
+                      style: appTextTheme(context).bodySmall?.copyWith(
+                            color: AppColor.neutral[600],
+                          ),
+                    ),
+                    value: listGender[index],
+                    groupValue: selectedGender,
+                    onChanged: (value) {
+                      setState(() {
+                        selectedGender = value;
+                      });
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      } else {
+        return dataStatic(
+          "Jenis Kelamin",
+          convertGenderName(genderController.text),
+        );
+      }
+    }
+
+    Widget jobField() {
+      if (isEditable) {
+        return AppValidatorTextField(
+          controller: jobController,
+          labelText: "Pekerjaan",
+          withUpperLabel: true,
+          isMandatory: true,
+          inputType: TextInputType.text,
+          hintText: "Masukkan Pekerjaan",
+          validator: (String? value) {
+            if (value?.isEmpty ?? true) {
+              return "Pekerjaan Tidak boleh kosong";
+            }
+            return null;
+          },
+        );
+      }
+      return dataStatic(
+        "Pekerjaan",
+        jobController.text,
       );
     }
 
@@ -403,9 +462,14 @@ class _BiodataViewState extends State<BiodataView> {
             tempFile = await appConvertImage(picture!);
           }
           UpdateProfilePayload payload = UpdateProfilePayload(
+            nik: nikController.text,
             name: nameController.text,
             email: emailController.text,
             mobilephone: phoneController.text,
+            birthPlace: birthPlaceController.text,
+            birthDate: birthDateController.text,
+            gender: selectedGender?.value ?? "",
+            job: jobController.text,
           );
           context.read<ProfileMemberCubit>().updateProfile(payload, tempFile);
           setState(() {
@@ -420,22 +484,25 @@ class _BiodataViewState extends State<BiodataView> {
       child: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
-          // numberKTA(),
-          // numberNIK(),
-          // numberPhone(),
-          // job(),
-          // birthDate(),
-          // gender(),
-          // address(),
           const SizedBox(height: 16.0),
           profilePicture(),
           const SizedBox(height: 16.0),
           buttonChangeProfilePicture(),
+          nikField(),
+          isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
           nameField(),
           isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
           emailField(),
           isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
           phoneField(),
+          isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
+          birthPlaceField(),
+          isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
+          birthDateField(),
+          isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
+          genderField(),
+          isEditable ? const SizedBox(height: 16.0) : const SizedBox(),
+          jobField(),
           isEditable ? const SizedBox(height: 36.0) : const SizedBox(),
           editButton(),
           const SizedBox(height: 18.0),

@@ -95,7 +95,7 @@ class _ProfileMemberViewState extends State<ProfileMemberView>
                 controller: _tabController,
                 children: [
                   BiodataView(state.profile!),
-                  AttachmentView(),
+                  AttachmentView(state.profile!),
                 ],
               );
             }
