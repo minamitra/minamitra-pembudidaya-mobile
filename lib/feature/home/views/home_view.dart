@@ -497,19 +497,31 @@ class _HomeViewState extends State<HomeView> {
         switch (entity.name) {
           case "Promo 3M":
             Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage("Promo 3M"),
+              const CommingSoonPage(
+                "Promo 3M",
+                customTitle: "Promo 3M Akan Segera Hadir",
+                customImage: AppAssets.commingSoonPromoImage,
+              ),
               CommingSoonPage.route(),
             ));
             break;
           case "Pasar Ikan":
             Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage("Pasar Ikan"),
+              const CommingSoonPage(
+                "Pasar Ikan",
+                customTitle: "Pasar Ikan Akan Segera Hadir",
+                customImage: AppAssets.commingSoonFishStoreImage,
+              ),
               CommingSoonPage.route(),
             ));
             break;
           case "Acara 3M":
             Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage("Acara 3M"),
+              const CommingSoonPage(
+                "Acara 3M",
+                customTitle: "Acara 3M Akan Segera Hadir",
+                customImage: AppAssets.commingSoonEventImage,
+              ),
               CommingSoonPage.route(),
             ));
             break;
@@ -577,7 +589,11 @@ class _HomeViewState extends State<HomeView> {
               text: "Lihat Semua",
               onTap: () {
                 Navigator.of(context).push(AppTransition.pushTransition(
-                  const CommingSoonPage("Acara 3M"),
+                  const CommingSoonPage(
+                    "Acara 3M",
+                    customTitle: "Acara 3M Akan Segera Hadir",
+                    customImage: AppAssets.commingSoonEventImage,
+                  ),
                   CommingSoonPage.route(),
                 ));
               },

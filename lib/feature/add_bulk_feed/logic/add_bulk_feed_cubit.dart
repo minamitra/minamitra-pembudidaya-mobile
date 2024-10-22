@@ -126,7 +126,10 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
     ));
   }
 
-  Future<void> saveFeed(String type) async {
+  Future<void> saveFeed({
+    required String type,
+    required List<String> typeList,
+  }) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       // Cleaning data
@@ -163,10 +166,11 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
         ));
         return;
       }
-      final int getHourTime = type.getHourTime();
+      // final int getHourTime = type.getHourTime();
       SaveBulkBody saveBulkBody = SaveBulkBody(
-        date: state.pickedDate!.copyWith(hour: getHourTime),
+        date: state.pickedDate ?? DateTime.now(),
         timeSheet: type,
+        timeSheetJsonArray: typeList,
         data: bulkDataCleaning,
       );
       await service.saveFeedBulkData(saveBulkBody);

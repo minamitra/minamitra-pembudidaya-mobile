@@ -18,6 +18,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_s
 import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/privacy_policy/views/privacy_policy_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile/logic/profile_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
@@ -421,8 +422,8 @@ class _ProfileViewState extends State<ProfileView> {
           "Informasi Poin milikmu",
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
-              const PointPage(),
-              PointPage.routeSettings,
+              const PointV2Page(),
+              PointV2Page.route(),
             ));
           },
         ),

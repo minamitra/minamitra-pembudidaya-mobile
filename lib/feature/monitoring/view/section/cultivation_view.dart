@@ -35,13 +35,13 @@ class _CultivationViewState extends State<CultivationView> {
   final TextEditingController parameterController = TextEditingController();
 
   List<String> dataBudidayDummy = [
-    "Pakan Harian",
-    "Pakan Kumulatif",
     "MBW (Mean Body Weight) (gram)",
     "Total Biomass (kg)",
-    "SR (Survival Rate) (%)",
-    "FCR (Feed Convertion Ratio)",
     "ADG (Average Daily Growth) (gram)",
+    // "Pakan Harian",
+    // "Pakan Kumulatif",
+    // "SR (Survival Rate) (%)",
+    // "FCR (Feed Convertion Ratio)",
   ];
 
   TrackballBehavior defaultTrackballBehavior(
@@ -528,6 +528,8 @@ class _CultivationViewState extends State<CultivationView> {
                 maximumZoomLevel: 0.5,
                 enablePanning: true, // Enable panning for the chart
                 enablePinching: true, // Enable pinch zooming
+                // enableSelectionZooming: true,
+                enableMouseWheelZooming: true,
                 zoomMode:
                     ZoomMode.x, // Allow zooming and panning only on the X-axis
               ),
@@ -539,6 +541,7 @@ class _CultivationViewState extends State<CultivationView> {
               legend: Legend(
                 isVisible: true,
               ),
+
               primaryXAxis: NumericAxis(
                 title: const AxisTitle(text: "DoC (hari)"),
                 minimum: state.data?.data?.first.doc?.toDouble() ?? 10,
@@ -559,44 +562,44 @@ class _CultivationViewState extends State<CultivationView> {
                     text: (state.data?.filterName ?? "Unknown Filter")
                         .convertFilterToTitle()),
                 minimum: 0,
-                maximum: (state.data?.data?.map((e) => e.target).reduce((a, b) {
-                              return (a ?? 0.0) > (b ?? 0.0) ? a : b;
-                            }) ??
-                            100) <
-                        20
-                    ? 100
-                    : (state.data?.data?.map((e) => e.target).reduce((a, b) {
-                          return (a ?? 0.0) > (b ?? 0.0) ? a : b;
-                        }) ??
-                        100),
-                interval:
-                    ((state.data?.data?.map((e) => e.target).reduce((a, b) {
-                                      return (a ?? 0.0) > (b ?? 0.0) ? a : b;
-                                    }) ??
-                                    100) <
-                                20
-                            ? 10
-                            : (state.data?.data
-                                        ?.map((e) => e.target)
-                                        .reduce((a, b) {
-                                      return (a ?? 0.0) > (b ?? 0.0) ? a : b;
-                                    }) ??
-                                    100) /
-                                10)
-                        .roundToDouble(),
+                // maximum: (state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //               return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //             }) ??
+                //             100) <
+                //         20
+                //     ? 100
+                //     : (state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //           return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //         }) ??
+                //         100),
+                // interval:
+                //     ((state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //                       return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //                     }) ??
+                //                     100) <
+                //                 20
+                //             ? 10
+                //             : (state.data?.data
+                //                         ?.map((e) => e.target)
+                //                         .reduce((a, b) {
+                //                       return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //                     }) ??
+                //                     100) /
+                //                 10)
+                //         .roundToDouble(),
                 initialVisibleMinimum: 0,
-                initialVisibleMaximum: (state.data?.data
-                                ?.map((e) => e.target)
-                                .reduce((a, b) {
-                              return (a ?? 0.0) > (b ?? 0.0) ? a : b;
-                            }) ??
-                            100) <
-                        20
-                    ? 100
-                    : (state.data?.data?.map((e) => e.target).reduce((a, b) {
-                          return (a ?? 0.0) > (b ?? 0.0) ? a : b;
-                        }) ??
-                        100),
+                // initialVisibleMaximum: (state.data?.data
+                //                 ?.map((e) => e.target)
+                //                 .reduce((a, b) {
+                //               return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //             }) ??
+                //             100) <
+                //         20
+                //     ? 100
+                //     : (state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //           return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //         }) ??
+                //         100),
                 majorGridLines: MajorGridLines(
                   width: 1.5,
                   color: AppColor.neutral[200],
@@ -615,6 +618,13 @@ class _CultivationViewState extends State<CultivationView> {
                   isVisibleInLegend: true,
                   legendItemText: "Target",
                   enableTooltip: true,
+                  // markerSettings: MarkerSettings(
+                  //   isVisible: true,
+                  //   shape: DataMarkerType.circle,
+                  //   borderWidth: 2.0,
+                  //   borderColor: AppColor.accent[900],
+                  //   color: AppColor.accent[900],
+                  // ),
                 ),
                 LineSeries<GraphResponseDataItem, int>(
                   dataSource: state.data?.data ?? [],

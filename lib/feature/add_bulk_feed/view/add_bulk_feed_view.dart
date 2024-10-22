@@ -32,6 +32,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
 
   List<String> listType = ["Pagi", "Siang", "Sore", "Malam"];
+  List<String> selectedTypeOfFeed = [];
 
   bool isShow = false;
 
@@ -132,14 +133,24 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
             }
             return null;
           },
-          onTap: appBottomSheetShowModal(
-            context,
-            "Pilih waktu kegiatan",
-            listType,
-            (value) {
-              typeController.text = value;
+          onTap: appBottomSheetShowModalChecklist(
+            context: context,
+            title: "Pilih waktu kegiatan",
+            data: listType,
+            selectedData: selectedTypeOfFeed,
+            onSelected: (value) {
+              typeController.text = value.join(", ");
             },
           ),
+
+          // appBottomSheetShowModal(
+          //   context,
+          //   "Pilih waktu kegiatan",
+          //   listType,
+          //   (value) {
+          //     typeController.text = value;
+          //   },
+          // ),
         ),
       );
     }
@@ -297,7 +308,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     const SizedBox(width: 8.0),
                     Text(
-                      "$feedValue Gram",
+                      "$feedValue Kg",
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -337,7 +348,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        "Saran pakan : ${recommendation.toStringAsFixed(5)} gram",
+                        "Saran pakan : ${recommendation.toStringAsFixed(2)} Kg",
                         style: appTextTheme(context).titleSmall?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
@@ -345,9 +356,9 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     InkWell(
                       onTap: () {
-                        log("recommendation : ${recommendation.toStringAsFixed(5)}");
+                        log("recommendation : ${recommendation.toStringAsFixed(2)}");
 
-                        onChangedFeedAmount!(recommendation.toStringAsFixed(5));
+                        onChangedFeedAmount!(recommendation.toStringAsFixed(2));
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -401,7 +412,17 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                   hintText: "0",
                   withUpperLabel: true,
                   isMandatory: true,
-                  suffixText: "gram",
+                  suffixConstraints: const BoxConstraints(),
+                  suffixWidget: Padding(
+                    padding: const EdgeInsets.only(right: 18.0),
+                    child: Text(
+                      "Kg",
+                      style: appTextTheme(context).bodySmall?.copyWith(
+                            color: AppColor.neutral[500],
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                  ),
                   onChanged: (value) {
                     onChangedFeedAmount!(value);
                     fishFeedValuecontroller.text = value;
@@ -497,7 +518,9 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                         );
                   },
                   state.recommendationFeedBulk?.data?[index].isShow ?? false,
-                  state.recommendationFeedBulk?.data?[index].suggestFeed ?? 0.0,
+                  (state.recommendationFeedBulk?.data?[index].suggestFeed ??
+                          0.0) /
+                      1000,
                   (value) {
                     context.read<AddBulkFeedCubit>().onChangeFeedAmount(
                           index,
@@ -587,7 +610,10 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
             if (!_formKey.currentState!.validate()) {
               return;
             }
-            context.read<AddBulkFeedCubit>().saveFeed(typeController.text);
+            context.read<AddBulkFeedCubit>().saveFeed(
+                  type: typeController.text,
+                  typeList: selectedTypeOfFeed,
+                );
           },
         ),
       );

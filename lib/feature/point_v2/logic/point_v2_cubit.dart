@@ -1,0 +1,24 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/point/point_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+
+part 'point_v2_state.dart';
+
+class PointV2Cubit extends Cubit<PointV2State> {
+  PointV2Cubit(this.service) : super(const PointV2State());
+
+  final PointService service;
+
+  void onChangeGridExchangeValue(int index) {
+    emit(state.copyWith(status: GlobalState.onUpdating));
+    emit(state.copyWith(
+      status: GlobalState.loaded,
+      selectedGridExchange: index,
+    ));
+  }
+
+  Future<void> onSubmitExchange() async {
+    try {} catch (e) {}
+  }
+}

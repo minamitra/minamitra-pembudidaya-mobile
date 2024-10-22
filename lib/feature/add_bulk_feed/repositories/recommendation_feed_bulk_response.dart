@@ -122,7 +122,7 @@ class RecommendationFeedBulkData {
   Map<String, dynamic> submitBulkMap() => {
         "fishpond_id": fishpondId,
         "recommendation": suggestFeed,
-        "actual": feedAmount,
+        "actual": (feedAmount ?? 0) * 1000,
         "fishfood_id": selectedFishfood!.id,
         "note": "Tidak ada catatan",
         // "mbw_by_fish_age": mbwByFishAge,

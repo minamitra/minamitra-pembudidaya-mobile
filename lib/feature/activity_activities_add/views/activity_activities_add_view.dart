@@ -44,7 +44,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 45));
   DateTime lastDate = DateTime.now();
 
-  List<String> listType = ["Pagi", "Siang", "Sore", "Malam"];
+  List<String> listType = ["pagi", "siang", "sore", "malam"];
+  List<String> selectedTypeOfFeed = [];
 
   @override
   void initState() {
@@ -59,8 +60,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           );
       hourController.text =
           AppConvertDateTime().jm24(widget.editData!.datetime!);
-      typeController.text = widget.editData!.timeSheet ?? "";
-
+      typeController.text = widget.editData!.timeSheetArray?.join(", ") ?? "";
+      selectedTypeOfFeed = widget.editData!.timeSheetArray ?? [];
       brandController.text = widget.editData!.fishfoodName ?? "";
       context
           .read<ActivityActivitiesAddCubit>()
@@ -135,32 +136,45 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   }
 
   Widget typeTextFormField() {
-    return AppValidatorTextField(
-      labelText: "Waktu Kegiatan",
-      controller: typeController,
-      isMandatory: true,
-      withUpperLabel: true,
-      readOnly: true,
-      hintText: "Pilih waktu kegiatan",
-      suffixWidget: const Padding(
-        padding: EdgeInsets.only(right: 18.0),
-        child: Icon(Icons.arrow_drop_down_rounded),
-      ),
-      suffixConstraints: const BoxConstraints(),
-      validator: (value) {
-        if (value?.isEmpty ?? true) {
-          return "Waktu kegiatan tidak boleh kosong";
-        }
-        return null;
+    return BlocBuilder<ActivityActivitiesAddCubit, ActivityActivitiesAddState>(
+      builder: (context, state) {
+        return AppValidatorTextField(
+          labelText: "Waktu Kegiatan",
+          controller: typeController,
+          isMandatory: true,
+          withUpperLabel: true,
+          readOnly: true,
+          hintText: "Pilih waktu kegiatan",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Waktu kegiatan tidak boleh kosong";
+            }
+            return null;
+          },
+          onTap: appBottomSheetShowModalChecklist(
+            context: context,
+            title: "Waktu pakan",
+            data: listType,
+            selectedData: selectedTypeOfFeed,
+            onSelected: (value) {
+              typeController.text = value.join(", ");
+            },
+          ),
+          // appBottomSheetShowModal(
+          //   context,
+          //   "Pilih waktu kegiatan",
+          //   listType,
+          //   (value) {
+          //     typeController.text = value;
+          //   },
+          // ),
+        );
       },
-      onTap: appBottomSheetShowModal(
-        context,
-        "Pilih waktu kegiatan",
-        listType,
-        (value) {
-          typeController.text = value;
-        },
-      ),
     );
   }
 
@@ -246,13 +260,13 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                             0) /
                         1000) +
                     (double.tryParse(value.handleEmptyStringToZero()) ?? 0))
-                .toString();
+                .toStringAsFixed(2);
           },
           suffixConstraints: const BoxConstraints(),
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "Kilogram",
+              "Kg",
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -326,7 +340,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      "Saran Pakan: ${((state.feedRecomendationResponse?.data?.suggestFeed ?? 0) / 1000).toStringAsFixed(7)} Kilogram",
+                      "Saran Pakan: ${((state.feedRecomendationResponse?.data?.suggestFeed ?? 0) / 1000).toStringAsFixed(2)} Kg",
                       maxLines: 2,
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
@@ -355,7 +369,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                                   .read<ActivityActivitiesAddCubit>()
                                   .amountController
                                   .text))
-                          .toString();
+                          .toStringAsFixed(2);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
@@ -496,7 +510,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "Kilogram",
+          "Kg",
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
                 fontWeight: FontWeight.w500,
@@ -564,7 +578,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         }
 
         if (state.status.isLoaded) {
-          fishAgeController.text = state.fishAge.toString();
+          fishAgeController.text =
+              state.feedRecomendationResponse?.data?.fishAge ?? "1";
         }
 
         return AppValidatorTextField(
@@ -640,7 +655,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
             if (!formKey.currentState!.validate()) {
               return;
             }
-            final int getHourTime = typeController.text.getHourTime();
+            // final int getHourTime = typeController.text.getHourTime();
             final activityCubit = context.read<ActivityActivitiesAddCubit>();
             final double? actualAmount =
                 double.tryParse(activityCubit.amountController.text);
@@ -654,9 +669,11 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                     fishpondId: int.parse(activityCubit.fishPondID ?? "0"),
                     fishpondcycleId:
                         int.parse(activityCubit.fishPondCycleID ?? "0"),
-                    datetime: activityCubit.state.selectedDate
-                        ?.copyWith(hour: getHourTime),
-                    fishAge: activityCubit.state.fishAge,
+                    datetime: activityCubit.state.selectedDate,
+                    fishAge: int.tryParse(activityCubit.state
+                                .feedRecomendationResponse?.data?.fishAge ??
+                            "1") ??
+                        1,
                     recommendation: activityCubit
                         .state.feedRecomendationResponse?.data?.suggestFeed,
                     actual: actualAmount * 1000,
@@ -667,7 +684,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                     fishfoodId: activityCubit.state.fishFoodID,
                     note: noteController.text,
                     dataID: widget.editData?.id,
-                    timeSheet: typeController.text.toLowerCase(),
+                    timeSheet: typeController.text,
+                    timeSheetJsonArray: selectedTypeOfFeed,
                   ),
                 );
           },

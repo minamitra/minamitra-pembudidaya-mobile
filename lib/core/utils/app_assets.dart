@@ -67,6 +67,12 @@ class AppAssets {
       "$imagePath/information-dummy-3-image.png";
   static const String informationDummy4Image =
       "$imagePath/information-dummy-4-image.png";
+  static const String commingSoonPromoImage =
+      "$imagePath/comming-soon-promo-image.png";
+  static const String commingSoonEventImage =
+      "$imagePath/comming-soon-event-image.png";
+  static const String commingSoonFishStoreImage =
+      "$imagePath/comming-soon-fish-store-image.png";
 
   // Transaction
   static const String product1Image = "$imagePath/product-1-image.png";
@@ -130,6 +136,12 @@ class AppAssets {
   static const String circleActiveIcon = "$iconPath/circle-active-icon.png";
   static const String circleInactiveIcon = "$iconPath/circle-inactive-icon.png";
   static const String pointAddIcon = "$iconPath/point-add-icon.png";
+  static const String pointBackgroundv2Image =
+      "$imagePath/point-background-v2-image.png";
+  static const String silverIcon = "$iconPath/silver-icon.png";
+  static const String goldIcon = "$iconPath/gold-icon.png";
+  static const String platinumIcon = "$iconPath/platinum-icon.png";
+  static const String diamondIcon = "$iconPath/diamond-icon.png";
 
   // FAQ
   static const String questionIcon = "$iconPath/question-icon.png";

@@ -62,7 +62,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
                       double.parse(
                           amountController.text.handleEmptyStringToZero())) /
                   1000)
-              .toStringAsFixed(7);
+              .toStringAsFixed(2);
 
       emit(state.copyWith(
         status: GlobalState.loaded,

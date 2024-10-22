@@ -535,11 +535,13 @@ class _DetailActivityViewState extends State<DetailActivityView> {
 
     Widget detailPakanItem(
       String title,
-      String value,
+      String feeData,
+      String valueData,
     ) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
@@ -550,14 +552,26 @@ class _DetailActivityViewState extends State<DetailActivityView> {
             ),
             const SizedBox(width: 8.0),
             Expanded(
-              child: Text(
-                value,
-                textAlign: TextAlign.end,
-                maxLines: 3,
-                style: appTextTheme(context).bodySmall?.copyWith(
-                      color: AppColor.neutral[800],
-                      fontWeight: FontWeight.w500,
-                    ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    feeData,
+                    textAlign: TextAlign.end,
+                    maxLines: 3,
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          color: AppColor.neutral[800],
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    "Est Total Pakan: $valueData Kg",
+                    style: appTextTheme(context)
+                        .labelLarge
+                        ?.copyWith(color: AppColor.primary[500]),
+                  )
+                ],
               ),
             ),
           ],
@@ -746,9 +760,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               "done" ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
                       ? "-"
-                      : state.onGoingCycleFeedResponseData!.data!.first
-                              .estimationPanenTonase ??
-                          "-",
+                      : "${(state.onGoingCycleFeedResponseData?.data?.first.estimationPanenTonase ?? "-")} Kg",
                 ),
                 const SizedBox(height: 36.0),
               ],
@@ -788,7 +800,19 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               .toList()
                               .join(", ") ??
                           "-",
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.starter1
+                              ?.map((element) => (element.total ?? 0))
+                              .toList()
+                              .reduce((value, element) => value + element)
+                              .toStringAsFixed(2) ??
+                          "-",
                 ),
+                AppDividerSmall(),
                 detailPakanItem(
                   "Starter 2",
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
@@ -801,7 +825,19 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               .toList()
                               .join(", ") ??
                           "-",
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.starter2
+                              ?.map((element) => (element.total ?? 0))
+                              .toList()
+                              .reduce((value, element) => value + element)
+                              .toStringAsFixed(2) ??
+                          "-",
                 ),
+                AppDividerSmall(),
                 detailPakanItem(
                   "Starter 3",
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
@@ -814,7 +850,19 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               .toList()
                               .join(", ") ??
                           "-",
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.starter3
+                              ?.map((element) => (element.total ?? 0))
+                              .toList()
+                              .reduce((value, element) => value + element)
+                              .toStringAsFixed(2) ??
+                          "-",
                 ),
+                AppDividerSmall(),
                 detailPakanItem(
                   "Grower",
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
@@ -826,6 +874,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               ?.map((element) => element.name)
                               .toList()
                               .join(", ") ??
+                          "-",
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.grower
+                              ?.map((element) => (element.total ?? 0))
+                              .toList()
+                              .reduce((value, element) => value + element)
+                              .toStringAsFixed(2) ??
                           "-",
                 ),
                 AppDividerSmall(),
@@ -840,6 +899,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               ?.map((element) => element.name)
                               .toList()
                               .join(", ") ??
+                          "-",
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              "done" ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                      ? "-"
+                      : state.onGoingCycleFeedResponseData?.data?.first
+                              .fishfoodJsonObject?.finisher
+                              ?.map((element) => (element.total ?? 0))
+                              .toList()
+                              .reduce((value, element) => value + element)
+                              .toStringAsFixed(2) ??
                           "-",
                 ),
                 const SizedBox(height: 36.0),

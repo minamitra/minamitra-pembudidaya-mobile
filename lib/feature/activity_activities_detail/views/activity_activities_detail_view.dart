@@ -46,7 +46,14 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
             "Waktu Pakan",
-            AppConvertDateTime().ddmmyyyyhhmm(data.datetime ?? DateTime.now()),
+            AppConvertDateTime().dmyName(data.datetime ?? DateTime.now()),
+          ),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+            "Waktu kegiatan",
+            data.timeSheetArray?.join(", ") ?? "-",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
@@ -60,7 +67,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
             "Jumlah Pakan",
-            "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(7)} gram",
+            "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(2)} Kg",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
@@ -78,7 +85,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
             "Catatan",
-            data.note ?? "-",
+            data.note.handlingEmptyStringWithTNoteNotes(),
           ),
           const SizedBox(height: 98.0),
         ],
