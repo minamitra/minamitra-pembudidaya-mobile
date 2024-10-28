@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/logic/history_point_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/history_point_detail/view/history_point_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class HistoryPointView extends StatefulWidget {
@@ -99,7 +101,12 @@ class _HistoryPointViewState extends State<HistoryPointView> {
       );
     }
 
-    Widget listHistoryItem() {
+    Widget listHistoryItem({
+      required String title,
+      required String dateTime,
+      required int point,
+      String? balance,
+    }) {
       return Container(
         padding: const EdgeInsets.all(18.0),
         child: Row(
@@ -121,14 +128,14 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Tarik Tunai",
+                    title,
                     style: appTextTheme(context)
                         .titleSmall
                         ?.copyWith(fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 10.0),
                   Text(
-                    "19 Sep 2024, 15:30",
+                    dateTime,
                     style: appTextTheme(context)
                         .bodySmall
                         ?.copyWith(color: AppColor.neutralBlueGrey[400]),
@@ -136,24 +143,26 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                 ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "- 500 poin",
-                  style: appTextTheme(context)
-                      .titleSmall
-                      ?.copyWith(color: AppColor.accent[900]),
-                ),
-                const SizedBox(height: 10.0),
-                Text(
-                  "+ Rp 50,000",
-                  style: appTextTheme(context)
-                      .titleSmall
-                      ?.copyWith(color: AppColor.secondary[900]),
-                ),
-              ],
-            ),
+            balance != null
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        " ${point <= 0 ? "-" : "+"} $point poin",
+                        style: appTextTheme(context)
+                            .titleSmall
+                            ?.copyWith(color: AppColor.accent[900]),
+                      ),
+                      const SizedBox(height: 10.0),
+                      Text(
+                        "+ Rp 50,000",
+                        style: appTextTheme(context)
+                            .titleSmall
+                            ?.copyWith(color: AppColor.secondary[900]),
+                      ),
+                    ],
+                  )
+                : const SizedBox(),
           ],
         ),
       );
@@ -172,8 +181,18 @@ class _HistoryPointViewState extends State<HistoryPointView> {
         },
         itemBuilder: (context, index) {
           return InkWell(
-            onTap: () {},
-            child: listHistoryItem(),
+            onTap: () {
+              Navigator.of(context).push(AppTransition.pushTransition(
+                const HistoryPointDetailPage(),
+                HistoryPointDetailPage.route,
+              ));
+            },
+            child: listHistoryItem(
+              title: "Tarik Tunai",
+              dateTime: "12 Januari 2021",
+              point: 100,
+              balance: "+ Rp 50,000",
+            ),
           );
         },
       );

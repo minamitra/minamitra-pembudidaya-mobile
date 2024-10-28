@@ -53,8 +53,7 @@ class _FeedingViewState extends State<FeedingView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        AppConvertDateTime()
-                            .ddmmyyyyhhmm(data.datetime ?? DateTime.now()),
+                        "${AppConvertDateTime().dmyName(data.datetime ?? DateTime.now())} | ${data.timeSheet ?? "-"}",
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],

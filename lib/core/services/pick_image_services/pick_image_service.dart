@@ -6,7 +6,10 @@ Future<XFile?> pickDocumentImage(
   ImageSource source,
 ) async {
   final ImagePicker picker = ImagePicker();
-  final pickedImage = await picker.pickImage(source: source);
+  final pickedImage = await picker.pickImage(
+    source: source,
+    imageQuality: 50,
+  );
   if (pickedImage == null) {
     return null;
   }

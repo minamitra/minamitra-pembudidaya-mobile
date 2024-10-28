@@ -74,7 +74,8 @@ class RecommendationFeedBulkData {
   factory RecommendationFeedBulkData.fromMap(Map<String, dynamic> json) =>
       RecommendationFeedBulkData(
         fishpondId: json["fishpond_id"],
-        mbwByFishAge: json["mbw_by_fish_age"].toDouble(),
+        mbwByFishAge:
+            double.tryParse(json["mbw_by_fish_age"].toString()) ?? 0.0,
         suggestFeed: json["suggest_feed"].toDouble(),
         accumulationTotalFeedBefore:
             json["accumulation_total_feed_before"].toDouble(),
@@ -85,7 +86,7 @@ class RecommendationFeedBulkData {
             : List<Fishfood>.from(
                 json["fishfoods"]!.map((x) => Fishfood.fromMap(x))),
         fishpondName: json["fishpond_name"],
-        fishAge: json["fish_age"],
+        fishAge: json["fish_age"].toString(),
       );
 
   RecommendationFeedBulkData copyWith({

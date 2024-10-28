@@ -24,11 +24,25 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
     Widget header() {
       return Row(
         children: [
-          CircleAvatar(
-            radius: 18.0,
-            child: Image.asset(
-              AppAssets.profileImageDummy,
-              fit: BoxFit.cover,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100.0),
+            child: SizedBox(
+              height: 36.0,
+              width: 36.0,
+              child: Image.network(
+                widget.data.userImageUrl ?? "",
+                fit: BoxFit.cover,
+                errorBuilder: (
+                  BuildContext context,
+                  Object obj,
+                  StackTrace? trace,
+                ) {
+                  return Image.asset(
+                    AppAssets.profileImageDummy,
+                    fit: BoxFit.cover,
+                  );
+                },
+              ),
             ),
           ),
           const SizedBox(width: 12.0),
@@ -57,9 +71,9 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
       return (widget.data.attachmentJsonArray?.isEmpty ?? true)
           ? [
               const Padding(
-                padding: EdgeInsets.only(top: 24.0),
+                padding: EdgeInsets.only(top: 50.0),
                 child: AppEmptyData(
-                  "Belum ada catatan\ndari pendamping",
+                  "Belum ada lampiran\ndari pendamping",
                   isCenter: true,
                 ),
               ),

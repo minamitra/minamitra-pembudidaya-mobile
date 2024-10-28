@@ -46,7 +46,7 @@ class FeedRecomendationResponseData {
         suggestFeed: json["suggest_feed"]?.toDouble(),
         accumulationTotalFeedBefore:
             json["accumulation_total_feed_before"]?.toDouble(),
-        fishAge: json["fish_age"],
+        fishAge: json["fish_age"].toString(),
       );
 
   Map<String, dynamic> toMap() => {

@@ -81,12 +81,18 @@ class GraphResponseDataItem {
   DateTime? date;
   double? target;
   double? actual;
+  double? standar;
+  double? estimasi;
+  double? aktual;
 
   GraphResponseDataItem({
     this.doc,
     this.date,
     this.target,
     this.actual,
+    this.standar,
+    this.estimasi,
+    this.aktual,
   });
 
   factory GraphResponseDataItem.fromJson(String str) =>
@@ -100,7 +106,30 @@ class GraphResponseDataItem {
         date: json["date"] == null ? null : DateTime.parse(json["date"]),
         target: double.tryParse(json["target"].toString()) ?? 0.0,
         actual: double.tryParse(json["actual"].toString()) ?? 0.0,
+        standar: double.tryParse(json["standar"].toString()) ?? 0.0,
+        estimasi: double.tryParse(json["estimasi"].toString()) ?? 0.0,
+        aktual: double.tryParse(json["aktual"].toString()) ?? 0.0,
       );
+
+  copyWith({
+    int? doc,
+    DateTime? date,
+    double? target,
+    double? actual,
+    double? standar,
+    double? estimasi,
+    double? aktual,
+  }) {
+    return GraphResponseDataItem(
+      doc: doc ?? this.doc,
+      date: date ?? this.date,
+      target: target ?? this.target,
+      actual: actual ?? this.actual,
+      standar: standar ?? this.standar,
+      estimasi: estimasi ?? this.estimasi,
+      aktual: aktual ?? this.aktual,
+    );
+  }
 
   Map<String, dynamic> toMap() => {
         "doc": doc,

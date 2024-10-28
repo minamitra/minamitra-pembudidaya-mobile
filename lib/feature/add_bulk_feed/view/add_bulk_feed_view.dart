@@ -501,7 +501,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.recommendationFeedBulk?.data?.length,
+            itemCount: state.recommendationFeedBulk?.data?.length ?? 0,
             itemBuilder: (context, index) {
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),

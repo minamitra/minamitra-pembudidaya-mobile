@@ -7,6 +7,7 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_module_card.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/dashboard/dashboard_bottom_nav_cubit.dart';
@@ -21,6 +22,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/informati
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
@@ -28,6 +30,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatefulWidget {
@@ -332,8 +335,8 @@ class _HomeViewState extends State<HomeView> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const PointPage(),
-                    PointPage.routeSettings,
+                    const PointV2Page(),
+                    PointV2Page.route(),
                   ));
                 },
                 child: Container(
@@ -422,15 +425,13 @@ class _HomeViewState extends State<HomeView> {
             80,
             double.infinity,
             16,
-            margin: EdgeInsets.symmetric(horizontal: 16.0),
+            margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
           );
         }
 
-        log(state.pondReponse?.data?.length.toString() ?? "no");
-
         if ((state.pondReponse?.data?.length ?? 1) <= 1) {
           return AppDefaultCard(
-            margin: const EdgeInsets.symmetric(horizontal: 16.0),
+            margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
             padding: const EdgeInsets.only(),
             borderRadius: 16.0,
             backgroundCardColor: AppColor.primary,
@@ -541,6 +542,7 @@ class _HomeViewState extends State<HomeView> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GridView.builder(
+        padding: const EdgeInsets.only(),
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -839,24 +841,31 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        header(),
-        const SizedBox(height: 16.0),
-        levelCard(),
-        const SizedBox(height: 16.0),
-        poinCard(),
-        const SizedBox(height: 16.0),
-        menu(),
-        const SizedBox(height: 16.0),
-        ...event(),
-        const SizedBox(height: 18.0),
-        referral(),
-        const SizedBox(height: 18.0),
-        ...promo(),
-        const SizedBox(height: 18.0),
-        ...informations(),
-      ],
+    return AppRefresher(
+      onRefresh: () {
+        context.read<HomeCubit>().init();
+        context.read<ActivityCubit>().init();
+      },
+      offset: 24.0,
+      child: ListView(
+        padding: const EdgeInsets.only(top: 16.0),
+        children: [
+          header(),
+          const SizedBox(height: 16.0),
+          levelCard(),
+          poinCard(),
+          const SizedBox(height: 16.0),
+          menu(),
+          const SizedBox(height: 16.0),
+          ...event(),
+          const SizedBox(height: 18.0),
+          referral(),
+          const SizedBox(height: 18.0),
+          ...promo(),
+          const SizedBox(height: 18.0),
+          ...informations(),
+        ],
+      ),
     );
   }
 }

@@ -63,102 +63,131 @@ class _CultivationViewState extends State<CultivationView> {
         // tooltipAlignment: ChartAlignment.far,
         builder: (context, trackballs) {
           return Container(
-              width: MediaQuery.sizeOf(context).width * 0.55,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0,
-                      vertical: 8.0,
+            width: MediaQuery.sizeOf(context).width * 0.55,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
                     ),
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        topRight: Radius.circular(8.0),
-                      ),
-                      color: AppColor.primary[600],
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title.convertFilterToTitle(),
-                          style: appTextTheme(context).labelLarge?.copyWith(
-                                color: AppColor.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
-                        const SizedBox(height: 4.0),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "DoC : ${trackballs.groupingModeInfo?.points[0].x.toString()} Hari",
-                                style:
-                                    appTextTheme(context).labelLarge?.copyWith(
-                                          color: AppColor.white,
-                                        ),
-                              ),
+                    color: AppColor.primary[600],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title.convertFilterToTitle(),
+                        style: appTextTheme(context).labelLarge?.copyWith(
+                              color: AppColor.white,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(
-                              AppConvertDateTime().dmyName(
-                                  data[trackballs.groupingModeInfo?.points[0].x]
-                                          .date ??
-                                      DateTime.now()),
+                      ),
+                      const SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "DoC : ${trackballs.groupingModeInfo?.points[0].x.toString()} Hari",
                               style: appTextTheme(context).labelLarge?.copyWith(
                                     color: AppColor.white,
                                   ),
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8.0,
-                      vertical: 12.0,
-                    ),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(8.0),
-                        bottomRight: Radius.circular(8.0),
+                            ),
+                          ),
+                          Text(
+                            AppConvertDateTime().dmyName(
+                                data[trackballs.groupingModeInfo?.points[0].x]
+                                        .date ??
+                                    DateTime.now()),
+                            style: appTextTheme(context).labelLarge?.copyWith(
+                                  color: AppColor.white,
+                                ),
+                          )
+                        ],
                       ),
-                      color: AppColor.white,
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 12.0,
+                  ),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 14.0,
-                              height: 14.0,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4.0),
-                                color: AppColor.accent[900],
-                              ),
+                    color: AppColor.white,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 14.0,
+                            height: 14.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: AppColor.accent[900],
                             ),
-                            const SizedBox(width: 6.0),
-                            Expanded(
-                              child: Text(
-                                "Target",
-                                style: appTextTheme(context).labelLarge,
-                              ),
-                            ),
-                            Text(
-                              trackballs.groupingModeInfo?.points[0].y
-                                      ?.toStringAsFixed(5) ??
-                                  "-",
+                          ),
+                          const SizedBox(width: 6.0),
+                          Expanded(
+                            child: Text(
+                              "Standar",
                               style: appTextTheme(context).labelLarge,
                             ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            appConvert3Digits(trackballs
+                                    .groupingModeInfo?.points[0].y
+                                    ?.toDouble() ??
+                                0.0),
+                            style: appTextTheme(context).labelLarge,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12.0),
+                      DottedLine(dashColor: AppColor.neutral[200]!),
+                      const SizedBox(height: 12.0),
+                      Row(
+                        children: [
+                          Container(
+                            width: 14.0,
+                            height: 14.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: AppColor.green[500],
+                            ),
+                          ),
+                          const SizedBox(width: 6.0),
+                          Expanded(
+                            child: Text(
+                              "Estimasi",
+                              style: appTextTheme(context).labelLarge,
+                            ),
+                          ),
+                          Text(
+                            appConvert3Digits(trackballs
+                                    .groupingModeInfo?.points[1].y
+                                    ?.toDouble() ??
+                                0.0),
+                            style: appTextTheme(context).labelLarge,
+                          ),
+                        ],
+                      ),
+                      if (trackballs.groupingModeInfo?.points.length == 3) ...[
                         const SizedBox(height: 12.0),
                         DottedLine(dashColor: AppColor.neutral[200]!),
                         const SizedBox(height: 12.0),
@@ -169,7 +198,7 @@ class _CultivationViewState extends State<CultivationView> {
                               height: 14.0,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(4.0),
-                                color: AppColor.green[500],
+                                color: AppColor.primary[600],
                               ),
                             ),
                             const SizedBox(width: 6.0),
@@ -180,24 +209,22 @@ class _CultivationViewState extends State<CultivationView> {
                               ),
                             ),
                             Text(
-                              trackballs.groupingModeInfo?.points[1].y
-                                      .toString() ??
-                                  "",
+                              appConvert3Digits(trackballs
+                                      .groupingModeInfo?.points[2].y
+                                      ?.toDouble() ??
+                                  0.0),
                               style: appTextTheme(context).labelLarge,
                             ),
                           ],
                         ),
-                      ],
-                    ),
+                      ]
+                    ],
                   ),
-                ],
-              )
+                ),
+              ],
+            ),
+          );
 
-              // Text(
-              //   "DoC : ${trackballs.groupingModeInfo?.points[0].x.toString()} Hari\nMBW : ${trackballs.point?.y.toString()} gram",
-              //   style: const TextStyle(color: Colors.white),
-              // ),
-              );
           // : Container();
         },
       );
@@ -538,10 +565,7 @@ class _CultivationViewState extends State<CultivationView> {
                 state.data?.data ?? [],
               ),
               // tooltipBehavior: defaultTooltipBehavior,
-              legend: Legend(
-                isVisible: true,
-              ),
-
+              legend: Legend(isVisible: true),
               primaryXAxis: NumericAxis(
                 title: const AxisTitle(text: "DoC (hari)"),
                 minimum: state.data?.data?.first.doc?.toDouble() ?? 10,
@@ -611,14 +635,14 @@ class _CultivationViewState extends State<CultivationView> {
                 LineSeries<GraphResponseDataItem, int>(
                   dataSource: state.data?.data ?? [],
                   xValueMapper: (GraphResponseDataItem data, _) => data.doc,
-                  yValueMapper: (GraphResponseDataItem data, _) => data.target,
+                  yValueMapper: (GraphResponseDataItem data, _) => data.standar,
                   width: 4.0,
                   color: AppColor.accent[900],
                   legendIconType: LegendIconType.seriesType,
                   isVisibleInLegend: true,
-                  legendItemText: "Target",
+                  legendItemText: "Standar",
                   enableTooltip: true,
-                  // markerSettings: MarkerSettings(
+                  //   markerSettings: MarkerSettings(
                   //   isVisible: true,
                   //   shape: DataMarkerType.circle,
                   //   borderWidth: 2.0,
@@ -629,14 +653,34 @@ class _CultivationViewState extends State<CultivationView> {
                 LineSeries<GraphResponseDataItem, int>(
                   dataSource: state.data?.data ?? [],
                   xValueMapper: (GraphResponseDataItem data, _) => data.doc,
-                  yValueMapper: (GraphResponseDataItem data, _) => data.actual,
+                  yValueMapper: (GraphResponseDataItem data, _) =>
+                      data.estimasi,
                   width: 4.0,
                   color: AppColor.green[500],
                   legendIconType: LegendIconType.seriesType,
                   isVisibleInLegend: true,
-                  legendItemText: "Aktual",
+                  legendItemText: "Estimasi",
                   enableTooltip: false,
-                )
+                ),
+                LineSeries<GraphResponseDataItem, int>(
+                  dataSource: state.data?.data ?? [],
+                  xValueMapper: (GraphResponseDataItem data, _) => data.doc,
+                  yValueMapper: (GraphResponseDataItem data, _) =>
+                      (data.aktual ?? 0) <= 0 ? null : data.aktual,
+                  width: 4.0,
+                  color: AppColor.primary[600],
+                  legendIconType: LegendIconType.seriesType,
+                  isVisibleInLegend: true,
+                  legendItemText: "Aktual",
+                  enableTooltip: true,
+                  markerSettings: MarkerSettings(
+                    isVisible: true,
+                    shape: DataMarkerType.circle,
+                    borderWidth: 1.0,
+                    borderColor: AppColor.primary[600],
+                    color: AppColor.primary[600],
+                  ),
+                ),
               ],
             ),
           );
@@ -655,21 +699,25 @@ class _CultivationViewState extends State<CultivationView> {
           const SizedBox(height: 18.0),
           Row(
             children: [
-              CircleAvatar(
-                radius: 18.0,
-                child: Image.network(
-                  companionImage,
-                  fit: BoxFit.cover,
-                  errorBuilder: (
-                    BuildContext context,
-                    Object obj,
-                    StackTrace? trace,
-                  ) {
-                    return Image.asset(
-                      AppAssets.profileImageDummy,
-                      fit: BoxFit.cover,
-                    );
-                  },
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: SizedBox(
+                  height: 36.0,
+                  width: 36.0,
+                  child: Image.network(
+                    companionImage,
+                    fit: BoxFit.cover,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object obj,
+                      StackTrace? trace,
+                    ) {
+                      return Image.asset(
+                        AppAssets.profileImageDummy,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(width: 12.0),

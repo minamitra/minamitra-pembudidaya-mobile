@@ -15,6 +15,7 @@ PreferredSizeWidget appDefaultAppBar(
   Function()? onBackButtonPressed,
   Widget? flexibleSpace,
   bool isCenterTitle = false,
+  Widget? customLeading,
 }) {
   return AppBar(
     title: customTitle ??
@@ -30,14 +31,15 @@ PreferredSizeWidget appDefaultAppBar(
     titleSpacing: isBackButton ? 0 : 16,
     elevation: 0,
     leading: isBackButton
-        ? IconButton(
-            onPressed: onBackButtonPressed ??
-                () {
-                  Navigator.pop(context);
-                },
-            icon: const Icon(Icons.arrow_back_ios),
-            color: backButtonColor,
-          )
+        ? customLeading ??
+            IconButton(
+              onPressed: onBackButtonPressed ??
+                  () {
+                    Navigator.pop(context);
+                  },
+              icon: const Icon(Icons.arrow_back_ios),
+              color: backButtonColor,
+            )
         : null,
     actions: actions,
     bottom: bottom,

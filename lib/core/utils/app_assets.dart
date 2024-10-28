@@ -16,6 +16,9 @@ class AppAssets {
   static const String phNewIcon = "$iconPath/ph-new-icon.png";
   static const String temperatureIcon = "$iconPath/thermometer-icon.png";
   static const String emptyDataImage = "$imagePath/empty-data-image.png";
+  static const String withdrawalIcon = "$iconPath/withdrawal-icon.png";
+  static const String walletWhiteIcon = "$iconPath/wallet-white-icon.png";
+  static const String activityIcon = "$iconPath/activity-icon.png";
 
   // Icon General
   static const String fishIcon = "$iconPath/fish-icon.png";

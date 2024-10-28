@@ -27,7 +27,7 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
         AppConvertDateTime().ymdDash(DateTime.now()),
       );
       this.pondID = pondID;
-      log(response.data.toString());
+      log(response.data.data?.length.toString() ?? "error");
       emit(state.copyWith(
         status: GlobalState.loaded,
         recommendationFeedBulk: response.data,
@@ -40,6 +40,7 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
         errorMessage: e.message,
       ));
     } catch (e) {
+      log(e.toString());
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),

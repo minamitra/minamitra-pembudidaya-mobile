@@ -43,7 +43,7 @@ class _ActivityCycleAddHarvestViewState
   final TextEditingController noteController = TextEditingController();
 
   DateTime dateNow = DateTime.now();
-  DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
+  DateTime firstDate = DateTime.now();
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
   DateTime? harvestDate;
 
@@ -222,10 +222,13 @@ class _ActivityCycleAddHarvestViewState
                               ImageSource.camera,
                             );
                             if (document != null) {
-                              await context
-                                  .read<ActivityCyclePictureCubit>()
-                                  .setImage(File(document.path));
-                              Navigator.of(bottomSheetContext).pop();
+                              if (context.mounted) {
+                                await context
+                                    .read<ActivityCyclePictureCubit>()
+                                    .setImage(File(document.path));
+                                Navigator.of(bottomSheetContext).pop();
+                              }
+
                               // await document.readAsBytes().then((image) {
                               //   context
                               //       .read<ActivityCyclePictureCubit>()
@@ -240,10 +243,13 @@ class _ActivityCycleAddHarvestViewState
                               ImageSource.gallery,
                             );
                             if (document != null) {
-                              await context
-                                  .read<ActivityCyclePictureCubit>()
-                                  .setImage(File(document.path));
-                              Navigator.of(bottomSheetContext).pop();
+                              if (context.mounted) {
+                                await context
+                                    .read<ActivityCyclePictureCubit>()
+                                    .setImage(File(document.path));
+                                Navigator.of(bottomSheetContext).pop();
+                              }
+
                               // await document.readAsBytes().then((image) {
                               //   context
                               //       .read<ActivityCyclePictureCubit>()
@@ -524,9 +530,18 @@ class _ActivityCycleAddHarvestViewState
                       " dianggap selesai dan tidak dapat diubah lagi.",
                   onTapDelete: () {
                     Navigator.of(context).pop();
-                    context
-                        .read<ActivityCycleAddHarvestCubit>()
-                        .doneHarvest(widget.data?.id ?? "");
+                    context.read<ActivityCycleAddHarvestCubit>().doneHarvest(
+                          id: widget.id,
+                          harvestDate: harvestDate!,
+                          harvestFishWeight: int.parse(sizeController.text),
+                          totalHarvestActual: int.parse(totalController.text),
+                          harvestNotes: noteController.text,
+                          images: context
+                                  .read<ActivityCyclePictureCubit>()
+                                  .state
+                                  .images ??
+                              [],
+                        );
                   },
                   icon: Icons.info_outline,
                   buttonTitle: "Selesaikan Panen",
