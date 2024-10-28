@@ -51,6 +51,7 @@ class AddPondPage extends StatelessWidget {
           create: (context) => AddPondCubit(
             RefServiceImpl.create(),
             PondServiceImpl.create(),
+            FeedServiceImpl.create(),
           )..init(),
         ),
         BlocProvider(create: (context) => MultipleImageCubit()),
@@ -113,11 +114,9 @@ class AddPondPage extends StatelessWidget {
                   AppTopSnackBar(context)
                       .showSuccess("Berhasil Membuat\nSiklus Baru");
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
                   Navigator.of(context).pop("refresh");
                 } else if (behaviourPage == BehaviourPage.editPond) {
                   AppTopSnackBar(context).showSuccess("Berhasil Edit\nKolam");
-                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                   Navigator.of(context).pop("refresh");
                 }

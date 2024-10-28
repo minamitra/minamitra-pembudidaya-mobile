@@ -5,28 +5,33 @@ class ProfileMemberState extends Equatable {
     this.status = GlobalState.initial,
     this.errorMessage = "",
     this.tabIndex = 0,
+    this.profile,
   });
 
   final GlobalState status;
   final String errorMessage;
   final int tabIndex;
+  final ProfileResponseData? profile;
 
   ProfileMemberState copyWith({
     GlobalState? status,
     String? errorMessage,
     int? tabIndex,
+    ProfileResponseData? profile,
   }) {
     return ProfileMemberState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       tabIndex: tabIndex ?? this.tabIndex,
+      profile: profile ?? this.profile,
     );
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
         errorMessage,
         tabIndex,
+        profile,
       ];
 }

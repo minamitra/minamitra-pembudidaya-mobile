@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -9,10 +11,14 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/seed_response.dar
 import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_endpoint.dart';
 
 abstract class FeedService {
-  Future<BaseResponse<FeedStarterResponse>> getFeedStarter();
+  Future<BaseResponse<FeedStarterResponse>> getFeedStarter(String type);
   Future<BaseResponse<FeedGrowerResponse>> getFeedGrower();
   Future<BaseResponse<FeedFinisherResponse>> getFeedFinisher();
   Future<BaseResponse<SeedResponse>> getSeed();
+  Future<BaseResponse<int>> addNewFishFeed(
+    String name,
+    int price,
+  );
 }
 
 class FeedServiceImpl implements FeedService {
@@ -59,8 +65,8 @@ class FeedServiceImpl implements FeedService {
   }
 
   @override
-  Future<BaseResponse<FeedStarterResponse>> getFeedStarter() async {
-    final uri = endpoint.getFeed("starter");
+  Future<BaseResponse<FeedStarterResponse>> getFeedStarter(String type) async {
+    final uri = endpoint.getFeed(type);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -79,5 +85,25 @@ class FeedServiceImpl implements FeedService {
     final SeedResponse data = SeedResponse.fromMap(metaResponse.result!);
 
     return BaseResponse(meta: metaResponse, data: data);
+  }
+
+  @override
+  Future<BaseResponse<int>> addNewFishFeed(String name, int price) async {
+    final uri = endpoint.postNewSeed();
+    final header = await headerProvider.headers;
+    final response = await httpClient.post(
+      uri,
+      header,
+      json.encode({
+        "name": name,
+        "price": price,
+      }),
+    );
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+
+    return BaseResponse(
+      meta: metaResponse,
+      data: metaResponse.result!["data"]["fishseed_id"],
+    );
   }
 }

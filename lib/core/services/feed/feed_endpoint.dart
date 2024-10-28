@@ -17,4 +17,10 @@ class FeedEndpoint {
       path: "mitra/fishseed/data",
     );
   }
+
+  Uri postNewSeed() {
+    return createUrl(
+      path: "mitra/fishseed/add-kiloan",
+    );
+  }
 }

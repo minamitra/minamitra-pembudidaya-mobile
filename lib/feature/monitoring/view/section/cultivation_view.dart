@@ -1,12 +1,24 @@
+import 'dart:developer';
+
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/view/cultivation_note_all_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_detail/view/cultivation_note_detail_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/line_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
@@ -25,45 +37,197 @@ class _CultivationViewState extends State<CultivationView> {
   List<String> dataBudidayDummy = [
     "MBW (Mean Body Weight) (gram)",
     "Total Biomass (kg)",
-    "Harvest Accumuation (kg)",
-    "Feed (kg)",
-    "FCR (Feed Convertion Ratio)",
-    "SR (Survival Rate) (%)",
     "ADG (Average Daily Growth) (gram)",
+    // "Pakan Harian",
+    // "Pakan Kumulatif",
+    // "SR (Survival Rate) (%)",
+    // "FCR (Feed Convertion Ratio)",
   ];
 
-  TrackballBehavior defaultTrackballBehavior = TrackballBehavior(
-    enable: true,
-    tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
-    activationMode: ActivationMode.singleTap,
-    lineType: TrackballLineType.vertical,
-    tooltipSettings: const InteractiveTooltip(
-      textStyle: TextStyle(
-        color: Colors.blue,
-        fontSize: 12,
-      ),
-      format: "point.x Hari : point.y gram",
-    ),
-    builder: (context, trackballs) {
-      return Container(
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black,
-              offset: Offset(0, 1),
-            )
-          ],
+  TrackballBehavior defaultTrackballBehavior(
+    String title,
+    List<GraphResponseDataItem> data,
+  ) =>
+      TrackballBehavior(
+        enable: true,
+        tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        activationMode: ActivationMode.singleTap,
+        lineType: TrackballLineType.vertical,
+        tooltipSettings: const InteractiveTooltip(
+          textStyle: TextStyle(
+            color: Colors.blue,
+            fontSize: 12,
+          ),
+          format: "point.x Hari : point.y gram",
         ),
-        child: Text(
-          "DoC : ${trackballs.point?.x.toString()} Hari\nMBW : ${trackballs.point?.y.toString()} gram",
-          style: const TextStyle(color: Colors.white),
-        ),
+        // tooltipAlignment: ChartAlignment.far,
+        builder: (context, trackballs) {
+          return Container(
+            width: MediaQuery.sizeOf(context).width * 0.55,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    color: AppColor.primary[600],
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title.convertFilterToTitle(),
+                        style: appTextTheme(context).labelLarge?.copyWith(
+                              color: AppColor.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                      const SizedBox(height: 4.0),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "DoC : ${trackballs.groupingModeInfo?.points[0].x.toString()} Hari",
+                              style: appTextTheme(context).labelLarge?.copyWith(
+                                    color: AppColor.white,
+                                  ),
+                            ),
+                          ),
+                          Text(
+                            AppConvertDateTime().dmyName(
+                                data[trackballs.groupingModeInfo?.points[0].x]
+                                        .date ??
+                                    DateTime.now()),
+                            style: appTextTheme(context).labelLarge?.copyWith(
+                                  color: AppColor.white,
+                                ),
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 12.0,
+                  ),
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(8.0),
+                      bottomRight: Radius.circular(8.0),
+                    ),
+                    color: AppColor.white,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            width: 14.0,
+                            height: 14.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: AppColor.accent[900],
+                            ),
+                          ),
+                          const SizedBox(width: 6.0),
+                          Expanded(
+                            child: Text(
+                              "Standar",
+                              style: appTextTheme(context).labelLarge,
+                            ),
+                          ),
+                          Text(
+                            appConvert3Digits(trackballs
+                                    .groupingModeInfo?.points[0].y
+                                    ?.toDouble() ??
+                                0.0),
+                            style: appTextTheme(context).labelLarge,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12.0),
+                      DottedLine(dashColor: AppColor.neutral[200]!),
+                      const SizedBox(height: 12.0),
+                      Row(
+                        children: [
+                          Container(
+                            width: 14.0,
+                            height: 14.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4.0),
+                              color: AppColor.green[500],
+                            ),
+                          ),
+                          const SizedBox(width: 6.0),
+                          Expanded(
+                            child: Text(
+                              "Estimasi",
+                              style: appTextTheme(context).labelLarge,
+                            ),
+                          ),
+                          Text(
+                            appConvert3Digits(trackballs
+                                    .groupingModeInfo?.points[1].y
+                                    ?.toDouble() ??
+                                0.0),
+                            style: appTextTheme(context).labelLarge,
+                          ),
+                        ],
+                      ),
+                      if (trackballs.groupingModeInfo?.points.length == 3) ...[
+                        const SizedBox(height: 12.0),
+                        DottedLine(dashColor: AppColor.neutral[200]!),
+                        const SizedBox(height: 12.0),
+                        Row(
+                          children: [
+                            Container(
+                              width: 14.0,
+                              height: 14.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4.0),
+                                color: AppColor.primary[600],
+                              ),
+                            ),
+                            const SizedBox(width: 6.0),
+                            Expanded(
+                              child: Text(
+                                "Aktual",
+                                style: appTextTheme(context).labelLarge,
+                              ),
+                            ),
+                            Text(
+                              appConvert3Digits(trackballs
+                                      .groupingModeInfo?.points[2].y
+                                      ?.toDouble() ??
+                                  0.0),
+                              style: appTextTheme(context).labelLarge,
+                            ),
+                          ],
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+
+          // : Container();
+        },
       );
-      // : Container();
-    },
-  );
 
   // TooltipBehavior defaultTooltipBehavior = TooltipBehavior(
   //   enable: true,
@@ -170,7 +334,11 @@ class _CultivationViewState extends State<CultivationView> {
         },
       ).then((value) {
         if (value != null) {
-          if (value is String) {}
+          if (value is String) {
+            parameterController.text = value;
+            context.read<CultivationCubit>().onChangeFilter(value.parameter());
+            setState(() {});
+          }
         }
       });
     };
@@ -208,178 +376,348 @@ class _CultivationViewState extends State<CultivationView> {
     }
 
     Widget xSetter() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(color: AppColor.neutral[300]!),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      bottomLeft: Radius.circular(10.0),
+      return BlocBuilder<CultivationCubit, CultivationState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: AppShimmer(
+                70.0,
+                double.infinity,
+                12.0,
+              ),
+            );
+          }
+
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: Border.all(color: AppColor.neutral[300]!),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                        ),
+                        border: Border.all(color: Colors.white),
+                        color: AppColor.neutral[100],
+                      ),
+                      child: const Text("DoC"),
                     ),
-                    border: Border.all(color: Colors.white),
-                    color: AppColor.neutral[100],
-                  ),
-                  child: const Text("DoC"),
-                ),
-                SizedBox(
-                  height: 44.0,
-                  child: VerticalDivider(
-                    width: 2.0,
-                    color: AppColor.neutral[300],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  child: const Text("0"),
-                ),
-                SizedBox(
-                  height: 44.0,
-                  child: VerticalDivider(
-                    width: 2.0,
-                    color: AppColor.neutral[300],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      bottomLeft: Radius.circular(10.0),
+                    SizedBox(
+                      height: 44.0,
+                      child: VerticalDivider(
+                        width: 2.0,
+                        color: AppColor.neutral[300],
+                      ),
                     ),
-                    border: Border.all(color: Colors.white),
-                    color: AppColor.neutral[100],
-                  ),
-                  child: const Icon(Icons.arrow_forward),
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 0.15,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      child: TextField(
+                        controller:
+                            context.read<CultivationCubit>().docStartController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: "0",
+                          hintStyle: appTextTheme(context).bodySmall,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 44.0,
+                      child: VerticalDivider(
+                        width: 2.0,
+                        color: AppColor.neutral[300],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                        ),
+                        border: Border.all(color: Colors.white),
+                        color: AppColor.neutral[100],
+                      ),
+                      child: const Icon(Icons.arrow_forward),
+                    ),
+                    SizedBox(
+                      height: 44.0,
+                      child: VerticalDivider(
+                        width: 2.0,
+                        color: AppColor.neutral[300],
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 0.15,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 14.0,
+                      ),
+                      child: TextField(
+                        controller:
+                            context.read<CultivationCubit>().docEndController,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          border: InputBorder.none,
+                          hintText: "0",
+                          hintStyle: appTextTheme(context).bodySmall,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(
-                  height: 44.0,
-                  child: VerticalDivider(
-                    width: 2.0,
-                    color: AppColor.neutral[300],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  child: Text("100"),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 18),
-          const Icon(Icons.refresh_outlined),
-        ],
+              ),
+              const SizedBox(width: 18),
+              InkWell(
+                onTap: () {
+                  if (int.parse(context
+                          .read<CultivationCubit>()
+                          .docStartController
+                          .text) >
+                      int.parse(context
+                          .read<CultivationCubit>()
+                          .docEndController
+                          .text)) {
+                    AppTopSnackBar(context).showDanger(
+                        "DoC awal tidak boleh lebih besar dari DoC akhir");
+                    return;
+                  }
+                  if (int.parse(context
+                          .read<CultivationCubit>()
+                          .docEndController
+                          .text) >
+                      (state.data?.tempData?.length ?? 0)) {
+                    AppTopSnackBar(context).showDanger(
+                        "DoC akhir tidak boleh lebih besar dari DoC terakhir");
+                    return;
+                  }
+                  context.read<CultivationCubit>().cahngeDOC();
+                },
+                child: const Icon(Icons.refresh_outlined),
+              ),
+            ],
+          );
+        },
       );
     }
 
     Widget lineChart() {
-      return Container(
-        margin: const EdgeInsets.only(right: 18.0),
-        width: MediaQuery.sizeOf(context).width * 1.5,
-        child: SfCartesianChart(
-          borderWidth: 2.0,
-          plotAreaBorderWidth: 2.0,
-          zoomPanBehavior: ZoomPanBehavior(
-            maximumZoomLevel: 0.5,
-            enablePanning: true, // Enable panning for the chart
-            enablePinching: true, // Enable pinch zooming
-            zoomMode:
-                ZoomMode.x, // Allow zooming and panning only on the X-axis
-          ),
-          trackballBehavior: defaultTrackballBehavior,
-          // tooltipBehavior: defaultTooltipBehavior,
-          legend: Legend(
-            isVisible: true,
-          ),
-          primaryXAxis: NumericAxis(
-            title: AxisTitle(text: "DoC (hari)"),
-            minimum: 0,
-            interval: 1,
-            initialVisibleMaximum: 10,
-            enableAutoIntervalOnZooming: true,
-            anchorRangeToVisiblePoints: true,
-            majorGridLines: MajorGridLines(
-              width: 1.5,
-              color: AppColor.neutral[200],
-              dashArray: const [8, 10],
+      return BlocBuilder<CultivationCubit, CultivationState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: AppShimmer(
+                MediaQuery.sizeOf(context).height * 0.4,
+                double.infinity,
+                12.0,
+              ),
+            );
+          }
+
+          log(state.data?.data?.map((e) => e.target).reduce((a, b) {
+                return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+              }).toString() ??
+              "null");
+
+          return Container(
+            margin: const EdgeInsets.only(right: 18.0),
+            width: MediaQuery.sizeOf(context).width * 1.5,
+            child: SfCartesianChart(
+              borderWidth: 2.0,
+              plotAreaBorderWidth: 2.0,
+              zoomPanBehavior: ZoomPanBehavior(
+                maximumZoomLevel: 0.5,
+                enablePanning: true, // Enable panning for the chart
+                enablePinching: true, // Enable pinch zooming
+                // enableSelectionZooming: true,
+                enableMouseWheelZooming: true,
+                zoomMode:
+                    ZoomMode.x, // Allow zooming and panning only on the X-axis
+              ),
+              trackballBehavior: defaultTrackballBehavior(
+                state.data?.filterName ?? "",
+                state.data?.data ?? [],
+              ),
+              // tooltipBehavior: defaultTooltipBehavior,
+              legend: Legend(isVisible: true),
+              primaryXAxis: NumericAxis(
+                title: const AxisTitle(text: "DoC (hari)"),
+                minimum: state.data?.data?.first.doc?.toDouble() ?? 10,
+                interval: 1,
+                initialVisibleMaximum: (state.data?.data?.length ?? 10) / 2,
+                enableAutoIntervalOnZooming: true,
+                anchorRangeToVisiblePoints: true,
+                majorGridLines: MajorGridLines(
+                  width: 1.5,
+                  color: AppColor.neutral[200],
+                  dashArray: const [8, 10],
+                ),
+                decimalPlaces: ((state.data?.data?.length ?? 10) < 10) ? 2 : 0,
+                desiredIntervals: 8,
+              ),
+              primaryYAxis: NumericAxis(
+                title: AxisTitle(
+                    text: (state.data?.filterName ?? "Unknown Filter")
+                        .convertFilterToTitle()),
+                minimum: 0,
+                // maximum: (state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //               return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //             }) ??
+                //             100) <
+                //         20
+                //     ? 100
+                //     : (state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //           return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //         }) ??
+                //         100),
+                // interval:
+                //     ((state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //                       return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //                     }) ??
+                //                     100) <
+                //                 20
+                //             ? 10
+                //             : (state.data?.data
+                //                         ?.map((e) => e.target)
+                //                         .reduce((a, b) {
+                //                       return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //                     }) ??
+                //                     100) /
+                //                 10)
+                //         .roundToDouble(),
+                initialVisibleMinimum: 0,
+                // initialVisibleMaximum: (state.data?.data
+                //                 ?.map((e) => e.target)
+                //                 .reduce((a, b) {
+                //               return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //             }) ??
+                //             100) <
+                //         20
+                //     ? 100
+                //     : (state.data?.data?.map((e) => e.target).reduce((a, b) {
+                //           return (a ?? 0.0) > (b ?? 0.0) ? a : b;
+                //         }) ??
+                //         100),
+                majorGridLines: MajorGridLines(
+                  width: 1.5,
+                  color: AppColor.neutral[200],
+                  dashArray: const [8, 10],
+                ),
+              ),
+              series: <CartesianSeries>[
+                // Renders line chart
+                LineSeries<GraphResponseDataItem, int>(
+                  dataSource: state.data?.data ?? [],
+                  xValueMapper: (GraphResponseDataItem data, _) => data.doc,
+                  yValueMapper: (GraphResponseDataItem data, _) => data.standar,
+                  width: 4.0,
+                  color: AppColor.accent[900],
+                  legendIconType: LegendIconType.seriesType,
+                  isVisibleInLegend: true,
+                  legendItemText: "Standar",
+                  enableTooltip: true,
+                  //   markerSettings: MarkerSettings(
+                  //   isVisible: true,
+                  //   shape: DataMarkerType.circle,
+                  //   borderWidth: 2.0,
+                  //   borderColor: AppColor.accent[900],
+                  //   color: AppColor.accent[900],
+                  // ),
+                ),
+                LineSeries<GraphResponseDataItem, int>(
+                  dataSource: state.data?.data ?? [],
+                  xValueMapper: (GraphResponseDataItem data, _) => data.doc,
+                  yValueMapper: (GraphResponseDataItem data, _) =>
+                      data.estimasi,
+                  width: 4.0,
+                  color: AppColor.green[500],
+                  legendIconType: LegendIconType.seriesType,
+                  isVisibleInLegend: true,
+                  legendItemText: "Estimasi",
+                  enableTooltip: false,
+                ),
+                LineSeries<GraphResponseDataItem, int>(
+                  dataSource: state.data?.data ?? [],
+                  xValueMapper: (GraphResponseDataItem data, _) => data.doc,
+                  yValueMapper: (GraphResponseDataItem data, _) =>
+                      (data.aktual ?? 0) <= 0 ? null : data.aktual,
+                  width: 4.0,
+                  color: AppColor.primary[600],
+                  legendIconType: LegendIconType.seriesType,
+                  isVisibleInLegend: true,
+                  legendItemText: "Aktual",
+                  enableTooltip: true,
+                  markerSettings: MarkerSettings(
+                    isVisible: true,
+                    shape: DataMarkerType.circle,
+                    borderWidth: 1.0,
+                    borderColor: AppColor.primary[600],
+                    color: AppColor.primary[600],
+                  ),
+                ),
+              ],
             ),
-            decimalPlaces: 0,
-            desiredIntervals: 10,
-          ),
-          primaryYAxis: NumericAxis(
-            title: AxisTitle(text: "MBW (gram)"),
-            minimum: 0,
-            maximum: 100,
-            interval: 10,
-            initialVisibleMinimum: 0,
-            initialVisibleMaximum: 100,
-            majorGridLines: MajorGridLines(
-              width: 1.5,
-              color: AppColor.neutral[200],
-              dashArray: const [8, 10],
-            ),
-          ),
-          series: <CartesianSeries>[
-            // Renders line chart
-            LineSeries<LineDummy, int>(
-              dataSource: lineDummyData,
-              xValueMapper: (LineDummy sales, _) => sales.xAxis,
-              yValueMapper: (LineDummy sales, _) => sales.yAxis,
-              width: 4.0,
-              color: AppColor.accent[900],
-              legendIconType: LegendIconType.seriesType,
-              isVisibleInLegend: true,
-              legendItemText: "Target",
-              enableTooltip: true,
-            ),
-            LineSeries<LineDummy, int>(
-              dataSource: lineDummyData2,
-              xValueMapper: (LineDummy sales, _) => sales.xAxis,
-              yValueMapper: (LineDummy sales, _) => sales.yAxis,
-              width: 4.0,
-              color: AppColor.green[500],
-              legendIconType: LegendIconType.seriesType,
-              isVisibleInLegend: true,
-              legendItemText: "Aktual",
-              enableTooltip: true,
-            )
-          ],
-        ),
+          );
+        },
       );
     }
 
-    Widget itemNote() {
+    Widget itemNote({
+      required String companionImage,
+      required String companionName,
+      required String dateTime,
+      required String companionNotes,
+    }) {
       return Column(
         children: [
           const SizedBox(height: 18.0),
           Row(
             children: [
-              CircleAvatar(
-                radius: 18.0,
-                child: Image.asset(
-                  AppAssets.profileImageDummy,
-                  fit: BoxFit.cover,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: SizedBox(
+                  height: 36.0,
+                  width: 36.0,
+                  child: Image.network(
+                    companionImage,
+                    fit: BoxFit.cover,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object obj,
+                      StackTrace? trace,
+                    ) {
+                      return Image.asset(
+                        AppAssets.profileImageDummy,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(width: 12.0),
@@ -388,12 +726,12 @@ class _CultivationViewState extends State<CultivationView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Jacob Jones",
+                      companionName,
                       style: appTextTheme(context).titleSmall,
                     ),
                     const SizedBox(height: 4.0),
                     Text(
-                      "Senin, 12 Sept 2024, 14:30",
+                      dateTime,
                       style: appTextTheme(context)
                           .labelLarge
                           ?.copyWith(color: AppColor.neutral[400]),
@@ -423,8 +761,8 @@ class _CultivationViewState extends State<CultivationView> {
           ),
           const SizedBox(height: 18.0),
           Text(
-            "Pada tanggal 12 September 2024, dilakukan pengecekan kualitas air di Kolam 1. Ditemukan bahwa tingkat pH air menunjukkan fluktuasi yang cukup signifikan, dengan penurunan di bawah batas optimal. Kondisi ini dapat mempengaruhi kesehatan ikan, terutama dalam hal pertumbuhan dan daya tahan mereka terhadap penyakit. Setelah berkonsultasi dengan tim teknis, dilakukan penambahan buffer pH untuk menstabilkan kondisi air. Selain itu, pendamping merekomendasikan pemantauan harian untuk memastikan bahwa kondisi air tetap stabil dan tidak memburuk. Langkah selanjutnya adalah melakukan pengecekan lanjutan dalam 3 hari ke depan guna memastikan efektivitas dari penambahan buffer pH.",
-            maxLines: 3,
+            companionNotes,
+            maxLines: 2,
             style: appTextTheme(context).bodySmall,
           ),
           const SizedBox(height: 18.0),
@@ -439,40 +777,97 @@ class _CultivationViewState extends State<CultivationView> {
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          Row(
-            children: [
-              Text(
-                "Catatan Pendamping",
-                style: appTextTheme(context)
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const Spacer(),
-              AppWidgetSecondaryChip(
-                text: "Lihat Semua",
-                onTap: () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const CultivationNoteAllPage(),
-                    CultivationNoteAllPage.routeSettings,
-                  ));
-                },
-              ),
-            ],
+          BlocBuilder<CultivationCubit, CultivationState>(
+            builder: (context, state) {
+              return Row(
+                children: [
+                  Text(
+                    "Catatan Pendamping",
+                    style: appTextTheme(context)
+                        .titleMedium
+                        ?.copyWith(fontWeight: FontWeight.w700),
+                  ),
+                  const Spacer(),
+                  state.status.isLoading
+                      ? const AppShimmer(33, 100, 18)
+                      : AppWidgetSecondaryChip(
+                          text: "Lihat Semua",
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(AppTransition.pushTransition(
+                              CultivationNoteAllPage(
+                                  context.read<CultivationCubit>().pondCycleID,
+                                  state.companionNotesData?.data),
+                              CultivationNoteAllPage.routeSettings,
+                            ));
+                          },
+                        ),
+                ],
+              );
+            },
           ),
           const SizedBox(height: 18.0),
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const CultivationNoteDetailPage(),
-                    CultivationNoteDetailPage.routeSettings,
-                  ));
+          BlocBuilder<CultivationCubit, CultivationState>(
+            builder: (context, state) {
+              if (state.status.isLoading) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return const AppShimmer(
+                      100,
+                      double.infinity,
+                      8.0,
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                    );
+                  },
+                );
+              }
+
+              if (state.companionNotesData?.data?.isEmpty ?? true) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 24.0),
+                  child: AppEmptyData(
+                    "Belum ada catatan\ndari pendamping",
+                    isCenter: true,
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: ((state.companionNotesData?.data?.length ?? 0) > 7)
+                    ? 7
+                    : state.companionNotesData?.data?.length,
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.of(context).push(AppTransition.pushTransition(
+                        CultivationNoteDetailPage(
+                            state.companionNotesData!.data![index]),
+                        CultivationNoteDetailPage.routeSettings,
+                      ));
+                    },
+                    child: itemNote(
+                      companionImage: state
+                          .companionNotesData!.data![index].userImageUrl
+                          .handlingEmptyString(),
+                      companionName: state
+                          .companionNotesData!.data![index].userName
+                          .handlingEmptyString(),
+                      dateTime: AppConvertDateTime().edmy(state
+                              .companionNotesData!
+                              .data![index]
+                              .createDatetime ??
+                          DateTime.now()),
+                      companionNotes: state
+                          .companionNotesData!.data![index].content
+                          .handlingEmptyString(),
+                    ),
+                  );
                 },
-                child: itemNote(),
               );
             },
           )

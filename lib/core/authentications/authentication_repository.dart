@@ -35,7 +35,7 @@ abstract class AuthenticationRepository {
   //   String password,
   //   String name,
   // );
-  Future<void> logout();
+  Future<void> logout({bool isRequestServiceAPI = true});
   // Future<UserMeData> readUserProfile();
   Stream<AuthenticationStatus> get streamedStatus;
   Future<void> authorizingProfile();
@@ -87,8 +87,8 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   // }
 
   @override
-  Future<void> logout() async {
-    await authenticationService.logout();
+  Future<void> logout({bool isRequestServiceAPI = true}) async {
+    if (isRequestServiceAPI) await authenticationService.logout();
     await _storageService.clearSecureStorage();
     _controller.add(AuthenticationStatus.unauthenticated);
   }

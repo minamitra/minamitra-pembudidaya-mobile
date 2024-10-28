@@ -46,4 +46,35 @@ class CycleEndpoint {
       path: "mitra/fishpondcycle/update-panen-selesai",
     );
   }
+
+  Uri getGraph({
+    required String pondCycleID,
+    required String filterName,
+  }) {
+    return createUrl(
+      path: "mitra/fishpondcycle/data-grafik",
+      queryParameters: {
+        "fishpondcycle_id": pondCycleID,
+        "filter": filterName,
+      },
+    );
+  }
+
+  Uri getCompanionNotes(
+    String pondCycleID, {
+    String? filterStartDate,
+    String? filterEndDate,
+    String? companionName,
+  }) {
+    return createUrl(
+      path: "mitra/assistant-note/data",
+      queryParameters: {
+        "fishpondcycle_id": pondCycleID,
+        "pagination_bool": "false",
+        if (filterStartDate != null) "create_datetime[gte]": filterStartDate,
+        if (filterEndDate != null) "create_datetime[lte]": filterEndDate,
+        if (companionName != null) "user_name": companionName,
+      },
+    );
+  }
 }

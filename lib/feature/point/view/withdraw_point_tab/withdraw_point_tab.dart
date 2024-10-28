@@ -13,7 +13,11 @@ class WithdrawPointTab extends StatelessWidget {
     Widget searchField() {
       return Row(
         children: [
-          Expanded(child: AppSearchField()),
+          Expanded(
+            child: AppSearchField(
+              fillColor: AppColor.white,
+            ),
+          ),
           const SizedBox(width: 20.0),
           Icon(
             Icons.shopping_bag_rounded,

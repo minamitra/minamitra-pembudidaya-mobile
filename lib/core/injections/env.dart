@@ -30,7 +30,7 @@ extension EnvironmentExtension on Environment {
       case Environment.development:
         return 'api-dev.mitra3m.id';
       case Environment.production:
-        return 'xxxx';
+        return 'api.mitra3m.id';
       case Environment.staging:
         return 'https://staging.com';
       case Environment.testing:

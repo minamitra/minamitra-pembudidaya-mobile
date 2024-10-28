@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/add_pond_cycle_payload.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/ref/ref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
@@ -13,10 +14,12 @@ class AddPondCubit extends Cubit<AddPondState> {
   AddPondCubit(
     this.refService,
     this.pondService,
+    this.feedService,
   ) : super(const AddPondState());
 
   final RefService refService;
   final PondService pondService;
+  final FeedService feedService;
 
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));
@@ -48,9 +51,18 @@ class AddPondCubit extends Cubit<AddPondState> {
   Future<void> addPond({
     required AddPondPayload pondPayload,
     required AddPondCyclePayload pondCyclePayload,
+    String? seedName,
+    int? seedPrice,
   }) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
+      if (pondCyclePayload.fishseedId == null) {
+        final feedResponse = await feedService.addNewFishFeed(
+          seedName ?? "",
+          seedPrice ?? 0,
+        );
+        pondCyclePayload.fishseedId = feedResponse.data;
+      }
       final addPondResponse = await pondService.addPond(pondPayload);
       pondCyclePayload.fishpondId = addPondResponse.data.data?.fishpondId;
       await pondService.addPondCycle(pondCyclePayload);
@@ -74,9 +86,18 @@ class AddPondCubit extends Cubit<AddPondState> {
   Future<void> addNewCycle({
     required String pondID,
     required AddPondCyclePayload pondCyclePayload,
+    String? name,
+    int? price,
   }) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
+      if (pondCyclePayload.fishseedId == null) {
+        final feedResponse = await feedService.addNewFishFeed(
+          name ?? "",
+          price ?? 0,
+        );
+        pondCyclePayload.fishseedId = feedResponse.data;
+      }
       pondCyclePayload.fishpondId = int.parse(pondID);
       await pondService.addPondCycle(pondCyclePayload);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));

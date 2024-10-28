@@ -22,7 +22,9 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
   final TextEditingController spreadController = TextEditingController();
   final TextEditingController seedOriginController = TextEditingController();
   final TextEditingController targetController = TextEditingController();
-  final TextEditingController pakanStarterController = TextEditingController();
+  final TextEditingController pakanStarter1Controller = TextEditingController();
+  final TextEditingController pakanStarter2Controller = TextEditingController();
+  final TextEditingController pakanStarter3Controller = TextEditingController();
   final TextEditingController survivalRateController = TextEditingController();
   final TextEditingController pakanGrowerController = TextEditingController();
   final TextEditingController pakanFinisherController = TextEditingController();
@@ -31,15 +33,26 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      final feedStarterResponse = await feedService.getFeedStarter();
+      final feedStarter1Response = await feedService.getFeedStarter("starter1");
+      final feedStarter2Response = await feedService.getFeedStarter("starter2");
+      final feedStarter3Response = await feedService.getFeedStarter("starter3");
       final feedGrowerResponse = await feedService.getFeedGrower();
       final feedFinisherResponse = await feedService.getFeedFinisher();
       final seedResponse = await feedService.getSeed();
+      SeedResponse seedCleaningData = seedResponse.data;
+      seedCleaningData = seedCleaningData.copyWith(
+        data: [
+          ...seedCleaningData.data ?? [],
+          SeedResponseData(id: "-1", name: "Benih Baru"),
+        ],
+      );
       emit(state.copyWith(
-        feedStarterData: feedStarterResponse.data,
+        feedStarter1Data: feedStarter1Response.data,
+        feedStarter2Data: feedStarter2Response.data,
+        feedStarter3Data: feedStarter3Response.data,
         feedGrowerData: feedGrowerResponse.data,
         feedFinisherData: feedFinisherResponse.data,
-        seedResponse: seedResponse.data,
+        seedResponse: seedCleaningData,
         status: GlobalState.loaded,
       ));
     } on AppException catch (e) {

@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
@@ -102,13 +103,22 @@ class _ProductDetailViewState extends State<ProductDetailView> {
     //     },
     //   ),
     // );
-    return SizedBox(
-      width: double.infinity,
-      child: AspectRatio(
-        aspectRatio: 375 / 262,
-        child: AppNetworkImage(
-          widget.data.imageUrl ?? "",
-          fit: BoxFit.cover,
+    return InkWell(
+      onTap: () {
+        showImageViewer(
+          context,
+          Image.network(widget.data.imageUrl ?? "").image,
+          immersive: false,
+        );
+      },
+      child: SizedBox(
+        width: double.infinity,
+        child: AspectRatio(
+          aspectRatio: 375 / 262,
+          child: AppNetworkImage(
+            widget.data.imageUrl ?? "",
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

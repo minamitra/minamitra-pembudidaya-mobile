@@ -19,10 +19,12 @@ abstract class FeedActivityService {
   );
   Future<BaseResponse<FeedRecomendationResponse>> getRecommendation(
     String fishPondCycleID,
-    String fishAge,
+    String dateTime,
   );
   Future<BaseResponse<FeedDataByCycleResponse>> getFeedDataByCycle(
-      String fishPondCycleID);
+    String fishPondCycleID,
+    String dateTime,
+  );
   Future<BaseResponse<bool>> postAddFishFeed(
     AddFishFeedBody data, {
     bool isCreateData = true,
@@ -71,9 +73,9 @@ class FeedActivityServiceImpl implements FeedActivityService {
   @override
   Future<BaseResponse<FeedRecomendationResponse>> getRecommendation(
     String fishPondCycleID,
-    String fishAge,
+    String dateTime,
   ) async {
-    final uri = endpoint.getRecommendation(fishPondCycleID, fishAge);
+    final uri = endpoint.getRecommendation(fishPondCycleID, dateTime);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -84,8 +86,10 @@ class FeedActivityServiceImpl implements FeedActivityService {
 
   @override
   Future<BaseResponse<FeedDataByCycleResponse>> getFeedDataByCycle(
-      String fishPondCycleID) async {
-    final uri = endpoint.getFishFeedByCycle(fishPondCycleID);
+    String fishPondCycleID,
+    String dateTime,
+  ) async {
+    final uri = endpoint.getFishFeedByCycle(fishPondCycleID, dateTime);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);

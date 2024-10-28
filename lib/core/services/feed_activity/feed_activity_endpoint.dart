@@ -18,21 +18,29 @@ class FeedActivityEndpoint {
 
   Uri getRecommendation(
     String fishPondCycleID,
-    String fishAge,
+    // String fishAge,
+    String dateTime,
   ) {
     return createUrl(
       path: "mitra/activity-feeding/get-recommendation",
       queryParameters: {
         "fishpondcycle_id": fishPondCycleID,
-        "fish_age": fishAge,
+        // "fish_age": fishAge,
+        "date": dateTime,
       },
     );
   }
 
-  Uri getFishFeedByCycle(String fishPondCycleID) {
+  Uri getFishFeedByCycle(
+    String fishPondCycleID,
+    String dateTime,
+  ) {
     return createUrl(
       path: "mitra/activity-feeding/data-fishfood",
-      queryParameters: {"fishpondcycle_id": fishPondCycleID},
+      queryParameters: {
+        "fishpondcycle_id": fishPondCycleID,
+        "date": dateTime,
+      },
     );
   }
 

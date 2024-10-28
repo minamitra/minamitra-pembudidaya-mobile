@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
@@ -328,7 +329,22 @@ class _ActivityViewState extends State<ActivityView> {
       return BlocBuilder<ActivityCubit, ActivityState>(
         builder: (context, state) {
           if (state.status.isLoading) {
-            return const Center(child: CircularProgressIndicator());
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return const AppShimmer(
+                  75,
+                  double.infinity,
+                  8.0,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 18.0,
+                    vertical: 8.0,
+                  ),
+                );
+              },
+            );
           }
 
           return ListView.builder(
@@ -344,18 +360,16 @@ class _ActivityViewState extends State<ActivityView> {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: activityItem(
                   title: state.pondReponse?.data?[index].name ?? "",
-                  value: (double.parse(state.pondReponse?.data?[index]
-                                  .totalFoodRecommendation
-                                  .handleEmptyStringToZero() ??
-                              "0") /
-                          1000)
-                      .toStringAsFixed(3),
-                  percentage: (double.parse(state
-                                  .pondReponse?.data?[index].totalFoodActual
-                                  .handleEmptyStringToZero() ??
-                              "0") /
-                          1000)
-                      .toStringAsFixed(3),
+                  value: appConvert3Digits(double.parse(state
+                              .pondReponse?.data?[index].totalFoodRecommendation
+                              .handleEmptyStringToZero() ??
+                          "0.0") /
+                      1000),
+                  percentage: appConvert3Digits(double.parse(state
+                              .pondReponse?.data?[index].totalFoodActual
+                              .handleEmptyStringToZero() ??
+                          "0.0") /
+                      1000),
                   onTap: () {
                     Navigator.of(context)
                         .push(AppTransition.pushTransition(
@@ -735,7 +749,12 @@ class _ActivityViewState extends State<ActivityView> {
                 BlocBuilder<ActivityCubit, ActivityState>(
                   builder: (context, state) {
                     if (state.status.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const AppShimmer(
+                        180,
+                        double.infinity,
+                        8.0,
+                        margin: EdgeInsets.symmetric(horizontal: 18.0),
+                      );
                     }
 
                     return SizedBox(
@@ -745,22 +764,18 @@ class _ActivityViewState extends State<ActivityView> {
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: activityHeaderDataWrappedList(
-                          biomassaValue: state
-                                  .pondDashboardResponse?.data?.totalBiomas
-                                  .toString() ??
-                              "",
-                          srValue: state
-                                  .pondDashboardResponse?.data?.avgSurvivalRate
-                                  .toString() ??
-                              "",
-                          pakanValue: state
-                                  .pondDashboardResponse?.data?.totalFeeding
-                                  .toString() ??
-                              "",
-                          estimasiJualValue: state
-                                  .pondDashboardResponse?.data?.totalCost
-                                  .toString() ??
-                              "",
+                          biomassaValue:
+                              state.pondDashboardResponse?.data?.totalBiomas ??
+                                  0.0,
+                          srValue: state.pondDashboardResponse?.data
+                                  ?.avgSurvivalRate ??
+                              0.0,
+                          pakanValue:
+                              state.pondDashboardResponse?.data?.totalFeeding ??
+                                  0.0,
+                          estimasiJualValue:
+                              state.pondDashboardResponse?.data?.totalCost ??
+                                  0.0,
                         ).length,
                         itemBuilder: (context, index) {
                           return Padding(
@@ -768,25 +783,21 @@ class _ActivityViewState extends State<ActivityView> {
                                           biomassaValue: state
                                                   .pondDashboardResponse
                                                   ?.data
-                                                  ?.totalBiomas
-                                                  .toString() ??
-                                              "",
+                                                  ?.totalBiomas ??
+                                              0.0,
                                           srValue: state.pondDashboardResponse
-                                                  ?.data?.avgSurvivalRate
-                                                  .toString() ??
-                                              "",
+                                                  ?.data?.avgSurvivalRate ??
+                                              0.0,
                                           pakanValue: state
                                                   .pondDashboardResponse
                                                   ?.data
-                                                  ?.totalFeeding
-                                                  .toString() ??
-                                              "",
+                                                  ?.totalFeeding ??
+                                              0.0,
                                           estimasiJualValue: state
                                                   .pondDashboardResponse
                                                   ?.data
-                                                  ?.totalCost
-                                                  .toString() ??
-                                              "",
+                                                  ?.totalCost ??
+                                              0.0,
                                         ).length -
                                         1 ==
                                     index
@@ -795,21 +806,17 @@ class _ActivityViewState extends State<ActivityView> {
                             child: wrappedHeaderItemData(
                               activityHeaderDataWrappedList(
                                 biomassaValue: state.pondDashboardResponse?.data
-                                        ?.totalBiomas
-                                        .toString() ??
-                                    "",
+                                        ?.totalBiomas ??
+                                    0.0,
                                 srValue: state.pondDashboardResponse?.data
-                                        ?.avgSurvivalRate
-                                        .toString() ??
-                                    "",
+                                        ?.avgSurvivalRate ??
+                                    0.0,
                                 pakanValue: state.pondDashboardResponse?.data
-                                        ?.totalFeeding
-                                        .toString() ??
-                                    "",
-                                estimasiJualValue: state
-                                        .pondDashboardResponse?.data?.totalCost
-                                        .toString() ??
-                                    "",
+                                        ?.totalFeeding ??
+                                    0.0,
+                                estimasiJualValue: state.pondDashboardResponse
+                                        ?.data?.totalCost ??
+                                    0.0,
                               )[index],
                               (state.selectedPondID ?? "0") == "0",
                               state.pondReponse?.data?.length == 1
@@ -938,21 +945,20 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
-    return ListView(
-      children: [
-        // const SizedBox(height: 18.0),
-        // chartSection(),
-        // const SizedBox(height: 12.0),
-        // data(),
-        // const SizedBox(height: 12.0),
-        // seeAllText(),
-        headerData(),
-        addPond(),
-        listActivityItem(),
-        const SizedBox(height: 18.0),
-        addButton(),
-        const SizedBox(height: 18.0),
-      ],
+    return AppRefresher(
+      onRefresh: () {
+        context.read<ActivityCubit>().init();
+      },
+      child: ListView(
+        children: [
+          headerData(),
+          addPond(),
+          listActivityItem(),
+          const SizedBox(height: 18.0),
+          addButton(),
+          const SizedBox(height: 18.0),
+        ],
+      ),
     );
   }
 }

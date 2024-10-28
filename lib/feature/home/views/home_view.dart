@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,20 +7,30 @@ import 'package:linear_progress_bar/linear_progress_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_module_card.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
+import 'package:minamitra_pembudidaya_mobile/core/logic/dashboard/dashboard_bottom_nav_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/information_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatefulWidget {
@@ -70,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
       AppAssets.speakerIcon,
     ),
     NameIconEntity(
-      "Lapak Ikan",
+      "Pasar Ikan",
       AppAssets.locationIcon,
     ),
     NameIconEntity(
@@ -234,48 +246,66 @@ class _HomeViewState extends State<HomeView> {
                             ],
                           ),
                         ),
-                        Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: AppColor.primary,
-                                borderRadius: BorderRadius.circular(10.0),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(AppTransition.pushTransition(
+                              const QrScanPage(),
+                              QrScanPage.route(),
+                            ));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppColor.primary,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Image.asset(
+                                  AppAssets.scanIcon,
+                                  height: 20.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              child: Image.asset(
-                                AppAssets.scanIcon,
-                                height: 20.0,
-                                fit: BoxFit.cover,
+                              const SizedBox(height: 4.0),
+                              Text(
+                                "Bayar",
+                                style: AppTextStyle.blackExtraSmallText,
                               ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              "Bayar",
-                              style: AppTextStyle.blackExtraSmallText,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                         const SizedBox(width: 12.0),
-                        Column(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                color: AppColor.primary,
-                                borderRadius: BorderRadius.circular(10.0),
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context)
+                                .push(AppTransition.pushTransition(
+                              const TransactionHistoryPage(),
+                              TransactionHistoryPage.route(),
+                            ));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                  color: AppColor.primary,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Image.asset(
+                                  AppAssets.historyIcon,
+                                  height: 20.0,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
-                              child: Image.asset(
-                                AppAssets.historyIcon,
-                                height: 20.0,
-                                fit: BoxFit.cover,
+                              const SizedBox(height: 4.0),
+                              Text(
+                                "Riwayat",
+                                style: AppTextStyle.blackExtraSmallText,
                               ),
-                            ),
-                            const SizedBox(height: 4.0),
-                            Text(
-                              "Riwayat",
-                              style: AppTextStyle.blackExtraSmallText,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -305,8 +335,8 @@ class _HomeViewState extends State<HomeView> {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    const PointPage(),
-                    PointPage.routeSettings,
+                    const PointV2Page(),
+                    PointV2Page.route(),
                   ));
                 },
                 child: Container(
@@ -388,54 +418,75 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget poinCard() {
-    return AppDefaultCard(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      padding: const EdgeInsets.only(),
-      borderRadius: 16.0,
-      backgroundCardColor: AppColor.primary,
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
+    return BlocBuilder<ActivityCubit, ActivityState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return const AppShimmer(
+            80,
+            double.infinity,
+            16,
+            margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+          );
+        }
+
+        if ((state.pondReponse?.data?.length ?? 1) <= 1) {
+          return AppDefaultCard(
+            margin: const EdgeInsets.only(left: 16.0, right: 16.0, top: 16.0),
+            padding: const EdgeInsets.only(),
+            borderRadius: 16.0,
+            backgroundCardColor: AppColor.primary,
+            child: Stack(
+              alignment: Alignment.bottomRight,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Image.asset(
+                    AppAssets.circleBackdropImage,
+                    height: 72.0,
+                    fit: BoxFit.fill,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
                     children: [
-                      Text(
-                        "0 Poin",
-                        style: AppTextStyle.whiteBoldText,
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "0 Poin",
+                              style: AppTextStyle.whiteBoldText,
+                            ),
+                            Text(
+                              "Lengkapi data kolam sekarang!",
+                              style: AppTextStyle.whiteExtraSmallText,
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        "Lengkapi data kolam sekarang!",
-                        style: AppTextStyle.whiteExtraSmallText,
+                      SizedBox(
+                        height: 32,
+                        width: 120,
+                        child: AppWhiteButton(
+                          "Lengkapi Data",
+                          () {
+                            context
+                                .read<DashboardBottomNavCubit>()
+                                .changeIndex(2);
+                          },
+                        ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 32,
-                  width: 120,
-                  child: AppWhiteButton(
-                    "Lengkapi Data",
-                    () {},
-                  ),
-                ),
               ],
             ),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Image.asset(
-              AppAssets.circleBackdropImage,
-              height: 72.0,
-              fit: BoxFit.fill,
-            ),
-          ),
-        ],
-      ),
+          );
+        }
+
+        return const SizedBox();
+      },
     );
   }
 
@@ -446,10 +497,34 @@ class _HomeViewState extends State<HomeView> {
       () {
         switch (entity.name) {
           case "Promo 3M":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage(
+                "Promo 3M",
+                customTitle: "Promo 3M Akan Segera Hadir",
+                customImage: AppAssets.commingSoonPromoImage,
+              ),
+              CommingSoonPage.route(),
+            ));
             break;
-          case "Lapak Ikan":
+          case "Pasar Ikan":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage(
+                "Pasar Ikan",
+                customTitle: "Pasar Ikan Akan Segera Hadir",
+                customImage: AppAssets.commingSoonFishStoreImage,
+              ),
+              CommingSoonPage.route(),
+            ));
             break;
           case "Acara 3M":
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage(
+                "Acara 3M",
+                customTitle: "Acara 3M Akan Segera Hadir",
+                customImage: AppAssets.commingSoonEventImage,
+              ),
+              CommingSoonPage.route(),
+            ));
             break;
           case "Belanja":
             Navigator.of(context).push(AppTransition.pushTransition(
@@ -467,6 +542,7 @@ class _HomeViewState extends State<HomeView> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       child: GridView.builder(
+        padding: const EdgeInsets.only(),
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -513,7 +589,16 @@ class _HomeViewState extends State<HomeView> {
             ),
             AppWidgetSecondaryChip(
               text: "Lihat Semua",
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(AppTransition.pushTransition(
+                  const CommingSoonPage(
+                    "Acara 3M",
+                    customTitle: "Acara 3M Akan Segera Hadir",
+                    customImage: AppAssets.commingSoonEventImage,
+                  ),
+                  CommingSoonPage.route(),
+                ));
+              },
             ),
           ],
         ),
@@ -550,15 +635,23 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget referral() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 18.0),
-      height: 72.0,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16.0),
-        image: const DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(AppAssets.referralImage),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(AppTransition.pushTransition(
+          const ReferralPage(),
+          ReferralPage.routeSettings,
+        ));
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 18.0),
+        height: 72.0,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.0),
+          image: const DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage(AppAssets.referralImage),
+          ),
         ),
       ),
     );
@@ -748,24 +841,31 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        header(),
-        const SizedBox(height: 16.0),
-        levelCard(),
-        const SizedBox(height: 16.0),
-        poinCard(),
-        const SizedBox(height: 16.0),
-        menu(),
-        const SizedBox(height: 16.0),
-        ...event(),
-        const SizedBox(height: 18.0),
-        referral(),
-        const SizedBox(height: 18.0),
-        ...promo(),
-        const SizedBox(height: 18.0),
-        ...informations(),
-      ],
+    return AppRefresher(
+      onRefresh: () {
+        context.read<HomeCubit>().init();
+        context.read<ActivityCubit>().init();
+      },
+      offset: 24.0,
+      child: ListView(
+        padding: const EdgeInsets.only(top: 16.0),
+        children: [
+          header(),
+          const SizedBox(height: 16.0),
+          levelCard(),
+          poinCard(),
+          const SizedBox(height: 16.0),
+          menu(),
+          const SizedBox(height: 16.0),
+          ...event(),
+          const SizedBox(height: 18.0),
+          referral(),
+          const SizedBox(height: 18.0),
+          ...promo(),
+          const SizedBox(height: 18.0),
+          ...informations(),
+        ],
+      ),
     );
   }
 }

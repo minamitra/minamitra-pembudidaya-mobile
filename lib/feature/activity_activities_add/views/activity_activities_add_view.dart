@@ -1,18 +1,19 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/get_hour_time.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/view/add_new_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -32,11 +33,10 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController typeController = TextEditingController();
-  final TextEditingController amountController = TextEditingController();
+
   final TextEditingController brandController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
-  final TextEditingController totalAmountFeedFromInitController =
-      TextEditingController();
+
   final TextEditingController hourController = TextEditingController();
   final TextEditingController fishAgeController = TextEditingController();
 
@@ -44,7 +44,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 45));
   DateTime lastDate = DateTime.now();
 
-  List<String> listType = ['Pakan Pagi', 'Pakan Sore', 'Lainnya'];
+  List<String> listType = ["pagi", "siang", "sore", "malam"];
+  List<String> selectedTypeOfFeed = [];
 
   @override
   void initState() {
@@ -59,7 +60,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           );
       hourController.text =
           AppConvertDateTime().jm24(widget.editData!.datetime!);
-      amountController.text = widget.editData!.actual ?? "0";
+      typeController.text = widget.editData!.timeSheetArray?.join(", ") ?? "";
+      selectedTypeOfFeed = widget.editData!.timeSheetArray ?? [];
       brandController.text = widget.editData!.fishfoodName ?? "";
       context
           .read<ActivityActivitiesAddCubit>()
@@ -114,6 +116,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
               setState(() {
                 if (date != null) {
                   dateController.text = AppConvertDateTime().dmyName(date);
+                  brandController.clear();
                   context
                       .read<ActivityActivitiesAddCubit>()
                       .changeDateTime(date);
@@ -132,7 +135,50 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
     );
   }
 
-  Widget typeTextField() {
+  Widget typeTextFormField() {
+    return BlocBuilder<ActivityActivitiesAddCubit, ActivityActivitiesAddState>(
+      builder: (context, state) {
+        return AppValidatorTextField(
+          labelText: "Waktu Kegiatan",
+          controller: typeController,
+          isMandatory: true,
+          withUpperLabel: true,
+          readOnly: true,
+          hintText: "Pilih waktu kegiatan",
+          suffixWidget: const Padding(
+            padding: EdgeInsets.only(right: 18.0),
+            child: Icon(Icons.arrow_drop_down_rounded),
+          ),
+          suffixConstraints: const BoxConstraints(),
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return "Waktu kegiatan tidak boleh kosong";
+            }
+            return null;
+          },
+          onTap: appBottomSheetShowModalChecklist(
+            context: context,
+            title: "Waktu pakan",
+            data: listType,
+            selectedData: selectedTypeOfFeed,
+            onSelected: (value) {
+              typeController.text = value.join(", ");
+            },
+          ),
+          // appBottomSheetShowModal(
+          //   context,
+          //   "Pilih waktu kegiatan",
+          //   listType,
+          //   (value) {
+          //     typeController.text = value;
+          //   },
+          // ),
+        );
+      },
+    );
+  }
+
+  Widget typeDialogField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -190,29 +236,45 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   }
 
   Widget amountTextField() {
-    return AppValidatorTextField(
-      controller: amountController,
-      hintText: "Masukan jumlah pakan",
-      labelText: "Jumlah Pakan Diberikan ",
-      inputType: TextInputType.phone,
-      isMandatory: true,
-      validator: (String? value) {
-        if (value!.isEmpty) {
-          return "Jumlah tidak boleh kosong";
-        }
-        return null;
+    return BlocBuilder<ActivityActivitiesAddCubit, ActivityActivitiesAddState>(
+      builder: (context, state) {
+        return AppValidatorTextField(
+          controller:
+              context.read<ActivityActivitiesAddCubit>().amountController,
+          hintText: "Masukan jumlah pakan",
+          labelText: "Jumlah Pakan Diberikan ",
+          inputType: TextInputType.phone,
+          isMandatory: true,
+          validator: (String? value) {
+            if (value!.isEmpty) {
+              return "Jumlah tidak boleh kosong";
+            }
+            return null;
+          },
+          onChanged: (value) {
+            context
+                .read<ActivityActivitiesAddCubit>()
+                .totalAmountFeedFromInitController
+                .text = (((state.feedRecomendationResponse?.data
+                                ?.accumulationTotalFeedBefore ??
+                            0) /
+                        1000) +
+                    (double.tryParse(value.handleEmptyStringToZero()) ?? 0))
+                .toStringAsFixed(2);
+          },
+          suffixConstraints: const BoxConstraints(),
+          suffixWidget: Padding(
+            padding: const EdgeInsets.only(right: 18.0),
+            child: Text(
+              "Kg",
+              style: appTextTheme(context).bodySmall?.copyWith(
+                    color: AppColor.neutral[500],
+                    fontWeight: FontWeight.w500,
+                  ),
+            ),
+          ),
+        );
       },
-      suffixConstraints: const BoxConstraints(),
-      suffixWidget: Padding(
-        padding: const EdgeInsets.only(right: 18.0),
-        child: Text(
-          "gram",
-          style: appTextTheme(context).bodySmall?.copyWith(
-                color: AppColor.neutral[500],
-                fontWeight: FontWeight.w500,
-              ),
-        ),
-      ),
     );
   }
 
@@ -278,7 +340,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      "Saran Pakan: ${state.feedRecomendationResponse?.data?.suggestFeed} gram",
+                      "Saran Pakan: ${((state.feedRecomendationResponse?.data?.suggestFeed ?? 0) / 1000).toStringAsFixed(2)} Kg",
+                      maxLines: 2,
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -286,10 +349,27 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   ),
                   InkWell(
                     onTap: () {
-                      amountController.text = state
-                              .feedRecomendationResponse?.data?.suggestFeed
-                              .toString() ??
-                          "";
+                      context
+                          .read<ActivityActivitiesAddCubit>()
+                          .amountController
+                          .text = ((state.feedRecomendationResponse?.data
+                                      ?.suggestFeed ??
+                                  0) /
+                              1000)
+                          .toStringAsFixed(7);
+
+                      context
+                          .read<ActivityActivitiesAddCubit>()
+                          .totalAmountFeedFromInitController
+                          .text = (((state.feedRecomendationResponse?.data
+                                          ?.accumulationTotalFeedBefore ??
+                                      0) /
+                                  1000) +
+                              double.parse(context
+                                  .read<ActivityActivitiesAddCubit>()
+                                  .amountController
+                                  .text))
+                          .toStringAsFixed(2);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(8.0),
@@ -378,22 +458,24 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                 }
               });
             },
-            buttonWidget: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.add,
-                  color: AppColor.primary[600],
-                ),
-                const SizedBox(width: 8.0),
-                Text(
-                  "Tambah Pakan Baru",
-                  style: appTextTheme(context).titleSmall?.copyWith(
-                        color: AppColor.primary[600],
-                      ),
-                ),
-              ],
-            ),
+            buttonWidget: const SizedBox(),
+            // ! Note : Currently disable.
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     Icon(
+            //       Icons.add,
+            //       color: AppColor.primary[600],
+            //     ),
+            //     const SizedBox(width: 8.0),
+            //     Text(
+            //       "Tambah Pakan Baru",
+            //       style: appTextTheme(context).titleSmall?.copyWith(
+            //             color: AppColor.primary[600],
+            //           ),
+            //     ),
+            //   ],
+            // ),
             onTapButtonBottom: () {
               Navigator.of(context).pop();
               // Navigator.of(context).push(AppTransition.pushTransition(
@@ -409,11 +491,15 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
 
   Widget totalAmountFeedFromInit() {
     return AppValidatorTextField(
-      controller: totalAmountFeedFromInitController,
+      controller: context
+          .read<ActivityActivitiesAddCubit>()
+          .totalAmountFeedFromInitController,
       hintText: "0",
       labelText: "Total Pakan Diberikan",
       inputType: TextInputType.number,
-      isMandatory: true,
+      isMandatory: false,
+      readOnly: true,
+      fillColor: AppColor.neutral[100],
       validator: (String? value) {
         if (value!.isEmpty) {
           return "Jumlah tidak boleh kosong";
@@ -424,7 +510,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "gram",
+          "Kg",
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
                 fontWeight: FontWeight.w500,
@@ -492,7 +578,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         }
 
         if (state.status.isLoaded) {
-          fishAgeController.text = state.fishAge.toString();
+          fishAgeController.text =
+              state.feedRecomendationResponse?.data?.fishAge ?? "1";
         }
 
         return AppValidatorTextField(
@@ -500,7 +587,6 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           hintText: "0",
           labelText: "Umur Ikan",
           inputType: TextInputType.number,
-          isMandatory: true,
           readOnly: true,
           fillColor: AppColor.neutral[100],
           validator: (String? value) {
@@ -533,7 +619,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         children: [
           dateTextField(context),
           const SizedBox(height: 16.0),
-          hourTextField(context),
+          // hourTextField(context),
+          typeTextFormField(),
           const SizedBox(height: 16.0),
           fishAge(),
           const SizedBox(height: 16.0),
@@ -565,28 +652,40 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         child: AppPrimaryFullButton(
           "Simpan",
           () {
+            if (!formKey.currentState!.validate()) {
+              return;
+            }
+            // final int getHourTime = typeController.text.getHourTime();
             final activityCubit = context.read<ActivityActivitiesAddCubit>();
+            final double? actualAmount =
+                double.tryParse(activityCubit.amountController.text);
+            if (actualAmount == null) {
+              AppTopSnackBar(context).showDanger("Jumlah pakan tidak valid");
+              return;
+            }
+
             context.read<ActivityActivitiesAddCubit>().addFishFeed(
                   AddFishFeedBody(
                     fishpondId: int.parse(activityCubit.fishPondID ?? "0"),
                     fishpondcycleId:
                         int.parse(activityCubit.fishPondCycleID ?? "0"),
-                    datetime: activityCubit.state.selectedDate?.copyWith(
-                      hour: activityCubit.feedHour != null
-                          ? int.parse(activityCubit.feedHour!)
-                          : 0,
-                      minute: activityCubit.feedMinute != null
-                          ? int.parse(activityCubit.feedMinute!)
-                          : 0,
-                    ),
-                    fishAge: activityCubit.state.fishAge,
+                    datetime: activityCubit.state.selectedDate,
+                    fishAge: int.tryParse(activityCubit.state
+                                .feedRecomendationResponse?.data?.fishAge ??
+                            "1") ??
+                        1,
                     recommendation: activityCubit
                         .state.feedRecomendationResponse?.data?.suggestFeed,
-                    actual: double.parse(amountController.text),
-                    total: double.parse(amountController.text),
+                    actual: actualAmount * 1000,
+                    total: (double.tryParse(activityCubit
+                                .totalAmountFeedFromInitController.text) ??
+                            0) *
+                        1000,
                     fishfoodId: activityCubit.state.fishFoodID,
                     note: noteController.text,
                     dataID: widget.editData?.id,
+                    timeSheet: typeController.text,
+                    timeSheetJsonArray: selectedTypeOfFeed,
                   ),
                 );
           },
@@ -594,12 +693,15 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       );
     }
 
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        body(),
-        button(),
-      ],
+    return Form(
+      key: formKey,
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          body(),
+          button(),
+        ],
+      ),
     );
   }
 }

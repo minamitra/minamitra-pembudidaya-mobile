@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
@@ -22,19 +24,46 @@ class _PointViewState extends State<PointView>
   List<NameIconEntity> listLevel = [
     NameIconEntity(
       "200",
-      AppAssets.starIcon,
+      AppAssets.silverIcon,
     ),
     NameIconEntity(
       "400",
-      AppAssets.medalSilverIcon,
+      AppAssets.goldIcon,
     ),
     NameIconEntity(
       "600",
-      AppAssets.medalGoldIcon,
+      AppAssets.platinumIcon,
     ),
     NameIconEntity(
       "800",
-      AppAssets.crownIcon,
+      AppAssets.diamondIcon,
+    ),
+  ];
+
+  List<NameIconEntity> listPointInfo = [
+    NameIconEntity(
+      "Silver",
+      AppAssets.silverIcon,
+      description:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    ),
+    NameIconEntity(
+      "Gold",
+      AppAssets.goldIcon,
+      description:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    ),
+    NameIconEntity(
+      "Platinum",
+      AppAssets.platinumIcon,
+      description:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+    ),
+    NameIconEntity(
+      "Diamond",
+      AppAssets.diamondIcon,
+      description:
+          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
     ),
   ];
 
@@ -122,11 +151,92 @@ class _PointViewState extends State<PointView>
 
     List<Widget> pointBar() {
       return [
-        Text(
-          "Poin Bar",
-          style: appTextTheme(context)
-              .titleMedium
-              ?.copyWith(fontWeight: FontWeight.w700),
+        Row(
+          children: [
+            Text(
+              "Poin Bar",
+              style: appTextTheme(context)
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(width: 8.0),
+            InkWell(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (bottomSheetContext) {
+                    return AppBottomSheet(
+                      "List Member Level",
+                      ListView(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        children: [
+                          ...List.generate(
+                            listPointInfo.length,
+                            (index) {
+                              return Column(
+                                children: [
+                                  const SizedBox(height: 16.0),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Image.asset(
+                                        listPointInfo[index].icon,
+                                        height: 28.0,
+                                        width: 28.0,
+                                        fit: BoxFit.cover,
+                                        color: AppColor.accent,
+                                      ),
+                                      const SizedBox(width: 16.0),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              listPointInfo[index].name,
+                                              style: appTextTheme(context)
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                      fontWeight:
+                                                          FontWeight.w700),
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            Text(
+                                              listPointInfo[index]
+                                                      .description ??
+                                                  "-",
+                                              style: appTextTheme(context)
+                                                  .bodySmall
+                                                  ?.copyWith(
+                                                      color: AppColor
+                                                          .neutral[400]),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 16.0),
+                                  AppDividerSmall(),
+                                ],
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      height: MediaQuery.sizeOf(context).height * 0.6,
+                    );
+                  },
+                );
+              },
+              child: Icon(
+                Icons.info_outline,
+                color: AppColor.neutral[400],
+                size: 20.0,
+              ),
+            ),
+          ],
         ),
         const SizedBox(height: 18.0),
         Padding(
@@ -145,8 +255,6 @@ class _PointViewState extends State<PointView>
                         height: 28.0,
                         width: 28.0,
                         fit: BoxFit.cover,
-                        color:
-                            index < 2 ? AppColor.accent : AppColor.black[300],
                       ),
                     ],
                   );
@@ -157,7 +265,7 @@ class _PointViewState extends State<PointView>
         ),
         const SizedBox(height: 16.0),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: SizedBox(
             height: 16.0,
             width: double.infinity,
@@ -165,9 +273,9 @@ class _PointViewState extends State<PointView>
               alignment: Alignment.center,
               children: [
                 LinearPercentIndicator(
-                  padding: const EdgeInsets.all(0),
+                  // padding: const EdgeInsets.symmetric(horizontal: 14.0),
                   animation: true,
-                  lineHeight: 12.0,
+                  lineHeight: 8.0,
                   animationDuration: 1000,
                   percent: 0.4,
                   barRadius: const Radius.circular(8.0),
@@ -194,6 +302,25 @@ class _PointViewState extends State<PointView>
           ),
         ),
         const SizedBox(height: 16.0),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ...List.generate(
+                listLevel.length,
+                (index) {
+                  return Text(
+                    listLevel[index].name,
+                    style: appTextTheme(context)
+                        .titleSmall
+                        ?.copyWith(fontWeight: FontWeight.w500),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
       ];
     }
 

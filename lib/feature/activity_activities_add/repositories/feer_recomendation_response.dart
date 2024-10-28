@@ -26,11 +26,13 @@ class FeedRecomendationResponseData {
   double? mbwByFishAge;
   double? suggestFeed;
   double? accumulationTotalFeedBefore;
+  String? fishAge;
 
   FeedRecomendationResponseData({
     this.mbwByFishAge,
     this.suggestFeed,
     this.accumulationTotalFeedBefore,
+    this.fishAge,
   });
 
   factory FeedRecomendationResponseData.fromJson(String str) =>
@@ -44,11 +46,13 @@ class FeedRecomendationResponseData {
         suggestFeed: json["suggest_feed"]?.toDouble(),
         accumulationTotalFeedBefore:
             json["accumulation_total_feed_before"]?.toDouble(),
+        fishAge: json["fish_age"].toString(),
       );
 
   Map<String, dynamic> toMap() => {
         "mbw_by_fish_age": mbwByFishAge,
         "suggest_feed": suggestFeed,
         "accumulation_total_feed_before": accumulationTotalFeedBefore,
+        "fish_age": fishAge,
       };
 }

@@ -11,6 +11,9 @@ class AddFishFeedBody {
   int? fishfoodId;
   String? note;
   String? dataID;
+  // time_sheet_json_array
+  String? timeSheet;
+  List<String>? timeSheetJsonArray;
 
   AddFishFeedBody({
     this.fishpondId,
@@ -23,6 +26,8 @@ class AddFishFeedBody {
     this.fishfoodId,
     this.note,
     this.dataID,
+    this.timeSheet,
+    this.timeSheetJsonArray,
   });
 
   factory AddFishFeedBody.fromJson(String str) =>
@@ -43,6 +48,10 @@ class AddFishFeedBody {
         total: json["total"]?.toDouble(),
         fishfoodId: json["fishfood_id"],
         note: json["note"],
+        timeSheet: json["time_sheet"],
+        timeSheetJsonArray: json["time_sheet_json_array"] == null
+            ? null
+            : List<String>.from(json["time_sheet_json_array"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
@@ -55,6 +64,10 @@ class AddFishFeedBody {
         "total": total,
         "fishfood_id": fishfoodId,
         "note": note,
+        "time_sheet": timeSheet,
+        "time_sheet_json_array": timeSheetJsonArray == null
+            ? null
+            : List<dynamic>.from(timeSheetJsonArray!.map((x) => x)),
       };
 
   Map<String, dynamic> toEditMap() => {
@@ -66,5 +79,9 @@ class AddFishFeedBody {
         "total": total,
         "fishfood_id": fishfoodId,
         "note": note,
+        "time_sheet": timeSheet,
+        "time_sheet_json_array": timeSheetJsonArray == null
+            ? null
+            : List<dynamic>.from(timeSheetJsonArray!.map((x) => x)),
       };
 }

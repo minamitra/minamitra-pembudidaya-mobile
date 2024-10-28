@@ -1,4 +1,6 @@
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
 
 class ActivityHeaderDataDummy {
   final String title;
@@ -47,28 +49,29 @@ List<ActivityHeaderDataDummy> listActivtyHeaderDataDummy2(
       ),
       ActivityHeaderDataDummy(
         title: 'Est. Biaya',
-        value: 'Rp $estimasiJualValue Juta',
+        value: AppCurrencyFormatter.format(
+            double.tryParse(estimasiJualValue) ?? 0.0),
         imageAsset: AppAssets.sellEstimationActivityIcon,
       ),
     ];
 
 List<ActivityHeaderDataWrapped> activityHeaderDataWrappedList({
-  required String biomassaValue,
-  required String srValue,
-  required String pakanValue,
-  required String estimasiJualValue,
+  required double biomassaValue,
+  required double srValue,
+  required double pakanValue,
+  required double estimasiJualValue,
 }) =>
     [
       ActivityHeaderDataWrapped(
         listActivtyHeaderDataDummy: listActivtyHeaderDataDummy1(
-          biomassaValue,
-          srValue,
+          appConvert3Digits(biomassaValue),
+          appConvert3Digits(srValue),
         ),
       ),
       ActivityHeaderDataWrapped(
         listActivtyHeaderDataDummy: listActivtyHeaderDataDummy2(
-          pakanValue,
-          estimasiJualValue,
+          appConvert3Digits(pakanValue),
+          estimasiJualValue.toStringAsFixed(0),
         ),
       ),
     ];

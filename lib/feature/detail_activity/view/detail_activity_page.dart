@@ -3,10 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_padding.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/logic/detail_activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_view.dart';
@@ -30,6 +32,56 @@ class DetailActivityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final SimpleFontelicoProgressDialog dialog =
         SimpleFontelicoProgressDialog(context: context);
+
+    Widget shimmerLoading() {
+      return ListView(
+        children: [
+          AppShimmer(
+            MediaQuery.sizeOf(context).height * 0.35,
+            double.infinity,
+            0,
+          ),
+          const SizedBox(height: 18.0),
+          AppShimmer(
+            30.0,
+            MediaQuery.sizeOf(context).width * 0.2,
+            12.0,
+            margin: EdgeInsets.only(
+              left: 18.0,
+              right: MediaQuery.sizeOf(context).width * 0.6,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          AppShimmer(
+            30.0,
+            double.infinity,
+            12.0,
+            margin: AppPadding.horizontal18(),
+          ),
+          const SizedBox(height: 18.0),
+          const AppShimmer(
+            120.0,
+            double.infinity,
+            0,
+          ),
+          const SizedBox(height: 18.0),
+          ...List.generate(
+            9,
+            (index) {
+              return const AppShimmer(
+                55.0,
+                double.infinity,
+                12.0,
+                margin: EdgeInsets.symmetric(
+                  horizontal: 18.0,
+                  vertical: 8.0,
+                ),
+              );
+            },
+          ),
+        ],
+      );
+    }
 
     return BlocProvider(
       create: (context) => DetailActivityCubit(
@@ -72,7 +124,7 @@ class DetailActivityPage extends StatelessWidget {
                 automaticallyImplyLeading: false,
               ),
               body: state.status.isLoading
-                  ? const Center(child: CircularProgressIndicator())
+                  ? shimmerLoading()
                   : DetailActivityView(pondData, isCanAccessFeature),
             ),
           );

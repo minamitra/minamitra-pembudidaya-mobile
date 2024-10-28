@@ -49,6 +49,7 @@ class RecommendationFeedBulkData {
   List<Fishfood>? fishfoods;
   TextEditingController? fishFeedIDController;
   Fishfood? selectedFishfood;
+  String? fishAge;
 
   RecommendationFeedBulkData({
     this.fishpondId,
@@ -62,6 +63,7 @@ class RecommendationFeedBulkData {
     this.fishfoods,
     this.fishFeedIDController,
     this.selectedFishfood,
+    this.fishAge,
   });
 
   factory RecommendationFeedBulkData.fromJson(String str) =>
@@ -72,7 +74,8 @@ class RecommendationFeedBulkData {
   factory RecommendationFeedBulkData.fromMap(Map<String, dynamic> json) =>
       RecommendationFeedBulkData(
         fishpondId: json["fishpond_id"],
-        mbwByFishAge: json["mbw_by_fish_age"].toDouble(),
+        mbwByFishAge:
+            double.tryParse(json["mbw_by_fish_age"].toString()) ?? 0.0,
         suggestFeed: json["suggest_feed"].toDouble(),
         accumulationTotalFeedBefore:
             json["accumulation_total_feed_before"].toDouble(),
@@ -83,6 +86,7 @@ class RecommendationFeedBulkData {
             : List<Fishfood>.from(
                 json["fishfoods"]!.map((x) => Fishfood.fromMap(x))),
         fishpondName: json["fishpond_name"],
+        fishAge: json["fish_age"].toString(),
       );
 
   RecommendationFeedBulkData copyWith({
@@ -97,6 +101,7 @@ class RecommendationFeedBulkData {
     String? fishpondName,
     List<Fishfood>? fishfoods,
     Fishfood? selectedFishfood,
+    String? fishAge,
   }) {
     return RecommendationFeedBulkData(
       fishpondId: fishpondId ?? this.fishpondId,
@@ -111,13 +116,14 @@ class RecommendationFeedBulkData {
       fishpondName: fishpondName ?? this.fishpondName,
       fishfoods: fishfoods ?? this.fishfoods,
       selectedFishfood: selectedFishfood ?? this.selectedFishfood,
+      fishAge: fishAge ?? this.fishAge,
     );
   }
 
   Map<String, dynamic> submitBulkMap() => {
         "fishpond_id": fishpondId,
         "recommendation": suggestFeed,
-        "actual": feedAmount,
+        "actual": (feedAmount ?? 0) * 1000,
         "fishfood_id": selectedFishfood!.id,
         "note": "Tidak ada catatan",
         // "mbw_by_fish_age": mbwByFishAge,

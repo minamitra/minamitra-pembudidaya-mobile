@@ -4,19 +4,29 @@ import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/call_center/view/call_center_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/change_password/view/change_password_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/privacy_policy/views/privacy_policy_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/profile/logic/profile_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/term_condition/views/term_condition_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -29,47 +39,66 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   @override
+  void initState() {
+    super.initState();
+    context.read<UserCubit>().refreshUser();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Widget headerProfile() {
       return BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: Row(
-              children: [
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: DecorationImage(
-                      image: AssetImage(AppAssets.profileImageDummy),
-                      fit: BoxFit.cover,
-                    ),
+          return state.status.isLoading
+              ? const AppShimmer(
+                  65,
+                  double.infinity,
+                  8.0,
+                  margin: EdgeInsets.symmetric(horizontal: 18.0),
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(30.0),
+                        child: (state.userData?.imageUrl != null &&
+                                state.userData?.imageUrl != "")
+                            ? AppNetworkImage(
+                                state.userData!.imageUrl!,
+                                width: 60.0,
+                                height: 60.0,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                AppAssets.profileImageDummy,
+                                width: 60,
+                                height: 60,
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                      const SizedBox(width: 18.0),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.userData?.name ?? "-",
+                            style: appTextTheme(context).titleMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "No KTA - | ${state.userData?.mobilephone ?? "-"}",
+                            style: appTextTheme(context).bodySmall?.copyWith(
+                                  color: AppColor.neutral[400],
+                                ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                ),
-                const SizedBox(width: 18.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      state.userData?.name ?? "-",
-                      style: appTextTheme(context).titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "No KTA - | ${state.userData?.mobilephone ?? "-"}",
-                      style: appTextTheme(context).bodySmall?.copyWith(
-                            color: AppColor.neutral[400],
-                          ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
+                );
         },
       );
     }
@@ -381,21 +410,36 @@ class _ProfileViewState extends State<ProfileView> {
             ));
           },
         ),
+        actionMenu(
+          "Ganti Password",
+          "Update password akunmu",
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const ChangePasswordPage(),
+              ChangePasswordPage.routeSettings(),
+            ));
+          },
+        ),
         const SizedBox(height: 18.0),
         const AppDivider(),
         const SizedBox(height: 18.0),
         actionMenu(
           "Pengaturan Rekening",
           "Alamat rekening untuk penarikan saldo",
-          onTap: () {},
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const CommingSoonPage("Pengaturan Rekening"),
+              CommingSoonPage.route(),
+            ));
+          },
         ),
         actionMenu(
           "Informasi Point",
           "Informasi Poin milikmu",
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
-              const PointPage(),
-              PointPage.routeSettings,
+              const PointV2Page(),
+              PointV2Page.route(),
             ));
           },
         ),
@@ -429,6 +473,26 @@ class _ProfileViewState extends State<ProfileView> {
             Navigator.of(context).push(AppTransition.pushTransition(
               const CallCenterPage(),
               CallCenterPage.routeSettings,
+            ));
+          },
+        ),
+        actionMenu(
+          "Syarat dan Ketentuan",
+          "Informasi mengenai Syarat dan Ketentuan",
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const TermConditionPage(),
+              TermConditionPage.routeSettings,
+            ));
+          },
+        ),
+        actionMenu(
+          "Kebijakan Privasi",
+          "Informasi mengenai Kebijakan Privasi",
+          onTap: () {
+            Navigator.of(context).push(AppTransition.pushTransition(
+              const PrivacyPolicyPage(),
+              PrivacyPolicyPage.routeSettings,
             ));
           },
         ),
@@ -469,9 +533,7 @@ class _ProfileViewState extends State<ProfileView> {
                       child: AppPrimaryButton(
                         "Keluar",
                         () {
-                          RepositoryProvider.of<AuthenticationRepository>(
-                                  context)
-                              .logout();
+                          context.read<ProfileCubit>().logout();
                         },
                       ),
                     ),
@@ -485,17 +547,22 @@ class _ProfileViewState extends State<ProfileView> {
       ];
     }
 
-    return ListView(
-      children: [
-        const SizedBox(height: 18.0),
-        headerProfile(),
-        const SizedBox(height: 18.0),
-        pointCard(),
-        const SizedBox(height: 18.0),
-        currentlyUsedBalance(),
-        const SizedBox(height: 18.0),
-        ...actionMenuList(),
-      ],
+    return AppRefresher(
+      onRefresh: () {
+        context.read<UserCubit>().refreshUser();
+      },
+      child: ListView(
+        children: [
+          const SizedBox(height: 18.0),
+          headerProfile(),
+          const SizedBox(height: 18.0),
+          pointCard(),
+          const SizedBox(height: 18.0),
+          currentlyUsedBalance(),
+          const SizedBox(height: 18.0),
+          ...actionMenuList(),
+        ],
+      ),
     );
   }
 }

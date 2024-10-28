@@ -7,6 +7,16 @@ String appConvertCurrency(double value) {
   return "Rp $converted";
 }
 
+String appConvert3Digits(double value) {
+  String converted = NumberFormat('###,##0.00', 'id').format(value);
+  return value == 0.0 ||
+          value == 0.00 ||
+          value == 0 ||
+          value.toStringAsFixed(2) == "0.00"
+      ? "0"
+      : converted;
+}
+
 extension HandlingEmptyString on String? {
   String handlingEmptyString() {
     return (this ?? "").isEmpty ? "-" : this ?? "-";
@@ -70,6 +80,50 @@ extension PondStatusConverter on String {
         return false;
       default:
         return false;
+    }
+  }
+}
+
+extension ParameterCultivation on String {
+  String parameter() {
+    switch (this) {
+      case "MBW (Mean Body Weight) (gram)":
+        return "mbw";
+      case "Total Biomass (kg)":
+        return "biomas";
+      case "Pakan Harian":
+        return "pakan_harian";
+      case "Pakan Kumulatif":
+        return "pakan_kumulatif";
+      case "SR (Survival Rate) (%)":
+        return "sr";
+      case "FCR (Feed Convertion Ratio)":
+        return "fr";
+      case "ADG (Average Daily Growth) (gram)":
+        return "adg";
+      default:
+        return "mbw";
+    }
+  }
+
+  String convertFilterToTitle() {
+    switch (this) {
+      case "mbw":
+        return "MBW (gram)";
+      case "biomas":
+        return "Total Biomass (kg)";
+      case "pakan_harian":
+        return "Pakan Harian";
+      case "pakan_kumulatif":
+        return "Pakan Kumulatif";
+      case "sr":
+        return "SR (Survival Rate) (%)";
+      case "fr":
+        return "FCR (Feed Convertion Ratio)";
+      case "adg":
+        return "ADG (gram)";
+      default:
+        return "MBW (gram)";
     }
   }
 }
