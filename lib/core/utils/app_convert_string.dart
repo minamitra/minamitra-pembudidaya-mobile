@@ -7,6 +7,16 @@ String appConvertCurrency(double value) {
   return "Rp $converted";
 }
 
+String appConvert3Digits(double value) {
+  String converted = NumberFormat('###,##0.00', 'id').format(value);
+  return value == 0.0 ||
+          value == 0.00 ||
+          value == 0 ||
+          value.toStringAsFixed(2) == "0.00"
+      ? "0"
+      : converted;
+}
+
 extension HandlingEmptyString on String? {
   String handlingEmptyString() {
     return (this ?? "").isEmpty ? "-" : this ?? "-";

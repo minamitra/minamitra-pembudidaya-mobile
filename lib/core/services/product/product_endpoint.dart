@@ -13,6 +13,7 @@ class ProductEndpoint {
       queryParameters: {
         "name[lse]": search,
         "category_id": categoryId,
+        "pagination_bool": "false",
       },
     );
   }

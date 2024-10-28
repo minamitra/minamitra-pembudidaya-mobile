@@ -236,21 +236,25 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
           const SizedBox(height: 18.0),
           Row(
             children: [
-              CircleAvatar(
-                radius: 18.0,
-                child: Image.network(
-                  companionImage,
-                  fit: BoxFit.cover,
-                  errorBuilder: (
-                    BuildContext context,
-                    Object obj,
-                    StackTrace? trace,
-                  ) {
-                    return Image.asset(
-                      AppAssets.profileImageDummy,
-                      fit: BoxFit.cover,
-                    );
-                  },
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100.0),
+                child: SizedBox(
+                  height: 36.0,
+                  width: 36.0,
+                  child: Image.network(
+                    companionImage,
+                    fit: BoxFit.cover,
+                    errorBuilder: (
+                      BuildContext context,
+                      Object obj,
+                      StackTrace? trace,
+                    ) {
+                      return Image.asset(
+                        AppAssets.profileImageDummy,
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
                 ),
               ),
               const SizedBox(width: 12.0),

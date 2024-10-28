@@ -50,6 +50,7 @@ class FeedActivityResponseData {
   String? createByType;
   String? createByName;
   String? timeSheet;
+  List<String>? timeSheetArray;
 
   FeedActivityResponseData({
     this.id,
@@ -69,6 +70,7 @@ class FeedActivityResponseData {
     this.createByType,
     this.createByName,
     this.timeSheet,
+    this.timeSheetArray,
   });
 
   factory FeedActivityResponseData.fromJson(String str) =>
@@ -98,6 +100,9 @@ class FeedActivityResponseData {
         createByType: json["create_by_type"],
         createByName: json["create_by_name"],
         timeSheet: json["time_sheet"],
+        timeSheetArray: json["time_sheet_json_array"] == null
+            ? []
+            : List<String>.from(json["time_sheet_json_array"].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {

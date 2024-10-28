@@ -68,7 +68,6 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
               }
 
               if (state.status.isSuccessSubmit) {
-                //! please correct the route
                 AppTopSnackBar(context)
                     .showSuccess("Berhasil menambahkan panen");
                 if (isFromCycleDetail) {

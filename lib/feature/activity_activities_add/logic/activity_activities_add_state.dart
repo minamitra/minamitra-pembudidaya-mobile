@@ -7,7 +7,6 @@ class ActivityActivitiesAddState extends Equatable {
     this.selectedDate,
     this.feedRecomendationResponse,
     this.feedDataByCycleResponse,
-    this.fishAge = 0,
     this.fishFoodID = 0,
   });
 
@@ -16,7 +15,6 @@ class ActivityActivitiesAddState extends Equatable {
   final DateTime? selectedDate;
   final FeedRecomendationResponse? feedRecomendationResponse;
   final FeedDataByCycleResponse? feedDataByCycleResponse;
-  final int fishAge;
   final int fishFoodID;
 
   ActivityActivitiesAddState copyWith({
@@ -36,7 +34,6 @@ class ActivityActivitiesAddState extends Equatable {
           feedRecomendationResponse ?? this.feedRecomendationResponse,
       feedDataByCycleResponse:
           feedDataByCycleResponse ?? this.feedDataByCycleResponse,
-      fishAge: fishAge ?? this.fishAge,
       fishFoodID: fishFoodID ?? this.fishFoodID,
     );
   }
@@ -48,7 +45,6 @@ class ActivityActivitiesAddState extends Equatable {
         selectedDate,
         feedRecomendationResponse,
         feedDataByCycleResponse,
-        fishAge,
         fishFoodID,
       ];
 }

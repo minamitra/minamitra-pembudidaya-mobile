@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,7 +34,7 @@ class CultivationCubit extends Cubit<CultivationState> {
       final companionNotesResponse =
           await service.getCompanionNotes(pondCycleID: pondCycleID);
       this.pondCycleID = pondCycleID;
-      GraphResponseData data = response.data.data?.copyWith(
+      GraphResponseData datas = response.data.data?.copyWith(
         data: [
           GraphResponseDataItem(
             actual: 0,
@@ -54,18 +56,21 @@ class CultivationCubit extends Cubit<CultivationState> {
           ...response.data.data!.tempData ?? []
         ],
       );
-      docEndController.text = data.data?.length.toString() ?? "0";
+
+      docEndController.text = datas.data?.length.toString() ?? "0";
       emit(state.copyWith(
         status: GlobalState.loaded,
-        data: data,
+        data: datas,
         companionNotesData: companionNotesResponse.data,
       ));
     } on AppException catch (e) {
+      log("error $e");
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
       ));
     } catch (e) {
+      log("error $e");
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),

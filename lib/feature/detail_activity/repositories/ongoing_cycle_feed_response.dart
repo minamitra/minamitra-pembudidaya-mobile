@@ -243,10 +243,12 @@ class FishfoodJsonObject {
 class Finisher {
   String? id;
   String? name;
+  double? total;
 
   Finisher({
     this.id,
     this.name,
+    this.total,
   });
 
   factory Finisher.fromJson(String str) => Finisher.fromMap(json.decode(str));
@@ -256,6 +258,7 @@ class Finisher {
   factory Finisher.fromMap(Map<String, dynamic> json) => Finisher(
         id: json["id"],
         name: json["name"],
+        total: json["total"]?.toDouble(),
       );
 
   Map<String, dynamic> toMap() => {

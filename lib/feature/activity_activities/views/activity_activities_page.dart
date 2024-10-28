@@ -113,6 +113,11 @@ class ActivityActivitiesPage extends StatelessWidget {
                 onPressed: () {
                   switch (state.index) {
                     case 0:
+                      if ((tebarDate ?? DateTime.now())
+                          .isAfter(DateTime.now())) {
+                        AppTopSnackBar(context).showInfo(
+                            "Belum waktunya melakukan kegiatan\nTebar awal pada ${AppConvertDateTime().dmyName((tebarDate ?? DateTime.now()))}");
+                      }
                       Navigator.of(context)
                           .push(AppTransition.pushTransition(
                         ActivityActivitiesAddPage(

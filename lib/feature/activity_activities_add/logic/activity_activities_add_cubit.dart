@@ -42,7 +42,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
           : DateTime.now().difference(tebarDate).inDays;
       final response = await service.getRecommendation(
         fishPondCycleID,
-        diferentInDays.toString(),
+        AppConvertDateTime().ymdDash(selectedDate ?? DateTime.now()),
       );
       final fishFeedByCycleResponse = await service.getFeedDataByCycle(
         fishPondCycleID,
@@ -62,7 +62,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
                       double.parse(
                           amountController.text.handleEmptyStringToZero())) /
                   1000)
-              .toStringAsFixed(7);
+              .toStringAsFixed(2);
 
       emit(state.copyWith(
         status: GlobalState.loaded,
@@ -94,7 +94,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
           dateTime.difference(tebarDate ?? DateTime.now()).inDays;
       final response = await service.getRecommendation(
         fishPondCycleID ?? "",
-        diferentInDays.toString(),
+        AppConvertDateTime().ymdDash(dateTime),
       );
       final fishFeedByCycleResponse = await service.getFeedDataByCycle(
         fishPondCycleID ?? "",
