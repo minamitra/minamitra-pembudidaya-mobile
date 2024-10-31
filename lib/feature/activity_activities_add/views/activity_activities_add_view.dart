@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
@@ -273,6 +274,10 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   ),
             ),
           ),
+          inputFormatters: [
+            DecimalInputFormatter(decimalRange: 2),
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+          ],
         );
       },
     );
@@ -356,7 +361,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                                       ?.suggestFeed ??
                                   0) /
                               1000)
-                          .toStringAsFixed(7);
+                          .toStringAsFixed(2);
 
                       context
                           .read<ActivityActivitiesAddCubit>()

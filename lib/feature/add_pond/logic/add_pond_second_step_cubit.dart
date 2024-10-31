@@ -59,6 +59,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
     required String villageName,
     required String latitude,
     required String longitude,
+    required String urlImage,
   }) async {
     emit(state.copyWith(status: GlobalState.loading));
     final provinceResponse = await refService.province();
@@ -88,6 +89,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       ),
       latitude: latitude,
       longitude: longitude,
+      urlImage: urlImage,
       status: GlobalState.loaded,
     ));
   }
@@ -200,11 +202,49 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       ));
     } on AppException catch (e) {
       emit(state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: state.selectedVillage,
+        status: GlobalState.hideDialogLoading,
+      ));
+      emit(state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: state.selectedVillage,
         status: GlobalState.error,
         errorMessage: e.message,
       ));
     } catch (e) {
       emit(state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: state.selectedVillage,
+        status: GlobalState.hideDialogLoading,
+      ));
+      emit(state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: state.selectedVillage,
         status: GlobalState.error,
         errorMessage: e.toString(),
       ));

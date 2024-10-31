@@ -16,6 +16,7 @@ class SetLocationState extends Equatable {
     this.latitude,
     this.longitude,
     this.snapshotMap,
+    this.mapType = MapType.normal,
   });
 
   final SetLocationStateStatus status;
@@ -23,6 +24,7 @@ class SetLocationState extends Equatable {
   final double? latitude;
   final double? longitude;
   final Uint8List? snapshotMap;
+  final MapType? mapType;
 
   factory SetLocationState.initial() {
     return const SetLocationState(
@@ -31,6 +33,7 @@ class SetLocationState extends Equatable {
       latitude: null,
       longitude: null,
       snapshotMap: null,
+      mapType: MapType.normal,
     );
   }
 
@@ -40,6 +43,7 @@ class SetLocationState extends Equatable {
     double? latitude,
     double? longitude,
     Uint8List? snapshotMap,
+    MapType? mapType,
   }) {
     return SetLocationState(
       status: status ?? this.status,
@@ -47,6 +51,7 @@ class SetLocationState extends Equatable {
       latitude: latitude ?? this.latitude,
       longitude: longitude ?? this.longitude,
       snapshotMap: snapshotMap ?? this.snapshotMap,
+      mapType: mapType ?? this.mapType,
     );
   }
 
@@ -57,5 +62,6 @@ class SetLocationState extends Equatable {
         latitude,
         longitude,
         snapshotMap,
+        mapType,
       ];
 }

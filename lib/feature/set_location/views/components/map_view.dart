@@ -17,33 +17,38 @@ class MapView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(
-        target: initLocation,
-        zoom: 16,
-      ),
-      onMapCreated: onMapCreated,
-      mapType: MapType.normal,
-      onCameraMove: (camera) {
-        debounce.call(() {
-          context.read<SetLocationCubit>().updateLocation(LatLng(
-                camera.target.latitude,
-                camera.target.longitude,
-              ));
-        });
+    return BlocBuilder<SetLocationCubit, SetLocationState>(
+      builder: (context, state) {
+        return GoogleMap(
+          initialCameraPosition: CameraPosition(
+            target: initLocation,
+            zoom: 16,
+          ),
+          onMapCreated: onMapCreated,
+          mapType: state.mapType ?? MapType.normal,
+          onCameraMove: (camera) {
+            debounce.call(() {
+              context.read<SetLocationCubit>().updateLocation(LatLng(
+                    camera.target.latitude,
+                    camera.target.longitude,
+                  ));
+            });
+          },
+          onCameraMoveStarted: () {
+            context.read<SetLocationCubit>().startUpdatingLocation();
+          },
+          onCameraIdle: () async {
+            context.read<SetLocationCubit>().endUpdatingLocation();
+          },
+          zoomControlsEnabled: false,
+          myLocationButtonEnabled: false,
+          myLocationEnabled: true,
+          scrollGesturesEnabled: true,
+          tiltGesturesEnabled: true,
+          buildingsEnabled: true,
+          trafficEnabled: true,
+        );
       },
-      onCameraMoveStarted: () {
-        context.read<SetLocationCubit>().startUpdatingLocation();
-      },
-      onCameraIdle: () async {
-        context.read<SetLocationCubit>().endUpdatingLocation();
-      },
-      zoomControlsEnabled: false,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: true,
-      scrollGesturesEnabled: true,
-      tiltGesturesEnabled: true,
-      buildingsEnabled: true,
     );
   }
 }

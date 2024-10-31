@@ -73,6 +73,7 @@ class AddPondPage extends StatelessWidget {
                     villageName: pondData!.addressVillageName!,
                     latitude: pondData!.addressLatitude ?? "",
                     longitude: pondData!.addressLongitude ?? "",
+                    urlImage: pondData!.imageUrl ?? "",
                   ))
                 : (AddPondSecondStepCubit(
                     RefServiceImpl.create(),
@@ -119,6 +120,26 @@ class AddPondPage extends StatelessWidget {
                   AppTopSnackBar(context).showSuccess("Berhasil Edit\nKolam");
                   Navigator.of(context).pop();
                   Navigator.of(context).pop("refresh");
+                }
+              }
+            },
+          ),
+          BlocListener<AddPondSecondStepCubit, AddPondSecondStepState>(
+            listener: (context, state) {
+              if (state.status.isShowDialogLoading) {
+                AppDialog().showLoadingDialog(context, dialog);
+              }
+
+              if (state.status.isHideDialogLoading) {
+                dialog.hide();
+              }
+
+              if (state.status.isError) {
+                if (state.errorMessage == "TOKEN_EXPIRED") {
+                  RepositoryProvider.of<AuthenticationRepository>(context)
+                      .logout();
+                } else {
+                  AppTopSnackBar(context).showDanger(state.errorMessage);
                 }
               }
             },
