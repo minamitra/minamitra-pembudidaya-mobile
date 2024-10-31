@@ -195,10 +195,19 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                       ImageSource.camera,
                     );
                     if (document != null) {
-                      await document.readAsBytes().then((image) {
-                        context.read<MultipleImageCubit>().setImage(image);
+                      int size = await document.length();
+                      if (context.mounted) {
+                        if (size > 2000000) {
+                          AppTopSnackBar(context).showDanger(
+                              "Ukuran gambar melebihi\nBatas maks 2MB");
+                          Navigator.of(bottomSheetContext).pop();
+                          return;
+                        }
+                        context
+                            .read<AddPondSecondStepCubit>()
+                            .uploadImage(File(document.path));
                         Navigator.of(bottomSheetContext).pop();
-                      });
+                      }
                     }
                     break;
                   case PhotoSource.gallery:
@@ -207,13 +216,19 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                       ImageSource.gallery,
                     );
                     if (document != null) {
-                      await document.readAsBytes().then((image) {
-                        context.read<MultipleImageCubit>().setImage(image);
+                      int size = await document.length();
+                      if (context.mounted) {
+                        if (size > 2000000) {
+                          AppTopSnackBar(context).showDanger(
+                              "Ukuran gambar melebihi\nBatas maks 2MB");
+                          Navigator.of(bottomSheetContext).pop();
+                          return;
+                        }
                         context
                             .read<AddPondSecondStepCubit>()
                             .uploadImage(File(document.path));
                         Navigator.of(bottomSheetContext).pop();
-                      });
+                      }
                     }
                     break;
                 }
@@ -243,7 +258,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
             ],
           ),
           const SizedBox(height: 8.0),
-          BlocBuilder<MultipleImageCubit, List<Uint8List>?>(
+          BlocBuilder<AddPondSecondStepCubit, AddPondSecondStepState>(
             builder: (context, state) {
               return AppAnimatedSize(
                 isShow: true,
@@ -257,7 +272,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                         borderRadius: BorderRadius.circular(10.0),
                         border: Border.all(color: AppColor.neutral[200]!),
                       ),
-                      child: state == null || state.isEmpty
+                      child: state.urlImage.isEmpty
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -277,8 +292,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                                 ),
                               ],
                             )
-                          : Image.memory(
-                              state.last,
+                          : Image.network(
+                              state.urlImage,
                               fit: BoxFit.cover,
                             ),
                     ),
@@ -691,8 +706,11 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                     child: AppPrimaryFullButton(
                       widget.pondData == null ? "Selanjutnya" : "Simpan",
                       () {
-                        if (context.read<MultipleImageCubit>().state?.isEmpty ??
-                            true) {
+                        if (context
+                            .read<AddPondSecondStepCubit>()
+                            .state
+                            .urlImage
+                            .isEmpty) {
                           AppTopSnackBar(context)
                               .showDanger("Unggah lampiran terlebih dahulu");
                           return;
@@ -727,6 +745,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                                   stateSecondStep.latitude.toString(),
                               addressLongitude:
                                   stateSecondStep.longitude.toString(),
+                              imageUrl: stateSecondStep.urlImage,
                             );
                             context
                                 .read<AddPondCubit>()

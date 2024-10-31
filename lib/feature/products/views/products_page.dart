@@ -23,12 +23,6 @@ class ProductsPage extends StatelessWidget {
         "Belanja",
         actions: [
           Image.asset(
-            AppAssets.basketIcon,
-            height: 20.0,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 16.0),
-          Image.asset(
             AppAssets.bellIcon,
             height: 20.0,
             fit: BoxFit.cover,

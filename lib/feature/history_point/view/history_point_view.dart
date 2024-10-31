@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -169,6 +170,16 @@ class _HistoryPointViewState extends State<HistoryPointView> {
     }
 
     Widget listHistory() {
+      // If data is empty
+      // return const Center(
+      //   child: AppEmptyData(
+      //     "Oops, Belum Ada Riwayat",
+      //     isCenter: true,
+      //     descriptions:
+      //         "Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ",
+      //   ),
+      // );
+
       return ListView.separated(
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),

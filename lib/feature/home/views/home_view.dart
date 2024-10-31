@@ -100,42 +100,49 @@ class _HomeViewState extends State<HomeView> {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          color: AppColor.primary[800],
+          decoration: BoxDecoration(
+            color: AppColor.primary[800],
+            border: Border.all(width: 0.0),
+          ),
           child: Row(
             children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColor.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  height: 40,
-                  child: TextField(
-                    controller: _searchController,
-                    textAlignVertical: TextAlignVertical.center,
-                    textInputAction: TextInputAction.search,
-                    style: AppTextStyle.blackSmallText,
-                    decoration: InputDecoration(
-                      isCollapsed: true,
-                      hintStyle: AppTextStyle.blackSmallText,
-                      hintText: 'Cari produk',
-                      prefixIcon: const Icon(
-                        Icons.search,
-                        color: AppColor.black,
-                      ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
-                      fillColor: AppColor.white,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 16.0),
               Image.asset(
-                AppAssets.basketIcon,
+                AppAssets.newLogoIcon2,
                 height: 20.0,
-                fit: BoxFit.cover,
               ),
+              // Expanded(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       color: AppColor.white,
+              //       borderRadius: BorderRadius.circular(10.0),
+              //     ),
+              //     height: 40,
+              //     child: TextField(
+              //       controller: _searchController,
+              //       textAlignVertical: TextAlignVertical.center,
+              //       textInputAction: TextInputAction.search,
+              //       style: AppTextStyle.blackSmallText,
+              //       decoration: InputDecoration(
+              //         isCollapsed: true,
+              //         hintStyle: AppTextStyle.blackSmallText,
+              //         hintText: 'Cari produk',
+              //         prefixIcon: const Icon(
+              //           Icons.search,
+              //           color: AppColor.black,
+              //         ),
+              //         border: InputBorder.none,
+              //         contentPadding: EdgeInsets.zero,
+              //         fillColor: AppColor.white,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              const Expanded(child: SizedBox()),
+              // Image.asset(
+              //   AppAssets.basketIcon,
+              //   height: 20.0,
+              //   fit: BoxFit.cover,
+              // ),
               const SizedBox(width: 16.0),
               Image.asset(
                 AppAssets.bellIcon,

@@ -49,4 +49,12 @@ class SetLocationCubit extends Cubit<SetLocationState> {
       ));
     }
   }
+
+  void updateMapType(MapType type) {
+    emit(state.copyWith(status: SetLocationStateStatus.loading));
+    emit(state.copyWith(
+      mapType: type,
+      status: SetLocationStateStatus.loaded,
+    ));
+  }
 }

@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/componen
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/components/map_button.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/components/map_marker.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/components/map_panel.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/components/map_type.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/components/map_view.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -38,18 +39,22 @@ class _LocationScreenState extends State<LocationScreen> {
             initLatLng,
             (googleMapController) {
               setState(() {
-                controller = googleMapController;
                 completer.complete(googleMapController);
+                controller = googleMapController;
               });
             },
           ),
+          const MapTypeSection(),
           const MapMarker(),
           MapButton(controller),
-          const Positioned(
+          Positioned(
             left: 10,
             right: 10,
             bottom: 10,
-            child: MapPanel(),
+            child: MapPanel(
+              initLatLng,
+              controller,
+            ),
           ),
         ],
       );

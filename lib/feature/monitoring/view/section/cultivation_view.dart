@@ -13,6 +13,7 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_debounce.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/view/cultivation_note_all_page.dart';
@@ -33,6 +34,7 @@ class CultivationView extends StatefulWidget {
 
 class _CultivationViewState extends State<CultivationView> {
   final TextEditingController parameterController = TextEditingController();
+  AppDebounce debounce = AppDebounce(const Duration(milliseconds: 500));
 
   List<String> dataBudidayDummy = [
     "MBW (Mean Body Weight) (gram)",
@@ -439,6 +441,42 @@ class _CultivationViewState extends State<CultivationView> {
                           hintStyle: appTextTheme(context).bodySmall,
                         ),
                         textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            int? docStart = int.tryParse(value);
+                            if (docStart == null || docStart < 0) {
+                              AppTopSnackBar(context).showDanger(
+                                  "DoC awal harus berupa angka positif");
+                              return;
+                            }
+                            debounce.call(
+                              () {
+                                if (int.parse(context
+                                        .read<CultivationCubit>()
+                                        .docStartController
+                                        .text) >
+                                    int.parse(context
+                                        .read<CultivationCubit>()
+                                        .docEndController
+                                        .text)) {
+                                  AppTopSnackBar(context).showDanger(
+                                      "DoC awal tidak boleh lebih besar dari DoC akhir");
+                                  return;
+                                }
+                                if (int.parse(context
+                                        .read<CultivationCubit>()
+                                        .docEndController
+                                        .text) >
+                                    (state.data?.tempData?.length ?? 0)) {
+                                  AppTopSnackBar(context).showDanger(
+                                      "DoC akhir tidak boleh lebih besar dari DoC terakhir");
+                                  return;
+                                }
+                                context.read<CultivationCubit>().cahngeDOC();
+                              },
+                            );
+                          }
+                        },
                       ),
                     ),
                     SizedBox(
@@ -487,6 +525,42 @@ class _CultivationViewState extends State<CultivationView> {
                           hintStyle: appTextTheme(context).bodySmall,
                         ),
                         textAlign: TextAlign.center,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            int? docEnd = int.tryParse(value);
+                            if (docEnd == null || docEnd < 0) {
+                              AppTopSnackBar(context).showDanger(
+                                  "DoC akhir harus berupa angka positif");
+                              return;
+                            }
+                            debounce.call(
+                              () {
+                                if (int.parse(context
+                                        .read<CultivationCubit>()
+                                        .docStartController
+                                        .text) >
+                                    int.parse(context
+                                        .read<CultivationCubit>()
+                                        .docEndController
+                                        .text)) {
+                                  AppTopSnackBar(context).showDanger(
+                                      "DoC awal tidak boleh lebih besar dari DoC akhir");
+                                  return;
+                                }
+                                if (int.parse(context
+                                        .read<CultivationCubit>()
+                                        .docEndController
+                                        .text) >
+                                    (state.data?.tempData?.length ?? 0)) {
+                                  AppTopSnackBar(context).showDanger(
+                                      "DoC akhir tidak boleh lebih besar dari DoC terakhir");
+                                  return;
+                                }
+                                context.read<CultivationCubit>().cahngeDOC();
+                              },
+                            );
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -495,28 +569,7 @@ class _CultivationViewState extends State<CultivationView> {
               const SizedBox(width: 18),
               InkWell(
                 onTap: () {
-                  if (int.parse(context
-                          .read<CultivationCubit>()
-                          .docStartController
-                          .text) >
-                      int.parse(context
-                          .read<CultivationCubit>()
-                          .docEndController
-                          .text)) {
-                    AppTopSnackBar(context).showDanger(
-                        "DoC awal tidak boleh lebih besar dari DoC akhir");
-                    return;
-                  }
-                  if (int.parse(context
-                          .read<CultivationCubit>()
-                          .docEndController
-                          .text) >
-                      (state.data?.tempData?.length ?? 0)) {
-                    AppTopSnackBar(context).showDanger(
-                        "DoC akhir tidak boleh lebih besar dari DoC terakhir");
-                    return;
-                  }
-                  context.read<CultivationCubit>().cahngeDOC();
+                  context.read<CultivationCubit>().reset();
                 },
                 child: const Icon(Icons.refresh_outlined),
               ),

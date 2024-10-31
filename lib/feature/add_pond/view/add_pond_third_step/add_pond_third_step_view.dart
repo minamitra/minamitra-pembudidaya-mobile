@@ -605,6 +605,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               withUpperLabel: true,
               readOnly: true,
               labelText: "Pakan Starter 1",
+              descLabel: "Bobot tebar 1-5 gram/ekor",
               hintText: "Pilih Pakan",
               suffixWidget: const Padding(
                 padding: EdgeInsets.only(right: 18.0),
@@ -651,6 +652,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               withUpperLabel: true,
               readOnly: true,
               labelText: "Pakan Starter 2",
+              descLabel: "Bobot tebar 5,1-10 gram/ekor",
               hintText: "Pilih Pakan",
               suffixWidget: const Padding(
                 padding: EdgeInsets.only(right: 18.0),
@@ -697,6 +699,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               withUpperLabel: true,
               readOnly: true,
               labelText: "Pakan Starter 3",
+              descLabel: "Bobot tebar 10,1-50 gram/ekor",
               hintText: "Pilih Pakan",
               suffixWidget: const Padding(
                 padding: EdgeInsets.only(right: 18.0),
@@ -743,6 +746,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               withUpperLabel: true,
               readOnly: true,
               labelText: "Pakan Grower",
+              descLabel: "Bobot tebar 50,1-500 gram/ekor",
               hintText: "Pilih Pakan",
               suffixWidget: const Padding(
                 padding: EdgeInsets.only(right: 18.0),
@@ -789,6 +793,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
               withUpperLabel: true,
               readOnly: true,
               labelText: "Pakan Finisher",
+              descLabel: "Bobot tebar > 500,1 gram/ekor",
               hintText: "Pilih Pakan",
               suffixWidget: const Padding(
                 padding: EdgeInsets.only(right: 18.0),

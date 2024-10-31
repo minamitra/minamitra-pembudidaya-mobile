@@ -96,6 +96,7 @@ class AppValidatorTextField extends StatelessWidget {
   final AutovalidateMode? autoValidateMode;
   final Widget? prefixWidget;
   final List<TextInputFormatter>? inputFormatters;
+  final String? descLabel;
 
   const AppValidatorTextField({
     Key? key,
@@ -135,6 +136,7 @@ class AppValidatorTextField extends StatelessWidget {
     this.autoValidateMode,
     this.prefixWidget,
     this.inputFormatters,
+    this.descLabel,
   }) : super(key: key);
 
   // listInputType
@@ -262,6 +264,14 @@ class AppValidatorTextField extends StatelessWidget {
                 ),
             ],
           ),
+        if (descLabel != null) ...[
+          Text(
+            descLabel!,
+            style: appTextTheme(context).labelSmall?.copyWith(
+                  color: AppColor.neutral[400],
+                ),
+          ),
+        ],
         if (withUpperLabel) const SizedBox(height: 8.0),
         TextFormField(
           onTap: onTap,
@@ -327,6 +337,33 @@ class AppValidatorTextField extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class DecimalInputFormatter extends TextInputFormatter {
+  final int decimalRange;
+
+  DecimalInputFormatter({this.decimalRange = 2});
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    // Check if input already has a decimal point
+    if (newValue.text.contains('.')) {
+      // Split input into parts: before and after the decimal point
+      final parts = newValue.text.split('.');
+
+      // Limit the digits after the decimal point to the specified range
+      if (parts.length > 1 && parts[1].length > decimalRange) {
+        // Truncate input after the allowed decimal range
+        final truncated = '${parts[0]}.${parts[1].substring(0, decimalRange)}';
+        return TextEditingValue(
+          text: truncated,
+          selection: TextSelection.collapsed(offset: truncated.length),
+        );
+      }
+    }
+    return newValue;
   }
 }
 

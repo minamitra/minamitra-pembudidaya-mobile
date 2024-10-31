@@ -79,7 +79,20 @@ class CultivationCubit extends Cubit<CultivationState> {
   }
 
   Future<void> reset() async {
-    await init(pondCycleID, "mbw");
+    // await init(pondCycleID, "mbw");
+    emit(state.copyWith(status: GlobalState.loading));
+    docStartController.text = "0";
+    docEndController.text = state.data?.tempData?.length.toString() ?? "0";
+    GraphResponseData data = state.data?.copyWith(
+      data: state.data?.tempData?.sublist(
+        int.parse(docStartController.text),
+        int.parse(docEndController.text),
+      ),
+    );
+    emit(state.copyWith(
+      status: GlobalState.loaded,
+      data: data,
+    ));
   }
 
   void cahngeDOC() {
