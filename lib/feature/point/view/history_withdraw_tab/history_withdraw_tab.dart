@@ -32,14 +32,14 @@ class HistoryWithdrawTab extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Penambahan Poin",
+                        'Penambahan Poin',
                         style: appTextTheme(context)
                             .titleMedium
                             ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                       const SizedBox(height: 10.0),
                       Text(
-                        "16 September 2024",
+                        '16 September 2024',
                         style: appTextTheme(context).bodySmall?.copyWith(
                               color: AppColor.neutralBlueGrey[400],
                             ),
@@ -48,12 +48,12 @@ class HistoryWithdrawTab extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "+100 Poin",
+                  '+100 Poin',
                   style: appTextTheme(context).titleSmall?.copyWith(
                         color: AppColor.secondary[900],
                         fontWeight: FontWeight.w500,
                       ),
-                )
+                ),
               ],
             ),
             const SizedBox(height: 18.0),

@@ -11,12 +11,9 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/get_hour_time.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/view/add_new_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesAddView extends StatefulWidget {
@@ -45,7 +42,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 45));
   DateTime lastDate = DateTime.now();
 
-  List<String> listType = ["pagi", "siang", "sore", "malam"];
+  List<String> listType = ['pagi', 'siang', 'sore', 'malam'];
   List<String> selectedTypeOfFeed = [];
 
   @override
@@ -61,13 +58,13 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           );
       hourController.text =
           AppConvertDateTime().jm24(widget.editData!.datetime!);
-      typeController.text = widget.editData!.timeSheetArray?.join(", ") ?? "";
+      typeController.text = widget.editData!.timeSheetArray?.join(', ') ?? '';
       selectedTypeOfFeed = widget.editData!.timeSheetArray ?? [];
-      brandController.text = widget.editData!.fishfoodName ?? "";
+      brandController.text = widget.editData!.fishfoodName ?? '';
       context
           .read<ActivityActivitiesAddCubit>()
-          .cahngeFishFoodID(int.parse(widget.editData!.fishfoodId ?? "0"));
-      noteController.text = widget.editData!.note ?? "";
+          .cahngeFishFoodID(int.parse(widget.editData!.fishfoodId ?? '0'));
+      noteController.text = widget.editData!.note ?? '';
     } else {
       firstDate = widget.tebarDate;
       dateController.text = AppConvertDateTime().dmyName(dateNow);
@@ -90,8 +87,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         return AppValidatorTextField(
           readOnly: true,
           controller: dateController,
-          hintText: "Pilih Tanggal",
-          labelText: "Tanggal",
+          hintText: 'Pilih Tanggal',
+          labelText: 'Tanggal',
           suffixConstraints: const BoxConstraints(
             maxHeight: 50,
             maxWidth: 50,
@@ -127,7 +124,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           },
           validator: (String? value) {
             if (value!.isEmpty) {
-              return "Tanggal tidak boleh kosong";
+              return 'Tanggal tidak boleh kosong';
             }
             return null;
           },
@@ -140,12 +137,12 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
     return BlocBuilder<ActivityActivitiesAddCubit, ActivityActivitiesAddState>(
       builder: (context, state) {
         return AppValidatorTextField(
-          labelText: "Waktu Kegiatan",
+          labelText: 'Waktu Kegiatan',
           controller: typeController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          hintText: "Pilih waktu kegiatan",
+          hintText: 'Pilih waktu kegiatan',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -153,17 +150,17 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Waktu kegiatan tidak boleh kosong";
+              return 'Waktu kegiatan tidak boleh kosong';
             }
             return null;
           },
           onTap: appBottomSheetShowModalChecklist(
             context: context,
-            title: "Waktu pakan",
+            title: 'Waktu pakan',
             data: listType,
             selectedData: selectedTypeOfFeed,
             onSelected: (value) {
-              typeController.text = value.join(", ");
+              typeController.text = value.join(', ');
             },
           ),
           // appBottomSheetShowModal(
@@ -186,11 +183,11 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         Wrap(
           children: [
             Text(
-              "Jenis Kegiatan",
+              'Jenis Kegiatan',
               style: appTextTheme(context).bodyMedium,
             ),
             Text(
-              " *",
+              ' *',
               style:
                   appTextTheme(context).bodyMedium?.copyWith(color: Colors.red),
             ),
@@ -242,13 +239,13 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
         return AppValidatorTextField(
           controller:
               context.read<ActivityActivitiesAddCubit>().amountController,
-          hintText: "Masukan jumlah pakan",
-          labelText: "Jumlah Pakan Diberikan ",
+          hintText: 'Masukan jumlah pakan',
+          labelText: 'Jumlah Pakan Diberikan ',
           inputType: TextInputType.phone,
           isMandatory: true,
           validator: (String? value) {
             if (value!.isEmpty) {
-              return "Jumlah tidak boleh kosong";
+              return 'Jumlah tidak boleh kosong';
             }
             return null;
           },
@@ -267,7 +264,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "Kg",
+              'Kg',
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -286,12 +283,12 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   Widget brandTextField() {
     return AppValidatorTextField(
       controller: brandController,
-      hintText: "Masukan merk",
-      labelText: "Merk",
+      hintText: 'Masukan merk',
+      labelText: 'Merk',
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Merk tidak boleh kosong";
+          return 'Merk tidak boleh kosong';
         }
         return null;
       },
@@ -301,8 +298,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   Widget noteTextField() {
     return AppValidatorTextField(
       controller: noteController,
-      hintText: "Masukan catatan",
-      labelText: "Catatan",
+      hintText: 'Masukan catatan',
+      labelText: 'Catatan',
       maxLines: 3,
       isMandatory: false,
       validator: (String? value) {
@@ -345,7 +342,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   const SizedBox(width: 8.0),
                   Expanded(
                     child: Text(
-                      "Saran Pakan: ${((state.feedRecomendationResponse?.data?.suggestFeed ?? 0) / 1000).toStringAsFixed(2)} Kg",
+                      'Saran Pakan: ${((state.feedRecomendationResponse?.data?.suggestFeed ?? 0) / 1000).toStringAsFixed(2)} Kg',
                       maxLines: 2,
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
@@ -373,7 +370,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                               double.parse(context
                                   .read<ActivityActivitiesAddCubit>()
                                   .amountController
-                                  .text))
+                                  .text,))
                           .toStringAsFixed(2);
                     },
                     child: Container(
@@ -402,7 +399,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                 ),
                 const SizedBox(width: 8.0),
                 Text(
-                  "Pemberian pakan 2-3 kali per hari",
+                  'Pemberian pakan 2-3 kali per hari',
                   style: appTextTheme(context).labelLarge?.copyWith(
                         fontWeight: FontWeight.w400,
                         color: AppColor.neutral[600],
@@ -433,8 +430,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Nama Pakan Diberikan",
-          hintText: "Pilih Pakan",
+          labelText: 'Nama Pakan Diberikan',
+          hintText: 'Pilih Pakan',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -442,15 +439,15 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Pakan tidak boleh kosong";
+              return 'Pakan tidak boleh kosong';
             }
             return null;
           },
           onTap: appBottomSheetShowModalWithCustomButton(
             context: context,
-            title: "Pilih Pakan",
+            title: 'Pilih Pakan',
             data: state.feedDataByCycleResponse?.data
-                    ?.map((element) => element.name ?? "-")
+                    ?.map((element) => element.name ?? '-')
                     .toList() ??
                 [],
             onSelected: (value) {
@@ -499,15 +496,15 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       controller: context
           .read<ActivityActivitiesAddCubit>()
           .totalAmountFeedFromInitController,
-      hintText: "0",
-      labelText: "Total Pakan Diberikan",
+      hintText: '0',
+      labelText: 'Total Pakan Diberikan',
       inputType: TextInputType.number,
       isMandatory: false,
       readOnly: true,
       fillColor: AppColor.neutral[100],
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Jumlah tidak boleh kosong";
+          return 'Jumlah tidak boleh kosong';
         }
         return null;
       },
@@ -515,7 +512,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "Kg",
+          'Kg',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
                 fontWeight: FontWeight.w500,
@@ -528,8 +525,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   AppValidatorTextField hourTextField(BuildContext context) {
     return AppValidatorTextField(
       controller: hourController,
-      hintText: "Pilih Jam",
-      labelText: "Jam",
+      hintText: 'Pilih Jam',
+      labelText: 'Jam',
       suffixConstraints: const BoxConstraints(
         maxHeight: 50,
         maxWidth: 50,
@@ -564,7 +561,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       },
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Jam tidak boleh kosong";
+          return 'Jam tidak boleh kosong';
         }
         return null;
       },
@@ -584,19 +581,19 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
 
         if (state.status.isLoaded) {
           fishAgeController.text =
-              state.feedRecomendationResponse?.data?.fishAge ?? "1";
+              state.feedRecomendationResponse?.data?.fishAge ?? '1';
         }
 
         return AppValidatorTextField(
           controller: fishAgeController,
-          hintText: "0",
-          labelText: "Umur Ikan",
+          hintText: '0',
+          labelText: 'Umur Ikan',
           inputType: TextInputType.number,
           readOnly: true,
           fillColor: AppColor.neutral[100],
           validator: (String? value) {
             if (value!.isEmpty) {
-              return "Umur ikan tidak boleh kosong";
+              return 'Umur ikan tidak boleh kosong';
             }
             return null;
           },
@@ -604,7 +601,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "hari",
+              'hari',
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -655,7 +652,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (!formKey.currentState!.validate()) {
               return;
@@ -665,25 +662,25 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
             final double? actualAmount =
                 double.tryParse(activityCubit.amountController.text);
             if (actualAmount == null) {
-              AppTopSnackBar(context).showDanger("Jumlah pakan tidak valid");
+              AppTopSnackBar(context).showDanger('Jumlah pakan tidak valid');
               return;
             }
 
             context.read<ActivityActivitiesAddCubit>().addFishFeed(
                   AddFishFeedBody(
-                    fishpondId: int.parse(activityCubit.fishPondID ?? "0"),
+                    fishpondId: int.parse(activityCubit.fishPondID ?? '0'),
                     fishpondcycleId:
-                        int.parse(activityCubit.fishPondCycleID ?? "0"),
+                        int.parse(activityCubit.fishPondCycleID ?? '0'),
                     datetime: activityCubit.state.selectedDate,
                     fishAge: int.tryParse(activityCubit.state
                                 .feedRecomendationResponse?.data?.fishAge ??
-                            "1") ??
+                            '1',) ??
                         1,
                     recommendation: activityCubit
                         .state.feedRecomendationResponse?.data?.suggestFeed,
                     actual: actualAmount * 1000,
                     total: (double.tryParse(activityCubit
-                                .totalAmountFeedFromInitController.text) ??
+                                .totalAmountFeedFromInitController.text,) ??
                             0) *
                         1000,
                     fishfoodId: activityCubit.state.fishFoodID,

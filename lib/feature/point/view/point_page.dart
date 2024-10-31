@@ -12,9 +12,9 @@ class PointPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Informasi Poin",
+        'Informasi Poin',
       ),
-      body: PointView(),
+      body: const PointView(),
     );
   }
 }

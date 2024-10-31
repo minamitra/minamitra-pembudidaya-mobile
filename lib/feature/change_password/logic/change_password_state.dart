@@ -3,7 +3,7 @@ part of 'change_password_cubit.dart';
 class ChangePasswordState extends Equatable {
   const ChangePasswordState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.isObscureOldPassword = true,
     this.isObscureNewPassword = true,
     this.isObscureConfirmPassword = true,

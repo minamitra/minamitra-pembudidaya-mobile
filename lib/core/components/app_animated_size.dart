@@ -5,11 +5,11 @@ class AppAnimatedSize extends StatefulWidget {
   final bool isShow;
   final Duration? duration;
   const AppAnimatedSize({
-    Key? key,
+    super.key,
     required this.child,
     this.isShow = false,
     this.duration,
-  }) : super(key: key);
+  });
 
   @override
   AppAnimatedSizeState createState() => AppAnimatedSizeState();

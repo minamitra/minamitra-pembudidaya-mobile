@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
@@ -26,25 +25,25 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         builder: (context, state) {
           return AppValidatorTextField(
             controller: _oldPasswordController,
-            labelText: "Password lama",
+            labelText: 'Password lama',
             withUpperLabel: true,
             isMandatory: true,
             isObscure: state.isObscureOldPassword,
-            hintText: "Masukan Kata Sandi",
+            hintText: 'Masukan Kata Sandi',
             suffixWidget: IconButton(
               icon: Icon(!state.isObscureOldPassword
                   ? Icons.visibility
-                  : Icons.visibility_off),
+                  : Icons.visibility_off,),
               onPressed: () {
                 context.read<ChangePasswordCubit>().onChangeObscure(
-                    isObscureOldPassword: !state.isObscureOldPassword);
+                    isObscureOldPassword: !state.isObscureOldPassword,);
               },
             ),
             validator: (String? value) {
               if (value!.isEmpty) {
-                return "Password tidak boleh kosong";
+                return 'Password tidak boleh kosong';
               } else if (value.length < 6) {
-                return "Password minimal 6 karakter";
+                return 'Password minimal 6 karakter';
               }
               return null;
             },
@@ -58,25 +57,25 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         builder: (context, state) {
           return AppValidatorTextField(
             controller: _newPasswordController,
-            labelText: "Password baru",
+            labelText: 'Password baru',
             withUpperLabel: true,
             isMandatory: true,
             isObscure: state.isObscureNewPassword,
-            hintText: "Masukan Kata Sandi",
+            hintText: 'Masukan Kata Sandi',
             suffixWidget: IconButton(
               icon: Icon(!state.isObscureNewPassword
                   ? Icons.visibility
-                  : Icons.visibility_off),
+                  : Icons.visibility_off,),
               onPressed: () {
                 context.read<ChangePasswordCubit>().onChangeObscure(
-                    isObscureNewPassword: !state.isObscureNewPassword);
+                    isObscureNewPassword: !state.isObscureNewPassword,);
               },
             ),
             validator: (String? value) {
               if (value!.isEmpty) {
-                return "Password tidak boleh kosong";
+                return 'Password tidak boleh kosong';
               } else if (value.length < 6) {
-                return "Password minimal 6 karakter";
+                return 'Password minimal 6 karakter';
               }
               return null;
             },
@@ -90,27 +89,27 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
         builder: (context, state) {
           return AppValidatorTextField(
             controller: _confirmPasswordController,
-            labelText: "Konfirmasi password baru",
+            labelText: 'Konfirmasi password baru',
             withUpperLabel: true,
             isMandatory: true,
             isObscure: state.isObscureConfirmPassword,
-            hintText: "Masukan Kata Sandi",
+            hintText: 'Masukan Kata Sandi',
             suffixWidget: IconButton(
               icon: Icon(!state.isObscureConfirmPassword
                   ? Icons.visibility
-                  : Icons.visibility_off),
+                  : Icons.visibility_off,),
               onPressed: () {
                 context.read<ChangePasswordCubit>().onChangeObscure(
-                    isObscureConfirmPassword: !state.isObscureConfirmPassword);
+                    isObscureConfirmPassword: !state.isObscureConfirmPassword,);
               },
             ),
             validator: (String? value) {
               if (value!.isEmpty) {
-                return "Password tidak boleh kosong";
+                return 'Password tidak boleh kosong';
               } else if (value.length < 6) {
-                return "Password minimal 6 karakter";
+                return 'Password minimal 6 karakter';
               } else if (value != _newPasswordController.text) {
-                return "Password tidak sama";
+                return 'Password tidak sama';
               }
               return null;
             },
@@ -138,7 +137,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 18.0),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (_formKey.currentState!.validate()) {
               context.read<ChangePasswordCubit>().updatePassword(

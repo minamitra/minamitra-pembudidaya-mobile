@@ -3,7 +3,7 @@ part of 'activity_activities_detail_cubit.dart';
 class ActivityActivitiesDetailState extends Equatable {
   const ActivityActivitiesDetailState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
   });
 
   final GlobalState status;

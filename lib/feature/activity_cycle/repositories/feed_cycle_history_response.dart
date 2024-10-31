@@ -14,14 +14,14 @@ class FeedCycleHistoryResponse {
 
   factory FeedCycleHistoryResponse.fromMap(Map<String, dynamic> json) =>
       FeedCycleHistoryResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
-            : List<FeedCycleHistoryResponseData>.from(json["data"]!
-                .map((x) => FeedCycleHistoryResponseData.fromMap(x))),
+            : List<FeedCycleHistoryResponseData>.from(json['data']!
+                .map((x) => FeedCycleHistoryResponseData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -96,84 +96,84 @@ class FeedCycleHistoryResponseData {
 
   factory FeedCycleHistoryResponseData.fromMap(Map<String, dynamic> json) =>
       FeedCycleHistoryResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        tebarDate: json["tebar_date"] == null
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        tebarDate: json['tebar_date'] == null
             ? null
-            : DateTime.parse(json["tebar_date"]),
-        tebarFishTotal: json["tebar_fish_total"],
-        fishseedId: json["fishseed_id"],
-        tebarBobot: json["tebar_bobot"],
-        targetPanenBobot: json["target_panen_bobot"],
-        actualPanenBobot: json["actual_panen_bobot"],
-        srTarget: json["sr_target"],
-        estimationFishfoodEpp: json["estimation_fishfood_epp"],
-        estimationPanenDate: json["estimation_panen_date"] == null
+            : DateTime.parse(json['tebar_date']),
+        tebarFishTotal: json['tebar_fish_total'],
+        fishseedId: json['fishseed_id'],
+        tebarBobot: json['tebar_bobot'],
+        targetPanenBobot: json['target_panen_bobot'],
+        actualPanenBobot: json['actual_panen_bobot'],
+        srTarget: json['sr_target'],
+        estimationFishfoodEpp: json['estimation_fishfood_epp'],
+        estimationPanenDate: json['estimation_panen_date'] == null
             ? null
-            : DateTime.parse(json["estimation_panen_date"]),
-        actualPanenDate: json["actual_panen_date"],
-        estimationPanenTonase: json["estimation_panen_tonase"],
-        actualPanenTonase: json["actual_panen_tonase"],
-        panenNote: json["panen_note"],
-        panenAttachmentJsonArray: json["panen_attachment_json_array"] == null
+            : DateTime.parse(json['estimation_panen_date']),
+        actualPanenDate: json['actual_panen_date'],
+        estimationPanenTonase: json['estimation_panen_tonase'],
+        actualPanenTonase: json['actual_panen_tonase'],
+        panenNote: json['panen_note'],
+        panenAttachmentJsonArray: json['panen_attachment_json_array'] == null
             ? []
             : List<String>.from(
-                json["panen_attachment_json_array"]!.map((x) => x)),
-        status: json["status"],
-        createDatetime: json["create_datetime"] == null
+                json['panen_attachment_json_array']!.map((x) => x),),
+        status: json['status'],
+        createDatetime: json['create_datetime'] == null
             ? null
-            : DateTime.parse(json["create_datetime"]),
-        createById: json["create_by_id"],
-        createByType: json["create_by_type"],
-        createByName: json["create_by_name"],
-        fishseedName: json["fishseed_name"],
-        memberCode: json["member_code"],
-        memberName: json["member_name"],
-        fishpondName: json["fishpond_name"],
-        fishfoodTotalSum: json["fishfood_total_sum"],
-        fishfoodJsonObject: json["fishfood_json_object"] == null
+            : DateTime.parse(json['create_datetime']),
+        createById: json['create_by_id'],
+        createByType: json['create_by_type'],
+        createByName: json['create_by_name'],
+        fishseedName: json['fishseed_name'],
+        memberCode: json['member_code'],
+        memberName: json['member_name'],
+        fishpondName: json['fishpond_name'],
+        fishfoodTotalSum: json['fishfood_total_sum'],
+        fishfoodJsonObject: json['fishfood_json_object'] == null
             ? null
-            : FishfoodJsonObject.fromMap(json["fishfood_json_object"]),
-        buyerJsonArray: json["buyer_json_array"] == null
+            : FishfoodJsonObject.fromMap(json['fishfood_json_object']),
+        buyerJsonArray: json['buyer_json_array'] == null
             ? []
             : List<BuyerData>.from(
-                json["buyer_json_array"].map((x) => BuyerData.fromMap(x))),
+                json['buyer_json_array'].map((x) => BuyerData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "member_id": memberId,
-        "fishpond_id": fishpondId,
-        "tebar_date":
+        'id': id,
+        'member_id': memberId,
+        'fishpond_id': fishpondId,
+        'tebar_date':
             "${tebarDate!.year.toString().padLeft(4, '0')}-${tebarDate!.month.toString().padLeft(2, '0')}-${tebarDate!.day.toString().padLeft(2, '0')}",
-        "tebar_fish_total": tebarFishTotal,
-        "fishseed_id": fishseedId,
-        "tebar_bobot": tebarBobot,
-        "target_panen_bobot": targetPanenBobot,
-        "actual_panen_bobot": actualPanenBobot,
-        "sr_target": srTarget,
-        "estimation_fishfood_epp": estimationFishfoodEpp,
-        "estimation_panen_date":
+        'tebar_fish_total': tebarFishTotal,
+        'fishseed_id': fishseedId,
+        'tebar_bobot': tebarBobot,
+        'target_panen_bobot': targetPanenBobot,
+        'actual_panen_bobot': actualPanenBobot,
+        'sr_target': srTarget,
+        'estimation_fishfood_epp': estimationFishfoodEpp,
+        'estimation_panen_date':
             "${estimationPanenDate!.year.toString().padLeft(4, '0')}-${estimationPanenDate!.month.toString().padLeft(2, '0')}-${estimationPanenDate!.day.toString().padLeft(2, '0')}",
-        "actual_panen_date": actualPanenDate,
-        "estimation_panen_tonase": estimationPanenTonase,
-        "actual_panen_tonase": actualPanenTonase,
-        "panen_note": panenNote,
-        "panen_attachment_json_array": panenAttachmentJsonArray == null
+        'actual_panen_date': actualPanenDate,
+        'estimation_panen_tonase': estimationPanenTonase,
+        'actual_panen_tonase': actualPanenTonase,
+        'panen_note': panenNote,
+        'panen_attachment_json_array': panenAttachmentJsonArray == null
             ? []
             : List<dynamic>.from(panenAttachmentJsonArray!.map((x) => x)),
-        "status": status,
-        "create_datetime": createDatetime?.toIso8601String(),
-        "create_by_id": createById,
-        "create_by_type": createByType,
-        "create_by_name": createByName,
-        "fishseed_name": fishseedName,
-        "member_code": memberCode,
-        "member_name": memberName,
-        "fishpond_name": fishpondName,
-        "fishfood_total_sum": fishfoodTotalSum,
-        "fishfood_json_object": fishfoodJsonObject?.toMap(),
+        'status': status,
+        'create_datetime': createDatetime?.toIso8601String(),
+        'create_by_id': createById,
+        'create_by_type': createByType,
+        'create_by_name': createByName,
+        'fishseed_name': fishseedName,
+        'member_code': memberCode,
+        'member_name': memberName,
+        'fishpond_name': fishpondName,
+        'fishfood_total_sum': fishfoodTotalSum,
+        'fishfood_json_object': fishfoodJsonObject?.toMap(),
       };
 }
 
@@ -195,28 +195,28 @@ class FishfoodJsonObject {
 
   factory FishfoodJsonObject.fromMap(Map<String, dynamic> json) =>
       FishfoodJsonObject(
-        starter: json["starter"] == null
+        starter: json['starter'] == null
             ? []
             : List<Finisher>.from(
-                json["starter"]!.map((x) => Finisher.fromMap(x))),
-        grower: json["grower"] == null
+                json['starter']!.map((x) => Finisher.fromMap(x)),),
+        grower: json['grower'] == null
             ? []
             : List<Finisher>.from(
-                json["grower"]!.map((x) => Finisher.fromMap(x))),
-        finisher: json["finisher"] == null
+                json['grower']!.map((x) => Finisher.fromMap(x)),),
+        finisher: json['finisher'] == null
             ? []
             : List<Finisher>.from(
-                json["finisher"]!.map((x) => Finisher.fromMap(x))),
+                json['finisher']!.map((x) => Finisher.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "starter": starter == null
+        'starter': starter == null
             ? []
             : List<dynamic>.from(starter!.map((x) => x.toMap())),
-        "grower": grower == null
+        'grower': grower == null
             ? []
             : List<dynamic>.from(grower!.map((x) => x.toMap())),
-        "finisher": finisher == null
+        'finisher': finisher == null
             ? []
             : List<dynamic>.from(finisher!.map((x) => x.toMap())),
       };
@@ -236,12 +236,12 @@ class Finisher {
   String toJson() => json.encode(toMap());
 
   factory Finisher.fromMap(Map<String, dynamic> json) => Finisher(
-        id: json["id"],
-        name: json["name"],
+        id: json['id'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
+        'id': id,
+        'name': name,
       };
 }

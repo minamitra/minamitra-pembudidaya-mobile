@@ -18,7 +18,7 @@ class CDNImageResponse {
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -46,20 +46,20 @@ class CDNImageResponseData {
 
   factory CDNImageResponseData.fromMap(Map<String, dynamic> json) =>
       CDNImageResponseData(
-        type: json["type"],
-        filename: json["filename"],
-        filepath: json["filepath"],
-        filemime: json["filemime"],
-        fullpath: json["fullpath"],
-        fileuri: json["fileuri"],
+        type: json['type'],
+        filename: json['filename'],
+        filepath: json['filepath'],
+        filemime: json['filemime'],
+        fullpath: json['fullpath'],
+        fileuri: json['fileuri'],
       );
 
   Map<String, dynamic> toMap() => {
-        "type": type,
-        "filename": filename,
-        "filepath": filepath,
-        "filemime": filemime,
-        "fullpath": fullpath,
-        "fileuri": fileuri,
+        'type': type,
+        'filename': filename,
+        'filepath': filepath,
+        'filemime': filemime,
+        'fullpath': fullpath,
+        'fileuri': fileuri,
       };
 }

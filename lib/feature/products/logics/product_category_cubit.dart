@@ -19,17 +19,17 @@ class ProductCategoryCubit extends Cubit<ProductCategoryState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         categoryProduct: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

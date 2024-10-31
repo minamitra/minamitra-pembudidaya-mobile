@@ -26,17 +26,17 @@ class AddPondCubit extends Cubit<AddPondState> {
     try {
       emit(state.copyWith(
         status: GlobalState.loaded,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -45,7 +45,7 @@ class AddPondCubit extends Cubit<AddPondState> {
     emit(state.copyWith(
       index: index,
       status: GlobalState.refresh,
-    ));
+    ),);
   }
 
   Future<void> addPond({
@@ -58,7 +58,7 @@ class AddPondCubit extends Cubit<AddPondState> {
     try {
       if (pondCyclePayload.fishseedId == null) {
         final feedResponse = await feedService.addNewFishFeed(
-          seedName ?? "",
+          seedName ?? '',
           seedPrice ?? 0,
         );
         pondCyclePayload.fishseedId = feedResponse.data;
@@ -73,13 +73,13 @@ class AddPondCubit extends Cubit<AddPondState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -93,7 +93,7 @@ class AddPondCubit extends Cubit<AddPondState> {
     try {
       if (pondCyclePayload.fishseedId == null) {
         final feedResponse = await feedService.addNewFishFeed(
-          name ?? "",
+          name ?? '',
           price ?? 0,
         );
         pondCyclePayload.fishseedId = feedResponse.data;
@@ -107,20 +107,20 @@ class AddPondCubit extends Cubit<AddPondState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
   void setUpdatePond(UpdatePondPayload pondPayload) {
     emit(state.copyWith(
       updatePondPayload: pondPayload,
-    ));
+    ),);
   }
 
   Future<void> updatePond({
@@ -155,13 +155,13 @@ class AddPondCubit extends Cubit<AddPondState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

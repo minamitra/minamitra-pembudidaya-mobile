@@ -30,17 +30,17 @@ class AddPondCyclePayload {
 
   factory AddPondCyclePayload.fromMap(Map<String, dynamic> json) =>
       AddPondCyclePayload(
-        fishpondId: json["fishpond_id"],
-        tebarDate: json["tebar_date"],
-        tebarFishTotal: json["tebar_fish_total"],
-        fishseedId: json["fishseed_id"],
-        tebarBobot: json["tebar_bobot"],
-        targetPanenBobot: json["target_panen_bobot"],
-        srTarget: json["sr_target"],
-        fishfoodJsonObject: json["fishfood_json_object"] == null
+        fishpondId: json['fishpond_id'],
+        tebarDate: json['tebar_date'],
+        tebarFishTotal: json['tebar_fish_total'],
+        fishseedId: json['fishseed_id'],
+        tebarBobot: json['tebar_bobot'],
+        targetPanenBobot: json['target_panen_bobot'],
+        srTarget: json['sr_target'],
+        fishfoodJsonObject: json['fishfood_json_object'] == null
             ? null
-            : FishfoodJsonObject.fromMap(json["fishfood_json_object"]),
-        estimationFishfoodEpp: json["estimation_fishfood_epp"],
+            : FishfoodJsonObject.fromMap(json['fishfood_json_object']),
+        estimationFishfoodEpp: json['estimation_fishfood_epp'],
       );
 
   AddPondCyclePayload copyWith({
@@ -68,15 +68,15 @@ class AddPondCyclePayload {
   }
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId.toString(),
-        "tebar_date": tebarDate ?? "",
-        "tebar_fish_total": tebarFishTotal.toString(),
-        "fishseed_id": fishseedId.toString(),
-        "tebar_bobot": tebarBobot.toString(),
-        "target_panen_bobot": targetPanenBobot.toString(),
-        "sr_target": srTarget.toString(),
-        "fishfood_json_object": fishfoodJsonObject?.toMap() ?? "",
-        "estimation_fishfood_epp": estimationFishfoodEpp.toString(),
+        'fishpond_id': fishpondId.toString(),
+        'tebar_date': tebarDate ?? '',
+        'tebar_fish_total': tebarFishTotal.toString(),
+        'fishseed_id': fishseedId.toString(),
+        'tebar_bobot': tebarBobot.toString(),
+        'target_panen_bobot': targetPanenBobot.toString(),
+        'sr_target': srTarget.toString(),
+        'fishfood_json_object': fishfoodJsonObject?.toMap() ?? '',
+        'estimation_fishfood_epp': estimationFishfoodEpp.toString(),
       };
 }
 
@@ -102,42 +102,42 @@ class FishfoodJsonObject {
 
   factory FishfoodJsonObject.fromMap(Map<String, dynamic> json) =>
       FishfoodJsonObject(
-        starter1: json["starter1"] == null
+        starter1: json['starter1'] == null
             ? []
             : List<Finisher>.from(
-                json["starter1"]!.map((x) => Finisher.fromMap(x))),
-        starter2: json["starter2"] == null
+                json['starter1']!.map((x) => Finisher.fromMap(x)),),
+        starter2: json['starter2'] == null
             ? []
             : List<Finisher>.from(
-                json["starter2"]!.map((x) => Finisher.fromMap(x))),
-        starter3: json["starter3"] == null
+                json['starter2']!.map((x) => Finisher.fromMap(x)),),
+        starter3: json['starter3'] == null
             ? []
             : List<Finisher>.from(
-                json["starter3"]!.map((x) => Finisher.fromMap(x))),
-        grower: json["grower"] == null
+                json['starter3']!.map((x) => Finisher.fromMap(x)),),
+        grower: json['grower'] == null
             ? []
             : List<Finisher>.from(
-                json["grower"]!.map((x) => Finisher.fromMap(x))),
-        finisher: json["finisher"] == null
+                json['grower']!.map((x) => Finisher.fromMap(x)),),
+        finisher: json['finisher'] == null
             ? []
             : List<Finisher>.from(
-                json["finisher"]!.map((x) => Finisher.fromMap(x))),
+                json['finisher']!.map((x) => Finisher.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "starter1": starter1 == null
+        'starter1': starter1 == null
             ? []
             : List<dynamic>.from(starter1!.map((x) => x.toMap())),
-        "starter2": starter2 == null
+        'starter2': starter2 == null
             ? []
             : List<dynamic>.from(starter2!.map((x) => x.toMap())),
-        "starter3": starter3 == null
+        'starter3': starter3 == null
             ? []
             : List<dynamic>.from(starter3!.map((x) => x.toMap())),
-        "grower": grower == null
+        'grower': grower == null
             ? []
             : List<dynamic>.from(grower!.map((x) => x.toMap())),
-        "finisher": finisher == null
+        'finisher': finisher == null
             ? []
             : List<dynamic>.from(finisher!.map((x) => x.toMap())),
       };
@@ -157,12 +157,12 @@ class Finisher {
   String toJson() => json.encode(toMap());
 
   factory Finisher.fromMap(Map<String, dynamic> json) => Finisher(
-        id: json["id"],
-        name: json["name"],
+        id: json['id'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id.toString(),
-        "name": name ?? "",
+        'id': id.toString(),
+        'name': name ?? '',
       };
 }

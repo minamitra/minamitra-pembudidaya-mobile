@@ -4,8 +4,7 @@ class LocationErrorWidget extends StatelessWidget {
   final String? error;
   final Function? callback;
 
-  const LocationErrorWidget({Key? key, this.error, this.callback})
-      : super(key: key);
+  const LocationErrorWidget({super.key, this.error, this.callback});
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +28,11 @@ class LocationErrorWidget extends StatelessWidget {
           ),
           box,
           ElevatedButton(
-            child: const Text("Retry"),
+            child: const Text('Retry'),
             onPressed: () {
               if (callback != null) callback!();
             },
-          )
+          ),
         ],
       ),
     );

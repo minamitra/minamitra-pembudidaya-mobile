@@ -16,19 +16,19 @@ class FeedActivityResponse {
 
   factory FeedActivityResponse.fromMap(Map<String, dynamic> json) =>
       FeedActivityResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<FeedActivityResponseData>.from(
-                json["data"]!.map((x) => FeedActivityResponseData.fromMap(x))),
-        pagination: json["pagination"] == null
+                json['data']!.map((x) => FeedActivityResponseData.fromMap(x)),),
+        pagination: json['pagination'] == null
             ? null
-            : Pagination.fromMap(json["pagination"]),
+            : Pagination.fromMap(json['pagination']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-        "pagination": pagination?.toMap(),
+        'pagination': pagination?.toMap(),
       };
 }
 
@@ -80,49 +80,49 @@ class FeedActivityResponseData {
 
   factory FeedActivityResponseData.fromMap(Map<String, dynamic> json) =>
       FeedActivityResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
         datetime:
-            json["datetime"] == null ? null : DateTime.parse(json["datetime"]),
-        fishAge: json["fish_age"],
-        recommendation: json["recommendation"],
-        actual: json["actual"],
-        total: json["total"],
-        fishfoodId: json["fishfood_id"],
-        fishfoodName: json["fishfood_name"],
-        note: json["note"],
-        createDatetime: json["create_datetime"] == null
+            json['datetime'] == null ? null : DateTime.parse(json['datetime']),
+        fishAge: json['fish_age'],
+        recommendation: json['recommendation'],
+        actual: json['actual'],
+        total: json['total'],
+        fishfoodId: json['fishfood_id'],
+        fishfoodName: json['fishfood_name'],
+        note: json['note'],
+        createDatetime: json['create_datetime'] == null
             ? null
-            : DateTime.parse(json["create_datetime"]),
-        createById: json["create_by_id"],
-        createByType: json["create_by_type"],
-        createByName: json["create_by_name"],
-        timeSheet: json["time_sheet"],
-        timeSheetArray: json["time_sheet_json_array"] == null
+            : DateTime.parse(json['create_datetime']),
+        createById: json['create_by_id'],
+        createByType: json['create_by_type'],
+        createByName: json['create_by_name'],
+        timeSheet: json['time_sheet'],
+        timeSheetArray: json['time_sheet_json_array'] == null
             ? []
-            : List<String>.from(json["time_sheet_json_array"].map((x) => x)),
+            : List<String>.from(json['time_sheet_json_array'].map((x) => x)),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "member_id": memberId,
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
-        "datetime": datetime?.toIso8601String(),
-        "fish_age": fishAge,
-        "recommendation": recommendation,
-        "actual": actual,
-        "total": total,
-        "fishfood_id": fishfoodId,
-        "fishfood_name": fishfoodName,
-        "note": note,
-        "create_datetime": createDatetime?.toIso8601String(),
-        "create_by_id": createById,
-        "create_by_type": createByType,
-        "create_by_name": createByName,
-        "time_sheet": timeSheet,
+        'id': id,
+        'member_id': memberId,
+        'fishpond_id': fishpondId,
+        'fishpondcycle_id': fishpondcycleId,
+        'datetime': datetime?.toIso8601String(),
+        'fish_age': fishAge,
+        'recommendation': recommendation,
+        'actual': actual,
+        'total': total,
+        'fishfood_id': fishfoodId,
+        'fishfood_name': fishfoodName,
+        'note': note,
+        'create_datetime': createDatetime?.toIso8601String(),
+        'create_by_id': createById,
+        'create_by_type': createByType,
+        'create_by_name': createByName,
+        'time_sheet': timeSheet,
       };
 }
 
@@ -159,33 +159,33 @@ class Pagination {
   String toJson() => json.encode(toMap());
 
   factory Pagination.fromMap(Map<String, dynamic> json) => Pagination(
-        totalData: json["total_data"],
-        totalPage: json["total_page"],
-        totalDisplay: json["total_display"],
-        firstPage: json["first_page"],
-        lastPage: json["last_page"],
-        prev: json["prev"],
-        current: json["current"],
-        next: json["next"],
-        detail: json["detail"] == null
+        totalData: json['total_data'],
+        totalPage: json['total_page'],
+        totalDisplay: json['total_display'],
+        firstPage: json['first_page'],
+        lastPage: json['last_page'],
+        prev: json['prev'],
+        current: json['current'],
+        next: json['next'],
+        detail: json['detail'] == null
             ? []
-            : List<dynamic>.from(json["detail"]!.map((x) => x)),
-        start: json["start"],
-        end: json["end"],
+            : List<dynamic>.from(json['detail']!.map((x) => x)),
+        start: json['start'],
+        end: json['end'],
       );
 
   Map<String, dynamic> toMap() => {
-        "total_data": totalData,
-        "total_page": totalPage,
-        "total_display": totalDisplay,
-        "first_page": firstPage,
-        "last_page": lastPage,
-        "prev": prev,
-        "current": current,
-        "next": next,
-        "detail":
+        'total_data': totalData,
+        'total_page': totalPage,
+        'total_display': totalDisplay,
+        'first_page': firstPage,
+        'last_page': lastPage,
+        'prev': prev,
+        'current': current,
+        'next': next,
+        'detail':
             detail == null ? [] : List<dynamic>.from(detail!.map((x) => x)),
-        "start": start,
-        "end": end,
+        'start': start,
+        'end': end,
       };
 }

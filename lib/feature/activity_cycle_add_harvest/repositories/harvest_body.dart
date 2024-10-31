@@ -24,15 +24,15 @@ class HarvestBody {
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "actual_panen_date": actualPanenDate,
-        "actual_panen_bobot": actualPanenBobot,
-        "actual_panen_tonase": actualPanenTonase,
-        "panen_note": panenNote,
-        "panen_attachment_json_array": panenAttachmentJsonArray == null
+        'id': id,
+        'actual_panen_date': actualPanenDate,
+        'actual_panen_bobot': actualPanenBobot,
+        'actual_panen_tonase': actualPanenTonase,
+        'panen_note': panenNote,
+        'panen_attachment_json_array': panenAttachmentJsonArray == null
             ? []
             : List<dynamic>.from(panenAttachmentJsonArray!.map((x) => x)),
-        "buyer_json_array": buyerJsonArray == null
+        'buyer_json_array': buyerJsonArray == null
             ? []
             : List<dynamic>.from(buyerJsonArray!.map((x) => x.toMap())),
       };

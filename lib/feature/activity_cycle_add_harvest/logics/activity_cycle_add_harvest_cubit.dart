@@ -21,7 +21,7 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     emit(state.copyWith(status: GlobalState.loading));
     final BuyerData initData = BuyerData(
       isBuyerFrom3m: false,
-      buyerName: "",
+      buyerName: '',
       sellRequest: 0,
       sellUnitPrice: 0,
       sellTotalPrice: 0,
@@ -34,7 +34,7 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     emit(state.copyWith(
       status: GlobalState.loaded,
       buyerData: data != null ? data.buyerJsonArray : [initData],
-    ));
+    ),);
   }
 
   void onChnageBuyerType(int index, bool isBuyerFrom3m) {
@@ -43,10 +43,10 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     buyerData[index] = buyerData[index].copyWith(
         isBuyerFrom3m: isBuyerFrom3m,
         buyerID: null,
-        buyerName: "",
+        buyerName: '',
         sellRequest: 0,
         sellUnitPrice: 0,
-        sellerNotes: "");
+        sellerNotes: '',);
     emit(state.copyWith(buyerData: buyerData, status: GlobalState.loaded));
   }
 
@@ -75,7 +75,7 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     emit(state.copyWith(status: GlobalState.loading));
     final BuyerData initData = BuyerData(
       isBuyerFrom3m: false,
-      buyerName: "",
+      buyerName: '',
       sellRequest: 0,
       sellUnitPrice: 0,
       sellTotalPrice: 0,
@@ -88,7 +88,7 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     emit(state.copyWith(
       status: GlobalState.loaded,
       buyerData: [...state.buyerData, initData],
-    ));
+    ),);
   }
 
   void createHarvest({
@@ -105,24 +105,24 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       if (element.buyerName.isEmpty) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Nama pembeli tidak boleh kosong",
-        ));
+          errorMessage: 'Nama pembeli tidak boleh kosong',
+        ),);
         return;
       }
 
       if (element.sellRequest == 0) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Jumlah permintaan tidak boleh kosong",
-        ));
+          errorMessage: 'Jumlah permintaan tidak boleh kosong',
+        ),);
         return;
       }
 
       if (element.sellUnitPrice == 0) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Harga satuan tidak boleh kosong",
-        ));
+          errorMessage: 'Harga satuan tidak boleh kosong',
+        ),);
         return;
       }
 
@@ -132,8 +132,8 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     if (totalSellHarvestFromBuyer > totalHarvestActual) {
       emit(state.copyWith(
         status: GlobalState.error,
-        errorMessage: "Total penjualan tidak boleh melebihi total panen",
-      ));
+        errorMessage: 'Total penjualan tidak boleh melebihi total panen',
+      ),);
       return;
     }
 
@@ -156,13 +156,13 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -179,24 +179,24 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       if (element.buyerName.isEmpty) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Nama pembeli tidak boleh kosong",
-        ));
+          errorMessage: 'Nama pembeli tidak boleh kosong',
+        ),);
         return;
       }
 
       if (element.sellRequest == 0) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Jumlah permintaan tidak boleh kosong",
-        ));
+          errorMessage: 'Jumlah permintaan tidak boleh kosong',
+        ),);
         return;
       }
 
       if (element.sellUnitPrice == 0) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Harga satuan tidak boleh kosong",
-        ));
+          errorMessage: 'Harga satuan tidak boleh kosong',
+        ),);
         return;
       }
 
@@ -206,8 +206,8 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     if (totalSellHarvestFromBuyer > totalHarvestActual) {
       emit(state.copyWith(
         status: GlobalState.error,
-        errorMessage: "Total penjualan tidak boleh melebihi total panen",
-      ));
+        errorMessage: 'Total penjualan tidak boleh melebihi total panen',
+      ),);
       return;
     }
 
@@ -231,13 +231,13 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

@@ -12,29 +12,29 @@ class ActivitySamplingDetailPage extends StatelessWidget {
   const ActivitySamplingDetailPage(this.data, {super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-sampling-detail-page");
+      const RouteSettings(name: '/activity-sampling-detail-page');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Sampling",
+        'Detail Sampling',
         actions: [
           InkWell(
             onTap: () {
               Navigator.of(context).push(AppTransition.pushTransition(
                 ActivitySamplingAddPage(
-                  int.parse(data.fishpondId ?? "1"),
-                  int.parse(data.fishpondcycleId ?? "1"),
+                  int.parse(data.fishpondId ?? '1'),
+                  int.parse(data.fishpondcycleId ?? '1'),
                   isEdit: true,
                   data: data,
                 ),
                 ActivitySamplingAddPage.routeSettings,
-              ));
+              ),);
             },
             child: Text(
-              "Edit",
+              'Edit',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(color: Colors.white),

@@ -24,20 +24,20 @@ class AddIncidentPayload {
 
   factory AddIncidentPayload.fromMap(Map<String, dynamic> json) =>
       AddIncidentPayload(
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
-        datetime: json["datetime"],
-        incident: json["incident"],
-        note: json["note"],
-        attachmentJsonArray: json["attachment_json_array"],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
+        datetime: json['datetime'],
+        incident: json['incident'],
+        note: json['note'],
+        attachmentJsonArray: json['attachment_json_array'],
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
-        "datetime": datetime!.toIso8601String(),
-        "incident": incident,
-        "note": note,
-        "attachment_json_array": attachmentJsonArray,
+        'fishpond_id': fishpondId,
+        'fishpondcycle_id': fishpondcycleId,
+        'datetime': datetime!.toIso8601String(),
+        'incident': incident,
+        'note': note,
+        'attachment_json_array': attachmentJsonArray,
       };
 }

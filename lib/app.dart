@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
-import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
@@ -56,7 +55,7 @@ class _AppState extends State<App> {
                   context.read<UserCubit>().refreshUser();
                   _navigator.pushAndRemoveUntil(
                     AppTransition.pushAndRemoveUntilTransition(
-                      DashboardPage(),
+                      const DashboardPage(),
                       DashboardPage.routeSettings(),
                     ),
                     (route) => false,
@@ -71,7 +70,7 @@ class _AppState extends State<App> {
                 case AuthenticationStatus.unverifiedEKYC:
                 case AuthenticationStatus.waitingEKYC:
                   Future.delayed(
-                    Duration(milliseconds: 1000),
+                    const Duration(milliseconds: 1000),
                     () {
                       _navigator.pushAndRemoveUntil(
                         AppTransition.pushAndRemoveUntilTransition(

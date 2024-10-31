@@ -1,11 +1,11 @@
 String convertGenderName(String value) {
   switch (value) {
-    case "man":
-      return "Laki-laki";
-    case "woman":
-      return "Perempuan";
+    case 'man':
+      return 'Laki-laki';
+    case 'woman':
+      return 'Perempuan';
     default:
-      return "-";
+      return '-';
   }
 }
 
@@ -20,6 +20,6 @@ class GenderData {
 }
 
 List<GenderData> listGender = [
-  GenderData(value: "man", name: "Laki-laki"),
-  GenderData(value: "woman", name: "Perempuan"),
+  GenderData(value: 'man', name: 'Laki-laki'),
+  GenderData(value: 'woman', name: 'Perempuan'),
 ];

@@ -16,7 +16,7 @@ class HistoryPointPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Riwayat Point",
+          'Riwayat Point',
         ),
         body: const HistoryPointView(),
       ),

@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-String countryCode = "id";
+String countryCode = 'id';
 
 class AppConvertDateTime {
   String jm(DateTime dateTime) {

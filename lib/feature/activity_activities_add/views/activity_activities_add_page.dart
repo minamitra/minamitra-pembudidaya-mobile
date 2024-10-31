@@ -5,7 +5,6 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
@@ -27,7 +26,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
   final FeedActivityResponseData? editData;
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-activities-add");
+      const RouteSettings(name: '/activity-activities-add');
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
           }
 
           if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
+            if (state.errorMessage == 'TOKEN_EXPIRED') {
               RepositoryProvider.of<AuthenticationRepository>(context).logout();
             } else {
               AppTopSnackBar(context).showDanger(state.errorMessage);
@@ -66,13 +65,13 @@ class ActivityActivitiesAddPage extends StatelessWidget {
           if (state.status.isSuccessSubmit) {
             if (editData != null) {
               AppTopSnackBar(context)
-                  .showSuccess("Berhasil mengubah aktivitas");
-              Navigator.of(context).pop("refresh");
-              Navigator.of(context).pop("refresh");
+                  .showSuccess('Berhasil mengubah aktivitas');
+              Navigator.of(context).pop('refresh');
+              Navigator.of(context).pop('refresh');
             } else {
               AppTopSnackBar(context)
-                  .showSuccess("Berhasil menambahkan aktivitas");
-              Navigator.of(context).pop("refresh");
+                  .showSuccess('Berhasil menambahkan aktivitas');
+              Navigator.of(context).pop('refresh');
             }
           }
         },
@@ -80,7 +79,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
           return Scaffold(
             appBar: appDefaultAppBar(
               context,
-              "Tambah Aktivitas",
+              'Tambah Aktivitas',
             ),
             backgroundColor: Colors.white,
             // resizeToAvoidBottomInset: false,

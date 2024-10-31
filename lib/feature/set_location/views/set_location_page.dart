@@ -9,10 +9,10 @@ import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_loca
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class SetLocationPage extends StatelessWidget {
-  const SetLocationPage({Key? key}) : super(key: key);
+  const SetLocationPage({super.key});
 
   static RouteSettings routeSettings() {
-    return const RouteSettings(name: "/Set-location-page");
+    return const RouteSettings(name: '/Set-location-page');
   }
 
   @override
@@ -24,13 +24,13 @@ class SetLocationPage extends StatelessWidget {
       providers: [
         BlocProvider<RequesLocationCubit>(create: (BuildContext context) {
           return RequesLocationCubit()..checkLocationPermission();
-        }),
+        },),
         BlocProvider<InitFirstLocationCubit>(create: (BuildContext context) {
           return InitFirstLocationCubit();
-        }),
+        },),
         BlocProvider<SetLocationCubit>(create: (BuildContext context) {
           return SetLocationCubit();
-        }),
+        },),
       ],
       child: BlocListener<SetLocationCubit, SetLocationState>(
         listener: (context, state) {
@@ -51,7 +51,7 @@ class SetLocationPage extends StatelessWidget {
                 case LocationPermissionStatus.denied:
                 case LocationPermissionStatus.deniedForever:
                   return LocationErrorWidget(
-                    error: "Location service permission denied",
+                    error: 'Location service permission denied',
                     callback: () => context
                         .read<RequesLocationCubit>()
                         .checkLocationPermission(),

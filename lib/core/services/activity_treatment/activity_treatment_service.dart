@@ -78,7 +78,7 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
     final response = await httpClient.post(
       url,
       header,
-      json.encode({"id": id}),
+      json.encode({'id': id}),
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
@@ -86,7 +86,7 @@ class ActivityTreatmentServiceImpl implements ActivityTreatmentService {
 
   @override
   Future<BaseResponse<bool>> updateTreatment(
-      UpdateTreatmentPayload payload) async {
+      UpdateTreatmentPayload payload,) async {
     final url = endpoint.updateTreatment();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

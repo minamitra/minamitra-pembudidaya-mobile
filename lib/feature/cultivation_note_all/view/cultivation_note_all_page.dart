@@ -27,7 +27,7 @@ class CultivationNoteAllPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Catatan Pendamping",
+          'Catatan Pendamping',
         ),
         body: CultivationNoteAllView(data),
       ),

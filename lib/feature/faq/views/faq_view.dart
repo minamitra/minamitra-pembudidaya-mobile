@@ -52,7 +52,7 @@ class _FaqViewState extends State<FaqView> {
         Navigator.of(context).push(AppTransition.pushTransition(
           FaqDetailPage(text),
           FaqDetailPage.routeSettings(),
-        ));
+        ),);
       },
       child: AppDefaultCard(
         isShadow: false,

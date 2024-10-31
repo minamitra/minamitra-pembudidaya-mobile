@@ -12,9 +12,9 @@ class AboutPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Tentang Kami",
+        'Tentang Kami',
       ),
-      body: AboutView(),
+      body: const AboutView(),
     );
   }
 }

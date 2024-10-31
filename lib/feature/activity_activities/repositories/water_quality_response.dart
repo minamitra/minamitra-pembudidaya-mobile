@@ -12,10 +12,10 @@ class WaterQualityResponse {
 
   factory WaterQualityResponse.fromMap(Map<String, dynamic> json) =>
       WaterQualityResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<WaterQualityResponseData>.from(
-                json["data"]!.map((x) => WaterQualityResponseData.fromMap(x))),
+                json['data']!.map((x) => WaterQualityResponseData.fromMap(x)),),
       );
 }
 
@@ -69,30 +69,30 @@ class WaterQualityResponseData {
 
   factory WaterQualityResponseData.fromMap(Map<String, dynamic> json) =>
       WaterQualityResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
         datetime:
-            json["datetime"] != null ? DateTime.parse(json["datetime"]) : null,
-        level: json["level"],
-        ph: json["ph"],
-        salinitas: json["salinitas"],
-        temperature: json["temperature"],
-        dO: json["do"],
-        clarity: json["clarity"],
-        orp: json["orp"],
-        waterColor: json["water_color"],
-        waterWeather: json["water_weather"],
-        note: json["note"],
-        attachmentJsonArray: json["attachment_json_array"] == null
+            json['datetime'] != null ? DateTime.parse(json['datetime']) : null,
+        level: json['level'],
+        ph: json['ph'],
+        salinitas: json['salinitas'],
+        temperature: json['temperature'],
+        dO: json['do'],
+        clarity: json['clarity'],
+        orp: json['orp'],
+        waterColor: json['water_color'],
+        waterWeather: json['water_weather'],
+        note: json['note'],
+        attachmentJsonArray: json['attachment_json_array'] == null
             ? []
-            : List<String>.from(json["attachment_json_array"].map((x) => x)),
-        createDatetime: json["create_datetime"] != null
-            ? DateTime.parse(json["create_datetime"])
+            : List<String>.from(json['attachment_json_array'].map((x) => x)),
+        createDatetime: json['create_datetime'] != null
+            ? DateTime.parse(json['create_datetime'])
             : null,
-        createById: json["create_by_id"],
-        createByType: json["create_by_type"],
-        createByName: json["create_by_name"],
+        createById: json['create_by_id'],
+        createByType: json['create_by_type'],
+        createByName: json['create_by_name'],
       );
 }

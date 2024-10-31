@@ -43,7 +43,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
             children: [
               Expanded(
                 child: Text(
-                  "12 Sep 2024 - 19 Sep 2024",
+                  '12 Sep 2024 - 19 Sep 2024',
                   style: appTextTheme(context).bodySmall?.copyWith(),
                 ),
               ),
@@ -100,7 +100,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Distribusi Plafon",
+              'Distribusi Plafon',
               style: appTextTheme(context).titleSmall,
             ),
             const SizedBox(height: 8.0),
@@ -108,14 +108,14 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Rp 1.000.000",
+                  'Rp 1.000.000',
                   style: appTextTheme(context).bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 const SizedBox(width: 8.0),
                 Text(
-                  "dari Rp 1.500.000",
+                  'dari Rp 1.500.000',
                   style: appTextTheme(context).labelLarge?.copyWith(
                         color: AppColor.neutral[400],
                         fontWeight: FontWeight.w500,
@@ -165,20 +165,20 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
             const SizedBox(height: 24.0),
             balanceLegendItem(
               AppColor.primary[500]!,
-              "Kolam 1",
-              "Rp 500.000",
+              'Kolam 1',
+              'Rp 500.000',
             ),
             const SizedBox(height: 16.0),
             balanceLegendItem(
               AppColor.accent[900]!,
-              "Kolam 2",
-              "Rp 250.000",
+              'Kolam 2',
+              'Rp 250.000',
             ),
             const SizedBox(height: 16.0),
             balanceLegendItem(
               AppColor.green[500]!,
-              "Kolam 3",
-              "Rp 250.000",
+              'Kolam 3',
+              'Rp 250.000',
             ),
           ],
         ),
@@ -192,7 +192,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
           children: [
             Expanded(
               child: Text(
-                "Detail Penggunaan",
+                'Detail Penggunaan',
                 style: appTextTheme(context).titleSmall?.copyWith(
                       fontWeight: FontWeight.w700,
                     ),
@@ -210,7 +210,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
               child: Row(
                 children: [
                   Text(
-                    "Kolam 1",
+                    'Kolam 1',
                     style: appTextTheme(context).bodySmall,
                   ),
                   const SizedBox(width: 8.0),
@@ -265,21 +265,21 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
         child: Column(
           children: [
             summaryItem(
-              "Biaya Pakan",
-              "50%",
-              "Rp 100.000",
+              'Biaya Pakan',
+              '50%',
+              'Rp 100.000',
             ),
             const SizedBox(height: 18.0),
             summaryItem(
-              "Biaya Pakan",
-              "50%",
-              "Rp 100.000",
+              'Biaya Pakan',
+              '50%',
+              'Rp 100.000',
             ),
             const SizedBox(height: 18.0),
             summaryItem(
-              "Biaya Pakan",
-              "50%",
-              "Rp 100.000",
+              'Biaya Pakan',
+              '50%',
+              'Rp 100.000',
             ),
           ],
         ),
@@ -320,7 +320,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: [
+                children: const [
                   FeedTabView(),
                   FeedTabView(),
                 ],

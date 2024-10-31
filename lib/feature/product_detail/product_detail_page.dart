@@ -9,7 +9,7 @@ class ProductDetailPage extends StatelessWidget {
   const ProductDetailPage(this.data, {super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/products-detail");
+      const RouteSettings(name: '/products-detail');
 
   @override
   Widget build(BuildContext context) {

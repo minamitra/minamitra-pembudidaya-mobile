@@ -30,7 +30,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
   });
 
   static const RouteSettings routeSettings =
-      RouteSettings(name: "/activity-treatment-add-page");
+      RouteSettings(name: '/activity-treatment-add-page');
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          isEdit ? "Edit Perlakuan" : "Tambah Perlakuaan",
+          isEdit ? 'Edit Perlakuan' : 'Tambah Perlakuaan',
         ),
         body:
             BlocConsumer<ActivityTreatmentAddCubit, ActivityTreatmentAddState>(
@@ -64,7 +64,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
             }
 
             if (state.status.isError) {
-              if (state.errorMessage == "TOKEN_EXPIRED") {
+              if (state.errorMessage == 'TOKEN_EXPIRED') {
                 RepositoryProvider.of<AuthenticationRepository>(context)
                     .logout();
               } else {
@@ -74,11 +74,11 @@ class ActivityTreatmentAddPage extends StatelessWidget {
 
             if (state.status.isSuccessSubmit) {
               AppTopSnackBar(context).showSuccess(isEdit
-                  ? "Berhasil Edit\nPerlakuan!"
-                  : "Berhasil Membuat\nPerlakuan Baru!");
-              Navigator.of(context).pop("refresh");
+                  ? 'Berhasil Edit\nPerlakuan!'
+                  : 'Berhasil Membuat\nPerlakuan Baru!',);
+              Navigator.of(context).pop('refresh');
               if (isEdit) {
-                Navigator.of(context).pop("refresh");
+                Navigator.of(context).pop('refresh');
               }
             }
           },

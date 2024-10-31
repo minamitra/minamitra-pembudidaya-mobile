@@ -13,9 +13,9 @@ class ReferralPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Undang Teman",
+        'Undang Teman',
       ),
-      body: ReferralView(),
+      body: const ReferralView(),
     );
   }
 }

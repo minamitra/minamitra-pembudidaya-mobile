@@ -31,7 +31,7 @@ class _FeedingViewState extends State<FeedingView> {
           Navigator.of(context).push(AppTransition.pushTransition(
             ActivityActivitiesDetailPage(data, widget.tebarDate),
             ActivityActivitiesDetailPage.routeSettings(),
-          ));
+          ),);
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -66,14 +66,14 @@ class _FeedingViewState extends State<FeedingView> {
                     onTap: () {
                       showDeleteBottomSheet(
                         context,
-                        title: "Hapus Data ?",
+                        title: 'Hapus Data ?',
                         descriptions:
-                            "Data yang sudah terhapus\ntidak dapat dipulihkan kembali!",
+                            'Data yang sudah terhapus\ntidak dapat dipulihkan kembali!',
                         onTapDelete: () {
                           Navigator.of(context).pop();
                           context
                               .read<ActivityFeedCubit>()
-                              .onDeleteFeedActivity(data.id ?? "");
+                              .onDeleteFeedActivity(data.id ?? '');
                         },
                       );
                     },
@@ -81,7 +81,7 @@ class _FeedingViewState extends State<FeedingView> {
                       Icons.delete_outline_rounded,
                       color: AppColor.neutral[400],
                     ),
-                  )
+                  ),
                 ],
               ),
               const SizedBox(height: 18.0),
@@ -91,7 +91,7 @@ class _FeedingViewState extends State<FeedingView> {
                   const SizedBox(width: 12.0),
                   Text(
                       "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(2)} Kg",
-                      style: appTextTheme(context).titleSmall),
+                      style: appTextTheme(context).titleSmall,),
                 ],
               ),
             ],
@@ -107,7 +107,7 @@ class _FeedingViewState extends State<FeedingView> {
             child: Padding(
               padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
               child: AppEmptyData(
-                  "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+                  'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
             ),
           );
         }

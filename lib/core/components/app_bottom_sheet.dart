@@ -91,8 +91,8 @@ class AppCustomBottomSheet extends StatelessWidget {
     this._body,
     this.onMenuTap, {
     this.height = 300,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -201,12 +201,12 @@ Future showDeleteBottomSheet(
               const SizedBox(height: 18.0),
               AppDangerFullButton(
                 context,
-                buttonTitle ?? "Ya Hapus Permanen",
+                buttonTitle ?? 'Ya Hapus Permanen',
                 onTapDelete,
               ),
               const SizedBox(height: 18.0),
               AppWhiteFullButton(
-                "Batalkan",
+                'Batalkan',
                 () {
                   Navigator.of(context).pop();
                 },
@@ -424,7 +424,7 @@ Function() appBottomSheetShowModalChecklist({
                                   },
                                   orElse: () {
                                     pakanListTemp.add(data[index]);
-                                    return "";
+                                    return '';
                                   },
                                 );
                               });
@@ -439,7 +439,7 @@ Function() appBottomSheetShowModalChecklist({
                                           }
                                           return false;
                                         },
-                                        orElse: () => "",
+                                        orElse: () => '',
                                       ) ==
                                       data[index],
                                   onChanged: (value) {
@@ -454,7 +454,7 @@ Function() appBottomSheetShowModalChecklist({
                                         },
                                         orElse: () {
                                           pakanListTemp.add(data[index]);
-                                          return "";
+                                          return '';
                                         },
                                       );
                                     });
@@ -486,7 +486,7 @@ Function() appBottomSheetShowModalChecklist({
                       children: [
                         Expanded(
                           child: AppPrimaryOutlineFullButton(
-                            "Reset",
+                            'Reset',
                             () {
                               setModalState(() {
                                 pakanListTemp.clear();
@@ -497,7 +497,7 @@ Function() appBottomSheetShowModalChecklist({
                         const SizedBox(width: 18.0),
                         Expanded(
                           child: AppPrimaryFullButton(
-                            "Konfirmasi",
+                            'Konfirmasi',
                             () {
                               onSelected(pakanListTemp);
                               Navigator.of(context).pop();

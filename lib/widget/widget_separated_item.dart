@@ -23,7 +23,7 @@ class AppWidgetSeparatedItem extends StatelessWidget {
         Text(
           value,
           style: appTextTheme(context).bodySmall,
-        )
+        ),
       ],
     );
   }

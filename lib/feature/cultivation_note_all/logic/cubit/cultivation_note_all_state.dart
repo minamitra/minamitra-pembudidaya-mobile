@@ -3,7 +3,7 @@ part of 'cultivation_note_all_cubit.dart';
 class CultivationNoteAllState extends Equatable {
   const CultivationNoteAllState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.data = const [],
     this.companionName = const [],
   });

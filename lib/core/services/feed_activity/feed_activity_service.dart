@@ -121,7 +121,7 @@ class FeedActivityServiceImpl implements FeedActivityService {
     final response = await httpClient.post(
       uri,
       header,
-      json.encode({"id": id}),
+      json.encode({'id': id}),
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: metaResponse, data: true);

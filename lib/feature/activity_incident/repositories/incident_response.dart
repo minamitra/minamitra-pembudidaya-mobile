@@ -79,10 +79,10 @@ class IncidentResponse {
 
   factory IncidentResponse.fromMap(Map<String, dynamic> json) =>
       IncidentResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<IncidentResponseData>.from(
-                json["data"]!.map((x) => IncidentResponseData.fromMap(x))),
+                json['data']!.map((x) => IncidentResponseData.fromMap(x)),),
       );
 }
 
@@ -114,17 +114,17 @@ class IncidentResponseData {
 
   factory IncidentResponseData.fromMap(Map<String, dynamic> json) =>
       IncidentResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
         datetime:
-            json["datetime"] == null ? null : DateTime.parse(json["datetime"]),
-        incident: json["incident"],
-        note: json["note"],
-        status: incidentStatusToEnum(json["status"]),
-        attachmentJsonArray: json["attachment_json_array"] == null
+            json['datetime'] == null ? null : DateTime.parse(json['datetime']),
+        incident: json['incident'],
+        note: json['note'],
+        status: incidentStatusToEnum(json['status']),
+        attachmentJsonArray: json['attachment_json_array'] == null
             ? []
-            : List<String>.from(json["attachment_json_array"].map((x) => x)),
+            : List<String>.from(json['attachment_json_array'].map((x) => x)),
       );
 }

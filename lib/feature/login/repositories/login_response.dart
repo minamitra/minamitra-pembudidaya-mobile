@@ -17,15 +17,15 @@ class LoginResponse {
   String toJson() => json.encode(toMap());
 
   factory LoginResponse.fromMap(Map<String, dynamic> json) => LoginResponse(
-        data: json["data"] == null ? null : UserData.fromMap(json["data"]),
-        token: json["token"],
-        expiredIn: json["expired_in"],
+        data: json['data'] == null ? null : UserData.fromMap(json['data']),
+        token: json['token'],
+        expiredIn: json['expired_in'],
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
-        "token": token,
-        "expired_in": expiredIn,
+        'data': data?.toMap(),
+        'token': token,
+        'expired_in': expiredIn,
       };
 }
 
@@ -49,18 +49,18 @@ class UserData {
   String toJson() => json.encode(toMap());
 
   factory UserData.fromMap(Map<String, dynamic> json) => UserData(
-        id: json["id"],
-        name: json["name"],
-        email: json["email"],
-        mobilephone: json["mobilephone"],
-        imageUrl: json["image_url"],
+        id: json['id'],
+        name: json['name'],
+        email: json['email'],
+        mobilephone: json['mobilephone'],
+        imageUrl: json['image_url'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
-        "email": email,
-        "mobilephone": mobilephone,
-        "image_url": imageUrl,
+        'id': id,
+        'name': name,
+        'email': email,
+        'mobilephone': mobilephone,
+        'image_url': imageUrl,
       };
 }

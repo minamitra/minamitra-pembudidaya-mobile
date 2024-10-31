@@ -11,14 +11,14 @@ class VillageResponse {
   String toJson() => json.encode(toMap());
 
   factory VillageResponse.fromMap(Map<String, dynamic> json) => VillageResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<VillageResponseData>.from(
-                json["data"]!.map((x) => VillageResponseData.fromMap(x))),
+                json['data']!.map((x) => VillageResponseData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -41,14 +41,14 @@ class VillageResponseData {
 
   factory VillageResponseData.fromMap(Map<String, dynamic> json) =>
       VillageResponseData(
-        id: json["id"],
-        subdistrictId: json["subdistrict_id"],
-        name: json["name"],
+        id: json['id'],
+        subdistrictId: json['subdistrict_id'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "subdistrict_id": subdistrictId,
-        "name": name,
+        'id': id,
+        'subdistrict_id': subdistrictId,
+        'name': name,
       };
 }

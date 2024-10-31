@@ -19,17 +19,17 @@ class IncidentDataCubit extends Cubit<IncidentDataState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         incidents: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -41,17 +41,17 @@ class IncidentDataCubit extends Cubit<IncidentDataState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         incidents: incidents.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

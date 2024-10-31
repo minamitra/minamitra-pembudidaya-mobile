@@ -3,7 +3,7 @@ part of 'add_pond_first_step_cubit.dart';
 class AddPondFirstStepState extends Equatable {
   const AddPondFirstStepState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.pondName,
     this.pondLength,
     this.pondWidth,
@@ -39,7 +39,7 @@ class AddPondFirstStepState extends Equatable {
   List<Object> get props => [
         status,
         errorMessage,
-        pondName ?? "",
+        pondName ?? '',
         pondLength ?? 0,
         pondWidth ?? 0,
         pondDepth ?? 0,

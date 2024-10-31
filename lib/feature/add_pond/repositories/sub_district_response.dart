@@ -12,14 +12,14 @@ class SubDistrictResponse {
 
   factory SubDistrictResponse.fromMap(Map<String, dynamic> json) =>
       SubDistrictResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<SubDistrictResponseData>.from(
-                json["data"]!.map((x) => SubDistrictResponseData.fromMap(x))),
+                json['data']!.map((x) => SubDistrictResponseData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -42,14 +42,14 @@ class SubDistrictResponseData {
 
   factory SubDistrictResponseData.fromMap(Map<String, dynamic> json) =>
       SubDistrictResponseData(
-        id: json["id"],
-        cityId: json["city_id"],
-        name: json["name"],
+        id: json['id'],
+        cityId: json['city_id'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "city_id": cityId,
-        "name": name,
+        'id': id,
+        'city_id': cityId,
+        'name': name,
       };
 }

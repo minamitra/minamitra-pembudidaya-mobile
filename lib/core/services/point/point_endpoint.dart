@@ -5,7 +5,7 @@ class PointEndpoint {
 
   Uri yourEndpoint() {
     return createUrl(
-      path: "",
+      path: '',
     );
   }
 }

@@ -17,8 +17,8 @@ class AppDefaultCard extends StatelessWidget {
     this.borderRadius,
     this.margin,
     this.isShadow = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final Color? backgroundCardColor;
@@ -57,8 +57,7 @@ class AppDefaultCard extends StatelessWidget {
 // -------PICK IMAGE CARD----------
 class AppPickImageCard extends StatelessWidget {
   const AppPickImageCard(this.onTap,
-      {required this.listImage, required this.onTapImage, Key? key})
-      : super(key: key);
+      {required this.listImage, required this.onTapImage, super.key,});
 
   final List<Uint8List> listImage;
   final void Function() onTap;
@@ -88,7 +87,7 @@ class AppPickImageCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 18.0),
                       Text(
-                        "Tambah Gambar",
+                        'Tambah Gambar',
                         style: appTextTheme(context).bodySmall?.copyWith(
                               color: AppColor.neutral[500],
                             ),
@@ -128,7 +127,7 @@ class AppPickImageCard extends StatelessWidget {
                                         ),
                                       ),
                                       const SizedBox(height: 12.0),
-                                      AppPrimaryButton("Hapus", () {
+                                      AppPrimaryButton('Hapus', () {
                                         onTapImage(index);
                                         Navigator.pop(context);
                                       }),
@@ -170,7 +169,7 @@ class AppPickImageCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 18.0),
                             Text(
-                              "Tambah Gambar",
+                              'Tambah Gambar',
                               style: appTextTheme(context).bodySmall?.copyWith(
                                     color: AppColor.neutral[500],
                                   ),
@@ -190,8 +189,7 @@ class AppPickImageCard extends StatelessWidget {
 
 class AppPickImageNetworkCard extends StatelessWidget {
   const AppPickImageNetworkCard(this.onTap,
-      {required this.listImage, required this.onTapImage, Key? key})
-      : super(key: key);
+      {required this.listImage, required this.onTapImage, super.key,});
 
   final List<String> listImage;
   final void Function() onTap;
@@ -221,7 +219,7 @@ class AppPickImageNetworkCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 18.0),
                       Text(
-                        "Tambah Gambar",
+                        'Tambah Gambar',
                         style: appTextTheme(context).bodySmall?.copyWith(
                               color: AppColor.neutral[500],
                             ),
@@ -261,7 +259,7 @@ class AppPickImageNetworkCard extends StatelessWidget {
                                         ),
                                       ),
                                       const SizedBox(height: 12.0),
-                                      AppPrimaryButton("Hapus", () {
+                                      AppPrimaryButton('Hapus', () {
                                         onTapImage(index);
                                         Navigator.pop(context);
                                       }),
@@ -303,7 +301,7 @@ class AppPickImageNetworkCard extends StatelessWidget {
                             ),
                             const SizedBox(height: 18.0),
                             Text(
-                              "Tambah Gambar",
+                              'Tambah Gambar',
                               style: appTextTheme(context).bodySmall?.copyWith(
                                     color: AppColor.neutral[500],
                                   ),

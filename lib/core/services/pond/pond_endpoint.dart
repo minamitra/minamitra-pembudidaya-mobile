@@ -4,34 +4,34 @@ class PondEndpoint {
   PondEndpoint();
 
   Uri addPond() {
-    return createUrl(path: "mitra/fishpond/add");
+    return createUrl(path: 'mitra/fishpond/add');
   }
 
   Uri addPondCycle() {
-    return createUrl(path: "mitra/fishpondcycle/add");
+    return createUrl(path: 'mitra/fishpondcycle/add');
   }
 
   Uri updatePond() {
-    return createUrl(path: "mitra/fishpond/update");
+    return createUrl(path: 'mitra/fishpond/update');
   }
 
   Uri getPond() {
     return createUrl(
-      path: "mitra/fishpond/data",
+      path: 'mitra/fishpond/data',
       queryParameters: {
-        "pagination_bool": "false",
+        'pagination_bool': 'false',
       },
     );
   }
 
   Uri getPondDashboard(String? pondID) {
     return createUrl(
-      path: "mitra/dashboard/farming",
-      queryParameters: {if (pondID != null) "fishpond_id": pondID},
+      path: 'mitra/dashboard/farming',
+      queryParameters: {if (pondID != null) 'fishpond_id': pondID},
     );
   }
 
   Uri deletePond() {
-    return createUrl(path: "mitra/fishpond/delete");
+    return createUrl(path: 'mitra/fishpond/delete');
   }
 }

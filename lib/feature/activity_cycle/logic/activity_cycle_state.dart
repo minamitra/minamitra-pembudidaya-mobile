@@ -3,7 +3,7 @@ part of 'activity_cycle_cubit.dart';
 class ActivityCycleState extends Equatable {
   const ActivityCycleState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.activeData,
     this.readyHarvestData,
     this.harvestData,

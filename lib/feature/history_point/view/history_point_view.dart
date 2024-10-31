@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -20,10 +19,10 @@ class _HistoryPointViewState extends State<HistoryPointView> {
   final TextEditingController searchController = TextEditingController();
 
   List<String> listFilter = [
-    "Semua",
-    "Tarik Tunai",
-    "Konversi Saldo",
-    "Aktivitas",
+    'Semua',
+    'Tarik Tunai',
+    'Konversi Saldo',
+    'Aktivitas',
   ];
 
   @override
@@ -34,7 +33,7 @@ class _HistoryPointViewState extends State<HistoryPointView> {
         child: AppValidatorTextField(
           controller: searchController,
           withUpperLabel: false,
-          hintText: "Cari data ...",
+          hintText: 'Cari data ...',
           onChanged: (value) {},
         ),
       );
@@ -118,7 +117,7 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                 shape: BoxShape.circle,
                 color: AppColor.primary[500],
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.wallet,
                 color: AppColor.white,
               ),
@@ -156,7 +155,7 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                       ),
                       const SizedBox(height: 10.0),
                       Text(
-                        "+ Rp 50,000",
+                        '+ Rp 50,000',
                         style: appTextTheme(context)
                             .titleSmall
                             ?.copyWith(color: AppColor.secondary[900]),
@@ -196,13 +195,13 @@ class _HistoryPointViewState extends State<HistoryPointView> {
               Navigator.of(context).push(AppTransition.pushTransition(
                 const HistoryPointDetailPage(),
                 HistoryPointDetailPage.route,
-              ));
+              ),);
             },
             child: listHistoryItem(
-              title: "Tarik Tunai",
-              dateTime: "12 Januari 2021",
+              title: 'Tarik Tunai',
+              dateTime: '12 Januari 2021',
               point: 100,
-              balance: "+ Rp 50,000",
+              balance: '+ Rp 50,000',
             ),
           );
         },

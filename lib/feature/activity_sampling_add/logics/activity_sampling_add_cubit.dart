@@ -19,7 +19,7 @@ class ActivitySamplingAddCubit extends Cubit<ActivitySamplingAddState> {
   final CdnService cdnService;
 
   Future<void> addSampling(
-      AddSamplingPayload payload, List<File> attachment) async {
+      AddSamplingPayload payload, List<File> attachment,) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       List<String> attachmentLink = await uploadImage(attachment);
@@ -32,18 +32,18 @@ class ActivitySamplingAddCubit extends Cubit<ActivitySamplingAddState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
   Future<void> updateSampling(
-      UpdateSamplingPayload payload, List<File> attachment) async {
+      UpdateSamplingPayload payload, List<File> attachment,) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       List<String> attachmentLink = await uploadImage(attachment);
@@ -56,13 +56,13 @@ class ActivitySamplingAddCubit extends Cubit<ActivitySamplingAddState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 

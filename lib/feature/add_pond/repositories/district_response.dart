@@ -12,14 +12,14 @@ class DistrictResponse {
 
   factory DistrictResponse.fromMap(Map<String, dynamic> json) =>
       DistrictResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<DistrictResponseData>.from(
-                json["data"]!.map((x) => DistrictResponseData.fromMap(x))),
+                json['data']!.map((x) => DistrictResponseData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -42,14 +42,14 @@ class DistrictResponseData {
 
   factory DistrictResponseData.fromMap(Map<String, dynamic> json) =>
       DistrictResponseData(
-        id: json["id"],
-        provinceId: json["province_id"],
-        name: json["name"],
+        id: json['id'],
+        provinceId: json['province_id'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "province_id": provinceId,
-        "name": name,
+        'id': id,
+        'province_id': provinceId,
+        'name': name,
       };
 }

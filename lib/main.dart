@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
           //   create: (context) => HomeCubit(FinanceServiceImpl.create()),
           // ),
         ],
-        child: App(),
+        child: const App(),
       ),
     );
   }

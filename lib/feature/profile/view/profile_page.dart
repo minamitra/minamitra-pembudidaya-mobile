@@ -27,7 +27,7 @@ class ProfilePage extends StatelessWidget {
       child: BlocListener<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
+            if (state.errorMessage == 'TOKEN_EXPIRED') {
               RepositoryProvider.of<AuthenticationRepository>(context).logout();
             } else {
               AppTopSnackBar(context).showDanger(state.errorMessage);
@@ -49,7 +49,7 @@ class ProfilePage extends StatelessWidget {
           }
         },
         child: Scaffold(
-          appBar: appDefaultAppBarWithBucket(context, "Profil"),
+          appBar: appDefaultAppBarWithBucket(context, 'Profil'),
           body: const ProfileView(),
         ),
       ),

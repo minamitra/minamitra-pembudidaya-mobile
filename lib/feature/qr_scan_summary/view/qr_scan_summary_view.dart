@@ -38,31 +38,31 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
             ),
             const SizedBox(height: 8.0),
             Text(
-              "Amanda Amanata",
+              'Amanda Amanata',
               style: appTextTheme(context)
                   .titleSmall
                   ?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4.0),
             Text(
-              "Dompet 3M",
+              'Dompet 3M',
               style: appTextTheme(context).labelLarge,
             ),
             const SizedBox(height: 18.0),
             AppValidatorTextField(
               controller: nominalController,
-              labelText: "Nominal Transaksi",
+              labelText: 'Nominal Transaksi',
               isMandatory: true,
               withUpperLabel: true,
               inputType: TextInputType.number,
               suffixConstraints: const BoxConstraints(),
               prefixIcon: const Padding(
                 padding: EdgeInsets.only(left: 12.0),
-                child: Text("Rp "),
+                child: Text('Rp '),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return "Nominal harus diisi";
+                  return 'Nominal harus diisi';
                 }
                 return null;
               },
@@ -82,7 +82,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
           children: [
             const SizedBox(height: 24.0),
             Text(
-              "Rekening Sumber",
+              'Rekening Sumber',
               style: appTextTheme(context).labelLarge?.copyWith(
                     color: AppColor.neutral[500],
                   ),
@@ -98,7 +98,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                   color: AppColor.white,
                   border: Border.all(
                     color: const Color(0xFFE5E7EB),
-                  )),
+                  ),),
               child: Row(
                 children: [
                   Image.asset(
@@ -112,14 +112,14 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Rp 12.500.000",
+                          'Rp 12.500.000',
                           style: appTextTheme(context).titleSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          "Saldo Dompet3M",
+                          'Saldo Dompet3M',
                           style: appTextTheme(context).labelLarge,
                         ),
                       ],
@@ -137,7 +137,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
       return Padding(
         padding: const EdgeInsets.all(18.0),
         child: AppPrimaryFullButton(
-          "Lanjutkan",
+          'Lanjutkan',
           () {
             showModalBottomSheet(
               context: context,
@@ -184,7 +184,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                 }
 
                 return AppBottomSheet(
-                  "Konfirmasi Transafer",
+                  'Konfirmasi Transafer',
                   Padding(
                     padding: const EdgeInsets.all(18.0),
                     child: Column(
@@ -194,7 +194,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                             mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              transactionItem("Amanda Amanata", "Sumber"),
+                              transactionItem('Amanda Amanata', 'Sumber'),
                               Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
                                 child: Icon(
@@ -202,7 +202,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                   color: AppColor.neutralBlueGrey[400],
                                 ),
                               ),
-                              transactionItem("Koperasi 3M", "Penerima"),
+                              transactionItem('Koperasi 3M', 'Penerima'),
                               const SizedBox(height: 18.0),
                               AppDividerSmall(),
                               const SizedBox(height: 18.0),
@@ -210,7 +210,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      "Nominal Transfer",
+                                      'Nominal Transfer',
                                       style: appTextTheme(context)
                                           .bodySmall
                                           ?.copyWith(
@@ -219,7 +219,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                     ),
                                   ),
                                   Text(
-                                    "Rp 12.500.000",
+                                    'Rp 12.500.000',
                                     style: appTextTheme(context)
                                         .bodySmall
                                         ?.copyWith(fontWeight: FontWeight.w700),
@@ -230,7 +230,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                               AppDividerSmall(),
                               const SizedBox(height: 18.0),
                               Text(
-                                "Rekening Sumber",
+                                'Rekening Sumber',
                                 style:
                                     appTextTheme(context).labelLarge?.copyWith(
                                           color: AppColor.neutral[500],
@@ -247,7 +247,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                     color: AppColor.white,
                                     border: Border.all(
                                       color: const Color(0xFFE5E7EB),
-                                    )),
+                                    ),),
                                 child: Row(
                                   children: [
                                     Image.asset(
@@ -262,7 +262,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Rp 12.500.000",
+                                            'Rp 12.500.000',
                                             style: appTextTheme(context)
                                                 .titleSmall
                                                 ?.copyWith(
@@ -271,7 +271,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                           ),
                                           const SizedBox(height: 4.0),
                                           Text(
-                                            "Saldo Dompet3M",
+                                            'Saldo Dompet3M',
                                             style: appTextTheme(context)
                                                 .labelLarge,
                                           ),
@@ -285,7 +285,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                           ),
                         ),
                         AppPrimaryFullButton(
-                          "Bayar",
+                          'Bayar',
                           () {
                             Navigator.pop(context);
                           },

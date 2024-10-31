@@ -12,7 +12,7 @@ class FaqPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appDefaultAppBar(context, "Frequently Asked Questions"),
+      appBar: appDefaultAppBar(context, 'Frequently Asked Questions'),
       body: const FaqView(),
     );
   }

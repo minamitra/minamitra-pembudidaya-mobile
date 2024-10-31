@@ -16,7 +16,7 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddPondView extends StatefulWidget {
   const AddPondView(this.behaviourPage,
-      {this.pondID, this.pondData, super.key});
+      {this.pondID, this.pondData, super.key,});
 
   final BehaviourPage behaviourPage;
   final String? pondID;
@@ -109,7 +109,7 @@ class _AddPondViewState extends State<AddPondView> {
                       Expanded(
                         child: stepSection(
                           1,
-                          "Kolam",
+                          'Kolam',
                           state.index == 0,
                           state.index > 0,
                         ),
@@ -117,14 +117,14 @@ class _AddPondViewState extends State<AddPondView> {
                       Expanded(
                         child: stepSection(
                           2,
-                          "Lokasi",
+                          'Lokasi',
                           state.index == 1,
                           state.index > 1,
                         ),
                       ),
                       stepSection(
                         3,
-                        "Siklus",
+                        'Siklus',
                         state.index == 2,
                         false,
                       ),
@@ -135,14 +135,14 @@ class _AddPondViewState extends State<AddPondView> {
                       Expanded(
                         child: stepSection(
                           1,
-                          "Kolam",
+                          'Kolam',
                           state.index == 0,
                           state.index > 0,
                         ),
                       ),
                       stepSection(
                         2,
-                        "Lokasi",
+                        'Lokasi',
                         state.index == 1,
                         state.index > 1,
                         maxLenght: 2,
@@ -212,7 +212,7 @@ class _AddPondViewState extends State<AddPondView> {
                     child: AppAnimatedSize(
                       isShow: state.index > 0,
                       child: AppPrimaryOutlineFullButton(
-                        "Kembali",
+                        'Kembali',
                         () {
                           pageController.previousPage(
                             duration: const Duration(milliseconds: 300),
@@ -230,7 +230,7 @@ class _AddPondViewState extends State<AddPondView> {
                   child: AppAnimatedSize(
                     isShow: true,
                     child: AppPrimaryFullButton(
-                      state.index == 2 ? "Simpan" : "Selanjutnya",
+                      state.index == 2 ? 'Simpan' : 'Selanjutnya',
                       () {
                         state.index == 2
                             ? null

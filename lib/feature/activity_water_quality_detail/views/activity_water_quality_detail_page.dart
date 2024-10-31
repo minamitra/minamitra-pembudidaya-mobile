@@ -12,29 +12,29 @@ class ActivityWaterQualityDetailPage extends StatelessWidget {
   const ActivityWaterQualityDetailPage(this.data, {super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-water-quality-detail-page");
+      const RouteSettings(name: '/activity-water-quality-detail-page');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Kualitas Air",
+        'Detail Kualitas Air',
         actions: [
           InkWell(
             onTap: () {
               Navigator.of(context).push(AppTransition.pushTransition(
                 ActivityWaterQualityAddPage(
-                  int.parse(data.fishpondId ?? "1"),
-                  int.parse(data.fishpondcycleId ?? "1"),
+                  int.parse(data.fishpondId ?? '1'),
+                  int.parse(data.fishpondcycleId ?? '1'),
                   isEdit: true,
                   data: data,
                 ),
                 ActivityWaterQualityAddPage.routeSettings,
-              ));
+              ),);
             },
             child: Text(
-              "Edit",
+              'Edit',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(color: Colors.white),

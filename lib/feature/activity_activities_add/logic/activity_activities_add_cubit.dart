@@ -54,13 +54,13 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
 
       if (editData != null) {
         amountController.text =
-            (double.parse(editData.actual ?? "0") / 1000).toString();
+            (double.parse(editData.actual ?? '0') / 1000).toString();
       }
 
       totalAmountFeedFromInitController.text =
           (((response.data.data?.accumulationTotalFeedBefore ?? 0) +
                       double.parse(
-                          amountController.text.handleEmptyStringToZero())) /
+                          amountController.text.handleEmptyStringToZero(),)) /
                   1000)
               .toStringAsFixed(2);
 
@@ -70,17 +70,17 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
         feedRecomendationResponse: response.data,
         feedDataByCycleResponse: fishFeedByCycleResponse.data,
         fishAge: diferentInDays,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -88,16 +88,16 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
     emit(state.copyWith(
       status: GlobalState.loading,
       fishFoodID: null,
-    ));
+    ),);
     try {
       int diferentInDays =
           dateTime.difference(tebarDate ?? DateTime.now()).inDays;
       final response = await service.getRecommendation(
-        fishPondCycleID ?? "",
+        fishPondCycleID ?? '',
         AppConvertDateTime().ymdDash(dateTime),
       );
       final fishFeedByCycleResponse = await service.getFeedDataByCycle(
-        fishPondCycleID ?? "",
+        fishPondCycleID ?? '',
         AppConvertDateTime().ymdDash(dateTime),
       );
       totalAmountFeedFromInitController.text =
@@ -109,17 +109,17 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
         feedRecomendationResponse: response.data,
         feedDataByCycleResponse: fishFeedByCycleResponse.data,
         fishAge: diferentInDays,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -146,13 +146,13 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

@@ -12,13 +12,13 @@ class AddSamplingResponse {
 
   factory AddSamplingResponse.fromMap(Map<String, dynamic> json) =>
       AddSamplingResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : AddSamplingResponseData.fromMap(json["data"]),
+            : AddSamplingResponseData.fromMap(json['data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -34,10 +34,10 @@ class AddSamplingResponseData {
 
   factory AddSamplingResponseData.fromMap(Map<String, dynamic> json) =>
       AddSamplingResponseData(
-        activitySamplingId: json["activity_sampling_id"],
+        activitySamplingId: json['activity_sampling_id'],
       );
 
   Map<String, dynamic> toMap() => {
-        "activity_sampling_id": activitySamplingId,
+        'activity_sampling_id': activitySamplingId,
       };
 }

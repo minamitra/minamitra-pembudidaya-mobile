@@ -12,6 +12,6 @@ class HistoryPointCubit extends Cubit<HistoryPointState> {
     emit(state.copyWith(
       selectedFilter: selectedFilter,
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 }

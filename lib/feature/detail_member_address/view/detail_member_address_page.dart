@@ -31,16 +31,16 @@ class DetailMemberAddressPage extends StatelessWidget {
   final bool? isPrimaryAddress;
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/detail-member-address-page");
+      const RouteSettings(name: '/detail-member-address-page');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Alamat",
+        'Detail Alamat',
       ),
-      body: DetailMemberAddressView(),
+      body: const DetailMemberAddressView(),
     );
   }
 }

@@ -34,7 +34,7 @@ class _CommingSoonViewState extends State<CommingSoonView> {
           ),
           const SizedBox(height: 24.0),
           Text(
-            widget.customTitle ?? "Fitur Akan Segera Hadir",
+            widget.customTitle ?? 'Fitur Akan Segera Hadir',
             textAlign: TextAlign.center,
             style: appTextTheme(context).headlineSmall?.copyWith(
                   color: AppColor.primary[600],
@@ -43,7 +43,7 @@ class _CommingSoonViewState extends State<CommingSoonView> {
           const SizedBox(height: 8.0),
           Text(
             widget.customDescription ??
-                "Fitur ini sedang dalam pengembangan. Mohon bersabar, ya!",
+                'Fitur ini sedang dalam pengembangan. Mohon bersabar, ya!',
             textAlign: TextAlign.center,
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[400],

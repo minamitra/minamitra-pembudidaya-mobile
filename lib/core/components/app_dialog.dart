@@ -82,7 +82,7 @@ class AppDialog {
     SimpleFontelicoProgressDialog dialog,
   ) {
     dialog.show(
-      message: "Loading ...",
+      message: 'Loading ...',
       type: SimpleFontelicoProgressDialogType.iphone,
       horizontal: false,
       hideText: false,
@@ -92,7 +92,7 @@ class AppDialog {
     );
   }
 
-  static defaultDialog(
+  static AlertDialog defaultDialog(
     BuildContext context,
     String title, {
     required Widget child,
@@ -114,7 +114,7 @@ class AppDialog {
                 child: Text(
               title,
               style: appTextTheme(context).bodyMedium,
-            )),
+            ),),
             InkWell(
               onTap: () {
                 Navigator.of(context).pop();
@@ -123,7 +123,7 @@ class AppDialog {
                 Icons.close,
                 color: AppColor.primary,
               ),
-            )
+            ),
           ],
         ),
       );

@@ -18,7 +18,7 @@ abstract class ActivityWaterQualityService {
   Future<BaseResponse<bool>> addWaterQuality(AddWaterQualityPayload payload);
   Future<BaseResponse<bool>> deleteWaterQuality(String id);
   Future<BaseResponse<bool>> updateWaterQuality(
-      UpdateWaterQualityPayload payload);
+      UpdateWaterQualityPayload payload,);
 }
 
 class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
@@ -61,7 +61,7 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
 
   @override
   Future<BaseResponse<bool>> addWaterQuality(
-      AddWaterQualityPayload payload) async {
+      AddWaterQualityPayload payload,) async {
     final url = endpoint.addWaterQuality();
     final header = await headerProvider.headers;
     final response = await httpClient.post(
@@ -80,7 +80,7 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
     final response = await httpClient.post(
       url,
       header,
-      json.encode({"id": id}),
+      json.encode({'id': id}),
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
@@ -88,7 +88,7 @@ class ActivityWaterQualityServiceImpl implements ActivityWaterQualityService {
 
   @override
   Future<BaseResponse<bool>> updateWaterQuality(
-      UpdateWaterQualityPayload payload) async {
+      UpdateWaterQualityPayload payload,) async {
     final url = endpoint.updateWaterQuality();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

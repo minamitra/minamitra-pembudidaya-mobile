@@ -16,19 +16,19 @@ class OnGoingCycleFeedResponse {
 
   factory OnGoingCycleFeedResponse.fromMap(Map<String, dynamic> json) =>
       OnGoingCycleFeedResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
-            : List<OnGoingCycleFeedResponseData>.from(json["data"]!
-                .map((x) => OnGoingCycleFeedResponseData.fromMap(x))),
-        pagination: json["pagination"] == null
+            : List<OnGoingCycleFeedResponseData>.from(json['data']!
+                .map((x) => OnGoingCycleFeedResponseData.fromMap(x)),),
+        pagination: json['pagination'] == null
             ? null
-            : Pagination.fromMap(json["pagination"]),
+            : Pagination.fromMap(json['pagination']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-        "pagination": pagination?.toMap(),
+        'pagination': pagination?.toMap(),
       };
 }
 
@@ -100,80 +100,80 @@ class OnGoingCycleFeedResponseData {
 
   factory OnGoingCycleFeedResponseData.fromMap(Map<String, dynamic> json) =>
       OnGoingCycleFeedResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        tebarDate: json["tebar_date"] == null
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        tebarDate: json['tebar_date'] == null
             ? null
-            : DateTime.parse(json["tebar_date"]),
-        tebarFishTotal: json["tebar_fish_total"],
-        fishseedId: json["fishseed_id"],
-        tebarBobot: json["tebar_bobot"],
-        targetPanenBobot: json["target_panen_bobot"],
-        actualPanenBobot: json["actual_panen_bobot"],
-        srTarget: json["sr_target"],
-        estimationFishfoodEpp: json["estimation_fishfood_epp"],
-        estimationPanenDate: json["estimation_panen_date"] == null
+            : DateTime.parse(json['tebar_date']),
+        tebarFishTotal: json['tebar_fish_total'],
+        fishseedId: json['fishseed_id'],
+        tebarBobot: json['tebar_bobot'],
+        targetPanenBobot: json['target_panen_bobot'],
+        actualPanenBobot: json['actual_panen_bobot'],
+        srTarget: json['sr_target'],
+        estimationFishfoodEpp: json['estimation_fishfood_epp'],
+        estimationPanenDate: json['estimation_panen_date'] == null
             ? null
-            : DateTime.parse(json["estimation_panen_date"]),
-        actualPanenDate: json["actual_panen_date"],
-        estimationPanenTonase: json["estimation_panen_tonase"],
-        actualPanenTonase: json["actual_panen_tonase"],
-        panenNote: json["panen_note"],
-        panenAttachmentJsonArray: json["panen_attachment_json_array"] == null
+            : DateTime.parse(json['estimation_panen_date']),
+        actualPanenDate: json['actual_panen_date'],
+        estimationPanenTonase: json['estimation_panen_tonase'],
+        actualPanenTonase: json['actual_panen_tonase'],
+        panenNote: json['panen_note'],
+        panenAttachmentJsonArray: json['panen_attachment_json_array'] == null
             ? []
             : List<dynamic>.from(
-                json["panen_attachment_json_array"]!.map((x) => x)),
-        status: json["status"],
-        createDatetime: json["create_datetime"] == null
+                json['panen_attachment_json_array']!.map((x) => x),),
+        status: json['status'],
+        createDatetime: json['create_datetime'] == null
             ? null
-            : DateTime.parse(json["create_datetime"]),
-        createById: json["create_by_id"],
-        createByType: json["create_by_type"],
-        createByName: json["create_by_name"],
-        fishseedName: json["fishseed_name"],
-        memberCode: json["member_code"],
-        memberName: json["member_name"],
-        fishpondName: json["fishpond_name"],
-        fishfoodTotalSum: json["fishfood_total_sum"],
-        fishfoodJsonObject: json["fishfood_json_object"] == null
+            : DateTime.parse(json['create_datetime']),
+        createById: json['create_by_id'],
+        createByType: json['create_by_type'],
+        createByName: json['create_by_name'],
+        fishseedName: json['fishseed_name'],
+        memberCode: json['member_code'],
+        memberName: json['member_name'],
+        fishpondName: json['fishpond_name'],
+        fishfoodTotalSum: json['fishfood_total_sum'],
+        fishfoodJsonObject: json['fishfood_json_object'] == null
             ? null
-            : FishfoodJsonObject.fromMap(json["fishfood_json_object"]),
+            : FishfoodJsonObject.fromMap(json['fishfood_json_object']),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "member_id": memberId,
-        "fishpond_id": fishpondId,
-        "tebar_date":
+        'id': id,
+        'member_id': memberId,
+        'fishpond_id': fishpondId,
+        'tebar_date':
             "${tebarDate!.year.toString().padLeft(4, '0')}-${tebarDate!.month.toString().padLeft(2, '0')}-${tebarDate!.day.toString().padLeft(2, '0')}",
-        "tebar_fish_total": tebarFishTotal,
-        "fishseed_id": fishseedId,
-        "tebar_bobot": tebarBobot,
-        "target_panen_bobot": targetPanenBobot,
-        "actual_panen_bobot": actualPanenBobot,
-        "sr_target": srTarget,
-        "estimation_fishfood_epp": estimationFishfoodEpp,
-        "estimation_panen_date":
+        'tebar_fish_total': tebarFishTotal,
+        'fishseed_id': fishseedId,
+        'tebar_bobot': tebarBobot,
+        'target_panen_bobot': targetPanenBobot,
+        'actual_panen_bobot': actualPanenBobot,
+        'sr_target': srTarget,
+        'estimation_fishfood_epp': estimationFishfoodEpp,
+        'estimation_panen_date':
             "${estimationPanenDate!.year.toString().padLeft(4, '0')}-${estimationPanenDate!.month.toString().padLeft(2, '0')}-${estimationPanenDate!.day.toString().padLeft(2, '0')}",
-        "actual_panen_date": actualPanenDate,
-        "estimation_panen_tonase": estimationPanenTonase,
-        "actual_panen_tonase": actualPanenTonase,
-        "panen_note": panenNote,
-        "panen_attachment_json_array": panenAttachmentJsonArray == null
+        'actual_panen_date': actualPanenDate,
+        'estimation_panen_tonase': estimationPanenTonase,
+        'actual_panen_tonase': actualPanenTonase,
+        'panen_note': panenNote,
+        'panen_attachment_json_array': panenAttachmentJsonArray == null
             ? []
             : List<dynamic>.from(panenAttachmentJsonArray!.map((x) => x)),
-        "status": status,
-        "create_datetime": createDatetime?.toIso8601String(),
-        "create_by_id": createById,
-        "create_by_type": createByType,
-        "create_by_name": createByName,
-        "fishseed_name": fishseedName,
-        "member_code": memberCode,
-        "member_name": memberName,
-        "fishpond_name": fishpondName,
-        "fishfood_total_sum": fishfoodTotalSum,
-        "fishfood_json_object": fishfoodJsonObject?.toMap(),
+        'status': status,
+        'create_datetime': createDatetime?.toIso8601String(),
+        'create_by_id': createById,
+        'create_by_type': createByType,
+        'create_by_name': createByName,
+        'fishseed_name': fishseedName,
+        'member_code': memberCode,
+        'member_name': memberName,
+        'fishpond_name': fishpondName,
+        'fishfood_total_sum': fishfoodTotalSum,
+        'fishfood_json_object': fishfoodJsonObject?.toMap(),
       };
 }
 
@@ -199,42 +199,42 @@ class FishfoodJsonObject {
 
   factory FishfoodJsonObject.fromMap(Map<String, dynamic> json) =>
       FishfoodJsonObject(
-        starter1: json["starter1"] == null
+        starter1: json['starter1'] == null
             ? []
             : List<Finisher>.from(
-                json["starter1"]!.map((x) => Finisher.fromMap(x))),
-        starter2: json["starter2"] == null
+                json['starter1']!.map((x) => Finisher.fromMap(x)),),
+        starter2: json['starter2'] == null
             ? []
             : List<Finisher>.from(
-                json["starter2"]!.map((x) => Finisher.fromMap(x))),
-        starter3: json["starter3"] == null
+                json['starter2']!.map((x) => Finisher.fromMap(x)),),
+        starter3: json['starter3'] == null
             ? []
             : List<Finisher>.from(
-                json["starter3"]!.map((x) => Finisher.fromMap(x))),
-        grower: json["grower"] == null
+                json['starter3']!.map((x) => Finisher.fromMap(x)),),
+        grower: json['grower'] == null
             ? []
             : List<Finisher>.from(
-                json["grower"]!.map((x) => Finisher.fromMap(x))),
-        finisher: json["finisher"] == null
+                json['grower']!.map((x) => Finisher.fromMap(x)),),
+        finisher: json['finisher'] == null
             ? []
             : List<Finisher>.from(
-                json["finisher"]!.map((x) => Finisher.fromMap(x))),
+                json['finisher']!.map((x) => Finisher.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "starter1": starter1 == null
+        'starter1': starter1 == null
             ? []
             : List<dynamic>.from(starter1!.map((x) => x.toMap())),
-        "starter2": starter2 == null
+        'starter2': starter2 == null
             ? []
             : List<dynamic>.from(starter2!.map((x) => x.toMap())),
-        "starter3": starter3 == null
+        'starter3': starter3 == null
             ? []
             : List<dynamic>.from(starter3!.map((x) => x.toMap())),
-        "grower": grower == null
+        'grower': grower == null
             ? []
             : List<dynamic>.from(grower!.map((x) => x.toMap())),
-        "finisher": finisher == null
+        'finisher': finisher == null
             ? []
             : List<dynamic>.from(finisher!.map((x) => x.toMap())),
       };
@@ -256,14 +256,14 @@ class Finisher {
   String toJson() => json.encode(toMap());
 
   factory Finisher.fromMap(Map<String, dynamic> json) => Finisher(
-        id: json["id"],
-        name: json["name"],
-        total: json["total"]?.toDouble(),
+        id: json['id'],
+        name: json['name'],
+        total: json['total']?.toDouble(),
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
+        'id': id,
+        'name': name,
       };
 }
 
@@ -300,33 +300,33 @@ class Pagination {
   String toJson() => json.encode(toMap());
 
   factory Pagination.fromMap(Map<String, dynamic> json) => Pagination(
-        totalData: json["total_data"],
-        totalPage: json["total_page"],
-        totalDisplay: json["total_display"],
-        firstPage: json["first_page"],
-        lastPage: json["last_page"],
-        prev: json["prev"],
-        current: json["current"],
-        next: json["next"],
-        detail: json["detail"] == null
+        totalData: json['total_data'],
+        totalPage: json['total_page'],
+        totalDisplay: json['total_display'],
+        firstPage: json['first_page'],
+        lastPage: json['last_page'],
+        prev: json['prev'],
+        current: json['current'],
+        next: json['next'],
+        detail: json['detail'] == null
             ? []
-            : List<dynamic>.from(json["detail"]!.map((x) => x)),
-        start: json["start"],
-        end: json["end"],
+            : List<dynamic>.from(json['detail']!.map((x) => x)),
+        start: json['start'],
+        end: json['end'],
       );
 
   Map<String, dynamic> toMap() => {
-        "total_data": totalData,
-        "total_page": totalPage,
-        "total_display": totalDisplay,
-        "first_page": firstPage,
-        "last_page": lastPage,
-        "prev": prev,
-        "current": current,
-        "next": next,
-        "detail":
+        'total_data': totalData,
+        'total_page': totalPage,
+        'total_display': totalDisplay,
+        'first_page': firstPage,
+        'last_page': lastPage,
+        'prev': prev,
+        'current': current,
+        'next': next,
+        'detail':
             detail == null ? [] : List<dynamic>.from(detail!.map((x) => x)),
-        "start": start,
-        "end": end,
+        'start': start,
+        'end': end,
       };
 }

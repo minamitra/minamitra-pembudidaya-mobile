@@ -19,7 +19,7 @@ class ActivityTreatmentAddCubit extends Cubit<ActivityTreatmentAddState> {
   final CdnService cdnService;
 
   Future<void> addTreatment(
-      AddTreatmentPayload payload, List<File> attachment) async {
+      AddTreatmentPayload payload, List<File> attachment,) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       List<String> attachmentLink = await uploadImage(attachment);
@@ -32,18 +32,18 @@ class ActivityTreatmentAddCubit extends Cubit<ActivityTreatmentAddState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
   Future<void> updateTreatment(
-      UpdateTreatmentPayload payload, List<File> attachment) async {
+      UpdateTreatmentPayload payload, List<File> attachment,) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       List<String> attachmentLink = await uploadImage(attachment);
@@ -56,13 +56,13 @@ class ActivityTreatmentAddCubit extends Cubit<ActivityTreatmentAddState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 

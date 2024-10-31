@@ -26,7 +26,7 @@ class LoginPage extends StatelessWidget {
         ),
         BlocProvider<LoginCubit>(
           create: (context) => LoginCubit(
-              RepositoryProvider.of<AuthenticationRepository>(context)),
+              RepositoryProvider.of<AuthenticationRepository>(context),),
         ),
       ],
       child: BlocListener<LoginCubit, LoginState>(
@@ -44,7 +44,7 @@ class LoginPage extends StatelessWidget {
             AppDialog().showLoadingDialog(context, dialog);
           }
         },
-        child: Scaffold(
+        child: const Scaffold(
           body: LoginView(),
         ),
       ),

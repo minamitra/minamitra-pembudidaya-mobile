@@ -13,29 +13,29 @@ class ActivityActivitiesDetailPage extends StatelessWidget {
   final DateTime tebarDate;
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-activities-detail");
+      const RouteSettings(name: '/activity-activities-detail');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Aktivitas",
+        'Detail Aktivitas',
         actions: [
           InkWell(
             onTap: () {
               Navigator.of(context).push(AppTransition.pushTransition(
                 ActivityActivitiesAddPage(
-                  data.fishpondId ?? "",
-                  data.fishpondcycleId ?? "",
+                  data.fishpondId ?? '',
+                  data.fishpondcycleId ?? '',
                   tebarDate,
                   editData: data,
                 ),
                 ActivityActivitiesAddPage.routeSettings(),
-              ));
+              ),);
             },
             child: Text(
-              "Edit",
+              'Edit',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(color: Colors.white),

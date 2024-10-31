@@ -29,57 +29,57 @@ class _PointV2ViewState extends State<PointV2View> {
 
   List<NameIconEntity> listLevel = [
     NameIconEntity(
-      "200",
+      '200',
       AppAssets.silverIcon,
     ),
     NameIconEntity(
-      "400",
+      '400',
       AppAssets.goldIcon,
     ),
     NameIconEntity(
-      "600",
+      '600',
       AppAssets.platinumIcon,
     ),
     NameIconEntity(
-      "800",
+      '800',
       AppAssets.diamondIcon,
     ),
   ];
 
   List<String> exchangeType = [
-    "Konversi Saldo",
-    "Tarik Tunai",
+    'Konversi Saldo',
+    'Tarik Tunai',
   ];
 
   List<NameIconEntity> listPointInfo = [
     NameIconEntity(
-      "Silver",
+      'Silver',
       AppAssets.silverIcon,
-      description: "Kumpulkan 1000 poin untuk mendapatkan lencana silver.",
+      description: 'Kumpulkan 1000 poin untuk mendapatkan lencana silver.',
     ),
     NameIconEntity(
-      "Gold",
+      'Gold',
       AppAssets.goldIcon,
-      description: "Kumpulkan 3000 poin untuk mendapatkan lencana gold.",
+      description: 'Kumpulkan 3000 poin untuk mendapatkan lencana gold.',
     ),
     NameIconEntity(
-      "Platinum",
+      'Platinum',
       AppAssets.platinumIcon,
-      description: "Kumpulkan 7000 poin untuk mendapatkan lencana platinum.",
+      description: 'Kumpulkan 7000 poin untuk mendapatkan lencana platinum.',
     ),
     NameIconEntity(
-      "Diamond",
+      'Diamond',
       AppAssets.diamondIcon,
-      description: "Kumpulkan 10.000 poin untuk mendapatkan lencana diamond.",
+      description: 'Kumpulkan 10.000 poin untuk mendapatkan lencana diamond.',
     ),
   ];
 
   List<String> tocPoint = [
-    "Untuk dapat melakukan penukaran poin, minimal perlu mencapai level gold atau 3000 poin",
-    "1 Poin = Rp 100",
-    "Minimal penukaran poin ke saldo atau tarik tunai adalah 250 poin atau Rp 25,000",
-    "Maksimal penukaran poin ke saldo atau tarik tunai adalah 10,000 poin Rp 1,000,000",
-    "Akumulasi penukaran poin ke saldo atau tarik tunai adalah 10,000 poin atau Rp 1,000,000 per hari",
+    'Untuk dapat melakukan penukaran poin, minimal perlu mencapai level gold atau 3000 poin',
+    '1 Poin = Rp 100',
+    'Minimal penukaran poin ke saldo atau tarik tunai adalah 250 poin atau Rp 25,000',
+    'Maksimal penukaran poin ke saldo atau tarik tunai adalah 10,000 poin Rp 1,000,000',
+    'Akumulasi penukaran poin ke saldo atau tarik tunai adalah 10,000 poin atau Rp 1,000,000 per hari',
   ];
 
   @override
@@ -99,7 +99,7 @@ class _PointV2ViewState extends State<PointV2View> {
           const SizedBox(width: 18.0),
           Expanded(
             child: Text(
-              "Infromasi Poin",
+              'Infromasi Poin',
               style: appTextTheme(context)
                   .headlineSmall
                   ?.copyWith(color: AppColor.white),
@@ -110,10 +110,10 @@ class _PointV2ViewState extends State<PointV2View> {
               Navigator.of(context).push(AppTransition.pushTransition(
                 const HistoryPointPage(),
                 HistoryPointPage.route,
-              ));
+              ),);
             },
             child: Text(
-              "Riwayat",
+              'Riwayat',
               style: appTextTheme(context)
                   .titleMedium
                   ?.copyWith(color: AppColor.white),
@@ -125,7 +125,7 @@ class _PointV2ViewState extends State<PointV2View> {
               Navigator.of(context).push(AppTransition.pushTransition(
                 const HistoryPointPage(),
                 HistoryPointPage.route,
-              ));
+              ),);
             },
             child: const Icon(
               Icons.history,
@@ -150,7 +150,7 @@ class _PointV2ViewState extends State<PointV2View> {
             ),
             const SizedBox(height: 12.0),
             Text(
-              "7100 Poin",
+              '7100 Poin',
               style: appTextTheme(context).titleMedium?.copyWith(
                     color: AppColor.white,
                     fontWeight: FontWeight.w700,
@@ -158,11 +158,11 @@ class _PointV2ViewState extends State<PointV2View> {
             ),
             const SizedBox(height: 8.0),
             Text(
-              "Platinum",
+              'Platinum',
               style: appTextTheme(context)
                   .labelLarge
                   ?.copyWith(color: AppColor.white),
-            )
+            ),
           ],
         ),
       );
@@ -175,7 +175,7 @@ class _PointV2ViewState extends State<PointV2View> {
             context: context,
             builder: (bottomSheetContext) {
               return AppBottomSheet(
-                "List Member Level",
+                'List Member Level',
                 ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   children: [
@@ -205,15 +205,15 @@ class _PointV2ViewState extends State<PointV2View> {
                                         style: appTextTheme(context)
                                             .titleMedium
                                             ?.copyWith(
-                                                fontWeight: FontWeight.w700),
+                                                fontWeight: FontWeight.w700,),
                                       ),
                                       const SizedBox(height: 8.0),
                                       Text(
-                                        listPointInfo[index].description ?? "-",
+                                        listPointInfo[index].description ?? '-',
                                         style: appTextTheme(context)
                                             .bodySmall
                                             ?.copyWith(
-                                                color: AppColor.neutral[400]),
+                                                color: AppColor.neutral[400],),
                                       ),
                                     ],
                                   ),
@@ -408,7 +408,7 @@ class _PointV2ViewState extends State<PointV2View> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Tukar Poin",
+            'Tukar Poin',
             style: appTextTheme(context)
                 .titleMedium
                 ?.copyWith(fontWeight: FontWeight.w700),
@@ -439,7 +439,7 @@ class _PointV2ViewState extends State<PointV2View> {
             color: isActive ? AppColor.primary[50] : AppColor.white,
             border: Border.all(
                 color:
-                    isActive ? AppColor.primary[500]! : AppColor.neutral[300]!),
+                    isActive ? AppColor.primary[500]! : AppColor.neutral[300]!,),
           ),
           child: Column(
             children: [
@@ -470,7 +470,7 @@ class _PointV2ViewState extends State<PointV2View> {
           Row(
             children: [
               Text(
-                "Nilai Penukaran",
+                'Nilai Penukaran',
                 style: appTextTheme(context)
                     .titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700),
@@ -482,7 +482,7 @@ class _PointV2ViewState extends State<PointV2View> {
                     context: context,
                     builder: (bottomSheetContext) {
                       return AppBottomSheet(
-                        "Ketentuan Penukaran Point",
+                        'Ketentuan Penukaran Point',
                         ListView(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           children: [
@@ -530,7 +530,7 @@ class _PointV2ViewState extends State<PointV2View> {
                   Icons.help,
                   color: AppColor.primary[500],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 18.0),
@@ -541,8 +541,8 @@ class _PointV2ViewState extends State<PointV2View> {
                   Expanded(
                     child: exchangeGridItem(
                       isActive: state.selectedGridExchange == 0,
-                      title: "250 Poin",
-                      value: "Rp 25.000",
+                      title: '250 Poin',
+                      value: 'Rp 25.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
@@ -554,15 +554,15 @@ class _PointV2ViewState extends State<PointV2View> {
                   Expanded(
                     child: exchangeGridItem(
                       isActive: state.selectedGridExchange == 1,
-                      title: "500 Poin",
-                      value: "Rp 50.000",
+                      title: '500 Poin',
+                      value: 'Rp 50.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
                             .onChangeGridExchangeValue(1);
                       },
                     ),
-                  )
+                  ),
                 ],
               );
             },
@@ -575,8 +575,8 @@ class _PointV2ViewState extends State<PointV2View> {
                   Expanded(
                     child: exchangeGridItem(
                       isActive: state.selectedGridExchange == 2,
-                      title: "1000 Poin",
-                      value: "Rp 100.000",
+                      title: '1000 Poin',
+                      value: 'Rp 100.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
@@ -588,15 +588,15 @@ class _PointV2ViewState extends State<PointV2View> {
                   Expanded(
                     child: exchangeGridItem(
                       isActive: state.selectedGridExchange == 3,
-                      title: "2000 Poin",
-                      value: "Rp 200.000",
+                      title: '2000 Poin',
+                      value: 'Rp 200.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
                             .onChangeGridExchangeValue(3);
                       },
                     ),
-                  )
+                  ),
                 ],
               );
             },
@@ -608,8 +608,8 @@ class _PointV2ViewState extends State<PointV2View> {
     Widget customExchangeValue() {
       return AppValidatorTextField(
         controller: customExchangeValueController,
-        hintText: "0",
-        labelText: "Kustom Nominal",
+        hintText: '0',
+        labelText: 'Kustom Nominal',
         inputType: TextInputType.phone,
         isMandatory: true,
         validator: (String? value) {
@@ -622,7 +622,7 @@ class _PointV2ViewState extends State<PointV2View> {
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 18.0),
           child: Text(
-            "Rp ",
+            'Rp ',
             style: appTextTheme(context).bodySmall?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
@@ -634,7 +634,7 @@ class _PointV2ViewState extends State<PointV2View> {
 
     Widget buttonExchange() {
       return AppPrimaryFullButton(
-        "Submit",
+        'Submit',
         () {
           if (formKey.currentState!.validate()) {
             context.read<PointV2Cubit>().onSubmitExchange();

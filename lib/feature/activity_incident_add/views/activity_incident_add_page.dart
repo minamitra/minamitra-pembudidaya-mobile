@@ -28,7 +28,7 @@ class ActivityIncidentAddPage extends StatelessWidget {
   });
 
   static const RouteSettings routeSettings =
-      RouteSettings(name: "/activity-incident-add-page");
+      RouteSettings(name: '/activity-incident-add-page');
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ActivityIncidentAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          isEdit ? "Edit Kejadian" : "Tambah Kejadian",
+          isEdit ? 'Edit Kejadian' : 'Tambah Kejadian',
         ),
         body: BlocConsumer<ActivityIncidentAddCubit, ActivityIncidentAddState>(
           listener: (context, state) {
@@ -61,7 +61,7 @@ class ActivityIncidentAddPage extends StatelessWidget {
             }
 
             if (state.status.isError) {
-              if (state.errorMessage == "TOKEN_EXPIRED") {
+              if (state.errorMessage == 'TOKEN_EXPIRED') {
                 RepositoryProvider.of<AuthenticationRepository>(context)
                     .logout();
               } else {
@@ -71,11 +71,11 @@ class ActivityIncidentAddPage extends StatelessWidget {
 
             if (state.status.isSuccessSubmit) {
               AppTopSnackBar(context).showSuccess(isEdit
-                  ? "Berhasil Edit\nKejadian!"
-                  : "Berhasil Membuat\nKejadian Baru!");
-              Navigator.of(context).pop("refresh");
+                  ? 'Berhasil Edit\nKejadian!'
+                  : 'Berhasil Membuat\nKejadian Baru!',);
+              Navigator.of(context).pop('refresh');
               if (isEdit) {
-                Navigator.of(context).pop("refresh");
+                Navigator.of(context).pop('refresh');
               }
             }
           },

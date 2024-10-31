@@ -14,7 +14,7 @@ class AddBulkFeedPage extends StatelessWidget {
   const AddBulkFeedPage(this.pondID, {super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/add-bulk-feed-page");
+      const RouteSettings(name: '/add-bulk-feed-page');
 
   final String pondID;
 
@@ -29,7 +29,7 @@ class AddBulkFeedPage extends StatelessWidget {
       child: BlocListener<AddBulkFeedCubit, AddBulkFeedState>(
         listener: (context, state) {
           if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
+            if (state.errorMessage == 'TOKEN_EXPIRED') {
               RepositoryProvider.of<AuthenticationRepository>(context).logout();
             } else {
               AppTopSnackBar(context).showDanger(state.errorMessage);
@@ -45,16 +45,16 @@ class AddBulkFeedPage extends StatelessWidget {
           }
 
           if (state.status.isSuccessSubmit) {
-            AppTopSnackBar(context).showSuccess("Berhasil menambahkan pakan");
+            AppTopSnackBar(context).showSuccess('Berhasil menambahkan pakan');
             Navigator.pop(context);
           }
         },
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            "Tambah Pakan",
+            'Tambah Pakan',
           ),
-          body: AddBulkFeedView(),
+          body: const AddBulkFeedView(),
         ),
       ),
     );

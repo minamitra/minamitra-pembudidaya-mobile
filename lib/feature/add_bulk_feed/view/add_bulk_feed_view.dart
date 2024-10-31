@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,7 +31,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
 
-  List<String> listType = ["Pagi", "Siang", "Sore", "Malam"];
+  List<String> listType = ['Pagi', 'Siang', 'Sore', 'Malam'];
   List<String> selectedTypeOfFeed = [];
 
   bool isShow = false;
@@ -117,12 +116,12 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: AppValidatorTextField(
-          labelText: "Waktu Kegiatan",
+          labelText: 'Waktu Kegiatan',
           controller: typeController,
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          hintText: "Pilih waktu kegiatan",
+          hintText: 'Pilih waktu kegiatan',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -130,17 +129,17 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Waktu kegiatan tidak boleh kosong";
+              return 'Waktu kegiatan tidak boleh kosong';
             }
             return null;
           },
           onTap: appBottomSheetShowModalChecklist(
             context: context,
-            title: "Pilih waktu kegiatan",
+            title: 'Pilih waktu kegiatan',
             data: listType,
             selectedData: selectedTypeOfFeed,
             onSelected: (value) {
-              typeController.text = value.join(", ");
+              typeController.text = value.join(', ');
             },
           ),
 
@@ -178,8 +177,8 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
             child: AppValidatorTextField(
               readOnly: true,
               controller: dateController,
-              hintText: "Pilih Tanggal",
-              labelText: "Tanggal",
+              hintText: 'Pilih Tanggal',
+              labelText: 'Tanggal',
               suffixConstraints: const BoxConstraints(
                 maxHeight: 50,
                 maxWidth: 50,
@@ -210,7 +209,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
               },
               validator: (String? value) {
                 if (value!.isEmpty) {
-                  return "Tanggal tidak boleh kosong";
+                  return 'Tanggal tidak boleh kosong';
                 }
                 return null;
               },
@@ -226,8 +225,8 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
         child: AppValidatorTextField(
           readOnly: true,
           controller: hourController,
-          hintText: "Pilih Jam",
-          labelText: "Jam",
+          hintText: 'Pilih Jam',
+          labelText: 'Jam',
           suffixConstraints: const BoxConstraints(
             maxHeight: 50,
             maxWidth: 50,
@@ -255,7 +254,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
           },
           validator: (String? value) {
             if (value!.isEmpty) {
-              return "Jam tidak boleh kosong";
+              return 'Jam tidak boleh kosong';
             }
             return null;
           },
@@ -309,7 +308,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     const SizedBox(width: 8.0),
                     Text(
-                      "$feedValue Kg",
+                      '$feedValue Kg',
                       style: appTextTheme(context).titleSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                           ),
@@ -349,7 +348,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: Text(
-                        "Saran pakan : ${recommendation.toStringAsFixed(2)} Kg",
+                        'Saran pakan : ${recommendation.toStringAsFixed(2)} Kg',
                         style: appTextTheme(context).titleSmall?.copyWith(
                               fontWeight: FontWeight.w500,
                             ),
@@ -369,7 +368,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                         child: Text(
-                          "Terapkan",
+                          'Terapkan',
                           style: appTextTheme(context).titleSmall?.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
@@ -392,12 +391,12 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     const SizedBox(width: 8.0),
                     Text(
-                      "Pemberian pakan 2-3 kali per hari",
+                      'Pemberian pakan 2-3 kali per hari',
                       style: appTextTheme(context).labelLarge?.copyWith(
                             color: AppColor.accent[900],
                             fontWeight: FontWeight.w500,
                           ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -407,15 +406,15 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                 child: AppValidatorTextField(
                   controller: fishFeedValuecontroller,
                   inputType: TextInputType.phone,
-                  labelText: "Jumlah Pakan",
-                  hintText: "0",
+                  labelText: 'Jumlah Pakan',
+                  hintText: '0',
                   withUpperLabel: true,
                   isMandatory: true,
                   suffixConstraints: const BoxConstraints(),
                   suffixWidget: Padding(
                     padding: const EdgeInsets.only(right: 18.0),
                     child: Text(
-                      "Kg",
+                      'Kg',
                       style: appTextTheme(context).bodySmall?.copyWith(
                             color: AppColor.neutral[500],
                             fontWeight: FontWeight.w500,
@@ -429,7 +428,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                   inputFormatters: [
                     DecimalInputFormatter(decimalRange: 2),
                     FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}')),
+                        RegExp(r'^\d+\.?\d{0,2}'),),
                   ],
                 ),
               ),
@@ -438,8 +437,8 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: AppValidatorTextField(
                   controller: fishFeedNameController,
-                  labelText: "Pakan Diberikan",
-                  hintText: "Pilih Pakan",
+                  labelText: 'Pakan Diberikan',
+                  hintText: 'Pilih Pakan',
                   withUpperLabel: true,
                   isMandatory: true,
                   suffixWidget: Icon(
@@ -450,7 +449,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                   onTap: () {
                     bottomSheetShowModal(
                       context,
-                      "Pilih Pakan",
+                      'Pilih Pakan',
                       listFeedType,
                       (value) {
                         fishFeedNameController.text = value;
@@ -465,16 +464,16 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: AppValidatorTextField(
                   initialText: fishAge,
-                  labelText: "Umur Ikan",
-                  hintText: "0",
+                  labelText: 'Umur Ikan',
+                  hintText: '0',
                   withUpperLabel: true,
-                  suffixText: "hari",
+                  suffixText: 'hari',
                   readOnly: true,
                   fillColor: AppColor.neutral[100],
                 ),
               ),
               const SizedBox(height: 18.0),
-            ]
+            ],
           ],
         ),
       );
@@ -511,10 +510,10 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: pondCard(
                   state.recommendationFeedBulk?.data?[index].fishpondName ??
-                      "-",
+                      '-',
                   state.recommendationFeedBulk?.data?[index].feedAmount
                           ?.toString() ??
-                      "0",
+                      '0',
                   (bool value) {
                     context.read<AddBulkFeedCubit>().onChangeShowingPond(
                           index,
@@ -538,14 +537,14 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                         );
                   },
                   state.recommendationFeedBulk?.data?[index].fishfoods
-                          ?.map((element) => element.name ?? "-")
+                          ?.map((element) => element.name ?? '-')
                           .toList() ??
                       [],
                   state.recommendationFeedBulk!.data![index]
                       .feedValuecontroller!,
                   state.recommendationFeedBulk!.data![index]
                       .fishFeedIDController!,
-                  state.recommendationFeedBulk!.data![index].fishAge ?? "-",
+                  state.recommendationFeedBulk!.data![index].fishAge ?? '-',
                 ),
               );
             },
@@ -563,7 +562,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Text(
-              "*Wajib Diisi",
+              '*Wajib Diisi',
               style: appTextTheme(context).labelLarge?.copyWith(
                     color: AppColor.red[500],
                     fontWeight: FontWeight.w500,
@@ -593,7 +592,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             child: Text(
-              "Pemberian Pakan",
+              'Pemberian Pakan',
               style: appTextTheme(context).titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -609,7 +608,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
       return Padding(
         padding: const EdgeInsets.all(18),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (!_formKey.currentState!.validate()) {
               return;

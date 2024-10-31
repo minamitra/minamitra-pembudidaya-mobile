@@ -12,7 +12,7 @@ class MetaExceptionHanlder {
 
   handleByErrorCode() {
     String message =
-        MetaResponse.fromJson(responseBody).message ?? "Unknown Error";
+        MetaResponse.fromJson(responseBody).message ?? 'Unknown Error';
 
     switch (errorCode) {
       case 400:

@@ -20,8 +20,8 @@ class ActivityCubit extends Cubit<ActivityState> {
       BaseResponse<PondResponse> response = await pondService.getPonds();
       response.data.data = [
         PondResponseData(
-          id: "0",
-          name: "Semua Kolam",
+          id: '0',
+          name: 'Semua Kolam',
         ),
         ...response.data.data!,
       ];
@@ -30,17 +30,17 @@ class ActivityCubit extends Cubit<ActivityState> {
         status: GlobalState.loaded,
         pondReponse: response.data,
         pondDashboardResponse: pondDashboardResponse.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -53,17 +53,17 @@ class ActivityCubit extends Cubit<ActivityState> {
         status: GlobalState.loaded,
         pondDashboardResponse: pondDashboardResponse.data,
         selectedPondID: pondId,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

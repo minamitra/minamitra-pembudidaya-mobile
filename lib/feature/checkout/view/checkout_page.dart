@@ -16,7 +16,7 @@ class CheckoutPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Checkout",
+        'Checkout',
       ),
       backgroundColor: AppColor.neutral[100],
       body: CheckoutView(data),

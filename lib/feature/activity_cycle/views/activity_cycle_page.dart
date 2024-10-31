@@ -12,7 +12,7 @@ class ActivityCyclePage extends StatelessWidget {
   const ActivityCyclePage(this.pondID, {super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-cycle");
+      const RouteSettings(name: '/activity-cycle');
 
   final String pondID;
 
@@ -24,7 +24,7 @@ class ActivityCyclePage extends StatelessWidget {
       child: BlocListener<ActivityCycleCubit, ActivityCycleState>(
         listener: (context, state) {
           if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
+            if (state.errorMessage == 'TOKEN_EXPIRED') {
               RepositoryProvider.of<AuthenticationRepository>(context).logout();
             } else {
               AppTopSnackBar(context).showDanger(state.errorMessage);
@@ -34,7 +34,7 @@ class ActivityCyclePage extends StatelessWidget {
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            "Siklus",
+            'Siklus',
           ),
           body: ActivityCycleView(pondID),
         ),

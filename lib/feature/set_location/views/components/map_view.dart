@@ -31,7 +31,7 @@ class MapView extends StatelessWidget {
               context.read<SetLocationCubit>().updateLocation(LatLng(
                     camera.target.latitude,
                     camera.target.longitude,
-                  ));
+                  ),);
             });
           },
           onCameraMoveStarted: () {

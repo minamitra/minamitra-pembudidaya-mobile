@@ -2,6 +2,7 @@
 /// @email dikynugraha1111@gmail.com
 /// @create date 2024-03-24 14:22:18
 /// @modify date 2024-03-24 14:22:18
+library;
 
 import 'dart:developer';
 
@@ -49,11 +50,11 @@ class SharedPreferenceServiceImpl implements SharedPreferenceService {
           await _secureStorage.read(key: AppSharedPrefKey.userProfileKey);
       log(userDataJson.toString());
       if (userDataJson == null) {
-        throw Exception("User data not found");
+        throw Exception('User data not found');
       }
       return UserData.fromJson(userDataJson);
     } catch (e) {
-      throw Exception("User data not found");
+      throw Exception('User data not found');
     }
   }
 

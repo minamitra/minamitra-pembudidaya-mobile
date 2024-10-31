@@ -45,7 +45,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       selectedSubDistrict: null,
       selectedVillage: null,
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   Future<void> initWithExistData({
@@ -91,11 +91,11 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       longitude: longitude,
       urlImage: urlImage,
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   Future<void> selectProvince(ProvinceResponseData province) async {
-    final districtResponse = await refService.district(province.id ?? "");
+    final districtResponse = await refService.district(province.id ?? '');
     emit(state.copyWith(
       selectedProvince: province,
       provinceData: state.provinceData,
@@ -106,11 +106,11 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       subDistrictData: null,
       villageData: null,
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   Future<void> selectDistrict(DistrictResponseData district) async {
-    final subDistrictResponse = await refService.subDistrict(district.id ?? "");
+    final subDistrictResponse = await refService.subDistrict(district.id ?? '');
     emit(state.copyWith(
       selectedProvince: state.selectedProvince,
       provinceData: state.provinceData,
@@ -121,11 +121,11 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       status: GlobalState.loaded,
       subDistrictData: subDistrictResponse.data,
       villageData: null,
-    ));
+    ),);
   }
 
   Future<void> selectSubDistrict(SubDistrictResponseData subDistrict) async {
-    final villageResponse = await refService.village(subDistrict.id ?? "");
+    final villageResponse = await refService.village(subDistrict.id ?? '');
     emit(state.copyWith(
       selectedProvince: state.selectedProvince,
       provinceData: state.provinceData,
@@ -136,7 +136,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       selectedVillage: null,
       status: GlobalState.loaded,
       villageData: villageResponse.data,
-    ));
+    ),);
   }
 
   void selectVillage(VillageResponseData village) {
@@ -150,7 +150,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       villageData: state.villageData,
       selectedVillage: village,
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   void changeLocationOnMap(
@@ -171,7 +171,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       villageData: state.villageData,
       selectedVillage: state.selectedVillage,
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   Future<void> uploadImage(File image) async {
@@ -185,7 +185,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
       villageData: state.villageData,
       selectedVillage: state.selectedVillage,
       status: GlobalState.showDialogLoading,
-    ));
+    ),);
     try {
       final response = await cdnService.uploadImage(image);
       emit(state.copyWith(
@@ -197,9 +197,9 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
         selectedSubDistrict: state.selectedSubDistrict,
         villageData: state.villageData,
         selectedVillage: state.selectedVillage,
-        urlImage: response.data.data?.fileuri ?? "",
+        urlImage: response.data.data?.fileuri ?? '',
         status: GlobalState.hideDialogLoading,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         selectedProvince: state.selectedProvince,
@@ -211,7 +211,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
         villageData: state.villageData,
         selectedVillage: state.selectedVillage,
         status: GlobalState.hideDialogLoading,
-      ));
+      ),);
       emit(state.copyWith(
         selectedProvince: state.selectedProvince,
         provinceData: state.provinceData,
@@ -223,7 +223,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
         selectedVillage: state.selectedVillage,
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         selectedProvince: state.selectedProvince,
@@ -235,7 +235,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
         villageData: state.villageData,
         selectedVillage: state.selectedVillage,
         status: GlobalState.hideDialogLoading,
-      ));
+      ),);
       emit(state.copyWith(
         selectedProvince: state.selectedProvince,
         provinceData: state.provinceData,
@@ -247,7 +247,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
         selectedVillage: state.selectedVillage,
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

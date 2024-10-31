@@ -28,7 +28,7 @@ class ActivitySamplingAddPage extends StatelessWidget {
   });
 
   static const RouteSettings routeSettings =
-      RouteSettings(name: "/activity-sampling-add-page");
+      RouteSettings(name: '/activity-sampling-add-page');
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class ActivitySamplingAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          isEdit ? "Edit Sampling" : "Tambah Sampling",
+          isEdit ? 'Edit Sampling' : 'Tambah Sampling',
         ),
         body: BlocConsumer<ActivitySamplingAddCubit, ActivitySamplingAddState>(
           listener: (context, state) {
@@ -63,7 +63,7 @@ class ActivitySamplingAddPage extends StatelessWidget {
             }
 
             if (state.status.isError) {
-              if (state.errorMessage == "TOKEN_EXPIRED") {
+              if (state.errorMessage == 'TOKEN_EXPIRED') {
                 RepositoryProvider.of<AuthenticationRepository>(context)
                     .logout();
               } else {
@@ -73,11 +73,11 @@ class ActivitySamplingAddPage extends StatelessWidget {
 
             if (state.status.isSuccessSubmit) {
               AppTopSnackBar(context).showSuccess(isEdit
-                  ? "Berhasil Edit\nSampling!"
-                  : "Berhasil Membuat\nSampling Baru!");
-              Navigator.of(context).pop("refresh");
+                  ? 'Berhasil Edit\nSampling!'
+                  : 'Berhasil Membuat\nSampling Baru!',);
+              Navigator.of(context).pop('refresh');
               if (isEdit) {
-                Navigator.of(context).pop("refresh");
+                Navigator.of(context).pop('refresh');
               }
             }
           },

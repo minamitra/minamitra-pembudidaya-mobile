@@ -12,13 +12,13 @@ class AddWaterQualityResponse {
 
   factory AddWaterQualityResponse.fromMap(Map<String, dynamic> json) =>
       AddWaterQualityResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : AddWaterQualityResponseData.fromMap(json["data"]),
+            : AddWaterQualityResponseData.fromMap(json['data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -34,10 +34,10 @@ class AddWaterQualityResponseData {
 
   factory AddWaterQualityResponseData.fromMap(Map<String, dynamic> json) =>
       AddWaterQualityResponseData(
-        activityWaterQualityId: json["activity_water_quality_id"],
+        activityWaterQualityId: json['activity_water_quality_id'],
       );
 
   Map<String, dynamic> toMap() => {
-        "activity_water_quality_id": activityWaterQualityId,
+        'activity_water_quality_id': activityWaterQualityId,
       };
 }

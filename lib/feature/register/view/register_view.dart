@@ -31,7 +31,7 @@ class _RegisterViewState extends State<RegisterView> {
     List<Widget> header() {
       return [
         Text(
-          "Daftarkan Akun",
+          'Daftarkan Akun',
           style: appTextTheme(context).titleLarge?.copyWith(
                 fontWeight: FontWeight.w700,
                 fontSize: 22.0,
@@ -39,7 +39,7 @@ class _RegisterViewState extends State<RegisterView> {
         ),
         const SizedBox(height: 10.0),
         Text(
-          "Silahkan masukan data diri anda",
+          'Silahkan masukan data diri anda',
           style: appTextTheme(context).bodyMedium?.copyWith(
                 color: AppColor.neutral[400],
               ),
@@ -54,12 +54,12 @@ class _RegisterViewState extends State<RegisterView> {
         children: [
           AppValidatorTextField(
             controller: nameController,
-            hintText: "Ketik nama lengkap",
-            labelText: "Nama Lengkap",
+            hintText: 'Ketik nama lengkap',
+            labelText: 'Nama Lengkap',
             withUpperLabel: true,
             validator: (String? value) {
               if (value?.isEmpty ?? true) {
-                return "Isi nama lengkap";
+                return 'Isi nama lengkap';
               }
               return null;
             },
@@ -67,16 +67,16 @@ class _RegisterViewState extends State<RegisterView> {
           const SizedBox(height: 18.0),
           AppValidatorTextField(
             controller: phoneController,
-            hintText: "Ketik nomor lengkap",
-            labelText: "Nomor Telepon",
+            hintText: 'Ketik nomor lengkap',
+            labelText: 'Nomor Telepon',
             inputType: TextInputType.phone,
             withUpperLabel: true,
             validator: (String? value) {
               if (value?.isEmpty ?? true) {
-                return "Isi nomor lengkap";
+                return 'Isi nomor lengkap';
               }
               if (!value!.isPhone()) {
-                return "Nomor tidak valid";
+                return 'Nomor tidak valid';
               }
               return null;
             },
@@ -84,15 +84,15 @@ class _RegisterViewState extends State<RegisterView> {
           const SizedBox(height: 18.0),
           AppValidatorTextField(
             controller: emailController,
-            hintText: "Ketik email",
-            labelText: "Email",
+            hintText: 'Ketik email',
+            labelText: 'Email',
             withUpperLabel: true,
             validator: (String? value) {
               if (value?.isEmpty ?? true) {
-                return "Isi email";
+                return 'Isi email';
               }
               if (!value!.isEmail()) {
-                return "Email tidak valid";
+                return 'Email tidak valid';
               }
               return null;
             },
@@ -102,11 +102,11 @@ class _RegisterViewState extends State<RegisterView> {
             builder: (context, state) {
               return AppValidatorTextField(
                 controller: passwordController,
-                labelText: "Password",
+                labelText: 'Password',
                 withUpperLabel: true,
                 isMandatory: false,
                 isObscure: !state,
-                hintText: "Masukan Kata Sandi",
+                hintText: 'Masukan Kata Sandi',
                 suffixWidget: IconButton(
                   icon: Icon(state ? Icons.visibility : Icons.visibility_off),
                   onPressed: () {
@@ -115,10 +115,10 @@ class _RegisterViewState extends State<RegisterView> {
                 ),
                 validator: (String? value) {
                   if (value?.isEmpty ?? true) {
-                    return "Isi password";
+                    return 'Isi password';
                   }
                   if (value!.length < 6) {
-                    return "Minimal 6 karakter";
+                    return 'Minimal 6 karakter';
                   }
                   return null;
                 },
@@ -161,33 +161,33 @@ class _RegisterViewState extends State<RegisterView> {
                 children: [
                   TextSpan(
                     text:
-                        "Dengan menekan tombol Masuk Atau Daftar, Berarti Anda menyetujui ",
+                        'Dengan menekan tombol Masuk Atau Daftar, Berarti Anda menyetujui ',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.neutral[400],
                         ),
                   ),
                   TextSpan(
-                    text: "Syarat & Ketentuan ",
+                    text: 'Syarat & Ketentuan ',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.primary[600],
                           fontWeight: FontWeight.w500,
                         ),
                   ),
                   TextSpan(
-                    text: "dan ",
+                    text: 'dan ',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.neutral[400],
                         ),
                   ),
                   TextSpan(
-                    text: "Kebijakan Privasi ",
+                    text: 'Kebijakan Privasi ',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.primary[600],
                           fontWeight: FontWeight.w500,
                         ),
                   ),
                   TextSpan(
-                    text: "kami.",
+                    text: 'kami.',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.neutral[400],
                         ),
@@ -195,7 +195,7 @@ class _RegisterViewState extends State<RegisterView> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       );
     }
@@ -204,13 +204,13 @@ class _RegisterViewState extends State<RegisterView> {
       return BlocBuilder<SecondaryActiveCubit, bool>(
         builder: (context, state) {
           return AppPrimaryFullButton(
-            "Daftar",
+            'Daftar',
             () {
               if (formKey.currentState!.validate()) {
                 SystemChannels.textInput.invokeMethod('TextInput.hide');
                 if (!context.read<SecondaryActiveCubit>().state) {
                   AppTopSnackBar(context)
-                      .showDanger("Harap berikan persetujuan TOC");
+                      .showDanger('Harap berikan persetujuan TOC');
                   return;
                 } else {
                   context.read<RegisterCubit>().register(
@@ -236,14 +236,14 @@ class _RegisterViewState extends State<RegisterView> {
         child: Wrap(
           children: [
             Text(
-              "Sudah Mempunyai Akun? ",
+              'Sudah Mempunyai Akun? ',
               textAlign: TextAlign.center,
               style: appTextTheme(context).bodySmall?.copyWith(
                     fontWeight: FontWeight.w400,
                   ),
             ),
             Text(
-              "Masuk",
+              'Masuk',
               textAlign: TextAlign.center,
               style: appTextTheme(context).bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,

@@ -4,14 +4,14 @@ class ProfileEndpoint {
   ProfileEndpoint();
 
   Uri detailProfile() {
-    return createUrl(path: "/mitra/profile/detail-personnal");
+    return createUrl(path: '/mitra/profile/detail-personnal');
   }
 
   Uri updateProfile() {
-    return createUrl(path: "/mitra/profile/update-personnal");
+    return createUrl(path: '/mitra/profile/update-personnal');
   }
 
   Uri postUpdatePassword() {
-    return createUrl(path: "/mitra/profile/update-password");
+    return createUrl(path: '/mitra/profile/update-password');
   }
 }

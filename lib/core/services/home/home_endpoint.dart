@@ -5,7 +5,7 @@ class HomeEndpoint {
 
   Uri getHomeBanner() {
     return createUrl(
-      path: "mitra/home-banner/data",
+      path: 'mitra/home-banner/data',
     );
   }
 }

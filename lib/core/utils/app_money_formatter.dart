@@ -14,10 +14,10 @@ class AppCurrencyFormatter {
       CurrencyTextInputFormatter.currency(
     locale: 'id',
     decimalDigits: 0,
-    symbol: "",
+    symbol: '',
   );
 
   String unFormatedCurrency(String value) {
-    return value.replaceAll("Rp ", "").replaceAll(".", "");
+    return value.replaceAll('Rp ', '').replaceAll('.', '');
   }
 }

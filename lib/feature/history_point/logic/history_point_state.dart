@@ -3,7 +3,7 @@ part of 'history_point_cubit.dart';
 class HistoryPointState extends Equatable {
   const HistoryPointState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.selectedFilter = -1,
   });
 

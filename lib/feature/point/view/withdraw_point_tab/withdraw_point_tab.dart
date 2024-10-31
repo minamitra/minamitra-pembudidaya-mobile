@@ -58,14 +58,14 @@ class WithdrawPointTab extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Super Patin",
+                          'Super Patin',
                           style: appTextTheme(context)
                               .titleSmall
                               ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 6.0),
                         Text(
-                          "Pakan",
+                          'Pakan',
                           style: appTextTheme(context)
                               .bodySmall
                               ?.copyWith(color: AppColor.neutral[400]),
@@ -76,7 +76,7 @@ class WithdrawPointTab extends StatelessWidget {
                           children: [
                             Expanded(
                               child: Text(
-                                "10 Poin",
+                                '10 Poin',
                                 style:
                                     appTextTheme(context).titleSmall?.copyWith(
                                           color: AppColor.accent[900],
@@ -95,7 +95,7 @@ class WithdrawPointTab extends StatelessWidget {
                                     Border.all(color: AppColor.primary[500]!),
                               ),
                               child: Text(
-                                "Tukar Poin",
+                                'Tukar Poin',
                                 style:
                                     appTextTheme(context).titleSmall?.copyWith(
                                           color: AppColor.primary[500],

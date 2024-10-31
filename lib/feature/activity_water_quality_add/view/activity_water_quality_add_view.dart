@@ -74,32 +74,32 @@ class _ActivityWaterQualityAddViewState
     if (widget.isEdit) {
       dateController.text = widget.data!.datetime != null
           ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
-          : "";
+          : '';
       hourController.text = widget.data!.datetime != null
           ? AppConvertDateTime().jm24(widget.data!.datetime!)
-          : "";
+          : '';
       waterLevelController.text =
-          widget.data!.level != null ? widget.data!.level.toString() : "";
+          widget.data!.level != null ? widget.data!.level.toString() : '';
       waterPHController.text =
-          widget.data!.ph != null ? widget.data!.ph.toString() : "";
+          widget.data!.ph != null ? widget.data!.ph.toString() : '';
       salinityController.text = widget.data!.salinitas != null
           ? widget.data!.salinitas.toString()
-          : "";
+          : '';
       temperatureController.text = widget.data!.temperature != null
           ? widget.data!.temperature.toString()
-          : "";
+          : '';
       dOController.text =
-          widget.data!.dO != null ? widget.data!.dO.toString() : "";
+          widget.data!.dO != null ? widget.data!.dO.toString() : '';
       brightnessController.text =
-          widget.data!.clarity != null ? widget.data!.clarity.toString() : "";
+          widget.data!.clarity != null ? widget.data!.clarity.toString() : '';
       orpController.text =
-          widget.data!.orp != null ? widget.data!.orp.toString() : "";
+          widget.data!.orp != null ? widget.data!.orp.toString() : '';
       waterColorController.text =
-          widget.data!.waterColor != null ? widget.data!.waterColor! : "";
+          widget.data!.waterColor != null ? widget.data!.waterColor! : '';
       weatherController.text =
-          widget.data!.waterWeather != null ? widget.data!.waterWeather! : "";
+          widget.data!.waterWeather != null ? widget.data!.waterWeather! : '';
       notesController.text =
-          widget.data!.note != null ? widget.data!.note! : "";
+          widget.data!.note != null ? widget.data!.note! : '';
       if (widget.data!.attachmentJsonArray != null &&
           widget.data!.attachmentJsonArray!.isNotEmpty) {
         convertAttachmentImage(widget.data!.attachmentJsonArray!);
@@ -120,8 +120,8 @@ class _ActivityWaterQualityAddViewState
       return AppValidatorTextField(
         readOnly: true,
         controller: dateController,
-        hintText: "Pilih Tanggal",
-        labelText: "Tanggal",
+        hintText: 'Pilih Tanggal',
+        labelText: 'Tanggal',
         suffixConstraints: const BoxConstraints(),
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
@@ -148,7 +148,7 @@ class _ActivityWaterQualityAddViewState
         },
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Tanggal tidak boleh kosong";
+            return 'Tanggal tidak boleh kosong';
           }
           return null;
         },
@@ -159,8 +159,8 @@ class _ActivityWaterQualityAddViewState
       return AppValidatorTextField(
         readOnly: true,
         controller: hourController,
-        hintText: "Pilih Jam",
-        labelText: "Jam",
+        hintText: 'Pilih Jam',
+        labelText: 'Jam',
         suffixConstraints: const BoxConstraints(
           maxHeight: 50,
           maxWidth: 50,
@@ -183,15 +183,14 @@ class _ActivityWaterQualityAddViewState
           ).then((time) {
             setState(() {
               if (time != null) {
-                hourController.text = time.format(context).replaceAll(".", ":");
-                ;
+                hourController.text = time.format(context).replaceAll('.', ':');
               }
             });
           });
         },
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Jam tidak boleh kosong";
+            return 'Jam tidak boleh kosong';
           }
           return null;
         },
@@ -201,13 +200,13 @@ class _ActivityWaterQualityAddViewState
     Widget waterLevel() {
       return AppValidatorTextField(
         controller: waterLevelController,
-        hintText: "0",
-        labelText: "Ketinggian Air",
+        hintText: '0',
+        labelText: 'Ketinggian Air',
         inputType: TextInputType.number,
         isMandatory: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "Ketinggian air tidak boleh kosong";
+            return 'Ketinggian air tidak boleh kosong';
           }
           return null;
         },
@@ -215,7 +214,7 @@ class _ActivityWaterQualityAddViewState
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "cm",
+            'cm',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -228,13 +227,13 @@ class _ActivityWaterQualityAddViewState
     Widget waterPH() {
       return AppValidatorTextField(
         controller: waterPHController,
-        hintText: "0",
-        labelText: "PH",
+        hintText: '0',
+        labelText: 'PH',
         inputType: TextInputType.number,
         isMandatory: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "PH air tidak boleh kosong";
+            return 'PH air tidak boleh kosong';
           }
           return null;
         },
@@ -244,8 +243,8 @@ class _ActivityWaterQualityAddViewState
     Widget salinity() {
       return AppValidatorTextField(
         controller: salinityController,
-        hintText: "0",
-        labelText: "Salinitas",
+        hintText: '0',
+        labelText: 'Salinitas',
         inputType: TextInputType.number,
         isMandatory: false,
         validator: (String? value) {
@@ -258,7 +257,7 @@ class _ActivityWaterQualityAddViewState
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "ppt",
+            'ppt',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -271,13 +270,13 @@ class _ActivityWaterQualityAddViewState
     Widget temperature() {
       return AppValidatorTextField(
         controller: temperatureController,
-        hintText: "0",
-        labelText: "Suhu",
+        hintText: '0',
+        labelText: 'Suhu',
         inputType: TextInputType.number,
         isMandatory: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "Temperatur tidak boleh kosong";
+            return 'Temperatur tidak boleh kosong';
           }
           return null;
         },
@@ -285,7 +284,7 @@ class _ActivityWaterQualityAddViewState
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "°C",
+            '°C',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -298,8 +297,8 @@ class _ActivityWaterQualityAddViewState
     Widget dO() {
       return AppValidatorTextField(
         controller: dOController,
-        hintText: "0",
-        labelText: "DO",
+        hintText: '0',
+        labelText: 'DO',
         inputType: TextInputType.number,
         isMandatory: false,
         validator: (String? value) {
@@ -312,7 +311,7 @@ class _ActivityWaterQualityAddViewState
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "mg/L",
+            'mg/L',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -325,8 +324,8 @@ class _ActivityWaterQualityAddViewState
     Widget brightness() {
       return AppValidatorTextField(
         controller: brightnessController,
-        hintText: "0",
-        labelText: "Kecerahan",
+        hintText: '0',
+        labelText: 'Kecerahan',
         inputType: TextInputType.number,
         isMandatory: false,
         validator: (String? value) {
@@ -339,7 +338,7 @@ class _ActivityWaterQualityAddViewState
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "mg/L",
+            'mg/L',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -352,8 +351,8 @@ class _ActivityWaterQualityAddViewState
     Widget orp() {
       return AppValidatorTextField(
         controller: orpController,
-        hintText: "0",
-        labelText: "ORP",
+        hintText: '0',
+        labelText: 'ORP',
         inputType: TextInputType.number,
         isMandatory: false,
         validator: (String? value) {
@@ -366,7 +365,7 @@ class _ActivityWaterQualityAddViewState
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "mg/L",
+            'mg/L',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -382,8 +381,8 @@ class _ActivityWaterQualityAddViewState
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Warna Air",
-        hintText: "Pilih Air",
+        labelText: 'Warna Air',
+        hintText: 'Pilih Air',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -391,14 +390,14 @@ class _ActivityWaterQualityAddViewState
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Warna air tidak boleh kosong";
+            return 'Warna air tidak boleh kosong';
           }
           return null;
         },
         onTap: appBottomSheetShowModal(
           context,
-          "Pilih warna air",
-          ["Cokelat", "Biru", "Bening"],
+          'Pilih warna air',
+          ['Cokelat', 'Biru', 'Bening'],
           (value) {
             waterColorController.text = value;
           },
@@ -412,8 +411,8 @@ class _ActivityWaterQualityAddViewState
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Cuaca",
-        hintText: "Pilih cuaca",
+        labelText: 'Cuaca',
+        hintText: 'Pilih cuaca',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -421,14 +420,14 @@ class _ActivityWaterQualityAddViewState
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Cuaca tidak boleh kosong";
+            return 'Cuaca tidak boleh kosong';
           }
           return null;
         },
         onTap: appBottomSheetShowModal(
           context,
-          "Pilih cuaca",
-          ["Mendung", "Badai", "Cerah"],
+          'Pilih cuaca',
+          ['Mendung', 'Badai', 'Cerah'],
           (value) {
             weatherController.text = value;
           },
@@ -439,8 +438,8 @@ class _ActivityWaterQualityAddViewState
     Widget noteTextField() {
       return AppValidatorTextField(
         controller: notesController,
-        hintText: "Masukan catatan",
-        labelText: "Catatan",
+        hintText: 'Masukan catatan',
+        labelText: 'Catatan',
         maxLines: 3,
         isMandatory: false,
         // validator: (String? value) {
@@ -459,7 +458,7 @@ class _ActivityWaterQualityAddViewState
           Wrap(
             children: [
               Text(
-                "Unggah Lampiran",
+                'Unggah Lampiran',
                 style: appTextTheme(context).bodyMedium,
               ),
             ],
@@ -477,7 +476,7 @@ class _ActivityWaterQualityAddViewState
                     ),
                     builder: (bottomSheetContext) {
                       return AppImagePickerMenu(
-                        "Upload Gambar",
+                        'Upload Gambar',
                         (type) async {
                           switch (type) {
                             case PhotoSource.camera:
@@ -523,11 +522,11 @@ class _ActivityWaterQualityAddViewState
           ),
           const SizedBox(height: 8.0),
           Text(
-            "Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB",
+            'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
             style: appTextTheme(context).labelLarge?.copyWith(
                   color: AppColor.neutral[500],
                 ),
-          )
+          ),
         ],
       );
     }
@@ -582,7 +581,7 @@ class _ActivityWaterQualityAddViewState
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (!formKey.currentState!.validate()) {
               return;
@@ -598,7 +597,7 @@ class _ActivityWaterQualityAddViewState
                 fishpondId: widget.fishpondId,
                 fishpondcycleId: widget.fishpondcycleId,
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 level: double.parse(waterLevelController.text),
                 ph: double.parse(waterPHController.text),
@@ -618,9 +617,9 @@ class _ActivityWaterQualityAddViewState
                   );
             } else {
               UpdateWaterQualityPayload payload = UpdateWaterQualityPayload(
-                id: widget.data?.id ?? "",
+                id: widget.data?.id ?? '',
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 level: double.parse(waterLevelController.text),
                 ph: double.parse(waterPHController.text),

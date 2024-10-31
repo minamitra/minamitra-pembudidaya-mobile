@@ -13,9 +13,9 @@ class AddNewFeedPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Tambah Pakan Baru",
+        'Tambah Pakan Baru',
       ),
-      body: AddNewFeedView(),
+      body: const AddNewFeedView(),
     );
   }
 }

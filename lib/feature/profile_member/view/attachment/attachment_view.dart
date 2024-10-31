@@ -32,10 +32,10 @@ class _AttachmentViewState extends State<AttachmentView> {
   @override
   void initState() {
     super.initState();
-    if (widget.profile.ktpUrl != null && widget.profile.ktpUrl != "") {
+    if (widget.profile.ktpUrl != null && widget.profile.ktpUrl != '') {
       convertKtpImageUrl(widget.profile.ktpUrl!);
     }
-    if (widget.profile.ekusukaUrl != null && widget.profile.ekusukaUrl != "") {
+    if (widget.profile.ekusukaUrl != null && widget.profile.ekusukaUrl != '') {
       convertEkusukaImageUrl(widget.profile.ekusukaUrl!);
     }
   }
@@ -59,7 +59,7 @@ class _AttachmentViewState extends State<AttachmentView> {
     List<Widget> identityPhoto() {
       return [
         Text(
-          "Foto KTP",
+          'Foto KTP',
           style: appTextTheme(context).titleSmall,
         ),
         const SizedBox(height: 8.0),
@@ -72,7 +72,7 @@ class _AttachmentViewState extends State<AttachmentView> {
               ),
               builder: (bottomSheetContext) {
                 return AppImagePickerMenu(
-                  "Upload Gambar",
+                  'Upload Gambar',
                   (type) async {
                     switch (type) {
                       case PhotoSource.camera:
@@ -147,18 +147,18 @@ class _AttachmentViewState extends State<AttachmentView> {
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Unggah file .jpg, .jpeg, .png, .img, .pdf ukuran maks 2MB",
+          'Unggah file .jpg, .jpeg, .png, .img, .pdf ukuran maks 2MB',
           style: appTextTheme(context)
               .labelLarge
               ?.copyWith(color: AppColor.neutral[500]),
-        )
+        ),
       ];
     }
 
     List<Widget> identityMemberPhoto() {
       return [
         Text(
-          "Kartu E-Kusuka",
+          'Kartu E-Kusuka',
           style: appTextTheme(context).titleSmall,
         ),
         const SizedBox(height: 8.0),
@@ -171,7 +171,7 @@ class _AttachmentViewState extends State<AttachmentView> {
               ),
               builder: (bottomSheetContext) {
                 return AppImagePickerMenu(
-                  "Upload Gambar",
+                  'Upload Gambar',
                   (type) async {
                     switch (type) {
                       case PhotoSource.camera:
@@ -247,23 +247,23 @@ class _AttachmentViewState extends State<AttachmentView> {
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Unggah file .jpg, .jpeg, .png, .img, .pdf ukuran maks 2MB",
+          'Unggah file .jpg, .jpeg, .png, .img, .pdf ukuran maks 2MB',
           style: appTextTheme(context)
               .labelLarge
               ?.copyWith(color: AppColor.neutral[500]),
-        )
+        ),
       ];
     }
 
     Widget button() {
       return AppPrimaryButton(
-        "Simpan",
+        'Simpan',
         () async {
           File tempKtpFile;
           File tempEkusukaFile;
           if (ktpPictureFile == null && ekusukaCardPictureFile == null) {
             AppTopSnackBar(context)
-                .showDanger("Mohon lengkapi data terlebih dahulu");
+                .showDanger('Mohon lengkapi data terlebih dahulu');
             return;
           }
           if (ktpPictureFile != null && ekusukaCardPictureFile != null) {

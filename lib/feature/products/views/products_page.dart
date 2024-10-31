@@ -13,14 +13,14 @@ class ProductsPage extends StatelessWidget {
   const ProductsPage({this.isPick = false, super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/products");
+      const RouteSettings(name: '/products');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Belanja",
+        'Belanja',
         actions: [
           Image.asset(
             AppAssets.bellIcon,

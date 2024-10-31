@@ -26,22 +26,22 @@ class UpdateTreatmentPayload {
 
   factory UpdateTreatmentPayload.fromMap(Map<String, dynamic> json) =>
       UpdateTreatmentPayload(
-        id: json["id"],
-        datetime: json["datetime"],
-        fishAge: json["fish_age"],
-        name: json["name"],
-        note: json["note"],
-        cost: json["cost"],
-        attachmentJsonArray: json["attachment_json_array"],
+        id: json['id'],
+        datetime: json['datetime'],
+        fishAge: json['fish_age'],
+        name: json['name'],
+        note: json['note'],
+        cost: json['cost'],
+        attachmentJsonArray: json['attachment_json_array'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "datetime": datetime!.toIso8601String(),
-        "fish_age": fishAge,
-        "name": name,
-        "note": note,
-        "cost": cost,
-        "attachment_json_array": attachmentJsonArray ?? [],
+        'id': id,
+        'datetime': datetime!.toIso8601String(),
+        'fish_age': fishAge,
+        'name': name,
+        'note': note,
+        'cost': cost,
+        'attachment_json_array': attachmentJsonArray ?? [],
       };
 }

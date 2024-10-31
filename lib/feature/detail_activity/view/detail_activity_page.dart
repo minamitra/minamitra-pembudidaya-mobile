@@ -88,15 +88,15 @@ class DetailActivityPage extends StatelessWidget {
         CycleServiceImpl.create(),
         PondServiceImpl.create(),
       )..init(
-          pondData.id ?? "0",
-          pondData.lastFishpondcycleId ?? "",
+          pondData.id ?? '0',
+          pondData.lastFishpondcycleId ?? '',
         ),
       child: BlocBuilder<DetailActivityCubit, DetailActivityState>(
         builder: (context, state) {
           return BlocListener<DetailActivityCubit, DetailActivityState>(
             listener: (context, state) {
               if (state.status.isError) {
-                if (state.errorMessage == "TOKEN_EXPIRED") {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
                   RepositoryProvider.of<AuthenticationRepository>(context)
                       .logout();
                 } else {
@@ -113,7 +113,7 @@ class DetailActivityPage extends StatelessWidget {
               }
 
               if (state.status.isSuccessSubmit) {
-                Navigator.of(context).pop("refresh");
+                Navigator.of(context).pop('refresh');
               }
             },
             child: Scaffold(

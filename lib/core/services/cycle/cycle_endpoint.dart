@@ -1,20 +1,19 @@
 import 'package:minamitra_pembudidaya_mobile/core/network/url_builder.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 
 class CycleEndpoint {
   CycleEndpoint();
 
   Uri getOngoingCycle({
-    String status = "active",
+    String status = 'active',
     String? fishpondID,
     String? lastPondCycleID,
   }) {
     return createUrl(
-      path: "mitra/fishpondcycle/data",
+      path: 'mitra/fishpondcycle/data',
       queryParameters: {
         // "status": status,
-        if (fishpondID != null) "fishpond_id": fishpondID,
-        if (lastPondCycleID != null) "id": lastPondCycleID,
+        if (fishpondID != null) 'fishpond_id': fishpondID,
+        if (lastPondCycleID != null) 'id': lastPondCycleID,
       },
     );
   }
@@ -26,24 +25,24 @@ class CycleEndpoint {
     String? lastDate,
   }) {
     return createUrl(
-      path: "mitra/fishpondcycle/data",
+      path: 'mitra/fishpondcycle/data',
       queryParameters: {
-        "fishpond_id": pondID,
-        "status[eq]": status,
-        "pagination_bool": "false",
-        if (firstDate != null) "estimation_panen_date[gte]": firstDate,
-        if (lastDate != null) "estimation_panen_date[lte]": lastDate,
+        'fishpond_id': pondID,
+        'status[eq]': status,
+        'pagination_bool': 'false',
+        if (firstDate != null) 'estimation_panen_date[gte]': firstDate,
+        if (lastDate != null) 'estimation_panen_date[lte]': lastDate,
       },
     );
   }
 
   Uri postHarvest() {
-    return createUrl(path: "mitra/fishpondcycle/update-panen");
+    return createUrl(path: 'mitra/fishpondcycle/update-panen');
   }
 
   Uri updateHarvestDone() {
     return createUrl(
-      path: "mitra/fishpondcycle/update-panen-selesai",
+      path: 'mitra/fishpondcycle/update-panen-selesai',
     );
   }
 
@@ -52,10 +51,10 @@ class CycleEndpoint {
     required String filterName,
   }) {
     return createUrl(
-      path: "mitra/fishpondcycle/data-grafik",
+      path: 'mitra/fishpondcycle/data-grafik',
       queryParameters: {
-        "fishpondcycle_id": pondCycleID,
-        "filter": filterName,
+        'fishpondcycle_id': pondCycleID,
+        'filter': filterName,
       },
     );
   }
@@ -67,13 +66,13 @@ class CycleEndpoint {
     String? companionName,
   }) {
     return createUrl(
-      path: "mitra/assistant-note/data",
+      path: 'mitra/assistant-note/data',
       queryParameters: {
-        "fishpondcycle_id": pondCycleID,
-        "pagination_bool": "false",
-        if (filterStartDate != null) "create_datetime[gte]": filterStartDate,
-        if (filterEndDate != null) "create_datetime[lte]": filterEndDate,
-        if (companionName != null) "user_name": companionName,
+        'fishpondcycle_id': pondCycleID,
+        'pagination_bool': 'false',
+        if (filterStartDate != null) 'create_datetime[gte]': filterStartDate,
+        if (filterEndDate != null) 'create_datetime[lte]': filterEndDate,
+        if (companionName != null) 'user_name': companionName,
       },
     );
   }

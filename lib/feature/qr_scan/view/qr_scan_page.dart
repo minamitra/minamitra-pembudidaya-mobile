@@ -14,8 +14,8 @@ class QrScanPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => QrscanCubit(),
       child: Scaffold(
-        appBar: appDefaultAppBar(context, "QR Scan"),
-        body: QrScanView(),
+        appBar: appDefaultAppBar(context, 'QR Scan'),
+        body: const QrScanView(),
       ),
     );
   }

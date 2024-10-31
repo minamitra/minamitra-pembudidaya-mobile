@@ -12,10 +12,10 @@ class ProductCategoryResponse {
 
   factory ProductCategoryResponse.fromMap(Map<String, dynamic> json) =>
       ProductCategoryResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<ProductCategoryData>.from(
-                json["data"]!.map((x) => ProductCategoryData.fromMap(x))),
+                json['data']!.map((x) => ProductCategoryData.fromMap(x)),),
       );
 }
 
@@ -39,10 +39,10 @@ class ProductCategoryData {
 
   factory ProductCategoryData.fromMap(Map<String, dynamic> json) =>
       ProductCategoryData(
-        id: json["id"],
-        parId: json["par_id"],
-        name: json["name"],
-        activeBool: json["active_bool"],
-        productCount: json["product_count"],
+        id: json['id'],
+        parId: json['par_id'],
+        name: json['name'],
+        activeBool: json['active_bool'],
+        productCount: json['product_count'],
       );
 }

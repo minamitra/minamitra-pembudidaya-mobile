@@ -13,7 +13,7 @@ class AddressMemberPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Alamat Saya",
+        'Alamat Saya',
       ),
       body: const AddressMemberView(),
     );

@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -70,7 +69,7 @@ class _MapPanelState extends State<MapPanel> {
                       color: AppColor.primary,
                     ),
                     SizedBox(width: 8.0),
-                    Text("Letak Lokasi")
+                    Text('Letak Lokasi'),
                   ],
                 ),
                 const SizedBox(height: 12.0),
@@ -78,7 +77,7 @@ class _MapPanelState extends State<MapPanel> {
                 const SizedBox(height: 12.0),
                 Row(
                   children: [
-                    const Text("Latitude : "),
+                    const Text('Latitude : '),
                     const SizedBox(width: 8.0),
                     Text(latLng.latitude.toString()),
                   ],
@@ -86,7 +85,7 @@ class _MapPanelState extends State<MapPanel> {
                 const SizedBox(height: 8.0),
                 Row(
                   children: [
-                    const Text("Longitude : "),
+                    const Text('Longitude : '),
                     const SizedBox(width: 8.0),
                     Text(latLng.longitude.toString()),
                   ],

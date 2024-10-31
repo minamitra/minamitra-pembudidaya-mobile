@@ -32,21 +32,21 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(state.copyWith(status: GlobalState.hideDialogLoading));
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Gagal mendaftar",
-        ));
+          errorMessage: 'Gagal mendaftar',
+        ),);
       }
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

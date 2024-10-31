@@ -20,31 +20,31 @@ class PromoDummy {
 
 final List<PromoDummy> promoDummyList = [
   PromoDummy(
-    title: "HARGA\nSPESIAL",
+    title: 'HARGA\nSPESIAL',
     iconAsset: AppAssets.specialPriceIcon,
     cardColor: AppColor.primary[900]!,
     chipColor: AppColor.primary[700]!,
     onTap: () {},
   ),
   PromoDummy(
-    title: "PAKAN\nHEMAT",
+    title: 'PAKAN\nHEMAT',
     iconAsset: AppAssets.economicalFeedIcon,
     cardColor: AppColor.secondary[900]!,
     chipColor: AppColor.secondary[700]!,
     onTap: () {},
   ),
   PromoDummy(
-    title: "PAKET\nBENIH",
+    title: 'PAKET\nBENIH',
     iconAsset: AppAssets.feedPackageIcon,
     cardColor: AppColor.primary[900]!,
     chipColor: AppColor.primary[700]!,
     onTap: () {},
   ),
   PromoDummy(
-    title: "VOUCHER\nKONSUL",
+    title: 'VOUCHER\nKONSUL',
     iconAsset: AppAssets.cosulVoucherIcon,
     cardColor: AppColor.secondary[900]!,
     chipColor: AppColor.secondary[700]!,
     onTap: () {},
-  )
+  ),
 ];

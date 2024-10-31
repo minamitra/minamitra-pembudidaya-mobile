@@ -1,6 +1,6 @@
-import "package:flutter/material.dart";
-import "package:minamitra_pembudidaya_mobile/core/themes/app_color.dart";
-import "package:minamitra_pembudidaya_mobile/main.dart";
+import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 enum PhotoSource { camera, gallery }
 
@@ -12,8 +12,9 @@ class AppImagePickerMenu extends StatelessWidget {
 
   const AppImagePickerMenu(
     this.title,
-    this._callback,
-  );
+    this._callback, {
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class AppImagePickerMenu extends StatelessWidget {
             Icons.photo_camera_outlined,
             color: AppColor.primary,
           ),
-          "Kamera",
+          'Kamera',
           () => _callback(PhotoSource.camera),
         ),
         _ImagePickerOption(
@@ -33,7 +34,7 @@ class AppImagePickerMenu extends StatelessWidget {
             Icons.photo_library_outlined,
             color: AppColor.primary,
           ),
-          "Galeri",
+          'Galeri',
           () => _callback(PhotoSource.gallery),
         ),
       ],
@@ -52,9 +53,8 @@ class _BottomMenuContainer extends StatelessWidget {
 
   const _BottomMenuContainer(
     this._title,
-    this._child, {
-    Key? key,
-  }) : super(key: key);
+    this._child,
+  );
 
   @override
   Widget build(BuildContext context) {

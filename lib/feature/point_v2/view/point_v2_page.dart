@@ -18,7 +18,7 @@ class PointV2Page extends StatelessWidget {
           toolbarHeight: 0.0,
           elevation: 0.0,
         ),
-        body: PointV2View(),
+        body: const PointV2View(),
       ),
     );
   }

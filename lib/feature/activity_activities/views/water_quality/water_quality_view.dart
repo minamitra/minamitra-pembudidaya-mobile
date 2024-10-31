@@ -37,9 +37,9 @@ class _WaterQualityViewState extends State<WaterQualityView> {
               .push(AppTransition.pushTransition(
             ActivityWaterQualityDetailPage(data),
             ActivityWaterQualityDetailPage.routeSettings(),
-          ))
+          ),)
               .then((value) {
-            if (value == "refresh") {
+            if (value == 'refresh') {
               context.read<WaterQualityCubit>().init(
                     widget.fishpondId,
                     widget.fishpondcycleId,
@@ -70,7 +70,7 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : "-",
+                        data.datetime != null ? data.datetime.toString() : '-',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -120,12 +120,12 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                       // );
                       showDeleteBottomSheet(
                         context,
-                        title: "Hapus Kualitas Air",
+                        title: 'Hapus Kualitas Air',
                         descriptions:
-                            "Apakah Anda yakin ingin menghapus kualitas air ini?",
+                            'Apakah Anda yakin ingin menghapus kualitas air ini?',
                         onTapDelete: () {
                           context.read<WaterQualityCubit>().deleteWaterQuality(
-                                data.id ?? "",
+                                data.id ?? '',
                                 widget.fishpondId,
                                 widget.fishpondcycleId,
                                 widget.datetime,
@@ -147,13 +147,13 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                 children: [
                   Image.asset(AppAssets.phNewIcon, height: 20.0),
                   const SizedBox(width: 8.0),
-                  Text(data.ph != null ? data.ph.toString() : "-",
-                      style: appTextTheme(context).titleSmall),
+                  Text(data.ph != null ? data.ph.toString() : '-',
+                      style: appTextTheme(context).titleSmall,),
                   const SizedBox(width: 24.0),
                   Image.asset(AppAssets.temperatureIcon, height: 20.0),
                   const SizedBox(width: 8.0),
-                  Text(data.ph != null ? '${data.ph.toString()} °C' : "-",
-                      style: appTextTheme(context).titleSmall),
+                  Text(data.ph != null ? '${data.ph.toString()} °C' : '-',
+                      style: appTextTheme(context).titleSmall,),
                 ],
               ),
             ],
@@ -175,7 +175,7 @@ class _WaterQualityViewState extends State<WaterQualityView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
                   child: AppEmptyData(
-                      "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
                 )
               : ListView.separated(
                   shrinkWrap: true,

@@ -38,7 +38,7 @@ class RefServiceImpl implements RefService {
 
   @override
   Future<BaseResponse<DistrictResponse>> district(String provinceID) async {
-    log("provinceID running");
+    log('provinceID running');
     final uri = endpoint.getDistrict(provinceID);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
@@ -61,7 +61,7 @@ class RefServiceImpl implements RefService {
 
   @override
   Future<BaseResponse<SubDistrictResponse>> subDistrict(
-      String districtID) async {
+      String districtID,) async {
     final uri = endpoint.getSubDistrict(districtID);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);

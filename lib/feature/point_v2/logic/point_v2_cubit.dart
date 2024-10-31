@@ -15,7 +15,7 @@ class PointV2Cubit extends Cubit<PointV2State> {
     emit(state.copyWith(
       status: GlobalState.loaded,
       selectedGridExchange: index,
-    ));
+    ),);
   }
 
   Future<void> onSubmitExchange() async {

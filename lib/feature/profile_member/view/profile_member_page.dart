@@ -22,7 +22,7 @@ class ProfileMemberPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Profil Saya",
+          'Profil Saya',
         ),
         body: const ProfileMemberView(),
       ),

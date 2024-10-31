@@ -22,6 +22,6 @@ class AddPondFirstStepCubit extends Cubit<AddPondFirstStepState> {
       pondLength: double.parse(pondlengthController.text),
       pondWidth: double.parse(pondWidthController.text),
       pondDepth: double.parse(pondDeepController.text),
-    ));
+    ),);
   }
 }

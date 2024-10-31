@@ -26,22 +26,22 @@ class AddSamplingPayload {
 
   factory AddSamplingPayload.fromMap(Map<String, dynamic> json) =>
       AddSamplingPayload(
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
-        datetime: json["datetime"],
-        mbw: json["mbw"],
-        sr: json["sr"],
-        note: json["note"],
-        attachmentJsonArray: json["attachment_json_array"],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
+        datetime: json['datetime'],
+        mbw: json['mbw'],
+        sr: json['sr'],
+        note: json['note'],
+        attachmentJsonArray: json['attachment_json_array'],
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
-        "datetime": datetime!.toIso8601String(),
-        "mbw": mbw,
-        "sr": sr,
-        "note": note,
-        "attachment_json_array": attachmentJsonArray,
+        'fishpond_id': fishpondId,
+        'fishpondcycle_id': fishpondcycleId,
+        'datetime': datetime!.toIso8601String(),
+        'mbw': mbw,
+        'sr': sr,
+        'note': note,
+        'attachment_json_array': attachmentJsonArray,
       };
 }

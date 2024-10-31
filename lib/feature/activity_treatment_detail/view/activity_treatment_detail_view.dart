@@ -70,38 +70,38 @@ class _ActivityTreatmentDetailViewState
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-              "Waktu  Perlakuan",
+              'Waktu  Perlakuan',
               widget.data.datetime != null
                   ? AppConvertDateTime().dmyName(widget.data.datetime!)
-                  : ""),
+                  : '',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Umur Ikan", widget.data.fishAge ?? "-"),
+          AppWidgetSeparatedItem('Umur Ikan', widget.data.fishAge ?? '-'),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Perlakuan", widget.data.name ?? "-"),
+          AppWidgetSeparatedItem('Perlakuan', widget.data.name ?? '-'),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "Biaya",
+              'Biaya',
               widget.data.cost != null
                   ? appConvertCurrency(double.parse(widget.data.cost!))
-                  : ""),
+                  : '',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
-            "Catatan",
-            widget.data.note ?? "-",
+            'Catatan',
+            widget.data.note ?? '-',
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           Text(
-            "File Lampiran",
+            'File Lampiran',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                 ),
@@ -129,7 +129,7 @@ class _ActivityTreatmentDetailViewState
           children: [
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Hapus",
+                'Hapus',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.trashIcon,
@@ -141,7 +141,7 @@ class _ActivityTreatmentDetailViewState
             const SizedBox(width: 16.0),
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Edit",
+                'Edit',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.editIcon,

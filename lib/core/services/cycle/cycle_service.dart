@@ -14,13 +14,13 @@ import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph
 
 abstract class CycleService {
   Future<BaseResponse<OnGoingCycleFeedResponse>> getOngoingCycle({
-    String status = "active",
+    String status = 'active',
     String? fishpondID,
     String? lastPondCycleID,
   });
   Future<BaseResponse<FeedCycleHistoryResponse>> getFeedCycleHistory({
     required String pondID,
-    String status = "active",
+    String status = 'active',
   });
   Future<BaseResponse<bool>> addHarvest({required HarvestBody body});
   Future<BaseResponse<bool>> updateHarvestDone({required String id});
@@ -57,7 +57,7 @@ class CycleServiceImpl implements CycleService {
 
   @override
   Future<BaseResponse<OnGoingCycleFeedResponse>> getOngoingCycle({
-    String status = "active",
+    String status = 'active',
     String? fishpondID,
     String? lastPondCycleID,
   }) async {
@@ -76,13 +76,13 @@ class CycleServiceImpl implements CycleService {
 
   @override
   Future<BaseResponse<FeedCycleHistoryResponse>> getFeedCycleHistory({
-    String status = "active",
+    String status = 'active',
     required String pondID,
   }) async {
-    final uri = status == "ready"
+    final uri = status == 'ready'
         ? endpoint.getFeedCycleHistory(
             pondID: pondID,
-            status: "active",
+            status: 'active',
             firstDate: AppConvertDateTime().ymdDash(DateTime.now()),
             lastDate: AppConvertDateTime()
                 .ymdDash(DateTime.now().add(const Duration(days: 30))),
@@ -117,8 +117,8 @@ class CycleServiceImpl implements CycleService {
       header,
       json.encode(
         {
-          "id": id,
-          "status": "done",
+          'id': id,
+          'status': 'done',
         },
       ),
     );

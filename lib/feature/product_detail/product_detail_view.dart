@@ -1,17 +1,14 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
-import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/view/checkout_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class ProductDetailView extends StatefulWidget {
   final ProductsResponseData data;
@@ -72,7 +69,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   width: 24,
                   height: 24,
                   fit: BoxFit.cover,
-                )),
+                ),),
           ),
         ],
       ),
@@ -107,7 +104,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       onTap: () {
         showImageViewer(
           context,
-          Image.network(widget.data.imageUrl ?? "").image,
+          Image.network(widget.data.imageUrl ?? '').image,
           immersive: false,
         );
       },
@@ -116,7 +113,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         child: AspectRatio(
           aspectRatio: 375 / 262,
           child: AppNetworkImage(
-            widget.data.imageUrl ?? "",
+            widget.data.imageUrl ?? '',
             fit: BoxFit.cover,
           ),
         ),
@@ -158,7 +155,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.data.name ?? "-",
+            widget.data.name ?? '-',
             textAlign: TextAlign.start,
             style: appTextTheme(context).titleSmall?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -167,7 +164,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           const SizedBox(height: 12.0),
           Text(
             widget.data.sellPrice == null
-                ? "-"
+                ? '-'
                 : appConvertCurrency(double.parse(widget.data.sellPrice!)),
             textAlign: TextAlign.start,
             style: appTextTheme(context).headlineSmall?.copyWith(
@@ -229,7 +226,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
               ),
               const SizedBox(width: 16.0),
               Text(
-                widget.data.supplierName ?? "-",
+                widget.data.supplierName ?? '-',
                 textAlign: TextAlign.start,
                 style: appTextTheme(context).titleSmall?.copyWith(
                       fontWeight: FontWeight.bold,
@@ -277,13 +274,13 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 ),
           ),
           const SizedBox(height: 20.0),
-          rowText('Kategori', widget.data.categoryName ?? "-"),
+          rowText('Kategori', widget.data.categoryName ?? '-'),
           Divider(
             color: AppColor.neutral[200],
             thickness: 1,
             height: 32,
           ),
-          rowText('Satuan', widget.data.unitName ?? "-"),
+          rowText('Satuan', widget.data.unitName ?? '-'),
           Divider(
             color: AppColor.neutral[200],
             thickness: 1,
@@ -292,7 +289,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           rowText(
             'Protein',
             widget.data.proteinPercent == null
-                ? "-"
+                ? '-'
                 : '${widget.data.proteinPercent}%',
           ),
           Divider(
@@ -303,7 +300,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           rowText(
             'Lemak',
             widget.data.lemakPercent == null
-                ? "-"
+                ? '-'
                 : '${double.parse(widget.data.lemakPercent!).round()}%',
           ),
           isHideDescription
@@ -319,7 +316,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     rowText(
                       'Serat Kasar',
                       widget.data.seratKasarPercent == null
-                          ? "-"
+                          ? '-'
                           : '${double.parse(widget.data.seratKasarPercent!).round()}%',
                     ),
                     Divider(
@@ -330,7 +327,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     rowText(
                       'Kadar Abu',
                       widget.data.kadarAbuPercent == null
-                          ? "-"
+                          ? '-'
                           : '${double.parse(widget.data.kadarAbuPercent!).round()}%',
                     ),
                     Divider(
@@ -341,15 +338,15 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     rowText(
                         'Kadar Air',
                         widget.data.kadarAirPercent == null
-                            ? "-"
-                            : '${double.parse(widget.data.kadarAirPercent!).round()}%'),
+                            ? '-'
+                            : '${double.parse(widget.data.kadarAirPercent!).round()}%',),
                     Divider(
                       color: AppColor.neutral[200],
                       thickness: 1,
                       height: 32,
                     ),
                     Text(
-                      "Keterangan",
+                      'Keterangan',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).bodySmall?.copyWith(
                             color: AppColor.neutral[500],
@@ -357,7 +354,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      widget.data.note ?? "-",
+                      widget.data.note ?? '-',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).bodySmall,
                     ),
@@ -373,7 +370,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 });
               },
               child: Text(
-                isHideDescription ? "Lihat Selengkapnya" : "Sembunyikan",
+                isHideDescription ? 'Lihat Selengkapnya' : 'Sembunyikan',
                 textAlign: TextAlign.center,
                 style: appTextTheme(context).titleSmall?.copyWith(
                       color: AppColor.secondary[900],
@@ -452,7 +449,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         const SizedBox(height: 16.0),
@@ -479,7 +476,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             children: [
               Text('4.8',
                   textAlign: TextAlign.start,
-                  style: appTextTheme(context).titleSmall!),
+                  style: appTextTheme(context).titleSmall!,),
               const SizedBox(width: 6.0),
               Image.asset(
                 AppAssets.starSingleIcon,
@@ -513,10 +510,10 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           ),
           reviewCard(
             AppAssets.dummyPerson1Image,
-            "Darrell Steward",
-            "21 Agustus 2023",
-            "Figma ipsum component variant main layer. Selection plugin align hand ellipse strikethrough hand style. Library bold object invite asset.",
-            "4.8",
+            'Darrell Steward',
+            '21 Agustus 2023',
+            'Figma ipsum component variant main layer. Selection plugin align hand ellipse strikethrough hand style. Library bold object invite asset.',
+            '4.8',
           ),
           Divider(
             color: AppColor.neutral[200],
@@ -525,10 +522,10 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           ),
           reviewCard(
             AppAssets.dummyPerson2Image,
-            "Albert Flores",
-            "20 Agustus 2023",
-            "Figma ipsum component variant main layer. Selection plugin align hand ellipse strikethrough hand style. Library bold object invite asset.",
-            "4.8",
+            'Albert Flores',
+            '20 Agustus 2023',
+            'Figma ipsum component variant main layer. Selection plugin align hand ellipse strikethrough hand style. Library bold object invite asset.',
+            '4.8',
           ),
         ],
       ),
@@ -562,12 +559,12 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         ),
       ),
       child: AppPrimaryFullButton(
-        "Beli Sekarang",
+        'Beli Sekarang',
         () {
           Navigator.of(context).push(AppTransition.pushTransition(
             CheckoutPage(widget.data),
             CheckoutPage.route,
-          ));
+          ),);
         },
       ),
     );

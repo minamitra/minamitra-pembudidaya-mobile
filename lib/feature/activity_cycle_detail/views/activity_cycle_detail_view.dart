@@ -47,14 +47,14 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
       width: double.infinity,
       decoration: BoxDecoration(
         color: cycleTypeColor(convertToCycleType(
-            widget.isReadyHarvest ? "ready" : widget.data.status ?? "active")),
+            widget.isReadyHarvest ? 'ready' : widget.data.status ?? 'active',),),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Text(
-        convertToCycleType(widget.data.status ?? "active") == CycleType.done
-            ? "Siklus Selesai"
+        convertToCycleType(widget.data.status ?? 'active') == CycleType.done
+            ? 'Siklus Selesai'
             : widget.isReadyHarvest
-                ? "Siklus siap panen"
+                ? 'Siklus siap panen'
                 : "Siklus Sedang ${cycleTypeToString(convertToCycleType(widget.data.status ?? "active"))}",
         textAlign: TextAlign.center,
         style: appTextTheme(context).bodySmall?.copyWith(
@@ -96,7 +96,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Informasi Siklus",
+            'Informasi Siklus',
             textAlign: TextAlign.center,
             style: appTextTheme(context).titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
@@ -104,26 +104,17 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           const SizedBox(height: 24.0),
           textRow(
-              "Tanggal Tebar",
+              'Tanggal Tebar',
               AppConvertDateTime()
-                  .dmy(widget.data.tebarDate ?? DateTime.now())),
+                  .dmy(widget.data.tebarDate ?? DateTime.now()),),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Jumlah Tebar",
-            "${widget.data.tebarFishTotal} ekor",
-          ),
-          Divider(
-            height: 32.0,
-            thickness: 1,
-            color: AppColor.neutral[100],
-          ),
-          textRow(
-            "Bobot Tebar",
-            "${widget.data.tebarBobot} gram/ekor",
+            'Jumlah Tebar',
+            '${widget.data.tebarFishTotal} ekor',
           ),
           Divider(
             height: 32.0,
@@ -131,7 +122,16 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Asal Benih",
+            'Bobot Tebar',
+            '${widget.data.tebarBobot} gram/ekor',
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
+            'Asal Benih',
             widget.data.fishpondName.handlingEmptyString(),
           ),
           Divider(
@@ -140,8 +140,8 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Target Bobot Panen Tebar",
-            "${widget.data.targetPanenBobot} gram/ekor",
+            'Target Bobot Panen Tebar',
+            '${widget.data.targetPanenBobot} gram/ekor',
           ),
           Divider(
             height: 32.0,
@@ -149,8 +149,8 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Survival Rate",
-            "${widget.data.srTarget} %",
+            'Survival Rate',
+            '${widget.data.srTarget} %',
           ),
           Divider(
             height: 32.0,
@@ -158,12 +158,12 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Pakan Starter",
+            'Pakan Starter',
             widget.data.fishfoodJsonObject?.starter
-                    ?.map((element) => element.name ?? "-")
+                    ?.map((element) => element.name ?? '-')
                     .toList()
-                    .join(", ") ??
-                "-",
+                    .join(', ') ??
+                '-',
           ),
           Divider(
             height: 32.0,
@@ -171,12 +171,12 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Pakan Grower",
+            'Pakan Grower',
             widget.data.fishfoodJsonObject?.grower
-                    ?.map((element) => element.name ?? "-")
+                    ?.map((element) => element.name ?? '-')
                     .toList()
-                    .join(", ") ??
-                "-",
+                    .join(', ') ??
+                '-',
           ),
           Divider(
             height: 32.0,
@@ -184,12 +184,12 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Pakan Finisher",
+            'Pakan Finisher',
             widget.data.fishfoodJsonObject?.finisher
-                    ?.map((element) => element.name ?? "-")
+                    ?.map((element) => element.name ?? '-')
                     .toList()
-                    .join(", ") ??
-                "-",
+                    .join(', ') ??
+                '-',
           ),
         ],
       ),
@@ -203,7 +203,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "File Lampiran",
+          'File Lampiran',
           textAlign: TextAlign.start,
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
@@ -227,7 +227,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
                   //   fit: BoxFit.cover,
                   // ),
                   child: AppNetworkImage(
-                    widget.data.panenAttachmentJsonArray?[index] ?? "",
+                    widget.data.panenAttachmentJsonArray?[index] ?? '',
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
@@ -250,7 +250,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Informasi Siklus",
+            'Informasi Siklus',
             textAlign: TextAlign.center,
             style: appTextTheme(context).titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
@@ -258,17 +258,17 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           const SizedBox(height: 24.0),
           textRow(
-              "Tanggal Panen",
+              'Tanggal Panen',
               AppConvertDateTime().edmy(DateTime.parse(
-                  widget.data.actualPanenDate ?? DateTime.now().toString()))),
+                  widget.data.actualPanenDate ?? DateTime.now().toString(),),),),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
           textRow(
-            "Total Panen",
-            "${widget.data.actualPanenBobot} kg",
+            'Total Panen',
+            '${widget.data.actualPanenBobot} kg',
           ),
           Divider(
             height: 32.0,
@@ -276,14 +276,14 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           Text(
-            "Catatan",
+            'Catatan',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                 ),
           ),
           const SizedBox(height: 8.0),
           Text(
-            widget.data.panenNote ?? "Tidak ada catatan",
+            widget.data.panenNote ?? 'Tidak ada catatan',
             style: appTextTheme(context).bodySmall,
           ),
           Divider(
@@ -306,11 +306,11 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           style: appTextTheme(context).bodySmall,
         ),
         const SizedBox(height: 16.0),
-        textRow("${data.sellRequest} kg",
-            appConvertCurrency(data.sellUnitPrice.toDouble())),
+        textRow('${data.sellRequest} kg',
+            appConvertCurrency(data.sellUnitPrice.toDouble()),),
         const SizedBox(height: 8.0),
         textRow(
-            "Sub Total", appConvertCurrency(data.sellTotalPrice.toDouble())),
+            'Sub Total', appConvertCurrency(data.sellTotalPrice.toDouble()),),
         Divider(
           height: 32.0,
           thickness: 1,
@@ -329,7 +329,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Transaksi",
+            'Transaksi',
             textAlign: TextAlign.center,
             style: appTextTheme(context).titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
@@ -347,7 +347,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             children: [
               Flexible(
                 child: Text(
-                  "Total",
+                  'Total',
                   style: appTextTheme(context).titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -381,12 +381,12 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         ),
       ),
       child: AppPrimaryFullButton(
-        "Panen Sekarang",
+        'Panen Sekarang',
         () {
           Navigator.of(context).push(AppTransition.pushTransition(
-            ActivityCycleAddHarvestPage(widget.data.id ?? ""),
+            ActivityCycleAddHarvestPage(widget.data.id ?? ''),
             ActivityCycleAddHarvestPage.routeSettings(),
-          ));
+          ),);
         },
       ),
     );
@@ -403,19 +403,19 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             statusBar(context),
             const SizedBox(height: 16.0),
             cycleInfo(),
-            convertToCycleType(widget.data.status ?? "active") == CycleType.done
+            convertToCycleType(widget.data.status ?? 'active') == CycleType.done
                 ? harvestInfo()
                 : const SizedBox(),
-            convertToCycleType(widget.data.status ?? "active") == CycleType.done
+            convertToCycleType(widget.data.status ?? 'active') == CycleType.done
                 ? transactionInfo()
                 : const SizedBox(),
-            convertToCycleType(widget.data.status ?? "active") == CycleType.done
+            convertToCycleType(widget.data.status ?? 'active') == CycleType.done
                 ? const SizedBox(height: 24.0)
                 : const SizedBox(height: 98.0),
           ],
         ),
-        convertToCycleType(widget.data.status ?? "active") == CycleType.done ||
-                convertToCycleType(widget.data.status ?? "active") ==
+        convertToCycleType(widget.data.status ?? 'active') == CycleType.done ||
+                convertToCycleType(widget.data.status ?? 'active') ==
                     CycleType.onBid
             ? const SizedBox()
             : button(),

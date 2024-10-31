@@ -26,17 +26,17 @@ class ActivityActivitiesCubit extends Cubit<ActivityActivitiesState> {
         feedActivityResponse: response.data,
         selectedDate: DateTime.now(),
         pondCycleID: fishPondCycleID,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -44,24 +44,24 @@ class ActivityActivitiesCubit extends Cubit<ActivityActivitiesState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await feedActivityService.getData(
-        state.pondCycleID ?? "",
+        state.pondCycleID ?? '',
         AppConvertDateTime().ymdDash(dateTime),
       );
       emit(state.copyWith(
         status: GlobalState.loaded,
         feedActivityResponse: response.data,
         selectedDate: dateTime,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -69,23 +69,23 @@ class ActivityActivitiesCubit extends Cubit<ActivityActivitiesState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await feedActivityService.getData(
-        state.pondCycleID ?? "",
+        state.pondCycleID ?? '',
         AppConvertDateTime().ymdDash(state.selectedDate ?? DateTime.now()),
       );
       emit(state.copyWith(
         status: GlobalState.loaded,
         feedActivityResponse: response.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 

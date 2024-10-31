@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_sampling/activity_sampling_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_treatment/activity_treatment_service.dart';
@@ -9,7 +8,6 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dar
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/activity_activities_cubit.dart';
@@ -37,7 +35,7 @@ class ActivityActivitiesPage extends StatelessWidget {
   final DateTime? tebarDate;
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-activities");
+      const RouteSettings(name: '/activity-activities');
 
   @override
   Widget build(BuildContext context) {
@@ -49,10 +47,10 @@ class ActivityActivitiesPage extends StatelessWidget {
         BlocProvider(
             create: (context) =>
                 ActivityActivitiesCubit(FeedActivityServiceImpl.create())
-                  ..init(pondCycleID)),
+                  ..init(pondCycleID),),
         BlocProvider(
             create: (context) =>
-                ActivityFeedCubit(FeedActivityServiceImpl.create())),
+                ActivityFeedCubit(FeedActivityServiceImpl.create()),),
         BlocProvider(
           create: (context) => TreatmentCubit(
             ActivityTreatmentServiceImpl.create(),
@@ -94,7 +92,7 @@ class ActivityActivitiesPage extends StatelessWidget {
               }
 
               if (state.status.isSuccessSubmit) {
-                AppTopSnackBar(context).showInfo("Berhasil menghapus data");
+                AppTopSnackBar(context).showInfo('Berhasil menghapus data');
                 context.read<ActivityActivitiesCubit>().refreshData();
               }
             },
@@ -103,7 +101,7 @@ class ActivityActivitiesPage extends StatelessWidget {
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            "Aktivitas",
+            'Aktivitas',
           ),
           floatingActionButton:
               BlocBuilder<ActivityActivitiesCubit, ActivityActivitiesState>(
@@ -116,7 +114,7 @@ class ActivityActivitiesPage extends StatelessWidget {
                       if ((tebarDate ?? DateTime.now())
                           .isAfter(DateTime.now())) {
                         AppTopSnackBar(context).showInfo(
-                            "Belum waktunya melakukan kegiatan\nTebar awal pada ${AppConvertDateTime().dmyName((tebarDate ?? DateTime.now()))}");
+                            'Belum waktunya melakukan kegiatan\nTebar awal pada ${AppConvertDateTime().dmyName((tebarDate ?? DateTime.now()))}',);
                       }
                       Navigator.of(context)
                           .push(AppTransition.pushTransition(
@@ -126,9 +124,9 @@ class ActivityActivitiesPage extends StatelessWidget {
                           tebarDate ?? DateTime.now(),
                         ),
                         ActivityActivitiesAddPage.routeSettings(),
-                      ))
+                      ),)
                           .then((value) {
-                        if (value != null && value == "refresh") {
+                        if (value != null && value == 'refresh') {
                           context.read<ActivityActivitiesCubit>().refreshData();
                         }
                       });
@@ -142,14 +140,14 @@ class ActivityActivitiesPage extends StatelessWidget {
                           tebarDate ?? DateTime.now(),
                         ),
                         ActivityTreatmentAddPage.routeSettings,
-                      ))
+                      ),)
                           .then((value) {
-                        if (value != null && value == "refresh") {
+                        if (value != null && value == 'refresh') {
                           context.read<TreatmentCubit>().init(
                                 int.parse(pondID),
                                 int.parse(pondCycleID),
                                 AppConvertDateTime().ymdDash(
-                                    state.selectedDate ?? DateTime.now()),
+                                    state.selectedDate ?? DateTime.now(),),
                               );
                         }
                       });
@@ -161,9 +159,9 @@ class ActivityActivitiesPage extends StatelessWidget {
                           int.parse(pondCycleID),
                         ),
                         ActivitySamplingAddPage.routeSettings,
-                      ))
+                      ),)
                           .then((value) {
-                        if (value != null && value == "refresh") {
+                        if (value != null && value == 'refresh') {
                           context.read<SamplingCubit>().init(
                                 int.parse(pondID),
                                 int.parse(pondCycleID),
@@ -181,9 +179,9 @@ class ActivityActivitiesPage extends StatelessWidget {
                           int.parse(pondCycleID),
                         ),
                         ActivityWaterQualityAddPage.routeSettings,
-                      ))
+                      ),)
                           .then((value) {
-                        if (value != null && value == "refresh") {
+                        if (value != null && value == 'refresh') {
                           context.read<WaterQualityCubit>().init(
                                 int.parse(pondID),
                                 int.parse(pondCycleID),
@@ -202,7 +200,7 @@ class ActivityActivitiesPage extends StatelessWidget {
                           tebarDate ?? DateTime.now(),
                         ),
                         ActivityActivitiesAddPage.routeSettings(),
-                      ));
+                      ),);
                       break;
                   }
                 },

@@ -9,9 +9,9 @@ class AppShimmer extends StatelessWidget {
     this.height,
     this.width,
     this.rounded, {
-    Key? key,
+    super.key,
     this.margin,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

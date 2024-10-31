@@ -25,9 +25,9 @@ class _IncidentDataViewState extends State<IncidentDataView> {
         Navigator.of(context)
             .push(AppTransition.pushTransition(
                 ActivityIncidentDetailPage(incident),
-                ActivityIncidentDetailPage.routeSettings()))
+                ActivityIncidentDetailPage.routeSettings(),),)
             .then((value) {
-          if (value != null || value == "refresh") {
+          if (value != null || value == 'refresh') {
             context.read<IncidentDataCubit>().getIncidentData();
           }
         });
@@ -55,7 +55,7 @@ class _IncidentDataViewState extends State<IncidentDataView> {
                     Text(
                       incident.datetime != null
                           ? incident.datetime.toString()
-                          : "-",
+                          : '-',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).labelLarge?.copyWith(
                             color: AppColor.black[500],
@@ -68,12 +68,12 @@ class _IncidentDataViewState extends State<IncidentDataView> {
                   onTap: () {
                     showDeleteBottomSheet(
                       context,
-                      title: "Hapus Sampling",
+                      title: 'Hapus Sampling',
                       descriptions:
-                          "Apakah Anda yakin ingin menghapus sampling ini?",
+                          'Apakah Anda yakin ingin menghapus sampling ini?',
                       onTapDelete: () {
                         context.read<IncidentDataCubit>().deleteIncident(
-                              incident.id ?? "",
+                              incident.id ?? '',
                             );
                         Navigator.of(context).pop();
                       },
@@ -123,7 +123,7 @@ class _IncidentDataViewState extends State<IncidentDataView> {
                       ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -145,7 +145,7 @@ class _IncidentDataViewState extends State<IncidentDataView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 124, 16, 0),
                   child: AppEmptyData(
-                      "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
                 )
               : ListView.separated(
                   shrinkWrap: true,

@@ -12,10 +12,10 @@ class AddPondSecondStepState extends Equatable {
     this.selectedDistrict,
     this.selectedSubDistrict,
     this.selectedVillage,
-    this.latitude = "",
-    this.longitude = "",
+    this.latitude = '',
+    this.longitude = '',
     this.snapshotMap,
-    this.urlImage = "",
+    this.urlImage = '',
   });
 
   final GlobalState status;

@@ -3,7 +3,7 @@ part of 'add_bulk_feed_cubit.dart';
 class AddBulkFeedState extends Equatable {
   const AddBulkFeedState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.recommendationFeedBulk,
     this.pickedDate,
   });

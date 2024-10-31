@@ -2,6 +2,7 @@
 /// @email dikynugraha1111@gmail.com
 /// @create date 2024-03-24 14:22:27
 /// @modify date 2024-03-24 14:22:27
+library;
 import 'dart:developer';
 
 import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_key.dart';
@@ -23,7 +24,7 @@ class AppHeaderProvider implements HeaderProvider {
   Future<Map<String, String>> get headers async {
     final accessToken = await _sharedPreferenceService
         .getSharedPreference(AppSharedPrefKey.tokenKey);
-    log("Token => ${accessToken.toString()}");
+    log('Token => ${accessToken.toString()}');
     // String? language = await _tokenProvider.getApplicationLanguage();
     // switch (language) {
     //   case "en":
@@ -41,7 +42,7 @@ class AppHeaderProvider implements HeaderProvider {
       // 'x-api-key': "",
       // 'Authorization': 'Basic YWlkYW46YTFkYW53M2IxZA==',
       'token': '$accessToken',
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Accept': 'application/json',
       // 'Accept-Language': language
     };

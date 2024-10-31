@@ -18,10 +18,10 @@ abstract class PondService {
   Future<BaseResponse<bool>> addPondCycle(AddPondCyclePayload payload);
   Future<BaseResponse<PondResponse>> getPonds();
   Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
-      {String? pondID});
+      {String? pondID,});
   Future<BaseResponse<bool>> deletePond(String pondID);
   Future<BaseResponse<UpdatePondResponse>> updatePond(
-      UpdatePondPayload payload);
+      UpdatePondPayload payload,);
 }
 
 class PondServiceImpl implements PondService {
@@ -82,7 +82,7 @@ class PondServiceImpl implements PondService {
 
   @override
   Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
-      {String? pondID}) async {
+      {String? pondID,}) async {
     final url = endpoint.getPondDashboard(pondID);
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
@@ -99,7 +99,7 @@ class PondServiceImpl implements PondService {
     final response = await httpClient.post(
       url,
       header,
-      json.encode({"id": int.parse(pondID)}),
+      json.encode({'id': int.parse(pondID)}),
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
@@ -107,7 +107,7 @@ class PondServiceImpl implements PondService {
 
   @override
   Future<BaseResponse<UpdatePondResponse>> updatePond(
-      UpdatePondPayload payload) async {
+      UpdatePondPayload payload,) async {
     final url = endpoint.updatePond();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

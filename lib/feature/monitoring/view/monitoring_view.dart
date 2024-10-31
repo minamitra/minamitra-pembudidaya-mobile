@@ -52,7 +52,7 @@ class _MonitoringViewState extends State<MonitoringView>
     Widget bodyTab() {
       return TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           CultivationView(),
           FinanceView(),
         ],

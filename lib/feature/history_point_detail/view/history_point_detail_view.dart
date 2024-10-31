@@ -75,7 +75,7 @@ class _HistoryPointDetailViewState extends State<HistoryPointDetailView> {
             const SizedBox(width: 8.0),
             Expanded(
               child: Text(
-                "Detail Attachment.png",
+                'Detail Attachment.png',
                 style: Theme.of(context)
                     .textTheme
                     .bodySmall
@@ -110,23 +110,23 @@ class _HistoryPointDetailViewState extends State<HistoryPointDetailView> {
             ),
             const SizedBox(height: 18.0),
             Text(
-              "Tarik Tunai",
+              'Tarik Tunai',
               style: Theme.of(context).textTheme.titleMedium,
             ),
             const SizedBox(height: 36.0),
             itemBodyCard(
-              "Tanggal, Waktu",
-              "19 Sep 2024, 15:30",
+              'Tanggal, Waktu',
+              '19 Sep 2024, 15:30',
             ),
             const SizedBox(height: 18.0),
             itemBodyCard(
-              "Jumlah Penarikan",
-              "Rp 50.000",
+              'Jumlah Penarikan',
+              'Rp 50.000',
             ),
             const SizedBox(height: 18.0),
             itemBodyCard(
-              "Poin",
-              "-500",
+              'Poin',
+              '-500',
             ),
             const SizedBox(height: 36.0),
             attachmentCard(),

@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:dio/dio.dart';
 import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
@@ -64,10 +62,10 @@ class AuthenticationServiceImpl implements AuthenticationService {
       headers,
       {},
       {
-        "email": email,
-        "mobilephone": phoneNumber,
-        "password": password,
-        "name": name,
+        'email': email,
+        'mobilephone': phoneNumber,
+        'password': password,
+        'name': name,
       },
     );
     if (response.statusCode == 200) {
@@ -86,7 +84,7 @@ class AuthenticationServiceImpl implements AuthenticationService {
       headers,
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
-    final UserData userData = UserData.fromMap(metaResponse.result!["data"]);
+    final UserData userData = UserData.fromMap(metaResponse.result!['data']);
     return BaseResponse(meta: metaResponse, data: userData);
   }
 

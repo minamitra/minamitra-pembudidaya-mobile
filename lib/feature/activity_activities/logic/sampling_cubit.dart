@@ -27,17 +27,17 @@ class SamplingCubit extends Cubit<SamplingState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         samplings: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -58,17 +58,17 @@ class SamplingCubit extends Cubit<SamplingState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         samplings: samplings.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

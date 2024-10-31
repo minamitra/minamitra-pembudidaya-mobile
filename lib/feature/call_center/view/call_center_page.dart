@@ -13,9 +13,9 @@ class CallCenterPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Pusat Bantuan",
+        'Pusat Bantuan',
       ),
-      body: CallCenterView(),
+      body: const CallCenterView(),
     );
   }
 }

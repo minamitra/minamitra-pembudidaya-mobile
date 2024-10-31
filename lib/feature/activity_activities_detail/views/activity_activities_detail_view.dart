@@ -45,36 +45,36 @@ class ActivityActivitiesDetailView extends StatelessWidget {
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-            "Waktu Pakan",
+            'Waktu Pakan',
             AppConvertDateTime().dmyName(data.datetime ?? DateTime.now()),
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-            "Waktu kegiatan",
-            data.timeSheetArray?.join(", ") ?? "-",
+            'Waktu kegiatan',
+            data.timeSheetArray?.join(', ') ?? '-',
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-            "Umur Ikan",
-            "${data.fishAge} hari",
+            'Umur Ikan',
+            '${data.fishAge} hari',
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-            "Jumlah Pakan",
+            'Jumlah Pakan',
             "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(2)} Kg",
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-            "Merk Pakan",
-            data.fishfoodName ?? "-",
+            'Merk Pakan',
+            data.fishfoodName ?? '-',
           ),
           // const SizedBox(height: 18.0),
           // AppDividerSmall(),
@@ -84,7 +84,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
-            "Catatan",
+            'Catatan',
             data.note.handlingEmptyStringWithTNoteNotes(),
           ),
           const SizedBox(height: 98.0),
@@ -108,7 +108,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
           children: [
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Hapus",
+                'Hapus',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.trashIcon,
@@ -120,7 +120,7 @@ class ActivityActivitiesDetailView extends StatelessWidget {
             const SizedBox(width: 16.0),
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Edit",
+                'Edit',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.editIcon,

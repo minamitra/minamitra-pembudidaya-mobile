@@ -14,7 +14,7 @@ class FaqDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appDefaultAppBar(context, "Detail FAQ"),
+      appBar: appDefaultAppBar(context, 'Detail FAQ'),
       body: FaqDetailView(title),
     );
   }

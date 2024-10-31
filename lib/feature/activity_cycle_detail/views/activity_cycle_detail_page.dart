@@ -15,14 +15,14 @@ class ActivityCycleDetailPage extends StatelessWidget {
   final bool isReadyHarvest;
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-cycle-detail");
+      const RouteSettings(name: '/activity-cycle-detail');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Siklus",
+        'Detail Siklus',
       ),
       backgroundColor: AppColor.neutral[100],
       body: ActivityCycleDetailView(

@@ -159,7 +159,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                     width: 16,
                     height: 16,
                     fit: BoxFit.cover,
-                  )
+                  ),
                 ],
               ),
             ],
@@ -235,7 +235,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: AppNetworkImage(
-                data.imageUrl ?? "",
+                data.imageUrl ?? '',
                 width: double.infinity,
                 height: double.infinity,
                 fit: BoxFit.cover,
@@ -251,7 +251,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                data.name ?? "-",
+                data.name ?? '-',
                 style: appTextTheme(context)
                     .bodySmall
                     ?.copyWith(fontWeight: FontWeight.w700),
@@ -260,7 +260,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               ),
               const SizedBox(height: 6.0),
               Text(
-                data.categoryName ?? "-",
+                data.categoryName ?? '-',
                 style: appTextTheme(context)
                     .bodySmall
                     ?.copyWith(color: AppColor.neutral[400]),
@@ -272,13 +272,13 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                   Text(
                     data.sellPrice != null
                         ? appConvertCurrency(double.parse(data.sellPrice!))
-                        : "-",
+                        : '-',
                     style: appTextTheme(context)
                         .bodySmall
                         ?.copyWith(fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    "x$amountItem",
+                    'x$amountItem',
                     style: appTextTheme(context)
                         .bodySmall
                         ?.copyWith(fontWeight: FontWeight.w500),
@@ -287,7 +287,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -377,20 +377,20 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           const SizedBox(height: 16.0),
           rowText(
             context,
-            "No Pesanan",
-            "XD-89100-B",
+            'No Pesanan',
+            'XD-89100-B',
           ),
           const SizedBox(height: 12.0),
           rowText(
             context,
-            "Tanggal Pesanan",
-            "15 Nov 2024, 16.08",
+            'Tanggal Pesanan',
+            '15 Nov 2024, 16.08',
           ),
           const SizedBox(height: 12.0),
           rowText(
             context,
-            "Atas Nama",
-            "John Doe",
+            'Atas Nama',
+            'John Doe',
           ),
         ],
       ),
@@ -415,14 +415,14 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           const SizedBox(height: 16.0),
           rowText(
             context,
-            "Harga",
-            "Rp 300.000",
+            'Harga',
+            'Rp 300.000',
           ),
           const SizedBox(height: 12.0),
           rowText(
             context,
-            "Potongan Harga",
-            "Rp 0",
+            'Potongan Harga',
+            'Rp 0',
           ),
           const SizedBox(height: 16.0),
           const AppDottedLine(),
@@ -431,7 +431,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Total Pembayaran",
+                'Total Pembayaran',
                 textAlign: TextAlign.start,
                 style: appTextTheme(context).titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -439,7 +439,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                     ),
               ),
               Text(
-                "Rp 300.000",
+                'Rp 300.000',
                 textAlign: TextAlign.end,
                 style: appTextTheme(context).titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -460,11 +460,11 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
         Wrap(
           children: [
             Text(
-              "Unggah Bukti Bayar",
+              'Unggah Bukti Bayar',
               style: appTextTheme(context).bodyMedium,
             ),
             Text(
-              " *",
+              ' *',
               style:
                   appTextTheme(context).bodyMedium?.copyWith(color: Colors.red),
             ),
@@ -480,7 +480,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               ),
               builder: (bottomSheetContext) {
                 return AppImagePickerMenu(
-                  "Upload Gambar",
+                  'Upload Gambar',
                   (type) async {
                     switch (type) {
                       case PhotoSource.camera:
@@ -526,11 +526,11 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB",
+          'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
           style: appTextTheme(context).labelLarge?.copyWith(
                 color: AppColor.neutral[500],
               ),
-        )
+        ),
       ],
     );
   }
@@ -538,8 +538,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   Widget noteTextField() {
     return AppValidatorTextField(
       controller: noteController,
-      hintText: "Masukan catatan",
-      labelText: "Catatan",
+      hintText: 'Masukan catatan',
+      labelText: 'Catatan',
       maxLines: 3,
     );
   }
@@ -553,7 +553,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           return StatefulBuilder(
             builder: (stateContext, setModalState) {
               return AppBottomSheet(
-                "Bukti Pembayaran",
+                'Bukti Pembayaran',
                 height: MediaQuery.of(context).size.height * 0.7,
                 ListView(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -563,7 +563,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                     noteTextField(),
                     const SizedBox(height: 36),
                     AppPrimaryFullButton(
-                      "Konfirmasi",
+                      'Konfirmasi',
                       () {
                         Navigator.of(context).pop();
                       },
@@ -586,12 +586,12 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
       child: Column(
         children: [
           AppPrimaryFullButton(
-            "Saya Sudah Bayar",
+            'Saya Sudah Bayar',
             donePaymentShowModal(context),
           ),
           const SizedBox(height: 16.0),
           AppPrimaryOutlineFullButton(
-            "Batalkan Pesanan",
+            'Batalkan Pesanan',
             () {
               Navigator.of(context).pop();
             },

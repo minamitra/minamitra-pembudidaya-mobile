@@ -3,7 +3,7 @@ part of 'point_v2_cubit.dart';
 class PointV2State extends Equatable {
   const PointV2State({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.selectedGridExchange = -1,
   });
 

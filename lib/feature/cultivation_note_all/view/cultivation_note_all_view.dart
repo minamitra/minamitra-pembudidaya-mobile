@@ -14,7 +14,6 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/logic/cubit/cultivation_note_all_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_detail/view/cultivation_note_detail_page.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
@@ -59,7 +58,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                   endDate: AppConvertDateTime()
                                       .ymdDash(rangePicker.end),
                                   pickedRangeDate:
-                                      "${AppConvertDateTime().dmy(rangePicker.start)} - ${AppConvertDateTime().dmy(rangePicker.end)}",
+                                      '${AppConvertDateTime().dmy(rangePicker.start)} - ${AppConvertDateTime().dmy(rangePicker.end)}',
                                 );
                           }
                         }
@@ -82,11 +81,11 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                             .watch<CultivationNoteAllCubit>()
                                             .pickedRangeDate ==
                                         null
-                                    ? "Pilih rentang waktu"
+                                    ? 'Pilih rentang waktu'
                                     : context
                                             .watch<CultivationNoteAllCubit>()
                                             .pickedRangeDate ??
-                                        "-",
+                                        '-',
                                 style: appTextTheme(context).bodySmall,
                               ),
                             ),
@@ -112,14 +111,14 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                       text: context
                                               .watch<CultivationNoteAllCubit>()
                                               .companionName ??
-                                          "");
+                                          '',);
                               return AppBottomSheet(
-                                "Filter Data",
+                                'Filter Data',
                                 height:
                                     MediaQuery.of(context).size.height * 0.35,
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 18.0),
+                                      horizontal: 18.0,),
                                   child: Column(
                                     children: [
                                       Expanded(
@@ -129,11 +128,11 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                               const AlwaysScrollableScrollPhysics(),
                                           children: [
                                             AppDropdownTextField(
-                                              "Pendamping",
+                                              'Pendamping',
                                               state.companionName ?? [],
                                               companionController,
-                                              hint: "Pilih Pendamping",
-                                            )
+                                              hint: 'Pilih Pendamping',
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -143,7 +142,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                         children: [
                                           Expanded(
                                             child: AppPrimaryOutlineFullButton(
-                                              "Reset",
+                                              'Reset',
                                               () {
                                                 context
                                                     .read<
@@ -156,18 +155,18 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                           const SizedBox(width: 18.0),
                                           Expanded(
                                             child: AppPrimaryFullButton(
-                                              "Terapkan",
+                                              'Terapkan',
                                               () {
                                                 context
                                                     .read<
                                                         CultivationNoteAllCubit>()
                                                     .filterByCompanionNmae(
                                                         companionController
-                                                            .text);
+                                                            .text,);
                                                 Navigator.of(context).pop();
                                               },
                                             ),
-                                          )
+                                          ),
                                         ],
                                       ),
                                       const SizedBox(height: 18.0),
@@ -206,14 +205,14 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                 children: [
                   const SizedBox(width: 18.0),
                   AppWidgetSecondaryChip(
-                    text: "Semua",
+                    text: 'Semua',
                     onTap: () {
                       context.read<CultivationNoteAllCubit>().reset();
                     },
                   ),
                   const SizedBox(width: 16.0),
                   AppWidgetSecondaryChip(
-                    text: "Belum Dibaca",
+                    text: 'Belum Dibaca',
                     onTap: () {},
                   ),
                 ],
@@ -272,7 +271,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                       style: appTextTheme(context)
                           .labelLarge
                           ?.copyWith(color: AppColor.neutral[400]),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -287,7 +286,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                   border: Border.all(color: AppColor.secondary[900]!),
                 ),
                 child: Text(
-                  "Baru",
+                  'Baru',
                   maxLines: 5,
                   style: appTextTheme(context).bodySmall?.copyWith(
                         color: AppColor.secondary[900],
@@ -333,7 +332,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
 
           if (state.data?.isEmpty ?? true) {
             return const AppEmptyData(
-              "Belum ada catatan\ndari pendamping",
+              'Belum ada catatan\ndari pendamping',
               isCenter: true,
             );
           }
@@ -349,7 +348,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                   Navigator.of(context).push(AppTransition.pushTransition(
                     CultivationNoteDetailPage(state.data![index]),
                     CultivationNoteDetailPage.routeSettings,
-                  ));
+                  ),);
                 },
                 child: itemNote(
                   companionImage:
@@ -357,7 +356,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                   companionName:
                       state.data![index].userName.handlingEmptyString(),
                   dateTime: AppConvertDateTime().edmy(
-                      state.data![index].createDatetime ?? DateTime.now()),
+                      state.data![index].createDatetime ?? DateTime.now(),),
                   companionNotes:
                       state.data![index].content.handlingEmptyString(),
                 ),

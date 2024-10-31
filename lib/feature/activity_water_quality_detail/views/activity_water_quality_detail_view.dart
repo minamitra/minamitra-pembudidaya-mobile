@@ -69,74 +69,74 @@ class _ActivityWaterQualityDetailViewState
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-              "Waktu  Perlakuan",
+              'Waktu  Perlakuan',
               widget.data.datetime != null
                   ? AppConvertDateTime().dmyName(widget.data.datetime!)
-                  : "-"),
+                  : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Ketinggian Air",
-              widget.data.level != null ? "${widget.data.level} cm" : "-"),
-          const SizedBox(height: 18.0),
-          AppDividerSmall(),
-          const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem(
-              "pH", widget.data.ph != null ? widget.data.ph! : "-"),
+          AppWidgetSeparatedItem('Ketinggian Air',
+              widget.data.level != null ? '${widget.data.level} cm' : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "Satinitas",
+              'pH', widget.data.ph != null ? widget.data.ph! : '-',),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+              'Satinitas',
               widget.data.salinitas != null
-                  ? "${widget.data.salinitas} ppt"
-                  : "-"),
+                  ? '${widget.data.salinitas} ppt'
+                  : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "Suhu",
+              'Suhu',
               widget.data.temperature != null
-                  ? "${widget.data.temperature}°C"
-                  : "-"),
+                  ? '${widget.data.temperature}°C'
+                  : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "DO", widget.data.dO != null ? "${widget.data.dO} mg/L" : "-"),
+              'DO', widget.data.dO != null ? '${widget.data.dO} mg/L' : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "Kecerahan",
+              'Kecerahan',
               widget.data.clarity != null
-                  ? "${widget.data.clarity} mg/L"
-                  : "-"),
+                  ? '${widget.data.clarity} mg/L'
+                  : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("Warna Air",
-              widget.data.waterColor != null ? widget.data.waterColor! : "-"),
+          AppWidgetSeparatedItem('Warna Air',
+              widget.data.waterColor != null ? widget.data.waterColor! : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "Cuaca",
+              'Cuaca',
               widget.data.waterWeather != null
                   ? widget.data.waterWeather!
-                  : "-"),
+                  : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
-            "Catatan",
-            widget.data.note ?? "-",
+            'Catatan',
+            widget.data.note ?? '-',
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           Text(
-            "File Lampiran",
+            'File Lampiran',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                 ),
@@ -164,7 +164,7 @@ class _ActivityWaterQualityDetailViewState
           children: [
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Hapus",
+                'Hapus',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.trashIcon,
@@ -176,7 +176,7 @@ class _ActivityWaterQualityDetailViewState
             const SizedBox(width: 16.0),
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Edit",
+                'Edit',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.editIcon,

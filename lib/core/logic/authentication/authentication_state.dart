@@ -12,7 +12,7 @@ class AuthenticationState extends Equatable {
   factory AuthenticationState.initial() {
     return const AuthenticationState(
       status: AuthenticationStatus.initial,
-      message: "UNKNOWN ERROR - DEFAULT",
+      message: 'UNKNOWN ERROR - DEFAULT',
     );
   }
 

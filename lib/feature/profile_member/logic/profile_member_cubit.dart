@@ -26,7 +26,7 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
     emit(state.copyWith(
       status: GlobalState.loaded,
       tabIndex: index,
-    ));
+    ),);
   }
 
   void getProfile() async {
@@ -36,17 +36,17 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         profile: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -64,17 +64,17 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         profile: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -103,19 +103,19 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         profile: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

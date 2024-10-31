@@ -6,6 +6,6 @@ class NameIconEntity {
   NameIconEntity(
     this.name,
     this.icon, {
-    this.description = "",
+    this.description = '',
   });
 }

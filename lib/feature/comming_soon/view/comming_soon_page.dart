@@ -17,7 +17,7 @@ class CommingSoonPage extends StatelessWidget {
   final String? customDescription;
 
   static RouteSettings route() =>
-      const RouteSettings(name: "/comming-soon-page");
+      const RouteSettings(name: '/comming-soon-page');
 
   @override
   Widget build(BuildContext context) {

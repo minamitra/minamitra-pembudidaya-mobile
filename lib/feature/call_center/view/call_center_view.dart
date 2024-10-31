@@ -16,18 +16,18 @@ class _CallCenterViewState extends State<CallCenterView> {
     List<Widget> header() {
       return [
         Text(
-          "Hubungi Kami",
+          'Hubungi Kami',
           style: appTextTheme(context)
               .titleLarge
               ?.copyWith(fontWeight: FontWeight.w700),
         ),
         const SizedBox(height: 12.0),
         Text(
-          "Jika Anda memiliki pertanyaan atau membutuhkan bantuan lebih lanjut mengenai aplikasi Mitra3M, Anda dapat menghubungi kami di:",
+          'Jika Anda memiliki pertanyaan atau membutuhkan bantuan lebih lanjut mengenai aplikasi Mitra3M, Anda dapat menghubungi kami di:',
           style: appTextTheme(context)
               .bodySmall
               ?.copyWith(color: AppColor.neutral[500]),
-        )
+        ),
       ];
     }
 
@@ -70,13 +70,13 @@ class _CallCenterViewState extends State<CallCenterView> {
       return [
         callCenterItem(
           Icons.phone_in_talk_rounded,
-          "0812-3456-789",
+          '0812-3456-789',
           () {},
         ),
         const SizedBox(height: 18.0),
         callCenterItem(
           Icons.mail_rounded,
-          "mitra.3m@gmail.com",
+          'mitra.3m@gmail.com',
           () {},
         ),
       ];
@@ -92,7 +92,7 @@ class _CallCenterViewState extends State<CallCenterView> {
           ...callCenterActionItems(),
           const Spacer(),
           AppPrimaryFullButton(
-            "Hubungi Admin",
+            'Hubungi Admin',
             () {},
             prefixIcon: const Icon(
               Icons.chat_rounded,

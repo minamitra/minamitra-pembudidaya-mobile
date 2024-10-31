@@ -98,7 +98,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     // final response = await authenticationService.getUserMe();
     await _storageService.setSharedPreference(
       AppSharedPrefKey.userProfileKey,
-      "Input to json models", // response.toJson(),
+      'Input to json models', // response.toJson(),
     );
     _controller.add(AuthenticationStatus.authenticated);
   }
@@ -126,9 +126,9 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
     try {
       final loginResponse = await authenticationService.login(request);
       if (loginResponse.data.token == null ||
-          loginResponse.data.token == "" ||
+          loginResponse.data.token == '' ||
           (loginResponse.data.token?.isEmpty ?? true)) {
-        throw AppException("Invalid Token");
+        throw AppException('Invalid Token');
       }
       await _storageService.setSharedPreference(
         AppSharedPrefKey.tokenKey,

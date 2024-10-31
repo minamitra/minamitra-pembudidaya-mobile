@@ -1,8 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 
-import 'package:dotted_border/dotted_border.dart';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -51,14 +49,14 @@ class _ActivityCycleAddHarvestViewState
 
   @override
   void initState() {
-    log("data: ${widget.data}");
+    log('data: ${widget.data}');
     super.initState();
     if (widget.data != null) {
       dateController.text = AppConvertDateTime().dmyName(DateTime.parse(
-          widget.data?.actualPanenDate ?? DateTime.now().toString()));
+          widget.data?.actualPanenDate ?? DateTime.now().toString(),),);
       sizeController.text =
-          double.parse(widget.data!.actualPanenBobot ?? "0").toStringAsFixed(0);
-      totalController.text = double.parse(widget.data!.actualPanenTonase ?? "0")
+          double.parse(widget.data!.actualPanenBobot ?? '0').toStringAsFixed(0);
+      totalController.text = double.parse(widget.data!.actualPanenTonase ?? '0')
           .toStringAsFixed(0);
       noteController.text = widget.data!.panenNote!;
       harvestDate = DateTime.parse(widget.data!.actualPanenDate!);
@@ -69,8 +67,8 @@ class _ActivityCycleAddHarvestViewState
     return AppValidatorTextField(
       readOnly: true,
       controller: dateController,
-      hintText: "Pilih Tanggal",
-      labelText: "Tanggal Panen",
+      hintText: 'Pilih Tanggal',
+      labelText: 'Tanggal Panen',
       suffixConstraints: const BoxConstraints(
         maxHeight: 50,
         maxWidth: 50,
@@ -103,7 +101,7 @@ class _ActivityCycleAddHarvestViewState
       },
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Tanggal tidak boleh kosong";
+          return 'Tanggal tidak boleh kosong';
         }
         return null;
       },
@@ -113,13 +111,13 @@ class _ActivityCycleAddHarvestViewState
   Widget sizeTextField() {
     return AppValidatorTextField(
       controller: sizeController,
-      labelText: "Ukuran Ikan",
-      hintText: "0",
+      labelText: 'Ukuran Ikan',
+      hintText: '0',
       inputType: TextInputType.number,
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Ukuran ikan tidak boleh kosong";
+          return 'Ukuran ikan tidak boleh kosong';
         }
         return null;
       },
@@ -127,7 +125,7 @@ class _ActivityCycleAddHarvestViewState
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "gram",
+          'gram',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
               ),
@@ -139,13 +137,13 @@ class _ActivityCycleAddHarvestViewState
   Widget totalTextField() {
     return AppValidatorTextField(
       controller: totalController,
-      labelText: "Total Panen",
-      hintText: "0",
+      labelText: 'Total Panen',
+      hintText: '0',
       inputType: TextInputType.number,
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Total panen tidak boleh kosong";
+          return 'Total panen tidak boleh kosong';
         }
         return null;
       },
@@ -153,7 +151,7 @@ class _ActivityCycleAddHarvestViewState
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "kg",
+          'kg',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
               ),
@@ -165,8 +163,8 @@ class _ActivityCycleAddHarvestViewState
   AppValidatorTextField noteTextField() {
     return AppValidatorTextField(
       controller: noteController,
-      labelText: "Catatan",
-      hintText: "Masukan catatan",
+      labelText: 'Catatan',
+      hintText: 'Masukan catatan',
       isMandatory: false,
       maxLines: 3,
       validator: (String? value) {
@@ -185,11 +183,11 @@ class _ActivityCycleAddHarvestViewState
         Wrap(
           children: [
             Text(
-              "Unggah Lampiran",
+              'Unggah Lampiran',
               style: appTextTheme(context).bodyMedium,
             ),
             Text(
-              " *",
+              ' *',
               style:
                   appTextTheme(context).bodyMedium?.copyWith(color: Colors.red),
             ),
@@ -208,10 +206,10 @@ class _ActivityCycleAddHarvestViewState
                   ),
                   builder: (bottomSheetContext) {
                     return AppImagePickerMenu(
-                      "Upload Gambar",
+                      'Upload Gambar',
                       (type) async {
                         if (state.images?.length == 3) {
-                          AppTopSnackBar(context).showInfo("Maksimal 3 gambar");
+                          AppTopSnackBar(context).showInfo('Maksimal 3 gambar');
                           Navigator.of(bottomSheetContext).pop();
                           return;
                         }
@@ -288,11 +286,11 @@ class _ActivityCycleAddHarvestViewState
             Wrap(
               children: [
                 Text(
-                  "Pembeli Ikan",
+                  'Pembeli Ikan',
                   style: appTextTheme(context).bodyMedium,
                 ),
                 Text(
-                  " *",
+                  ' *',
                   style: appTextTheme(context)
                       .bodyMedium
                       ?.copyWith(color: Colors.red),
@@ -331,11 +329,11 @@ class _ActivityCycleAddHarvestViewState
                     onChanged: (value) {
                       if (value !=
                           (state.buyerData[index].isBuyerFrom3m
-                              ? "Mitra3M"
-                              : "Lainnya")) {
+                              ? 'Mitra3M'
+                              : 'Lainnya')) {
                         if (value == 'Mitra3M') {
                           AppTopSnackBar(context)
-                              .showInfo("Fitur Sedang\nDalam Pengembangan");
+                              .showInfo('Fitur Sedang\nDalam Pengembangan');
                         } else {
                           context
                               .read<ActivityCycleAddHarvestCubit>()
@@ -356,8 +354,8 @@ class _ActivityCycleAddHarvestViewState
             const SizedBox(height: 18.0),
             AppValidatorTextField(
               controller: state.buyerData[index].buyerNameController,
-              hintText: "Masukkan pembeli",
-              labelText: "Pembeli",
+              hintText: 'Masukkan pembeli',
+              labelText: 'Pembeli',
               isMandatory: true,
               onChanged: (value) {
                 context
@@ -368,15 +366,15 @@ class _ActivityCycleAddHarvestViewState
             const SizedBox(height: 18.0),
             AppValidatorTextField(
               controller: state.buyerData[index].sellRequestController,
-              labelText: "Jumlah Dijual",
-              hintText: "0",
+              labelText: 'Jumlah Dijual',
+              hintText: '0',
               inputType: TextInputType.number,
               isMandatory: true,
               suffixConstraints: const BoxConstraints(),
               suffixWidget: Padding(
                 padding: const EdgeInsets.only(right: 18.0),
                 child: Text(
-                  "kg",
+                  'kg',
                   style: appTextTheme(context).bodySmall?.copyWith(
                         color: AppColor.neutral[500],
                       ),
@@ -392,7 +390,7 @@ class _ActivityCycleAddHarvestViewState
                     state.buyerData[index].sellTotalPriceController.text =
                         (int.parse(value) *
                                 int.parse(state.buyerData[index]
-                                    .sellUnitPriceController.text))
+                                    .sellUnitPriceController.text,))
                             .toString();
                   }
                 }
@@ -401,14 +399,14 @@ class _ActivityCycleAddHarvestViewState
             const SizedBox(height: 18.0),
             AppValidatorTextField(
               controller: state.buyerData[index].sellUnitPriceController,
-              labelText: "Harga Satuan",
-              hintText: "0",
+              labelText: 'Harga Satuan',
+              hintText: '0',
               inputType: TextInputType.number,
               isMandatory: true,
               suffixConstraints: const BoxConstraints(),
               prefixIcon: const Padding(
                 padding: EdgeInsets.only(left: 12.0),
-                child: Text("Rp "),
+                child: Text('Rp '),
               ),
               onChanged: (value) {
                 if (value.isNotEmpty) {
@@ -419,7 +417,7 @@ class _ActivityCycleAddHarvestViewState
                       .buyerData[index].sellRequestController.text.isNotEmpty) {
                     state.buyerData[index].sellTotalPriceController.text =
                         (int.parse(state.buyerData[index].sellRequestController
-                                    .text) *
+                                    .text,) *
                                 int.parse(value))
                             .toString();
                   }
@@ -429,15 +427,15 @@ class _ActivityCycleAddHarvestViewState
             const SizedBox(height: 18.0),
             AppValidatorTextField(
               controller: state.buyerData[index].sellTotalPriceController,
-              labelText: "Total Harga",
+              labelText: 'Total Harga',
               readOnly: true,
-              hintText: "0",
+              hintText: '0',
               inputType: TextInputType.number,
               isMandatory: true,
               suffixConstraints: const BoxConstraints(),
               prefixIcon: const Padding(
                 padding: EdgeInsets.only(left: 12.0),
-                child: Text("Rp "),
+                child: Text('Rp '),
               ),
             ),
           ],
@@ -463,7 +461,7 @@ class _ActivityCycleAddHarvestViewState
               return Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: AppPrimaryOutlineFullButton(
-                  "Tambah Pembeli Lainnya",
+                  'Tambah Pembeli Lainnya',
                   () {
                     context
                         .read<ActivityCycleAddHarvestCubit>()
@@ -519,15 +517,15 @@ class _ActivityCycleAddHarvestViewState
         mainAxisSize: MainAxisSize.min,
         children: [
           AppPrimaryOutlineFullButton(
-            "Selesaikan Panen",
+            'Selesaikan Panen',
             () {
               if (formKey.currentState!.validate()) {
                 showDeleteBottomSheet(
                   context,
-                  title: "Selesaikan Panen",
+                  title: 'Selesaikan Panen',
                   descriptions:
-                      "Dengan menyelesaikan panen, maka panen ini akan"
-                      " dianggap selesai dan tidak dapat diubah lagi.",
+                      'Dengan menyelesaikan panen, maka panen ini akan'
+                      ' dianggap selesai dan tidak dapat diubah lagi.',
                   onTapDelete: () {
                     Navigator.of(context).pop();
                     context.read<ActivityCycleAddHarvestCubit>().doneHarvest(
@@ -544,7 +542,7 @@ class _ActivityCycleAddHarvestViewState
                         );
                   },
                   icon: Icons.info_outline,
-                  buttonTitle: "Selesaikan Panen",
+                  buttonTitle: 'Selesaikan Panen',
                 );
                 return;
               }
@@ -552,7 +550,7 @@ class _ActivityCycleAddHarvestViewState
           ),
           const SizedBox(height: 16.0),
           AppPrimaryFullButton(
-            "Simpan",
+            'Simpan',
             () {
               if (formKey.currentState!.validate()) {
                 context.read<ActivityCycleAddHarvestCubit>().createHarvest(

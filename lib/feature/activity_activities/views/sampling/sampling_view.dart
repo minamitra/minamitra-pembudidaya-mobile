@@ -37,9 +37,9 @@ class _SamplingViewState extends State<SamplingView> {
               .push(AppTransition.pushTransition(
             ActivitySamplingDetailPage(data),
             ActivitySamplingDetailPage.routeSettings(),
-          ))
+          ),)
               .then((value) {
-            if (value == "refresh") {
+            if (value == 'refresh') {
               context.read<SamplingCubit>().init(
                     widget.fishpondId,
                     widget.fishpondcycleId,
@@ -68,7 +68,7 @@ class _SamplingViewState extends State<SamplingView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : "-",
+                        data.datetime != null ? data.datetime.toString() : '-',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -81,12 +81,12 @@ class _SamplingViewState extends State<SamplingView> {
                     onTap: () {
                       showDeleteBottomSheet(
                         context,
-                        title: "Hapus Sampling",
+                        title: 'Hapus Sampling',
                         descriptions:
-                            "Apakah Anda yakin ingin menghapus sampling ini?",
+                            'Apakah Anda yakin ingin menghapus sampling ini?',
                         onTapDelete: () {
                           context.read<SamplingCubit>().deleteSampling(
-                                data.id ?? "",
+                                data.id ?? '',
                                 widget.fishpondId,
                                 widget.fishpondcycleId,
                                 widget.datetime,
@@ -138,7 +138,7 @@ class _SamplingViewState extends State<SamplingView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
                   child: AppEmptyData(
-                      "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
                 )
               : ListView.separated(
                   shrinkWrap: true,

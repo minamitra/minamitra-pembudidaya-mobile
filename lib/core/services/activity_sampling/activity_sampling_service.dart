@@ -78,7 +78,7 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
     final response = await httpClient.post(
       url,
       header,
-      json.encode({"id": id}),
+      json.encode({'id': id}),
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
@@ -86,7 +86,7 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
 
   @override
   Future<BaseResponse<bool>> updateSampling(
-      UpdateSamplingPayload payload) async {
+      UpdateSamplingPayload payload,) async {
     final url = endpoint.updateSampling();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

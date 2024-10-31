@@ -35,17 +35,17 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         onGoingCycleFeedResponseData: response.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -59,17 +59,17 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         onGoingCycleFeedResponseData: response.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -84,13 +84,13 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

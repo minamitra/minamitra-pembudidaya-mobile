@@ -88,7 +88,7 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
           children: [
             const SizedBox(height: 24.0),
             Text(
-              "Selamat Datang Mitra 3M",
+              'Selamat Datang Mitra 3M',
               textAlign: TextAlign.center,
               style: appTextTheme(context).titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
@@ -97,7 +97,7 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
             ),
             const SizedBox(height: 12.0),
             Text(
-              "Platform inovatif yang dirancang khusus untuk mendukung para petani ikan patin di OKU Timur",
+              'Platform inovatif yang dirancang khusus untuk mendukung para petani ikan patin di OKU Timur',
               textAlign: TextAlign.center,
               style: appTextTheme(context).bodySmall?.copyWith(
                     fontWeight: FontWeight.w400,
@@ -107,12 +107,12 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppPrimaryFullButton(
-                "Masuk",
+                'Masuk',
                 () {
                   Navigator.of(context).push(AppTransition.pushTransition(
                     const LoginPage(),
                     LoginPage.route,
-                  ));
+                  ),);
                 },
               ),
             ),
@@ -120,18 +120,18 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppPrimaryOutlineFullButton(
-                "Daftar",
+                'Daftar',
                 () {
                   Navigator.of(context).push(AppTransition.pushTransition(
                     const RegisterPage(),
                     RegisterPage.routeSettings,
-                  ));
+                  ),);
                 },
               ),
             ),
             const Expanded(child: SizedBox()),
             Text(
-              "Koperasi Produsen Mina Mitra Mandiri",
+              'Koperasi Produsen Mina Mitra Mandiri',
               textAlign: TextAlign.center,
               style: appTextTheme(context).bodySmall?.copyWith(
                     fontWeight: FontWeight.w400,

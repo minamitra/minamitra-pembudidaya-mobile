@@ -25,10 +25,10 @@ class RecommendationFeedBulk {
 
   factory RecommendationFeedBulk.fromMap(Map<String, dynamic> json) =>
       RecommendationFeedBulk(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
-            : List<RecommendationFeedBulkData>.from(json["data"]!
-                .map((x) => RecommendationFeedBulkData.fromMap(x))),
+            : List<RecommendationFeedBulkData>.from(json['data']!
+                .map((x) => RecommendationFeedBulkData.fromMap(x)),),
       );
 
   // Map<String, dynamic> toMap() => {
@@ -73,20 +73,20 @@ class RecommendationFeedBulkData {
 
   factory RecommendationFeedBulkData.fromMap(Map<String, dynamic> json) =>
       RecommendationFeedBulkData(
-        fishpondId: json["fishpond_id"],
+        fishpondId: json['fishpond_id'],
         mbwByFishAge:
-            double.tryParse(json["mbw_by_fish_age"].toString()) ?? 0.0,
-        suggestFeed: json["suggest_feed"].toDouble(),
+            double.tryParse(json['mbw_by_fish_age'].toString()) ?? 0.0,
+        suggestFeed: json['suggest_feed'].toDouble(),
         accumulationTotalFeedBefore:
-            json["accumulation_total_feed_before"].toDouble(),
+            json['accumulation_total_feed_before'].toDouble(),
         feedValuecontroller: TextEditingController(),
         fishFeedIDController: TextEditingController(),
-        fishfoods: json["fishfoods"] == null
+        fishfoods: json['fishfoods'] == null
             ? []
             : List<Fishfood>.from(
-                json["fishfoods"]!.map((x) => Fishfood.fromMap(x))),
-        fishpondName: json["fishpond_name"],
-        fishAge: json["fish_age"].toString(),
+                json['fishfoods']!.map((x) => Fishfood.fromMap(x)),),
+        fishpondName: json['fishpond_name'],
+        fishAge: json['fish_age'].toString(),
       );
 
   RecommendationFeedBulkData copyWith({
@@ -121,11 +121,11 @@ class RecommendationFeedBulkData {
   }
 
   Map<String, dynamic> submitBulkMap() => {
-        "fishpond_id": fishpondId,
-        "recommendation": suggestFeed,
-        "actual": (feedAmount ?? 0) * 1000,
-        "fishfood_id": selectedFishfood!.id,
-        "note": "Tidak ada catatan",
+        'fishpond_id': fishpondId,
+        'recommendation': suggestFeed,
+        'actual': (feedAmount ?? 0) * 1000,
+        'fishfood_id': selectedFishfood!.id,
+        'note': 'Tidak ada catatan',
         // "mbw_by_fish_age": mbwByFishAge,
         // "suggest_feed": suggestFeed,
         // "accumulation_total_feed_before": accumulationTotalFeedBefore,
@@ -166,32 +166,32 @@ class Fishfood {
   String toJson() => json.encode(toMap());
 
   factory Fishfood.fromMap(Map<String, dynamic> json) => Fishfood(
-        id: json["id"],
-        type: json["type"],
-        name: json["name"],
-        weight: json["weight"],
-        proteinPercent: json["protein_percent"],
-        eppEstimationPercent: json["epp_estimation_percent"],
-        price: json["price"],
-        unitId: json["unit_id"],
-        unitName: json["unit_name"],
-        supplierId: json["supplier_id"],
-        supplierName: json["supplier_name"],
-        note: json["note"],
+        id: json['id'],
+        type: json['type'],
+        name: json['name'],
+        weight: json['weight'],
+        proteinPercent: json['protein_percent'],
+        eppEstimationPercent: json['epp_estimation_percent'],
+        price: json['price'],
+        unitId: json['unit_id'],
+        unitName: json['unit_name'],
+        supplierId: json['supplier_id'],
+        supplierName: json['supplier_name'],
+        note: json['note'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "type": type,
-        "name": name,
-        "weight": weight,
-        "protein_percent": proteinPercent,
-        "epp_estimation_percent": eppEstimationPercent,
-        "price": price,
-        "unit_id": unitId,
-        "unit_name": unitName,
-        "supplier_id": supplierId,
-        "supplier_name": supplierName,
-        "note": note,
+        'id': id,
+        'type': type,
+        'name': name,
+        'weight': weight,
+        'protein_percent': proteinPercent,
+        'epp_estimation_percent': eppEstimationPercent,
+        'price': price,
+        'unit_id': unitId,
+        'unit_name': unitName,
+        'supplier_id': supplierId,
+        'supplier_name': supplierName,
+        'note': note,
       };
 }

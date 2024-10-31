@@ -63,14 +63,14 @@ Widget appSliverDefaultAppBar({
   double? customToolbarHeight,
   double elevation = 1.5,
 }) {
-  Widget? _appBarTitle() {
+  Widget? appBarTitle() {
     return titleText != null
         ? Text(titleText, style: AppTextStyle.whiteMediumText)
         : null;
   }
 
   return SliverAppBar(
-    title: customAppBarTitle ?? _appBarTitle(),
+    title: customAppBarTitle ?? appBarTitle(),
     actions: actionsIcon,
     elevation: elevation,
     backgroundColor: Colors.white,

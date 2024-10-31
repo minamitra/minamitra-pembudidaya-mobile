@@ -8,10 +8,10 @@ class FeedActivityEndpoint {
     String dateTime,
   ) {
     return createUrl(
-      path: "mitra/activity-feeding/data",
+      path: 'mitra/activity-feeding/data',
       queryParameters: {
-        "fishpondcycle_id": fishPondCycleID,
-        "datetime": dateTime,
+        'fishpondcycle_id': fishPondCycleID,
+        'datetime': dateTime,
       },
     );
   }
@@ -22,11 +22,11 @@ class FeedActivityEndpoint {
     String dateTime,
   ) {
     return createUrl(
-      path: "mitra/activity-feeding/get-recommendation",
+      path: 'mitra/activity-feeding/get-recommendation',
       queryParameters: {
-        "fishpondcycle_id": fishPondCycleID,
+        'fishpondcycle_id': fishPondCycleID,
         // "fish_age": fishAge,
-        "date": dateTime,
+        'date': dateTime,
       },
     );
   }
@@ -36,10 +36,10 @@ class FeedActivityEndpoint {
     String dateTime,
   ) {
     return createUrl(
-      path: "mitra/activity-feeding/data-fishfood",
+      path: 'mitra/activity-feeding/data-fishfood',
       queryParameters: {
-        "fishpondcycle_id": fishPondCycleID,
-        "date": dateTime,
+        'fishpondcycle_id': fishPondCycleID,
+        'date': dateTime,
       },
     );
   }
@@ -47,13 +47,13 @@ class FeedActivityEndpoint {
   Uri postFishFeed(bool isCreateData) {
     return createUrl(
       path: isCreateData
-          ? "mitra/activity-feeding/add"
-          : "/mitra/activity-feeding/update",
+          ? 'mitra/activity-feeding/add'
+          : '/mitra/activity-feeding/update',
     );
   }
 
   Uri deleteFishActivity() {
-    return createUrl(path: "mitra/activity-feeding/delete");
+    return createUrl(path: 'mitra/activity-feeding/delete');
   }
 
   Uri getFeedRecommendationBulk(
@@ -61,15 +61,15 @@ class FeedActivityEndpoint {
     String date,
   ) {
     return createUrl(
-      path: "mitra/activity-feeding/get-recommendation-bulk",
+      path: 'mitra/activity-feeding/get-recommendation-bulk',
       queryParameters: {
-        "fishpond_ids": fishpondIds,
-        "date": date,
+        'fishpond_ids': fishpondIds,
+        'date': date,
       },
     );
   }
 
   Uri postBulkFeed() {
-    return createUrl(path: "mitra/activity-feeding/add-bulk");
+    return createUrl(path: 'mitra/activity-feeding/add-bulk');
   }
 }

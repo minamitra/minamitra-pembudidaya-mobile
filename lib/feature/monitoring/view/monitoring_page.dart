@@ -20,12 +20,12 @@ class MonitoringPage extends StatelessWidget {
             create: (context) => CultivationCubit(CycleServiceImpl.create())
               ..init(
                 pondCycleID,
-                "mbw",
-              ))
+                'mbw',
+              ),),
       ],
       child: Scaffold(
-        appBar: appDefaultAppBar(context, "Analisa"),
-        body: MonitoringView(),
+        appBar: appDefaultAppBar(context, 'Analisa'),
+        body: const MonitoringView(),
       ),
     );
   }

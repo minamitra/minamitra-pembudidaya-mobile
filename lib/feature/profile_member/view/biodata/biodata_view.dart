@@ -51,19 +51,19 @@ class _BiodataViewState extends State<BiodataView> {
   @override
   void initState() {
     super.initState();
-    if (widget.profile.imageUrl != null && widget.profile.imageUrl != "") {
+    if (widget.profile.imageUrl != null && widget.profile.imageUrl != '') {
       convertImageUrl(widget.profile.imageUrl!);
     }
-    nikController.text = widget.profile.nik ?? "";
-    nameController.text = widget.profile.name ?? "";
-    emailController.text = widget.profile.email ?? "";
-    phoneController.text = widget.profile.mobilephone ?? "";
-    birthPlaceController.text = widget.profile.birthPlace ?? "";
+    nikController.text = widget.profile.nik ?? '';
+    nameController.text = widget.profile.name ?? '';
+    emailController.text = widget.profile.email ?? '';
+    phoneController.text = widget.profile.mobilephone ?? '';
+    birthPlaceController.text = widget.profile.birthPlace ?? '';
     birthDateController.text = widget.profile.birthDate == null
-        ? ""
+        ? ''
         : AppConvertDateTime().ymdDash(widget.profile.birthDate!);
-    jobController.text = widget.profile.job ?? "";
-    if (widget.profile.gender != null && widget.profile.gender != "") {
+    jobController.text = widget.profile.job ?? '';
+    if (widget.profile.gender != null && widget.profile.gender != '') {
       selectedGender = listGender.firstWhere(
         (element) {
           return element.value == widget.profile.gender;
@@ -152,7 +152,7 @@ class _BiodataViewState extends State<BiodataView> {
                     ),
                     builder: (bottomSheetContext) {
                       return AppImagePickerMenu(
-                        "Upload Foto Profil",
+                        'Upload Foto Profil',
                         (type) async {
                           switch (type) {
                             case PhotoSource.camera:
@@ -186,7 +186,7 @@ class _BiodataViewState extends State<BiodataView> {
                   );
                 },
                 child: Text(
-                  "Ganti Foto",
+                  'Ganti Foto',
                   style: appTextTheme(context).bodySmall?.copyWith(
                         color: AppColor.primary,
                       ),
@@ -199,21 +199,21 @@ class _BiodataViewState extends State<BiodataView> {
       if (isEditable) {
         return AppValidatorTextField(
           controller: nikController,
-          labelText: "NIK",
+          labelText: 'NIK',
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.number,
-          hintText: "Masukkan NIK",
+          hintText: 'Masukkan NIK',
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
-              return "NIK Tidak boleh kosong";
+              return 'NIK Tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "NIK",
+        'NIK',
         nikController.text,
       );
     }
@@ -222,21 +222,21 @@ class _BiodataViewState extends State<BiodataView> {
       if (isEditable) {
         return AppValidatorTextField(
           controller: nameController,
-          labelText: "Nama Lengkap",
+          labelText: 'Nama Lengkap',
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.name,
-          hintText: "Masukkan Nama Lengkap",
+          hintText: 'Masukkan Nama Lengkap',
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
-              return "Nama Tidak boleh kosong";
+              return 'Nama Tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "Nama",
+        'Nama',
         nameController.text,
       );
     }
@@ -245,21 +245,21 @@ class _BiodataViewState extends State<BiodataView> {
       if (isEditable) {
         return AppValidatorTextField(
           controller: emailController,
-          labelText: "Email",
+          labelText: 'Email',
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.emailAddress,
-          hintText: "Masukkan Email",
+          hintText: 'Masukkan Email',
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
-              return "Email Tidak boleh kosong";
+              return 'Email Tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "Email",
+        'Email',
         emailController.text,
       );
     }
@@ -268,21 +268,21 @@ class _BiodataViewState extends State<BiodataView> {
       if (isEditable) {
         return AppValidatorTextField(
           controller: phoneController,
-          labelText: "Nomor Handphone",
+          labelText: 'Nomor Handphone',
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.phone,
-          hintText: "Masukkan Nomor Handphone",
+          hintText: 'Masukkan Nomor Handphone',
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
-              return "Nomor Handphone Tidak boleh kosong";
+              return 'Nomor Handphone Tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "Nomor Handphone",
+        'Nomor Handphone',
         phoneController.text,
       );
     }
@@ -291,21 +291,21 @@ class _BiodataViewState extends State<BiodataView> {
       if (isEditable) {
         return AppValidatorTextField(
           controller: birthPlaceController,
-          labelText: "Tempat Lahir (Sesuai KTP)",
+          labelText: 'Tempat Lahir (Sesuai KTP)',
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.text,
-          hintText: "Masukkan Tempat Lahir",
+          hintText: 'Masukkan Tempat Lahir',
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
-              return "Tempat Lahir Tidak boleh kosong";
+              return 'Tempat Lahir Tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "Tempat Lahir",
+        'Tempat Lahir',
         birthPlaceController.text,
       );
     }
@@ -315,8 +315,8 @@ class _BiodataViewState extends State<BiodataView> {
         return AppValidatorTextField(
           readOnly: true,
           controller: birthDateController,
-          labelText: "Tanggal Lahir (Sesuai KTP)",
-          hintText: "Pilih Tanggal Lahir",
+          labelText: 'Tanggal Lahir (Sesuai KTP)',
+          hintText: 'Pilih Tanggal Lahir',
           suffixConstraints: const BoxConstraints(),
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
@@ -343,14 +343,14 @@ class _BiodataViewState extends State<BiodataView> {
           },
           validator: (String? value) {
             if (value!.isEmpty) {
-              return "Tanggal tidak boleh kosong";
+              return 'Tanggal tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "Tanggal Lahir",
+        'Tanggal Lahir',
         birthDateController.text,
       );
     }
@@ -363,11 +363,11 @@ class _BiodataViewState extends State<BiodataView> {
             Wrap(
               children: [
                 Text(
-                  "Jenis Kelamin",
+                  'Jenis Kelamin',
                   style: appTextTheme(context).bodyMedium,
                 ),
                 Text(
-                  " *",
+                  ' *',
                   style: appTextTheme(context)
                       .bodyMedium
                       ?.copyWith(color: Colors.red),
@@ -414,8 +414,8 @@ class _BiodataViewState extends State<BiodataView> {
         );
       } else {
         return dataStatic(
-          "Jenis Kelamin",
-          selectedGender?.name ?? "-",
+          'Jenis Kelamin',
+          selectedGender?.name ?? '-',
         );
       }
     }
@@ -424,21 +424,21 @@ class _BiodataViewState extends State<BiodataView> {
       if (isEditable) {
         return AppValidatorTextField(
           controller: jobController,
-          labelText: "Pekerjaan",
+          labelText: 'Pekerjaan',
           withUpperLabel: true,
           isMandatory: true,
           inputType: TextInputType.text,
-          hintText: "Masukkan Pekerjaan",
+          hintText: 'Masukkan Pekerjaan',
           validator: (String? value) {
             if (value?.isEmpty ?? true) {
-              return "Pekerjaan Tidak boleh kosong";
+              return 'Pekerjaan Tidak boleh kosong';
             }
             return null;
           },
         );
       }
       return dataStatic(
-        "Pekerjaan",
+        'Pekerjaan',
         jobController.text,
       );
     }
@@ -446,7 +446,7 @@ class _BiodataViewState extends State<BiodataView> {
     Widget editButton() {
       if (!isEditable) {
         return AppPrimaryFullButton(
-          "Edit",
+          'Edit',
           () {
             setState(() {
               isEditable = true;
@@ -455,14 +455,14 @@ class _BiodataViewState extends State<BiodataView> {
         );
       }
       return AppPrimaryFullButton(
-        "Simpan",
+        'Simpan',
         () async {
           if (!_formKey.currentState!.validate()) {
             return;
           }
           if (picture == null && pictureFile == null) {
             AppTopSnackBar(context)
-                .showDanger("Foto Profil tidak boleh kosong");
+                .showDanger('Foto Profil tidak boleh kosong');
             return;
           }
 
@@ -480,7 +480,7 @@ class _BiodataViewState extends State<BiodataView> {
             mobilephone: phoneController.text,
             birthPlace: birthPlaceController.text,
             birthDate: birthDateController.text,
-            gender: selectedGender?.value ?? "",
+            gender: selectedGender?.value ?? '',
             job: jobController.text,
           );
           context.read<ProfileMemberCubit>().updateProfile(payload, tempFile);

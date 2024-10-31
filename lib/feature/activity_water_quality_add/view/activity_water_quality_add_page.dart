@@ -28,7 +28,7 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
   });
 
   static const RouteSettings routeSettings =
-      RouteSettings(name: "/activity-water-quality-page");
+      RouteSettings(name: '/activity-water-quality-page');
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          isEdit ? "Edit Kualitas Air" : "Tambah Kualitas Air",
+          isEdit ? 'Edit Kualitas Air' : 'Tambah Kualitas Air',
         ),
         body: BlocConsumer<ActivityWaterQualityAddCubit,
             ActivityWaterQualityAddState>(
@@ -62,7 +62,7 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
             }
 
             if (state.status.isError) {
-              if (state.errorMessage == "TOKEN_EXPIRED") {
+              if (state.errorMessage == 'TOKEN_EXPIRED') {
                 RepositoryProvider.of<AuthenticationRepository>(context)
                     .logout();
               } else {
@@ -72,11 +72,11 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
 
             if (state.status.isSuccessSubmit) {
               AppTopSnackBar(context).showSuccess(isEdit
-                  ? "Berhasil Edit\nKualitas Air!"
-                  : "Berhasil Membuat\nKualitas Air Baru!");
-              Navigator.of(context).pop("refresh");
+                  ? 'Berhasil Edit\nKualitas Air!'
+                  : 'Berhasil Membuat\nKualitas Air Baru!',);
+              Navigator.of(context).pop('refresh');
               if (isEdit) {
-                Navigator.of(context).pop("refresh");
+                Navigator.of(context).pop('refresh');
               }
             }
           },

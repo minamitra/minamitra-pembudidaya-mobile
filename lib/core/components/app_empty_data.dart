@@ -44,7 +44,7 @@ class AppEmptyData extends StatelessWidget {
         if (descriptions != null) ...[
           const SizedBox(height: 8.0),
           Text(
-            descriptions ?? "-",
+            descriptions ?? '-',
             textAlign: TextAlign.center,
             style: appTextTheme(context).labelLarge?.copyWith(
                   fontWeight: FontWeight.w400,

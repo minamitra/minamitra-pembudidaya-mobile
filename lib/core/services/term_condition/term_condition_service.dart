@@ -32,7 +32,7 @@ class TermConditionServiceImpl implements TermConditionService {
 
   @override
   Future<BaseResponse<TermConditionResponse>> getTermCondition() async {
-    final url = endpoint.termCondition("SYARAT_KETENTUAN");
+    final url = endpoint.termCondition('SYARAT_KETENTUAN');
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -43,7 +43,7 @@ class TermConditionServiceImpl implements TermConditionService {
 
   @override
   Future<BaseResponse<PrivacyPolicyResponse>> getPrivacyPolicy() async {
-    final url = endpoint.termCondition("KEBIJAKAN_PRIVASI");
+    final url = endpoint.termCondition('KEBIJAKAN_PRIVASI');
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);

@@ -55,14 +55,14 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
     super.initState();
     if (widget.isEdit) {
       if (widget.data != null) {
-        titleController.text = widget.data!.incident ?? "";
+        titleController.text = widget.data!.incident ?? '';
         dateController.text = widget.data!.datetime != null
             ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
-            : "";
+            : '';
         hourController.text = widget.data!.datetime != null
             ? AppConvertDateTime().jm24(widget.data!.datetime!)
-            : "";
-        noteController.text = widget.data!.note ?? "";
+            : '';
+        noteController.text = widget.data!.note ?? '';
         if (widget.data!.attachmentJsonArray != null &&
             widget.data!.attachmentJsonArray!.isNotEmpty) {
           convetAttachmentImage(widget.data!.attachmentJsonArray!);
@@ -81,12 +81,12 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
   Widget titleTextField() {
     return AppValidatorTextField(
       controller: titleController,
-      labelText: "Judul Laporan",
-      hintText: "Masukan Judul Laporan",
+      labelText: 'Judul Laporan',
+      hintText: 'Masukan Judul Laporan',
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Judul laporan tidak boleh kosong";
+          return 'Judul laporan tidak boleh kosong';
         }
         return null;
       },
@@ -97,8 +97,8 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
     return AppValidatorTextField(
       readOnly: true,
       controller: dateController,
-      hintText: "Pilih Tanggal",
-      labelText: "Tanggal",
+      hintText: 'Pilih Tanggal',
+      labelText: 'Tanggal',
       suffixConstraints: const BoxConstraints(
         maxHeight: 50,
         maxWidth: 50,
@@ -130,7 +130,7 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
       },
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Tanggal tidak boleh kosong";
+          return 'Tanggal tidak boleh kosong';
         }
         return null;
       },
@@ -141,8 +141,8 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
     return AppValidatorTextField(
       readOnly: true,
       controller: hourController,
-      hintText: "Pilih Jam",
-      labelText: "Jam",
+      hintText: 'Pilih Jam',
+      labelText: 'Jam',
       suffixConstraints: const BoxConstraints(
         maxHeight: 50,
         maxWidth: 50,
@@ -165,15 +165,14 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
         ).then((time) {
           setState(() {
             if (time != null) {
-              hourController.text = time.format(context).replaceAll(".", ":");
-              ;
+              hourController.text = time.format(context).replaceAll('.', ':');
             }
           });
         });
       },
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Jam tidak boleh kosong";
+          return 'Jam tidak boleh kosong';
         }
         return null;
       },
@@ -183,13 +182,13 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
   AppValidatorTextField noteTextField() {
     return AppValidatorTextField(
       controller: noteController,
-      hintText: "Masukan catatan",
-      labelText: "Catatan",
+      hintText: 'Masukan catatan',
+      labelText: 'Catatan',
       isMandatory: true,
       maxLines: 3,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Catatan tidak boleh kosong";
+          return 'Catatan tidak boleh kosong';
         }
         return null;
       },
@@ -203,7 +202,7 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
         Wrap(
           children: [
             Text(
-              "Unggah Lampiran",
+              'Unggah Lampiran',
               style: appTextTheme(context).bodyMedium,
             ),
           ],
@@ -221,7 +220,7 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
                   ),
                   builder: (bottomSheetContext) {
                     return AppImagePickerMenu(
-                      "Upload Gambar",
+                      'Upload Gambar',
                       (type) async {
                         switch (type) {
                           case PhotoSource.camera:
@@ -263,11 +262,11 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB",
+          'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
           style: appTextTheme(context).labelLarge?.copyWith(
                 color: AppColor.neutral[500],
               ),
-        )
+        ),
       ],
     );
   }
@@ -305,7 +304,7 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (!formKey.currentState!.validate()) {
               return;
@@ -322,7 +321,7 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
                 incident: titleController.text,
                 fishpondcycleId: widget.fishpondcycleId,
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 note: noteController.text,
               );
@@ -332,10 +331,10 @@ class _ActivityIncidentAddViewState extends State<ActivityIncidentAddView> {
                   );
             } else {
               UpdateIncidentPayload payload = UpdateIncidentPayload(
-                id: widget.data!.id ?? "",
+                id: widget.data!.id ?? '',
                 incident: titleController.text,
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 note: noteController.text,
               );

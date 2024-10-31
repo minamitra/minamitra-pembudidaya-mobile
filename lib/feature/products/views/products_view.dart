@@ -25,7 +25,7 @@ class ProductsView extends StatefulWidget {
 
 class _ProductsViewState extends State<ProductsView> {
   final _searchController = TextEditingController();
-  String selectedCategoryId = "";
+  String selectedCategoryId = '';
 
   @override
   void initState() {
@@ -129,7 +129,7 @@ class _ProductsViewState extends State<ProductsView> {
                             setState(() {
                               if (selectedCategoryId ==
                                   state.categoryProduct[index].id) {
-                                selectedCategoryId = "";
+                                selectedCategoryId = '';
                               } else {
                                 selectedCategoryId =
                                     state.categoryProduct[index].id!;
@@ -173,7 +173,7 @@ class _ProductsViewState extends State<ProductsView> {
             Navigator.of(context).push(AppTransition.pushTransition(
               ProductDetailPage(data),
               ProductDetailPage.routeSettings(),
-            ));
+            ),);
           }
         },
         child: Container(
@@ -186,7 +186,7 @@ class _ProductsViewState extends State<ProductsView> {
                 child: AspectRatio(
                   aspectRatio: 1.1,
                   child: AppNetworkImage(
-                    data.imageUrl ?? "",
+                    data.imageUrl ?? '',
                     width: double.infinity,
                     height: double.infinity,
                     fit: BoxFit.cover,
@@ -267,7 +267,7 @@ class _ProductsViewState extends State<ProductsView> {
             return state.products.isEmpty
                 ? const Padding(
                     padding: EdgeInsets.fromLTRB(16, 98, 16, 0),
-                    child: AppEmptyData("Belum ada data produk"),
+                    child: AppEmptyData('Belum ada data produk'),
                   )
                 : Expanded(
                     child: GridView.builder(

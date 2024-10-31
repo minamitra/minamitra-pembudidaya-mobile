@@ -20,7 +20,6 @@ import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/view/c
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_detail/view/cultivation_note_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/line_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -37,9 +36,9 @@ class _CultivationViewState extends State<CultivationView> {
   AppDebounce debounce = AppDebounce(const Duration(milliseconds: 500));
 
   List<String> dataBudidayDummy = [
-    "MBW (Mean Body Weight) (gram)",
-    "Total Biomass (kg)",
-    "ADG (Average Daily Growth) (gram)",
+    'MBW (Mean Body Weight) (gram)',
+    'Total Biomass (kg)',
+    'ADG (Average Daily Growth) (gram)',
     // "Pakan Harian",
     // "Pakan Kumulatif",
     // "SR (Survival Rate) (%)",
@@ -60,7 +59,7 @@ class _CultivationViewState extends State<CultivationView> {
             color: Colors.blue,
             fontSize: 12,
           ),
-          format: "point.x Hari : point.y gram",
+          format: 'point.x Hari : point.y gram',
         ),
         // tooltipAlignment: ChartAlignment.far,
         builder: (context, trackballs) {
@@ -99,7 +98,7 @@ class _CultivationViewState extends State<CultivationView> {
                         children: [
                           Expanded(
                             child: Text(
-                              "DoC : ${trackballs.groupingModeInfo?.points[0].x.toString()} Hari",
+                              'DoC : ${trackballs.groupingModeInfo?.points[0].x.toString()} Hari',
                               style: appTextTheme(context).labelLarge?.copyWith(
                                     color: AppColor.white,
                                   ),
@@ -109,11 +108,11 @@ class _CultivationViewState extends State<CultivationView> {
                             AppConvertDateTime().dmyName(
                                 data[trackballs.groupingModeInfo?.points[0].x]
                                         .date ??
-                                    DateTime.now()),
+                                    DateTime.now(),),
                             style: appTextTheme(context).labelLarge?.copyWith(
                                   color: AppColor.white,
                                 ),
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -147,7 +146,7 @@ class _CultivationViewState extends State<CultivationView> {
                           const SizedBox(width: 6.0),
                           Expanded(
                             child: Text(
-                              "Standar",
+                              'Standar',
                               style: appTextTheme(context).labelLarge,
                             ),
                           ),
@@ -155,7 +154,7 @@ class _CultivationViewState extends State<CultivationView> {
                             appConvert3Digits(trackballs
                                     .groupingModeInfo?.points[0].y
                                     ?.toDouble() ??
-                                0.0),
+                                0.0,),
                             style: appTextTheme(context).labelLarge,
                           ),
                         ],
@@ -176,7 +175,7 @@ class _CultivationViewState extends State<CultivationView> {
                           const SizedBox(width: 6.0),
                           Expanded(
                             child: Text(
-                              "Estimasi",
+                              'Estimasi',
                               style: appTextTheme(context).labelLarge,
                             ),
                           ),
@@ -184,7 +183,7 @@ class _CultivationViewState extends State<CultivationView> {
                             appConvert3Digits(trackballs
                                     .groupingModeInfo?.points[1].y
                                     ?.toDouble() ??
-                                0.0),
+                                0.0,),
                             style: appTextTheme(context).labelLarge,
                           ),
                         ],
@@ -206,7 +205,7 @@ class _CultivationViewState extends State<CultivationView> {
                             const SizedBox(width: 6.0),
                             Expanded(
                               child: Text(
-                                "Aktual",
+                                'Aktual',
                                 style: appTextTheme(context).labelLarge,
                               ),
                             ),
@@ -214,12 +213,12 @@ class _CultivationViewState extends State<CultivationView> {
                               appConvert3Digits(trackballs
                                       .groupingModeInfo?.points[2].y
                                       ?.toDouble() ??
-                                  0.0),
+                                  0.0,),
                               style: appTextTheme(context).labelLarge,
                             ),
                           ],
                         ),
-                      ]
+                      ],
                     ],
                   ),
                 ),
@@ -355,8 +354,8 @@ class _CultivationViewState extends State<CultivationView> {
           controller: parameterController,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Parameter",
-          hintText: "Pilih parameter",
+          labelText: 'Parameter',
+          hintText: 'Pilih parameter',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -364,13 +363,13 @@ class _CultivationViewState extends State<CultivationView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Parameter tidak boleh kosong";
+              return 'Parameter tidak boleh kosong';
             }
             return null;
           },
           onTap: bottomSheetShowModal(
             context,
-            "Pilih Parameter",
+            'Pilih Parameter',
             dataBudidayDummy,
           ),
         ),
@@ -415,7 +414,7 @@ class _CultivationViewState extends State<CultivationView> {
                         border: Border.all(color: Colors.white),
                         color: AppColor.neutral[100],
                       ),
-                      child: const Text("DoC"),
+                      child: const Text('DoC'),
                     ),
                     SizedBox(
                       height: 44.0,
@@ -437,7 +436,7 @@ class _CultivationViewState extends State<CultivationView> {
                         decoration: InputDecoration(
                           isCollapsed: true,
                           border: InputBorder.none,
-                          hintText: "0",
+                          hintText: '0',
                           hintStyle: appTextTheme(context).bodySmall,
                         ),
                         textAlign: TextAlign.center,
@@ -446,7 +445,7 @@ class _CultivationViewState extends State<CultivationView> {
                             int? docStart = int.tryParse(value);
                             if (docStart == null || docStart < 0) {
                               AppTopSnackBar(context).showDanger(
-                                  "DoC awal harus berupa angka positif");
+                                  'DoC awal harus berupa angka positif',);
                               return;
                             }
                             debounce.call(
@@ -454,22 +453,22 @@ class _CultivationViewState extends State<CultivationView> {
                                 if (int.parse(context
                                         .read<CultivationCubit>()
                                         .docStartController
-                                        .text) >
+                                        .text,) >
                                     int.parse(context
                                         .read<CultivationCubit>()
                                         .docEndController
-                                        .text)) {
+                                        .text,)) {
                                   AppTopSnackBar(context).showDanger(
-                                      "DoC awal tidak boleh lebih besar dari DoC akhir");
+                                      'DoC awal tidak boleh lebih besar dari DoC akhir',);
                                   return;
                                 }
                                 if (int.parse(context
                                         .read<CultivationCubit>()
                                         .docEndController
-                                        .text) >
+                                        .text,) >
                                     (state.data?.tempData?.length ?? 0)) {
                                   AppTopSnackBar(context).showDanger(
-                                      "DoC akhir tidak boleh lebih besar dari DoC terakhir");
+                                      'DoC akhir tidak boleh lebih besar dari DoC terakhir',);
                                   return;
                                 }
                                 context.read<CultivationCubit>().cahngeDOC();
@@ -521,7 +520,7 @@ class _CultivationViewState extends State<CultivationView> {
                         decoration: InputDecoration(
                           isCollapsed: true,
                           border: InputBorder.none,
-                          hintText: "0",
+                          hintText: '0',
                           hintStyle: appTextTheme(context).bodySmall,
                         ),
                         textAlign: TextAlign.center,
@@ -530,7 +529,7 @@ class _CultivationViewState extends State<CultivationView> {
                             int? docEnd = int.tryParse(value);
                             if (docEnd == null || docEnd < 0) {
                               AppTopSnackBar(context).showDanger(
-                                  "DoC akhir harus berupa angka positif");
+                                  'DoC akhir harus berupa angka positif',);
                               return;
                             }
                             debounce.call(
@@ -538,22 +537,22 @@ class _CultivationViewState extends State<CultivationView> {
                                 if (int.parse(context
                                         .read<CultivationCubit>()
                                         .docStartController
-                                        .text) >
+                                        .text,) >
                                     int.parse(context
                                         .read<CultivationCubit>()
                                         .docEndController
-                                        .text)) {
+                                        .text,)) {
                                   AppTopSnackBar(context).showDanger(
-                                      "DoC awal tidak boleh lebih besar dari DoC akhir");
+                                      'DoC awal tidak boleh lebih besar dari DoC akhir',);
                                   return;
                                 }
                                 if (int.parse(context
                                         .read<CultivationCubit>()
                                         .docEndController
-                                        .text) >
+                                        .text,) >
                                     (state.data?.tempData?.length ?? 0)) {
                                   AppTopSnackBar(context).showDanger(
-                                      "DoC akhir tidak boleh lebih besar dari DoC terakhir");
+                                      'DoC akhir tidak boleh lebih besar dari DoC terakhir',);
                                   return;
                                 }
                                 context.read<CultivationCubit>().cahngeDOC();
@@ -596,7 +595,7 @@ class _CultivationViewState extends State<CultivationView> {
           log(state.data?.data?.map((e) => e.target).reduce((a, b) {
                 return (a ?? 0.0) > (b ?? 0.0) ? a : b;
               }).toString() ??
-              "null");
+              'null',);
 
           return Container(
             margin: const EdgeInsets.only(right: 18.0),
@@ -614,13 +613,13 @@ class _CultivationViewState extends State<CultivationView> {
                     ZoomMode.x, // Allow zooming and panning only on the X-axis
               ),
               trackballBehavior: defaultTrackballBehavior(
-                state.data?.filterName ?? "",
+                state.data?.filterName ?? '',
                 state.data?.data ?? [],
               ),
               // tooltipBehavior: defaultTooltipBehavior,
-              legend: Legend(isVisible: true),
+              legend: const Legend(isVisible: true),
               primaryXAxis: NumericAxis(
-                title: const AxisTitle(text: "DoC (hari)"),
+                title: const AxisTitle(text: 'DoC (hari)'),
                 minimum: state.data?.data?.first.doc?.toDouble() ?? 10,
                 interval: 1,
                 initialVisibleMaximum: (state.data?.data?.length ?? 10) / 2,
@@ -636,8 +635,8 @@ class _CultivationViewState extends State<CultivationView> {
               ),
               primaryYAxis: NumericAxis(
                 title: AxisTitle(
-                    text: (state.data?.filterName ?? "Unknown Filter")
-                        .convertFilterToTitle()),
+                    text: (state.data?.filterName ?? 'Unknown Filter')
+                        .convertFilterToTitle(),),
                 minimum: 0,
                 // maximum: (state.data?.data?.map((e) => e.target).reduce((a, b) {
                 //               return (a ?? 0.0) > (b ?? 0.0) ? a : b;
@@ -693,7 +692,7 @@ class _CultivationViewState extends State<CultivationView> {
                   color: AppColor.accent[900],
                   legendIconType: LegendIconType.seriesType,
                   isVisibleInLegend: true,
-                  legendItemText: "Standar",
+                  legendItemText: 'Standar',
                   enableTooltip: true,
                   //   markerSettings: MarkerSettings(
                   //   isVisible: true,
@@ -712,7 +711,7 @@ class _CultivationViewState extends State<CultivationView> {
                   color: AppColor.green[500],
                   legendIconType: LegendIconType.seriesType,
                   isVisibleInLegend: true,
-                  legendItemText: "Estimasi",
+                  legendItemText: 'Estimasi',
                   enableTooltip: false,
                 ),
                 LineSeries<GraphResponseDataItem, int>(
@@ -724,7 +723,7 @@ class _CultivationViewState extends State<CultivationView> {
                   color: AppColor.primary[600],
                   legendIconType: LegendIconType.seriesType,
                   isVisibleInLegend: true,
-                  legendItemText: "Aktual",
+                  legendItemText: 'Aktual',
                   enableTooltip: true,
                   markerSettings: MarkerSettings(
                     isVisible: true,
@@ -788,7 +787,7 @@ class _CultivationViewState extends State<CultivationView> {
                       style: appTextTheme(context)
                           .labelLarge
                           ?.copyWith(color: AppColor.neutral[400]),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -803,7 +802,7 @@ class _CultivationViewState extends State<CultivationView> {
                   border: Border.all(color: AppColor.secondary[900]!),
                 ),
                 child: Text(
-                  "Baru",
+                  'Baru',
                   style: appTextTheme(context).bodySmall?.copyWith(
                         color: AppColor.secondary[900],
                         fontWeight: FontWeight.w500,
@@ -835,7 +834,7 @@ class _CultivationViewState extends State<CultivationView> {
               return Row(
                 children: [
                   Text(
-                    "Catatan Pendamping",
+                    'Catatan Pendamping',
                     style: appTextTheme(context)
                         .titleMedium
                         ?.copyWith(fontWeight: FontWeight.w700),
@@ -844,15 +843,15 @@ class _CultivationViewState extends State<CultivationView> {
                   state.status.isLoading
                       ? const AppShimmer(33, 100, 18)
                       : AppWidgetSecondaryChip(
-                          text: "Lihat Semua",
+                          text: 'Lihat Semua',
                           onTap: () {
                             Navigator.of(context)
                                 .push(AppTransition.pushTransition(
                               CultivationNoteAllPage(
                                   context.read<CultivationCubit>().pondCycleID,
-                                  state.companionNotesData?.data),
+                                  state.companionNotesData?.data,),
                               CultivationNoteAllPage.routeSettings,
-                            ));
+                            ),);
                           },
                         ),
                 ],
@@ -882,7 +881,7 @@ class _CultivationViewState extends State<CultivationView> {
                 return const Padding(
                   padding: EdgeInsets.only(top: 24.0),
                   child: AppEmptyData(
-                    "Belum ada catatan\ndari pendamping",
+                    'Belum ada catatan\ndari pendamping',
                     isCenter: true,
                   ),
                 );
@@ -899,9 +898,9 @@ class _CultivationViewState extends State<CultivationView> {
                     onTap: () {
                       Navigator.of(context).push(AppTransition.pushTransition(
                         CultivationNoteDetailPage(
-                            state.companionNotesData!.data![index]),
+                            state.companionNotesData!.data![index],),
                         CultivationNoteDetailPage.routeSettings,
-                      ));
+                      ),);
                     },
                     child: itemNote(
                       companionImage: state
@@ -914,7 +913,7 @@ class _CultivationViewState extends State<CultivationView> {
                               .companionNotesData!
                               .data![index]
                               .createDatetime ??
-                          DateTime.now()),
+                          DateTime.now(),),
                       companionNotes: state
                           .companionNotesData!.data![index].content
                           .handlingEmptyString(),
@@ -923,7 +922,7 @@ class _CultivationViewState extends State<CultivationView> {
                 },
               );
             },
-          )
+          ),
         ],
       );
     }

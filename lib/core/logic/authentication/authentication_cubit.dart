@@ -30,32 +30,32 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
       emit(state.copyWith(
         status: AuthenticationStatus.unauthenticated,
         message: e.message.toString(),
-      ));
+      ),);
     } on TokenNotFound catch (e) {
       emit(state.copyWith(
         status: AuthenticationStatus.unknown,
         message: e.message.toString(),
-      ));
+      ),);
     } on FailedAuthorizingProfile catch (e) {
       emit(state.copyWith(
         status: AuthenticationStatus.error,
         message: e.message.toString(),
-      ));
+      ),);
     } on FailedSaveUserProfile catch (e) {
       emit(state.copyWith(
         status: AuthenticationStatus.error,
         message: e.message.toString(),
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: AuthenticationStatus.error,
         message: e.message.toString(),
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: AuthenticationStatus.error,
         message: e.toString(),
-      ));
+      ),);
     }
   }
 }

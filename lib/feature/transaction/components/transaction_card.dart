@@ -34,7 +34,7 @@ class _TransactionCardState extends State<TransactionCard> {
           return StatefulBuilder(
             builder: (stateContext, setModalState) {
               return AppBottomSheet(
-                "Metode Pembayaran",
+                'Metode Pembayaran',
                 height: MediaQuery.of(context).size.height * 0.5,
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -70,7 +70,7 @@ class _TransactionCardState extends State<TransactionCard> {
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
+                                            vertical: 4.0,),
                                         decoration: BoxDecoration(
                                           color: AppColor.primary[50],
                                           borderRadius:
@@ -105,7 +105,7 @@ class _TransactionCardState extends State<TransactionCard> {
                                               textAlign: TextAlign.start,
                                               style: listMethodPayment[index]
                                                           .name ==
-                                                      "Plafon"
+                                                      'Plafon'
                                                   ? appTextTheme(context)
                                                       .bodySmall
                                                       ?.copyWith(
@@ -169,7 +169,7 @@ class _TransactionCardState extends State<TransactionCard> {
                                     children: [
                                       Container(
                                         padding: const EdgeInsets.symmetric(
-                                            vertical: 4.0),
+                                            vertical: 4.0,),
                                         decoration: BoxDecoration(
                                           color: AppColor.primary[50],
                                           borderRadius:
@@ -203,7 +203,7 @@ class _TransactionCardState extends State<TransactionCard> {
                                               textAlign: TextAlign.start,
                                               style: listMethodBank[index]
                                                           .name ==
-                                                      "Plafon"
+                                                      'Plafon'
                                                   ? appTextTheme(context)
                                                       .bodySmall
                                                       ?.copyWith(
@@ -244,7 +244,7 @@ class _TransactionCardState extends State<TransactionCard> {
                       ),
                       const SizedBox(height: 16),
                       AppPrimaryFullButton(
-                        "Konfirmasi",
+                        'Konfirmasi',
                         () {},
                         height: 56,
                       ),
@@ -272,7 +272,7 @@ class _TransactionCardState extends State<TransactionCard> {
             listMethodPayment[0],
           ),
           TransactionDetailPage.routeSettings(),
-        ));
+        ),);
       },
       child: AppDefaultCard(
         isShadow: false,
@@ -343,7 +343,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           ),
                           Expanded(
                             child: Text(
-                              "x${widget.data.amount}",
+                              'x${widget.data.amount}',
                               textAlign: TextAlign.end,
                               style: appTextTheme(context).bodySmall?.copyWith(
                                     fontWeight: FontWeight.w400,
@@ -367,7 +367,7 @@ class _TransactionCardState extends State<TransactionCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "1 Item",
+                  '1 Item',
                   textAlign: TextAlign.start,
                   style: appTextTheme(context).bodySmall?.copyWith(
                         fontWeight: FontWeight.w400,
@@ -396,7 +396,7 @@ class _TransactionCardState extends State<TransactionCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Bayar Sekarang",
+                            'Bayar Sekarang',
                             textAlign: TextAlign.start,
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
@@ -406,7 +406,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           SizedBox(
                             height: 40,
                             child: AppPrimaryButton(
-                              "Bayar",
+                              'Bayar',
                               unpaidShowModal(context),
                               width: 96,
                             ),
@@ -428,7 +428,7 @@ class _TransactionCardState extends State<TransactionCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Pesan Lagi Yuk",
+                            'Pesan Lagi Yuk',
                             textAlign: TextAlign.start,
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
@@ -438,7 +438,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           SizedBox(
                             height: 40,
                             child: AppPrimaryButton(
-                              "Ulas",
+                              'Ulas',
                               () {},
                               width: 96,
                             ),
@@ -460,7 +460,7 @@ class _TransactionCardState extends State<TransactionCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            "Pesanan Dibatalkan",
+                            'Pesanan Dibatalkan',
                             textAlign: TextAlign.start,
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w400,
@@ -470,7 +470,7 @@ class _TransactionCardState extends State<TransactionCard> {
                           SizedBox(
                             height: 40,
                             child: AppPrimaryButton(
-                              "Beli Lagi",
+                              'Beli Lagi',
                               () {},
                               width: 96,
                             ),

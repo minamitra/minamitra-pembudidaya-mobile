@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
@@ -17,7 +16,7 @@ class ActivityCyclePictureCubit extends Cubit<ActivityCyclePictureState> {
     emit(state.copyWith(
       status: GlobalState.loaded,
       images: image != null ? [...image] : [],
-    ));
+    ),);
   }
 
   Future<void> setImage(File image) async {
@@ -26,20 +25,20 @@ class ActivityCyclePictureCubit extends Cubit<ActivityCyclePictureState> {
       final response = await cdnService.uploadImage(image);
       emit(state.copyWith(
         status: GlobalState.hideDialogLoading,
-        images: [...state.images ?? [], response.data.data?.fileuri ?? ""],
-      ));
+        images: [...state.images ?? [], response.data.data?.fileuri ?? ''],
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
 
     // final List<Uint8List> listImage = [...state ?? []];
@@ -64,7 +63,7 @@ class ActivityCyclePictureCubit extends Cubit<ActivityCyclePictureState> {
 class ActivityCyclePictureState {
   ActivityCyclePictureState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.images = const [],
   });
 

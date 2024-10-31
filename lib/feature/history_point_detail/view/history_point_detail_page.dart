@@ -13,7 +13,7 @@ class HistoryPointDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "",
+        '',
         customLeading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -22,7 +22,7 @@ class HistoryPointDetailPage extends StatelessWidget {
           color: Colors.white,
         ),
       ),
-      body: HistoryPointDetailView(),
+      body: const HistoryPointDetailView(),
     );
   }
 }

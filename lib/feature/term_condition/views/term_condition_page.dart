@@ -16,7 +16,7 @@ class TermConditionPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Syarat dan Ketentuan",
+        'Syarat dan Ketentuan',
       ),
       body: BlocProvider(
         create: (context) => TermConditionCubit(

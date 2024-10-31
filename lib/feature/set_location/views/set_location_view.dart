@@ -13,7 +13,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/componen
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/components/map_view.dart';
 
 class LocationScreen extends StatefulWidget {
-  const LocationScreen({Key? key}) : super(key: key);
+  const LocationScreen({super.key});
 
   @override
   State<LocationScreen> createState() => _LocationScreenState();
@@ -32,7 +32,7 @@ class _LocationScreenState extends State<LocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _mapView(LatLng initLatLng) {
+    Widget mapView(LatLng initLatLng) {
       return Stack(
         children: [
           MapView(
@@ -69,7 +69,7 @@ class _LocationScreenState extends State<LocationScreen> {
         }
       },
       child: Scaffold(
-        appBar: appDefaultAppBar(context, "Lokasi"),
+        appBar: appDefaultAppBar(context, 'Lokasi'),
         body: BlocBuilder<InitFirstLocationCubit, InitFirstLocationStatus>(
           builder: (context, state) {
             switch (state) {
@@ -80,14 +80,14 @@ class _LocationScreenState extends State<LocationScreen> {
                 );
               case InitFirstLocationStatus.error:
                 return LocationErrorWidget(
-                  error: "Failed to get location",
+                  error: 'Failed to get location',
                   callback: () =>
                       context.read<InitFirstLocationCubit>().getLocation(),
                 );
               case InitFirstLocationStatus.loaded:
                 context.read<SetLocationCubit>().updateLocation(
-                    context.read<InitFirstLocationCubit>().latLng);
-                return _mapView(context.read<InitFirstLocationCubit>().latLng);
+                    context.read<InitFirstLocationCubit>().latLng,);
+                return mapView(context.read<InitFirstLocationCubit>().latLng);
             }
           },
         ),

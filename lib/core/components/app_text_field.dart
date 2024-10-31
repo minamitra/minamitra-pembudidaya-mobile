@@ -13,7 +13,7 @@ final _borderStyle = OutlineInputBorder(
 );
 
 final _onFocusedBorderStyle = OutlineInputBorder(
-  borderRadius: BorderRadius.all(Radius.circular(10)),
+  borderRadius: const BorderRadius.all(Radius.circular(10)),
   borderSide: BorderSide(
     color: AppColor.secondary[900]!,
   ),
@@ -99,8 +99,8 @@ class AppValidatorTextField extends StatelessWidget {
   final String? descLabel;
 
   const AppValidatorTextField({
-    Key? key,
-    this.hintText = "",
+    super.key,
+    this.hintText = '',
     this.onSaved,
     this.controller,
     this.labelText,
@@ -137,7 +137,7 @@ class AppValidatorTextField extends StatelessWidget {
     this.prefixWidget,
     this.inputFormatters,
     this.descLabel,
-  }) : super(key: key);
+  });
 
   // listInputType
   // 0 : text
@@ -159,7 +159,7 @@ class AppValidatorTextField extends StatelessWidget {
         formatters.add(FilteringTextInputFormatter.digitsOnly);
         break;
       case 6:
-        formatters.add(FilteringTextInputFormatter.allow(RegExp(" ")));
+        formatters.add(FilteringTextInputFormatter.allow(RegExp(' ')));
         break;
       case 9:
         break;
@@ -251,13 +251,13 @@ class AppValidatorTextField extends StatelessWidget {
           Wrap(
             children: [
               Text(
-                labelText ?? "Unknown",
+                labelText ?? 'Unknown',
                 style: appTextTheme(context).bodyMedium,
               ),
               // if (labelHintText != null) AppAbuSmallText(labelHintText!),
               if (isMandatory)
                 Text(
-                  " *",
+                  ' *',
                   style: appTextTheme(context)
                       .bodyMedium
                       ?.copyWith(color: Colors.red),
@@ -326,7 +326,7 @@ class AppValidatorTextField extends StatelessWidget {
                   color: Colors.red,
                   fontSize: 14,
                 ),
-            counterText: "",
+            counterText: '',
             prefix: prefixWidget,
             prefixIconConstraints: suffixConstraints,
           ),
@@ -347,7 +347,7 @@ class DecimalInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
+      TextEditingValue oldValue, TextEditingValue newValue,) {
     // Check if input already has a decimal point
     if (newValue.text.contains('.')) {
       // Split input into parts: before and after the decimal point
@@ -369,64 +369,44 @@ class DecimalInputFormatter extends TextInputFormatter {
 
 class AppSearchField extends AppValidatorTextField {
   AppSearchField({
-    Key? key,
+    super.key,
     String? hintText,
-    String? labelText,
-    int maxLength = 36,
-    bool isSetLength = false,
-    TextInputType? inputType,
-    String? initialText,
-    bool isObscure = false,
-    TextFieldAlign textAlign = TextFieldAlign.left,
-    ValueChanged<String?>? onSaved,
-    ValueChanged<String>? onChanged,
-    FormFieldValidator<String>? validator,
-    Widget? suffixWidget,
-    BoxConstraints? suffixConstraints,
-    EdgeInsetsGeometry? margin,
-    TextFieldBorderStyle textFieldBorderStyle = TextFieldBorderStyle.fullBorder,
-    bool readOnly = false,
-    String? suffixText,
-    String? prefixText,
-    int? decimalDigit,
+    super.labelText,
+    super.maxLength,
+    super.isSetLength,
+    super.inputType = null,
+    super.initialText,
+    super.isObscure,
+    super.textAlign,
+    super.onSaved,
+    super.onChanged,
+    super.validator,
+    super.suffixWidget,
+    super.suffixConstraints,
+    super.margin,
+    super.textFieldBorderStyle,
+    super.readOnly,
+    super.suffixText,
+    super.prefixText,
+    super.decimalDigit,
     ContentPadding? contentPadding,
-    int maxLines = 1,
+    super.maxLines,
     Widget? prefixIcon,
-    void Function(String)? onFieldSubmitted,
+    super.onFieldSubmitted,
     Color? fillColor,
-    Color? textColor,
+    super.textColor = null,
     bool withUpperLabel = true,
-    bool isMandatory = false,
-    String? regexFormater,
-    Function()? onTap,
-    FocusNode? focusNode,
-    String? labelHintText,
-    TextStyle? overrideErrorStyle,
+    super.isMandatory,
+    super.regexFormater,
+    super.onTap,
+    super.focusNode,
+    super.labelHintText,
+    super.overrideErrorStyle,
     void Function()? onTapSearch,
-    TextEditingController? controller,
+    super.controller,
   }) : super(
-          key: key,
-          hintText: hintText ?? "Cari data disini ...",
-          labelText: labelText,
-          maxLength: maxLength,
-          isSetLength: isSetLength,
-          inputType: inputType,
-          initialText: initialText,
-          isObscure: isObscure,
-          textAlign: textAlign,
-          onSaved: onSaved,
-          onChanged: onChanged,
-          validator: validator,
-          suffixWidget: suffixWidget,
-          suffixConstraints: suffixConstraints,
-          margin: margin,
-          textFieldBorderStyle: textFieldBorderStyle,
-          readOnly: readOnly,
-          suffixText: suffixText,
-          prefixText: prefixText,
-          decimalDigit: decimalDigit,
+          hintText: hintText ?? 'Cari data disini ...',
           contentPadding: ContentPadding.vertical8,
-          maxLines: maxLines,
           prefixIcon: InkWell(
             onTap: onTapSearch,
             child: Icon(
@@ -435,17 +415,8 @@ class AppSearchField extends AppValidatorTextField {
               color: AppColor.neutral[500],
             ),
           ),
-          onFieldSubmitted: onFieldSubmitted,
           fillColor: fillColor ?? AppColor.neutral[200],
-          textColor: textColor,
           withUpperLabel: false,
-          isMandatory: isMandatory,
-          regexFormater: regexFormater,
-          onTap: onTap,
-          focusNode: focusNode,
-          labelHintText: labelHintText,
-          overrideErrorStyle: overrideErrorStyle,
-          controller: controller,
         );
 }
 
@@ -489,7 +460,7 @@ class AppDropdownTextField extends StatelessWidget {
     Widget? hint() {
       return this.hint != null
           ? Text(
-              this.hint ?? "Unknown",
+              this.hint ?? 'Unknown',
               style: appTextTheme(context).bodyMedium?.copyWith(
                     color: AppColor.neutral[400],
                     fontWeight: FontWeight.w400,
@@ -510,7 +481,7 @@ class AppDropdownTextField extends StatelessWidget {
               ),
               if (isMandatory)
                 Text(
-                  " *",
+                  ' *',
                   style: appTextTheme(context)
                       .bodyMedium
                       ?.copyWith(color: Colors.red),

@@ -27,7 +27,7 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
   final FeedCycleHistoryResponseData? data;
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-cycle-add-harvest");
+      const RouteSettings(name: '/activity-cycle-add-harvest');
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
         BlocProvider<ActivityCycleAddHarvestCubit>(
             create: (BuildContext context) => ActivityCycleAddHarvestCubit(
                   CycleServiceImpl.create(),
-                )..init(data: data)),
+                )..init(data: data),),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -51,7 +51,7 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
               ActivityCycleAddHarvestState>(
             listener: (context, state) {
               if (state.status.isError) {
-                if (state.errorMessage == "TOKEN_EXPIRED") {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
                   RepositoryProvider.of<AuthenticationRepository>(context)
                       .logout();
                 } else {
@@ -69,13 +69,13 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
 
               if (state.status.isSuccessSubmit) {
                 AppTopSnackBar(context)
-                    .showSuccess("Berhasil menambahkan panen");
+                    .showSuccess('Berhasil menambahkan panen');
                 if (isFromCycleDetail) {
                   Navigator.of(context).popUntil(ModalRoute.withName(
-                      ActivityCyclePage.routeSettings().name ?? ""));
+                      ActivityCyclePage.routeSettings().name ?? '',),);
                 } else {
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop("refresh");
+                  Navigator.of(context).pop('refresh');
                 }
               }
             },
@@ -83,7 +83,7 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
           BlocListener<ActivityCyclePictureCubit, ActivityCyclePictureState>(
             listener: (context, state) {
               if (state.status.isError) {
-                if (state.errorMessage == "TOKEN_EXPIRED") {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
                   RepositoryProvider.of<AuthenticationRepository>(context)
                       .logout();
                 } else {
@@ -99,12 +99,12 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
                 dialog.hide();
               }
             },
-          )
+          ),
         ],
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            "Panen",
+            'Panen',
           ),
           backgroundColor: Colors.white,
           body: ActivityCycleAddHarvestView(

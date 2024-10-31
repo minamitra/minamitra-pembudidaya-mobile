@@ -5,15 +5,15 @@ class CdnEndpoint {
 
   Uri imageEndpoint() {
     return createUrl(
-      customBaseURL: "cdn.mitra3m.id",
-      path: "image.php",
+      customBaseURL: 'cdn.mitra3m.id',
+      path: 'image.php',
     );
   }
 
   Uri fileEndpoint() {
     return createUrl(
-      customBaseURL: "cdn.mitra3m.id",
-      path: "file.php",
+      customBaseURL: 'cdn.mitra3m.id',
+      path: 'file.php',
     );
   }
 }

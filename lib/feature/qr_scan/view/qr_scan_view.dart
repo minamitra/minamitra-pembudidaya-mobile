@@ -69,7 +69,7 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
                         .pushReplacement(AppTransition.pushTransition(
                       const QrScanSummaryPage(),
                       QrScanSummaryPage.route(),
-                    ));
+                    ),);
                   },
                 ),
               ),
@@ -101,7 +101,7 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      "Silahkan Scan QR Code\nDibawah Ini",
+                      'Silahkan Scan QR Code\nDibawah Ini',
                       textAlign: TextAlign.center,
                       style: appTextTheme(context).titleLarge?.copyWith(
                             color: AppColor.neutral[900],
@@ -125,9 +125,9 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
                       ),
                       size: 320,
                       gapless: false,
-                      embeddedImage: AssetImage(AppAssets.newLogoIcon2),
+                      embeddedImage: const AssetImage(AppAssets.newLogoIcon2),
                       embeddedImageStyle:
-                          QrEmbeddedImageStyle(size: Size(547 / 3, 112 / 3)),
+                          const QrEmbeddedImageStyle(size: Size(547 / 3, 112 / 3)),
                     ),
                   ],
                 ),

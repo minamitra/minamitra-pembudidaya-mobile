@@ -3,7 +3,7 @@ part of 'activity_cycle_add_harvest_cubit.dart';
 class ActivityCycleAddHarvestState extends Equatable {
   const ActivityCycleAddHarvestState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.buyerData = const [],
   });
 

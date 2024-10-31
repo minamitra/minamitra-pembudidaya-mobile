@@ -16,9 +16,9 @@ class CultivationCubit extends Cubit<CultivationState> {
 
   final CycleService service;
 
-  String pondCycleID = "";
+  String pondCycleID = '';
   final TextEditingController docStartController =
-      TextEditingController(text: "0");
+      TextEditingController(text: '0');
   final TextEditingController docEndController = TextEditingController();
 
   Future<void> init(
@@ -34,16 +34,16 @@ class CultivationCubit extends Cubit<CultivationState> {
       final companionNotesResponse =
           await service.getCompanionNotes(pondCycleID: pondCycleID);
       this.pondCycleID = pondCycleID;
-      GraphResponseData datas = response.data.data?.copyWith(
+      GraphResponseData? datas = response.data.data?.copyWith(
         data: [
           GraphResponseDataItem(
             actual: 0,
             target: 0,
             doc: 0,
-            date: response.data.data!.data?[0].date
+            date: response.data.data?.data?[0].date
                 ?.subtract(const Duration(days: 1)),
           ),
-          ...response.data.data!.data ?? []
+          ...response.data.data!.data ?? [],
         ],
         tempData: [
           GraphResponseDataItem(
@@ -53,60 +53,70 @@ class CultivationCubit extends Cubit<CultivationState> {
             date: response.data.data!.data?[0].date
                 ?.subtract(const Duration(days: 1)),
           ),
-          ...response.data.data!.tempData ?? []
+          ...response.data.data!.tempData ?? [],
         ],
       );
 
-      docEndController.text = datas.data?.length.toString() ?? "0";
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: datas,
-        companionNotesData: companionNotesResponse.data,
-      ));
+      docEndController.text = datas?.data?.length.toString() ?? '0';
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: datas,
+          companionNotesData: companionNotesResponse.data,
+        ),
+      );
     } on AppException catch (e) {
-      log("error $e");
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ));
+      log('error $e');
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      log("error $e");
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ));
+      log('error $e');
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> reset() async {
     // await init(pondCycleID, "mbw");
     emit(state.copyWith(status: GlobalState.loading));
-    docStartController.text = "0";
-    docEndController.text = state.data?.tempData?.length.toString() ?? "0";
-    GraphResponseData data = state.data?.copyWith(
+    docStartController.text = '0';
+    docEndController.text = state.data?.tempData?.length.toString() ?? '0';
+    GraphResponseData? data = state.data?.copyWith(
       data: state.data?.tempData?.sublist(
         int.parse(docStartController.text),
         int.parse(docEndController.text),
       ),
     );
-    emit(state.copyWith(
-      status: GlobalState.loaded,
-      data: data,
-    ));
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        data: data,
+      ),
+    );
   }
 
   void cahngeDOC() {
     emit(state.copyWith(status: GlobalState.loading));
-    GraphResponseData data = state.data?.copyWith(
+    GraphResponseData? data = state.data?.copyWith(
       data: state.data?.tempData?.sublist(
         int.parse(docStartController.text),
         int.parse(docEndController.text),
       ),
     );
-    emit(state.copyWith(
-      status: GlobalState.loaded,
-      data: data,
-    ));
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        data: data,
+      ),
+    );
   }
 
   Future<void> onChangeFilter(String filterName) async {
@@ -116,8 +126,8 @@ class CultivationCubit extends Cubit<CultivationState> {
         pondCycleID: pondCycleID,
         filterName: filterName,
       );
-      docStartController.text = "0";
-      GraphResponseData data = response.data.data?.copyWith(
+      docStartController.text = '0';
+      GraphResponseData data = response.data.data!.copyWith(
         data: [
           GraphResponseDataItem(
             actual: 0,
@@ -126,7 +136,7 @@ class CultivationCubit extends Cubit<CultivationState> {
             date: response.data.data!.data?[0].date
                 ?.subtract(const Duration(days: 1)),
           ),
-          ...response.data.data!.data ?? []
+          ...response.data.data!.data ?? [],
         ],
         tempData: [
           GraphResponseDataItem(
@@ -136,25 +146,31 @@ class CultivationCubit extends Cubit<CultivationState> {
             date: response.data.data!.data?[0].date
                 ?.subtract(const Duration(days: 1)),
           ),
-          ...response.data.data!.tempData ?? []
+          ...response.data.data!.tempData ?? [],
         ],
       );
-      docEndController.text = data.data?.length.toString() ?? "0";
+      docEndController.text = data.data?.length.toString() ?? '0';
 
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: data,
-      ));
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ));
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

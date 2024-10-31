@@ -33,8 +33,8 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Jenis Pakan Baru",
-        hintText: "Pilih Jenis Pakan",
+        labelText: 'Jenis Pakan Baru',
+        hintText: 'Pilih Jenis Pakan',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -42,14 +42,14 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Jenis Pakan tidak boleh kosong";
+            return 'Jenis Pakan tidak boleh kosong';
           }
           return null;
         },
         onTap: appBottomSheetShowModal(
           context,
-          "Pilih Jenis Pakan",
-          ["Starter", "Grower", "Finisher"],
+          'Pilih Jenis Pakan',
+          ['Starter', 'Grower', 'Finisher'],
           (value) {},
         ),
       );
@@ -58,12 +58,12 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
     Widget newFeedName() {
       return AppValidatorTextField(
         controller: newFeedNameController,
-        hintText: "Masukkan Nama Pakan Baru",
-        labelText: "Nama Pakan Baru",
+        hintText: 'Masukkan Nama Pakan Baru',
+        labelText: 'Nama Pakan Baru',
         isMandatory: true,
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Nama Pakan tidak boleh kosong";
+            return 'Nama Pakan tidak boleh kosong';
           }
           return null;
         },
@@ -84,12 +84,12 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
     Widget newFeedSize() {
       return AppValidatorTextField(
         controller: newFeedSizeController,
-        hintText: "Masukkan Ukuran Pakan Baru",
-        labelText: "Ukuran Pakan Baru",
+        hintText: 'Masukkan Ukuran Pakan Baru',
+        labelText: 'Ukuran Pakan Baru',
         isMandatory: true,
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Ukuran Pakan tidak boleh kosong";
+            return 'Ukuran Pakan tidak boleh kosong';
           }
           return null;
         },
@@ -97,7 +97,7 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "Kg",
+            'Kg',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -110,12 +110,12 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
     Widget newFeedProtein() {
       return AppValidatorTextField(
         controller: newFeedProteinController,
-        hintText: "Masukkan Protein Pakan Baru",
-        labelText: "Protein Pakan Baru",
+        hintText: 'Masukkan Protein Pakan Baru',
+        labelText: 'Protein Pakan Baru',
         isMandatory: true,
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Protein Pakan tidak boleh kosong";
+            return 'Protein Pakan tidak boleh kosong';
           }
           return null;
         },
@@ -123,7 +123,7 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "%",
+            '%',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -136,12 +136,12 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
     Widget newFeedEPP() {
       return AppValidatorTextField(
         controller: newFeedEPPController,
-        hintText: "Masukkan estimasi EPP Baru",
-        labelText: "Estimasi EPP Baru",
+        hintText: 'Masukkan estimasi EPP Baru',
+        labelText: 'Estimasi EPP Baru',
         isMandatory: true,
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "EPP Pakan tidak boleh kosong";
+            return 'EPP Pakan tidak boleh kosong';
           }
           return null;
         },
@@ -149,7 +149,7 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "%",
+            '%',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -162,12 +162,12 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
     Widget newFeedPrice() {
       return AppValidatorTextField(
         controller: newFeedPriceController,
-        hintText: "   0",
-        labelText: "Harga Pakan Baru",
+        hintText: '   0',
+        labelText: 'Harga Pakan Baru',
         isMandatory: true,
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Harga Pakan tidak boleh kosong";
+            return 'Harga Pakan tidak boleh kosong';
           }
           return null;
         },
@@ -175,7 +175,7 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 18.0),
           child: Text(
-            "Rp",
+            'Rp',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -191,8 +191,8 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         isMandatory: false,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Satuan Pakan Baru",
-        hintText: "Pilih Satuan Pakan",
+        labelText: 'Satuan Pakan Baru',
+        hintText: 'Pilih Satuan Pakan',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -207,8 +207,8 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         },
         onTap: appBottomSheetShowModal(
           context,
-          "Pilih Satuan Pakan",
-          ["gram", "Kilogram", "Ton"],
+          'Pilih Satuan Pakan',
+          ['gram', 'Kilogram', 'Ton'],
           (value) {},
         ),
       );
@@ -220,8 +220,8 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         isMandatory: false,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Supplier Pakan Baru",
-        hintText: "Pilih Supplier Pakan",
+        labelText: 'Supplier Pakan Baru',
+        hintText: 'Pilih Supplier Pakan',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -236,8 +236,8 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         },
         onTap: appBottomSheetShowModal(
           context,
-          "Pilih Supplier Pakan",
-          ["Mina", "Mitra", "Mandiri", "lainnya"],
+          'Pilih Supplier Pakan',
+          ['Mina', 'Mitra', 'Mandiri', 'lainnya'],
           (value) {},
         ),
       );
@@ -246,8 +246,8 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
     Widget newFeedNote() {
       return AppValidatorTextField(
         controller: newFeedNoteController,
-        hintText: "Masukan keterangan pakan ...",
-        labelText: "Keterangan Pakan Baru",
+        hintText: 'Masukan keterangan pakan ...',
+        labelText: 'Keterangan Pakan Baru',
         maxLines: 3,
         isMandatory: false,
         validator: (String? value) {
@@ -301,7 +301,7 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {},
         ),
       );

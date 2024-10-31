@@ -12,13 +12,13 @@ class FeedRecomendationResponse {
 
   factory FeedRecomendationResponse.fromMap(Map<String, dynamic> json) =>
       FeedRecomendationResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : FeedRecomendationResponseData.fromMap(json["data"]),
+            : FeedRecomendationResponseData.fromMap(json['data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -42,17 +42,17 @@ class FeedRecomendationResponseData {
 
   factory FeedRecomendationResponseData.fromMap(Map<String, dynamic> json) =>
       FeedRecomendationResponseData(
-        mbwByFishAge: json["mbw_by_fish_age"]?.toDouble(),
-        suggestFeed: json["suggest_feed"]?.toDouble(),
+        mbwByFishAge: json['mbw_by_fish_age']?.toDouble(),
+        suggestFeed: json['suggest_feed']?.toDouble(),
         accumulationTotalFeedBefore:
-            json["accumulation_total_feed_before"]?.toDouble(),
-        fishAge: json["fish_age"].toString(),
+            json['accumulation_total_feed_before']?.toDouble(),
+        fishAge: json['fish_age'].toString(),
       );
 
   Map<String, dynamic> toMap() => {
-        "mbw_by_fish_age": mbwByFishAge,
-        "suggest_feed": suggestFeed,
-        "accumulation_total_feed_before": accumulationTotalFeedBefore,
-        "fish_age": fishAge,
+        'mbw_by_fish_age': mbwByFishAge,
+        'suggest_feed': suggestFeed,
+        'accumulation_total_feed_before': accumulationTotalFeedBefore,
+        'fish_age': fishAge,
       };
 }

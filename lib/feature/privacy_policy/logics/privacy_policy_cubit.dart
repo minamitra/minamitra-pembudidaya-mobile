@@ -19,17 +19,17 @@ class PrivacyPolicyCubit extends Cubit<PrivacyPolicyState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         privacyPolicy: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

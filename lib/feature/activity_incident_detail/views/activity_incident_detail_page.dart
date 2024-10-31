@@ -11,14 +11,14 @@ class ActivityIncidentDetailPage extends StatelessWidget {
   const ActivityIncidentDetailPage(this.incident, {super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-incident-detail");
+      const RouteSettings(name: '/activity-incident-detail');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Kejadian",
+        'Detail Kejadian',
         actions: [
           InkWell(
             onTap: () {
@@ -30,10 +30,10 @@ class ActivityIncidentDetailPage extends StatelessWidget {
                   data: incident,
                 ),
                 ActivityIncidentAddPage.routeSettings,
-              ));
+              ),);
             },
             child: Text(
-              "Edit",
+              'Edit',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(color: Colors.white),

@@ -50,7 +50,7 @@ List<ActivityHeaderDataDummy> listActivtyHeaderDataDummy2(
       ActivityHeaderDataDummy(
         title: 'Est. Biaya',
         value: AppCurrencyFormatter.format(
-            double.tryParse(estimasiJualValue) ?? 0.0),
+            double.tryParse(estimasiJualValue) ?? 0.0,),
         imageAsset: AppAssets.sellEstimationActivityIcon,
       ),
     ];

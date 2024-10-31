@@ -18,12 +18,12 @@ class _FinanceViewState extends State<FinanceView> {
   final TextEditingController parameterController = TextEditingController();
 
   List<String> dataKeuanganDummy = [
-    "Biaya Pakan",
-    "Estimasi Biaya Produksi",
-    "Ekstimasi Harga Jual",
-    "Potensi Revenue",
-    "Potesnsi Profit",
-    "Estimasi HPP (Rp/kg)",
+    'Biaya Pakan',
+    'Estimasi Biaya Produksi',
+    'Ekstimasi Harga Jual',
+    'Potensi Revenue',
+    'Potesnsi Profit',
+    'Estimasi HPP (Rp/kg)',
   ];
 
   @override
@@ -126,8 +126,8 @@ class _FinanceViewState extends State<FinanceView> {
           controller: parameterController,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Parameter",
-          hintText: "Pilih parameter",
+          labelText: 'Parameter',
+          hintText: 'Pilih parameter',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -135,13 +135,13 @@ class _FinanceViewState extends State<FinanceView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Parameter tidak boleh kosong";
+              return 'Parameter tidak boleh kosong';
             }
             return null;
           },
           onTap: bottomSheetShowModal(
             context,
-            "Pilih Parameter",
+            'Pilih Parameter',
             dataKeuanganDummy,
           ),
         ),
@@ -173,7 +173,7 @@ class _FinanceViewState extends State<FinanceView> {
                     border: Border.all(color: Colors.white),
                     color: AppColor.neutral[100],
                   ),
-                  child: const Text("DoC"),
+                  child: const Text('DoC'),
                 ),
                 SizedBox(
                   height: 44.0,
@@ -187,7 +187,7 @@ class _FinanceViewState extends State<FinanceView> {
                     horizontal: 12.0,
                     vertical: 14.0,
                   ),
-                  child: const Text("0"),
+                  child: const Text('0'),
                 ),
                 SizedBox(
                   height: 44.0,
@@ -218,12 +218,12 @@ class _FinanceViewState extends State<FinanceView> {
                     color: AppColor.neutral[300],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
+                const Padding(
+                  padding: EdgeInsets.symmetric(
                     horizontal: 12.0,
                     vertical: 14.0,
                   ),
-                  child: Text("100"),
+                  child: Text('100'),
                 ),
               ],
             ),
@@ -244,11 +244,11 @@ class _FinanceViewState extends State<FinanceView> {
           child: SfCartesianChart(
             borderWidth: 2.0,
             plotAreaBorderWidth: 2.0,
-            legend: Legend(
+            legend: const Legend(
               isVisible: true,
             ),
             primaryXAxis: NumericAxis(
-              title: AxisTitle(text: "DoC (hari)"),
+              title: const AxisTitle(text: 'DoC (hari)'),
               minimum: 0,
               maximum: 100,
               interval: 10,
@@ -259,7 +259,7 @@ class _FinanceViewState extends State<FinanceView> {
               ),
             ),
             primaryYAxis: NumericAxis(
-              title: AxisTitle(text: "Biaya Pakan"),
+              title: const AxisTitle(text: 'Biaya Pakan'),
               minimum: 0,
               maximum: 100,
               interval: 10,
@@ -279,7 +279,7 @@ class _FinanceViewState extends State<FinanceView> {
                 color: AppColor.primary,
                 legendIconType: LegendIconType.seriesType,
                 isVisibleInLegend: true,
-                legendItemText: "Target",
+                legendItemText: 'Target',
               ),
               LineSeries<LineDummy, int>(
                 dataSource: lineDummyData2,
@@ -289,8 +289,8 @@ class _FinanceViewState extends State<FinanceView> {
                 color: AppColor.accent,
                 legendIconType: LegendIconType.seriesType,
                 isVisibleInLegend: true,
-                legendItemText: "Aktual",
-              )
+                legendItemText: 'Aktual',
+              ),
             ],
           ),
         ),
@@ -305,7 +305,7 @@ class _FinanceViewState extends State<FinanceView> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              "Lengkapi data pakan Anda untuk mendapatkan estimasi yang lebih akurat",
+              'Lengkapi data pakan Anda untuk mendapatkan estimasi yang lebih akurat',
               style: appTextTheme(context).labelLarge?.copyWith(
                     color: AppColor.yellow[600],
                   ),
@@ -322,7 +322,7 @@ class _FinanceViewState extends State<FinanceView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Biaya Pakan = Total Pakan (kg) x Harga Pakan",
+                    'Biaya Pakan = Total Pakan (kg) x Harga Pakan',
                     style: appTextTheme(context).labelLarge?.copyWith(
                           color: AppColor.yellow[600],
                           fontWeight: FontWeight.w600,
@@ -330,7 +330,7 @@ class _FinanceViewState extends State<FinanceView> {
                   ),
                   const SizedBox(height: 4.0),
                   Text(
-                    "*Perhitungan prediksi biaya ini tidak termasuk listrik, gaji karyawan dan biaya persiapan budaya",
+                    '*Perhitungan prediksi biaya ini tidak termasuk listrik, gaji karyawan dan biaya persiapan budaya',
                     style: appTextTheme(context).labelLarge?.copyWith(
                           color: AppColor.yellow[600],
                         ),
@@ -344,7 +344,7 @@ class _FinanceViewState extends State<FinanceView> {
       );
     }
 
-    return CommingSoonView();
+    return const CommingSoonView();
 
     // Column(
     //   children: [

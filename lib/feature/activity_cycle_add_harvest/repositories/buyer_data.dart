@@ -31,36 +31,36 @@ class BuyerData {
   });
 
   factory BuyerData.fromMap(Map<String, dynamic> json) => BuyerData(
-        isBuyerFrom3m: json["buyer_id"] != 0,
-        buyerID: json["buyer_id"].toString(),
-        buyerName: json["buyer_name"],
-        sellRequest: json["buyer_sell_request"],
-        sellUnitPrice: json["buyer_sell_unit_price"],
-        sellTotalPrice: json["buyer_sell_total_price"],
-        sellerNotes: json["buyer_notes"],
-        buyerNameController: TextEditingController(text: json["buyer_name"]),
+        isBuyerFrom3m: json['buyer_id'] != 0,
+        buyerID: json['buyer_id'].toString(),
+        buyerName: json['buyer_name'],
+        sellRequest: json['buyer_sell_request'],
+        sellUnitPrice: json['buyer_sell_unit_price'],
+        sellTotalPrice: json['buyer_sell_total_price'],
+        sellerNotes: json['buyer_notes'],
+        buyerNameController: TextEditingController(text: json['buyer_name']),
         sellRequestController:
-            TextEditingController(text: json["buyer_sell_request"].toString()),
+            TextEditingController(text: json['buyer_sell_request'].toString()),
         sellUnitPriceController: TextEditingController(
-            text: json["buyer_sell_unit_price"].toString()),
+            text: json['buyer_sell_unit_price'].toString(),),
         sellTotalPriceController: TextEditingController(
-            text: json["buyer_sell_total_price"].toString()),
+            text: json['buyer_sell_total_price'].toString(),),
         sellerNotesController:
-            TextEditingController(text: json["buyer_notes"].toString()),
+            TextEditingController(text: json['buyer_notes'].toString()),
       );
 
-  toMap() {
+  Map<String, Object> toMap() {
     return {
-      'buyer_id': int.parse(buyerID ?? "0"), // buyerID is null
+      'buyer_id': int.parse(buyerID ?? '0'), // buyerID is null
       'buyer_name': buyerName,
       'buyer_sell_request': sellRequest,
       'buyer_sell_unit_price': sellUnitPrice,
       'buyer_sell_total_price': sellRequest * sellUnitPrice,
-      'buyer_notes': sellerNotes ?? "",
+      'buyer_notes': sellerNotes ?? '',
     };
   }
 
-  copyWith({
+  BuyerData copyWith({
     bool? isBuyerFrom3m,
     String? buyerID,
     String? buyerName,

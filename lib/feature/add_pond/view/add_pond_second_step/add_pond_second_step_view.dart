@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,7 +55,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           widget.pondData!.addressSubdistrictName!;
       addPondSecondStepCubit.villageController.text =
           widget.pondData!.addressVillageName!;
-      if (widget.pondData!.imageUrl != "" ||
+      if (widget.pondData!.imageUrl != '' ||
           widget.pondData!.imageUrl != null) {
         convertImageUrl(widget.pondData!.imageUrl!);
       }
@@ -150,19 +149,19 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
       return [
         const SizedBox(height: 18.0),
         Text(
-          "Informasi Lokasi",
+          'Informasi Lokasi',
           style: appTextTheme(context).titleMedium,
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Tambahkan informasi lokasi untuk mendukung pengelolaan kolam Anda.",
+          'Tambahkan informasi lokasi untuk mendukung pengelolaan kolam Anda.',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
               ),
         ),
         const SizedBox(height: 12.0),
         Text(
-          "*Wajib diisi",
+          '*Wajib diisi',
           style: appTextTheme(context).labelLarge?.copyWith(
                 color: Colors.red,
                 fontWeight: FontWeight.w500,
@@ -186,7 +185,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           ),
           builder: (bottomSheetContext) {
             return AppImagePickerMenu(
-              "Upload Gambar",
+              'Upload Gambar',
               (type) async {
                 switch (type) {
                   case PhotoSource.camera:
@@ -199,7 +198,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                       if (context.mounted) {
                         if (size > 2000000) {
                           AppTopSnackBar(context).showDanger(
-                              "Ukuran gambar melebihi\nBatas maks 2MB");
+                              'Ukuran gambar melebihi\nBatas maks 2MB',);
                           Navigator.of(bottomSheetContext).pop();
                           return;
                         }
@@ -220,7 +219,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                       if (context.mounted) {
                         if (size > 2000000) {
                           AppTopSnackBar(context).showDanger(
-                              "Ukuran gambar melebihi\nBatas maks 2MB");
+                              'Ukuran gambar melebihi\nBatas maks 2MB',);
                           Navigator.of(bottomSheetContext).pop();
                           return;
                         }
@@ -246,11 +245,11 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           Wrap(
             children: [
               Text(
-                "Unggah Lampiran",
+                'Unggah Lampiran',
                 style: appTextTheme(context).bodyMedium,
               ),
               Text(
-                " *",
+                ' *',
                 style: appTextTheme(context)
                     .bodyMedium
                     ?.copyWith(color: Colors.red),
@@ -283,7 +282,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                                 ),
                                 const SizedBox(height: 18.0),
                                 Text(
-                                  "Tambah Gambar",
+                                  'Tambah Gambar',
                                   style:
                                       appTextTheme(context).bodySmall?.copyWith(
                                             color: AppColor.neutral[500],
@@ -400,7 +399,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                   .push(AppTransition.pushTransition(
                 const SetLocationPage(),
                 SetLocationPage.routeSettings(),
-              ))
+              ),)
                   .then((value) {
                 if (value != null) {
                   if (value is MapCallbackData) {
@@ -423,7 +422,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                             fit: BoxFit.cover,
                             height: 180.0,
                             width: double.infinity,
-                          )),
+                          ),),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),
@@ -441,7 +440,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                               ),
                               const SizedBox(height: 8.0),
                               Text(
-                                "Ganti lokasi",
+                                'Ganti lokasi',
                                 style: appTextTheme(context)
                                     .titleLarge
                                     ?.copyWith(color: AppColor.white),
@@ -481,7 +480,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                         const SizedBox(width: 12.0),
                         Expanded(
                           child: Text(
-                            "Pilih lokasi",
+                            'Pilih lokasi',
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   color: AppColor.neutral[400],
                                 ),
@@ -506,8 +505,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Provinsi",
-          hintText: "Pilih provinsi",
+          labelText: 'Provinsi',
+          hintText: 'Pilih provinsi',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -515,14 +514,14 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Provinsi tidak boleh kosong";
+              return 'Provinsi tidak boleh kosong';
             }
             return null;
           },
           onTap: bottomSheetShowModal(
             context,
-            "Pilih Provinsi",
-            state.provinceData?.data?.map((e) => e.name ?? "").toList() ?? [],
+            'Pilih Provinsi',
+            state.provinceData?.data?.map((e) => e.name ?? '').toList() ?? [],
             (value) {
               final selectedProvince = state.provinceData?.data
                   ?.firstWhere((element) => element.name == value);
@@ -530,7 +529,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                   .read<AddPondSecondStepCubit>()
                   .selectProvince(selectedProvince!);
               addPondSecondStepCubit.provinceController.text =
-                  selectedProvince.name ?? "";
+                  selectedProvince.name ?? '';
               addPondSecondStepCubit.districtController.clear();
               addPondSecondStepCubit.subdisctrictController.clear();
               addPondSecondStepCubit.villageController.clear();
@@ -543,8 +542,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Kabupaten",
-          hintText: "Pilih kabupaten",
+          labelText: 'Kabupaten',
+          hintText: 'Pilih kabupaten',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -552,29 +551,29 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Kabupaten tidak boleh kosong";
+              return 'Kabupaten tidak boleh kosong';
             }
             return null;
           },
           onTap: state.selectedProvince == null
               ? () {
                   AppTopSnackBar(context)
-                      .showDanger("Pilih provinsi terlebih dahulu");
+                      .showDanger('Pilih provinsi terlebih dahulu');
                 }
               : bottomSheetShowModal(
                   context,
-                  "Pilih Kabupaten",
-                  state.districtData?.data?.map((e) => e.name ?? "").toList() ??
+                  'Pilih Kabupaten',
+                  state.districtData?.data?.map((e) => e.name ?? '').toList() ??
                       [],
                   (value) {
-                    log("itsRun");
+                    log('itsRun');
                     final selectedDistrict = state.districtData?.data
                         ?.firstWhere((element) => element.name == value);
                     context
                         .read<AddPondSecondStepCubit>()
                         .selectDistrict(selectedDistrict!);
                     addPondSecondStepCubit.districtController.text =
-                        selectedDistrict.name ?? "";
+                        selectedDistrict.name ?? '';
                     addPondSecondStepCubit.subdisctrictController.clear();
                     addPondSecondStepCubit.villageController.clear();
                   },
@@ -586,8 +585,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Kecamatan",
-          hintText: "Pilih kecamatan",
+          labelText: 'Kecamatan',
+          hintText: 'Pilih kecamatan',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -595,20 +594,20 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Kecamatan tidak boleh kosong";
+              return 'Kecamatan tidak boleh kosong';
             }
             return null;
           },
           onTap: state.selectedDistrict == null
               ? () {
                   AppTopSnackBar(context)
-                      .showDanger("Pilih kabupaten terlebih dahulu");
+                      .showDanger('Pilih kabupaten terlebih dahulu');
                 }
               : bottomSheetShowModal(
                   context,
-                  "Pilih kecamatan",
+                  'Pilih kecamatan',
                   state.subDistrictData?.data
-                          ?.map((e) => e.name ?? "")
+                          ?.map((e) => e.name ?? '')
                           .toList() ??
                       [],
                   (value) {
@@ -618,7 +617,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                         .read<AddPondSecondStepCubit>()
                         .selectSubDistrict(selectedSubDistrict!);
                     addPondSecondStepCubit.subdisctrictController.text =
-                        selectedSubDistrict.name ?? "";
+                        selectedSubDistrict.name ?? '';
                     addPondSecondStepCubit.villageController.clear();
                   },
                 ),
@@ -629,8 +628,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           isMandatory: true,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Kelurahan",
-          hintText: "Pilih kelurahan",
+          labelText: 'Kelurahan',
+          hintText: 'Pilih kelurahan',
           suffixWidget: const Padding(
             padding: EdgeInsets.only(right: 18.0),
             child: Icon(Icons.arrow_drop_down_rounded),
@@ -638,19 +637,19 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value?.isEmpty ?? true) {
-              return "Kelurahan tidak boleh kosong";
+              return 'Kelurahan tidak boleh kosong';
             }
             return null;
           },
           onTap: state.selectedSubDistrict == null
               ? () {
                   AppTopSnackBar(context)
-                      .showDanger("Pilih kecamatan terlebih dahulu");
+                      .showDanger('Pilih kecamatan terlebih dahulu');
                 }
               : bottomSheetShowModal(
                   context,
-                  "Pilih kelurahan",
-                  state.villageData?.data?.map((e) => e.name ?? "").toList() ??
+                  'Pilih kelurahan',
+                  state.villageData?.data?.map((e) => e.name ?? '').toList() ??
                       [],
                   (value) {
                     final selectedVillage = state.villageData?.data
@@ -659,13 +658,13 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                         .read<AddPondSecondStepCubit>()
                         .selectVillage(selectedVillage!);
                     addPondSecondStepCubit.villageController.text =
-                        selectedVillage.name ?? "";
+                        selectedVillage.name ?? '';
                   },
                 ),
         ),
         const SizedBox(height: 18.0),
         Text(
-          "Lokasi Kolam",
+          'Lokasi Kolam',
           style: appTextTheme(context)
               .titleSmall
               ?.copyWith(fontWeight: FontWeight.w500),
@@ -688,7 +687,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                   child: AppAnimatedSize(
                     isShow: state.index > 0,
                     child: AppPrimaryOutlineFullButton(
-                      "Kembali",
+                      'Kembali',
                       () {
                         widget.rootPageController.previousPage(
                           duration: const Duration(milliseconds: 300),
@@ -704,7 +703,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                   child: AppAnimatedSize(
                     isShow: true,
                     child: AppPrimaryFullButton(
-                      widget.pondData == null ? "Selanjutnya" : "Simpan",
+                      widget.pondData == null ? 'Selanjutnya' : 'Simpan',
                       () {
                         if (context
                             .read<AddPondSecondStepCubit>()
@@ -712,7 +711,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                             .urlImage
                             .isEmpty) {
                           AppTopSnackBar(context)
-                              .showDanger("Unggah lampiran terlebih dahulu");
+                              .showDanger('Unggah lampiran terlebih dahulu');
                           return;
                         }
                         if (formSecondStepKey.currentState?.validate() ??

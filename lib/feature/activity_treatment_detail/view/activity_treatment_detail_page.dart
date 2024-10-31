@@ -11,33 +11,33 @@ class ActivityTreatmentDetailPage extends StatelessWidget {
   final DateTime dateDistribution;
 
   const ActivityTreatmentDetailPage(this.data, this.dateDistribution,
-      {super.key});
+      {super.key,});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-treatment-detail-page");
+      const RouteSettings(name: '/activity-treatment-detail-page');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Perlakuan",
+        'Detail Perlakuan',
         actions: [
           InkWell(
             onTap: () {
               Navigator.of(context).push(AppTransition.pushTransition(
                 ActivityTreatmentAddPage(
-                  int.parse(data.fishpondId ?? "1"),
-                  int.parse(data.fishpondcycleId ?? "1"),
+                  int.parse(data.fishpondId ?? '1'),
+                  int.parse(data.fishpondcycleId ?? '1'),
                   dateDistribution,
                   isEdit: true,
                   data: data,
                 ),
                 ActivityTreatmentAddPage.routeSettings,
-              ));
+              ),);
             },
             child: Text(
-              "Edit",
+              'Edit',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(color: Colors.white),

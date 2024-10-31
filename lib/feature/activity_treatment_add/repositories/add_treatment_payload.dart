@@ -28,24 +28,24 @@ class AddTreatmentPayload {
 
   factory AddTreatmentPayload.fromMap(Map<String, dynamic> json) =>
       AddTreatmentPayload(
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
-        datetime: json["datetime"],
-        fishAge: json["fish_age"],
-        name: json["name"],
-        note: json["note"],
-        cost: json["cost"],
-        attachmentJsonArray: json["attachment_json_array"],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
+        datetime: json['datetime'],
+        fishAge: json['fish_age'],
+        name: json['name'],
+        note: json['note'],
+        cost: json['cost'],
+        attachmentJsonArray: json['attachment_json_array'],
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
-        "datetime": datetime!.toIso8601String(),
-        "fish_age": fishAge,
-        "name": name,
-        "note": note,
-        "cost": cost,
-        "attachment_json_array": attachmentJsonArray ?? [],
+        'fishpond_id': fishpondId,
+        'fishpondcycle_id': fishpondcycleId,
+        'datetime': datetime!.toIso8601String(),
+        'fish_age': fishAge,
+        'name': name,
+        'note': note,
+        'cost': cost,
+        'attachment_json_array': attachmentJsonArray ?? [],
       };
 }

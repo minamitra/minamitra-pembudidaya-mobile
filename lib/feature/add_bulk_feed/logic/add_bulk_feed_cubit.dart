@@ -6,7 +6,6 @@ import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart
 import 'package:minamitra_pembudidaya_mobile/core/services/feed_activity/feed_activity_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/get_hour_time.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/repositories/recommendation_feed_bulk_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/repositories/save_bulk_body.dart';
 
@@ -27,24 +26,24 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
         AppConvertDateTime().ymdDash(DateTime.now()),
       );
       this.pondID = pondID;
-      log(response.data.data?.length.toString() ?? "error");
+      log(response.data.data?.length.toString() ?? 'error');
       emit(state.copyWith(
         status: GlobalState.loaded,
         recommendationFeedBulk: response.data,
         pickedDate: DateTime.now(),
-      ));
+      ),);
     } on AppException catch (e) {
       log(e.toString());
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       log(e.toString());
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -52,24 +51,24 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await service.getRecommendationFeedBulk(
-        pondID ?? "",
+        pondID ?? '',
         AppConvertDateTime().ymdDash(date),
       );
       emit(state.copyWith(
         status: GlobalState.loaded,
         recommendationFeedBulk: response.data,
         pickedDate: date,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -85,7 +84,7 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       recommendationFeedBulk:
           state.recommendationFeedBulk!.copyWith(data: data),
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   void onChangeFeedAmount(
@@ -103,7 +102,7 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       recommendationFeedBulk:
           state.recommendationFeedBulk!.copyWith(data: data),
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   void onChangeFeedName(
@@ -124,7 +123,7 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       recommendationFeedBulk:
           state.recommendationFeedBulk!.copyWith(data: data),
       status: GlobalState.loaded,
-    ));
+    ),);
   }
 
   Future<void> saveFeed({
@@ -137,7 +136,7 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       final List<RecommendationFeedBulkData> bulkDataCleaning = state
           .recommendationFeedBulk!.data!
           .where((element) =>
-              (element.feedAmount ?? 0) > 0 || element.selectedFishfood != null)
+              (element.feedAmount ?? 0) > 0 || element.selectedFishfood != null,)
           .toList();
       for (var element in bulkDataCleaning) {
         log(element.feedAmount.toString());
@@ -146,8 +145,8 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
           emit(state.copyWith(
             status: GlobalState.error,
             errorMessage:
-                "Jumlah pakan di kolam ${element.fishpondName} tidak boleh kurang dari 0",
-          ));
+                'Jumlah pakan di kolam ${element.fishpondName} tidak boleh kurang dari 0',
+          ),);
           return;
         }
         if (element.selectedFishfood == null) {
@@ -155,16 +154,16 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
           emit(state.copyWith(
             status: GlobalState.error,
             errorMessage:
-                "Silahkan pilih jenis pakan untuk ${element.fishpondName}",
-          ));
+                'Silahkan pilih jenis pakan untuk ${element.fishpondName}',
+          ),);
           return;
         }
       }
       if (bulkDataCleaning.isEmpty) {
         emit(state.copyWith(
           status: GlobalState.error,
-          errorMessage: "Tidak ada data yang disimpan",
-        ));
+          errorMessage: 'Tidak ada data yang disimpan',
+        ),);
         return;
       }
       // final int getHourTime = type.getHourTime();
@@ -178,20 +177,20 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.successSubmit,
-        errorMessage: "Berhasil menyimpan data",
-      ));
+        errorMessage: 'Berhasil menyimpan data',
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

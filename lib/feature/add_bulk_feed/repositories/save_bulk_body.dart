@@ -14,12 +14,12 @@ class SaveBulkBody {
   });
 
   Map<String, dynamic> toMap() => {
-        "datetime": date.toString(),
-        "time_sheet": timeSheet,
-        "time_sheet_json_array": timeSheetJsonArray == null
+        'datetime': date.toString(),
+        'time_sheet': timeSheet,
+        'time_sheet_json_array': timeSheetJsonArray == null
             ? null
             : List<dynamic>.from(timeSheetJsonArray!.map((x) => x)),
-        "bulk_data": data == null
+        'bulk_data': data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.submitBulkMap())),
       };

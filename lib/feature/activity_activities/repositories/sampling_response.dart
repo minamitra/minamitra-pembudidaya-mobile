@@ -12,10 +12,10 @@ class SamplingResponse {
 
   factory SamplingResponse.fromMap(Map<String, dynamic> json) =>
       SamplingResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<SamplingResponseData>.from(
-                json["data"]!.map((x) => SamplingResponseData.fromMap(x))),
+                json['data']!.map((x) => SamplingResponseData.fromMap(x)),),
       );
 }
 
@@ -55,23 +55,23 @@ class SamplingResponseData {
 
   factory SamplingResponseData.fromMap(Map<String, dynamic> json) =>
       SamplingResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
         datetime:
-            json["datetime"] != null ? DateTime.parse(json["datetime"]) : null,
-        mbw: json["mbw"],
-        sr: json["sr"],
-        note: json["note"],
-        attachmentJsonArray: json["attachment_json_array"] == null
+            json['datetime'] != null ? DateTime.parse(json['datetime']) : null,
+        mbw: json['mbw'],
+        sr: json['sr'],
+        note: json['note'],
+        attachmentJsonArray: json['attachment_json_array'] == null
             ? []
-            : List<String>.from(json["attachment_json_array"].map((x) => x)),
-        createDatetime: json["create_datetime"] != null
-            ? DateTime.parse(json["create_datetime"])
+            : List<String>.from(json['attachment_json_array'].map((x) => x)),
+        createDatetime: json['create_datetime'] != null
+            ? DateTime.parse(json['create_datetime'])
             : null,
-        createById: json["create_by_id"],
-        createByType: json["create_by_type"],
-        createByName: json["create_by_name"],
+        createById: json['create_by_id'],
+        createByType: json['create_by_type'],
+        createByName: json['create_by_name'],
       );
 }

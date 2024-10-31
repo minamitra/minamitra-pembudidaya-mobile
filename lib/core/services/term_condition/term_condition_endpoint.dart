@@ -5,9 +5,9 @@ class TermConditionEndpoint {
 
   Uri termCondition(String key) {
     return createUrl(
-      path: "public-access/config/detail",
+      path: 'public-access/config/detail',
       queryParameters: {
-        "key": key,
+        'key': key,
       },
     );
   }

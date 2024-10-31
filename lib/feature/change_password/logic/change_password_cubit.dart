@@ -20,7 +20,7 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
       isObscureOldPassword: isObscureOldPassword,
       isObscureNewPassword: isObscureNewPassword,
       isObscureConfirmPassword: isObscureConfirmPassword,
-    ));
+    ),);
   }
 
   Future<void> updatePassword(
@@ -37,13 +37,13 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

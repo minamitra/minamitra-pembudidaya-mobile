@@ -23,7 +23,7 @@ Future<bool> requestLocationPermission() async {
         if (permissionGranted == LocationPermission.denied ||
             permissionGranted == LocationPermission.deniedForever) {
           SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-          throw AppException("Permission Danied");
+          throw AppException('Permission Danied');
         }
       }
     }
@@ -35,7 +35,7 @@ Future<bool> requestLocationPermission() async {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       SystemChannels.platform.invokeMethod('SystemNavigator.pop');
-      throw AppException("Permission Danied");
+      throw AppException('Permission Danied');
     } else {
       getServiceLocation();
     }

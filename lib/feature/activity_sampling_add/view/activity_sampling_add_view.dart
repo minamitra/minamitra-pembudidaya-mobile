@@ -57,15 +57,15 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
     if (widget.isEdit) {
       dateController.text = widget.data!.datetime != null
           ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
-          : "";
+          : '';
       hourController.text = widget.data!.datetime != null
           ? AppConvertDateTime().jm24(widget.data!.datetime!)
-          : "";
+          : '';
       mbwController.text =
-          widget.data!.mbw != null ? widget.data!.mbw.toString() : "";
+          widget.data!.mbw != null ? widget.data!.mbw.toString() : '';
       srController.text =
-          widget.data!.sr != null ? widget.data!.sr.toString() : "";
-      noteController.text = widget.data!.note != null ? widget.data!.note! : "";
+          widget.data!.sr != null ? widget.data!.sr.toString() : '';
+      noteController.text = widget.data!.note != null ? widget.data!.note! : '';
       if (widget.data!.attachmentJsonArray != null &&
           widget.data!.attachmentJsonArray!.isNotEmpty) {
         convertAttachmentImage(widget.data!.attachmentJsonArray!);
@@ -86,8 +86,8 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
       return AppValidatorTextField(
         readOnly: true,
         controller: dateController,
-        hintText: "Pilih Tanggal",
-        labelText: "Tanggal",
+        hintText: 'Pilih Tanggal',
+        labelText: 'Tanggal',
         suffixConstraints: const BoxConstraints(),
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
@@ -114,7 +114,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         },
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Tanggal tidak boleh kosong";
+            return 'Tanggal tidak boleh kosong';
           }
           return null;
         },
@@ -125,8 +125,8 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
       return AppValidatorTextField(
         readOnly: true,
         controller: hourController,
-        hintText: "Pilih Jam",
-        labelText: "Jam",
+        hintText: 'Pilih Jam',
+        labelText: 'Jam',
         suffixConstraints: const BoxConstraints(
           maxHeight: 50,
           maxWidth: 50,
@@ -149,14 +149,14 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           ).then((time) {
             setState(() {
               if (time != null) {
-                hourController.text = time.format(context).replaceAll(".", ":");
+                hourController.text = time.format(context).replaceAll('.', ':');
               }
             });
           });
         },
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Jam tidak boleh kosong";
+            return 'Jam tidak boleh kosong';
           }
           return null;
         },
@@ -166,14 +166,14 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
     Widget mbw() {
       return AppValidatorTextField(
         controller: mbwController,
-        hintText: "0",
-        labelText: "MBW",
+        hintText: '0',
+        labelText: 'MBW',
         inputType: TextInputType.number,
         isMandatory: true,
         withUpperLabel: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "MBW tidak boleh kosong";
+            return 'MBW tidak boleh kosong';
           }
           return null;
         },
@@ -181,7 +181,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "gram",
+            'gram',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -194,14 +194,14 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
     Widget sr() {
       return AppValidatorTextField(
         controller: srController,
-        hintText: "0",
-        labelText: "SR",
+        hintText: '0',
+        labelText: 'SR',
         inputType: TextInputType.number,
         isMandatory: true,
         withUpperLabel: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "SR tidak boleh kosong";
+            return 'SR tidak boleh kosong';
           }
           return null;
         },
@@ -209,7 +209,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "%",
+            '%',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -222,8 +222,8 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
     Widget noteTextField() {
       return AppValidatorTextField(
         controller: noteController,
-        hintText: "Masukan catatan",
-        labelText: "Catatan",
+        hintText: 'Masukan catatan',
+        labelText: 'Catatan',
         maxLines: 3,
       );
     }
@@ -235,7 +235,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           Wrap(
             children: [
               Text(
-                "Unggah Lampiran",
+                'Unggah Lampiran',
                 style: appTextTheme(context).bodyMedium,
               ),
             ],
@@ -253,7 +253,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
                     ),
                     builder: (bottomSheetContext) {
                       return AppImagePickerMenu(
-                        "Upload Gambar",
+                        'Upload Gambar',
                         (type) async {
                           switch (type) {
                             case PhotoSource.camera:
@@ -299,11 +299,11 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           ),
           const SizedBox(height: 8.0),
           Text(
-            "Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB",
+            'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
             style: appTextTheme(context).labelLarge?.copyWith(
                   color: AppColor.neutral[500],
                 ),
-          )
+          ),
         ],
       );
     }
@@ -344,7 +344,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (!formKey.currentState!.validate()) {
               return;
@@ -359,7 +359,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
                 fishpondId: widget.fishpondId,
                 fishpondcycleId: widget.fishpondcycleId,
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 mbw: double.parse(mbwController.text),
                 sr: double.parse(srController.text),
@@ -372,9 +372,9 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
                   );
             } else {
               UpdateSamplingPayload payload = UpdateSamplingPayload(
-                id: widget.data?.id ?? "",
+                id: widget.data?.id ?? '',
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 mbw: double.parse(mbwController.text),
                 sr: double.parse(srController.text),

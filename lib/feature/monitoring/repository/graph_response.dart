@@ -13,9 +13,9 @@ class GraphResponse {
   String toJson() => json.encode(toMap());
 
   factory GraphResponse.fromMap(Map<String, dynamic> json) => GraphResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : GraphResponseData.fromMap(json["data"]),
+            : GraphResponseData.fromMap(json['data']),
       );
 
   GraphResponse copyWith({
@@ -26,7 +26,7 @@ class GraphResponse {
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -41,7 +41,7 @@ class GraphResponseData {
     this.tempData,
   });
 
-  copyWith({
+  GraphResponseData copyWith({
     String? filterName,
     List<GraphResponseDataItem>? data,
     List<GraphResponseDataItem>? tempData,
@@ -60,18 +60,18 @@ class GraphResponseData {
 
   factory GraphResponseData.fromMap(Map<String, dynamic> json) =>
       GraphResponseData(
-        filterName: json["filter_name"],
-        data: json["data"] == null
+        filterName: json['filter_name'],
+        data: json['data'] == null
             ? []
             : List<GraphResponseDataItem>.from(
-                json["data"]!.map((x) => GraphResponseDataItem.fromMap(x))),
+                json['data']!.map((x) => GraphResponseDataItem.fromMap(x)),),
         tempData: List<GraphResponseDataItem>.from(
-            json["data"]!.map((x) => GraphResponseDataItem.fromMap(x))),
+            json['data']!.map((x) => GraphResponseDataItem.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "filter_name": filterName,
-        "data":
+        'filter_name': filterName,
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -102,16 +102,16 @@ class GraphResponseDataItem {
 
   factory GraphResponseDataItem.fromMap(Map<String, dynamic> json) =>
       GraphResponseDataItem(
-        doc: int.tryParse(json["doc"].toString()) ?? 0,
-        date: json["date"] == null ? null : DateTime.parse(json["date"]),
-        target: double.tryParse(json["target"].toString()) ?? 0.0,
-        actual: double.tryParse(json["actual"].toString()) ?? 0.0,
-        standar: double.tryParse(json["standar"].toString()) ?? 0.0,
-        estimasi: double.tryParse(json["estimasi"].toString()) ?? 0.0,
-        aktual: double.tryParse(json["aktual"].toString()) ?? 0.0,
+        doc: int.tryParse(json['doc'].toString()) ?? 0,
+        date: json['date'] == null ? null : DateTime.parse(json['date']),
+        target: double.tryParse(json['target'].toString()) ?? 0.0,
+        actual: double.tryParse(json['actual'].toString()) ?? 0.0,
+        standar: double.tryParse(json['standar'].toString()) ?? 0.0,
+        estimasi: double.tryParse(json['estimasi'].toString()) ?? 0.0,
+        aktual: double.tryParse(json['aktual'].toString()) ?? 0.0,
       );
 
-  copyWith({
+  GraphResponseDataItem copyWith({
     int? doc,
     DateTime? date,
     double? target,
@@ -132,10 +132,10 @@ class GraphResponseDataItem {
   }
 
   Map<String, dynamic> toMap() => {
-        "doc": doc,
-        "date":
+        'doc': doc,
+        'date':
             "${date!.year.toString().padLeft(4, '0')}-${date!.month.toString().padLeft(2, '0')}-${date!.day.toString().padLeft(2, '0')}",
-        "target": target,
-        "actual": actual,
+        'target': target,
+        'actual': actual,
       };
 }

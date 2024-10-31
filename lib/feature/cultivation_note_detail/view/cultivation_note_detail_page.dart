@@ -16,7 +16,7 @@ class CultivationNoteDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Detail Catatan Pendamping",
+        'Detail Catatan Pendamping',
       ),
       body: CultivationNoteDetailView(data),
     );

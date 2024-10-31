@@ -29,7 +29,7 @@ class CdnServiceImpl implements CdnService {
     final response = await httpClient.multipartPost(
       uri,
       header,
-      {"image": file},
+      {'image': file},
       {},
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);

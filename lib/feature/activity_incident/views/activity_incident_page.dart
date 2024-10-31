@@ -19,7 +19,7 @@ class ActivityIncidentPage extends StatelessWidget {
   });
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-incident");
+      const RouteSettings(name: '/activity-incident');
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class ActivityIncidentPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Kejadian",
+          'Kejadian',
         ),
         floatingActionButton: Builder(builder: (context) {
           return FloatingActionButton(
@@ -52,9 +52,9 @@ class ActivityIncidentPage extends StatelessWidget {
                   int.parse(fishpondcycleId),
                 ),
                 ActivityIncidentAddPage.routeSettings,
-              ))
+              ),)
                   .then((value) {
-                if (value != null && value == "refresh") {
+                if (value != null && value == 'refresh') {
                   context.read<IncidentDataCubit>().getIncidentData();
                   context.read<IncidentHistoryCubit>().getIncidentHistory();
                 }
@@ -62,7 +62,7 @@ class ActivityIncidentPage extends StatelessWidget {
             },
             child: const Icon(Icons.add),
           );
-        }),
+        },),
         body: const ActivityIncidentView(),
       ),
     );

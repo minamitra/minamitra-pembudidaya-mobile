@@ -1,28 +1,56 @@
-# This file configures the analyzer, which statically analyzes Dart code to
-# check for errors, warnings, and lints.
-#
-# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
-# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
-# invoked from the command line by running `flutter analyze`.
-
-# The following line activates a set of recommended lints for Flutter apps,
-# packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
 
-linter:
-  # The lint rules applied to this project can be customized in the
-  # section below to disable rules from the `package:flutter_lints/flutter.yaml`
-  # included above or to enable additional rules. A list of all available lints
-  # and their documentation is published at https://dart.dev/lints.
-  #
-  # Instead of disabling a lint rule for the entire project in the
-  # section below, it can also be suppressed for a single line of code
-  # or a specific dart file by using the `// ignore: name_of_lint` and
-  # `// ignore_for_file: name_of_lint` syntax on the line or in the file
-  # producing the lint.
-  rules:
-    # avoid_print: false  # Uncomment to disable the `avoid_print` rule
-    # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/app.router.dart"
+    - "**/app.locator.dart"
+    - "**/test_setup.mocks.dart"
+    - "**/app.*.dart"
+  errors:
+    todo: ignore
+    fixme: ignore
+    invalid_annotation_target: ignore
+    non_constant_identifier_names: ignore
+  plugins:
+    - dart_code_metrics
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+linter:
+  rules:
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    sort_child_properties_last: true
+    sort_pub_dependencies: false
+    always_declare_return_types: true
+    flutter_style_todos: true
+    avoid_function_literals_in_foreach_calls: false
+    avoid_classes_with_only_static_members: false
+    use_setters_to_change_properties: false
+    file_names: false
+    depend_on_referenced_packages: false
+    noop_primitive_operations: false
+    constant_identifier_names: false
+    require_trailing_commas: true
+    no_literal_bool_comparisons: true
+    always_use_package_imports: true
+    unnecessary_string_escapes: true
+
+dart_code_metrics:
+  anti-patterns:
+    - long-method
+    - long-parameter-list
+  metrics:
+    cyclomatic-complexity: 20
+    maximum-nesting-level: 5
+    number-of-parameters: 4
+    source-lines-of-code: 50
+  metrics-exclude:
+    - test/**
+  rules:
+    - newline-before-return
+    - no-boolean-literal-compare
+    - no-empty-block
+    - prefer-conditional-expressions
+    - no-equal-then-else
+    - prefer-trailing-comma

@@ -19,17 +19,17 @@ class TermConditionCubit extends Cubit<TermConditionState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         termCondition: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

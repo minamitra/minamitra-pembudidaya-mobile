@@ -16,19 +16,19 @@ class FeedDataByCycleResponse {
 
   factory FeedDataByCycleResponse.fromMap(Map<String, dynamic> json) =>
       FeedDataByCycleResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
-            : List<FeedDataByCycleResponseData>.from(json["data"]!
-                .map((x) => FeedDataByCycleResponseData.fromMap(x))),
-        pagination: json["pagination"] == null
+            : List<FeedDataByCycleResponseData>.from(json['data']!
+                .map((x) => FeedDataByCycleResponseData.fromMap(x)),),
+        pagination: json['pagination'] == null
             ? null
-            : Pagination.fromMap(json["pagination"]),
+            : Pagination.fromMap(json['pagination']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
-        "pagination": pagination?.toMap(),
+        'pagination': pagination?.toMap(),
       };
 }
 
@@ -74,39 +74,39 @@ class FeedDataByCycleResponseData {
 
   factory FeedDataByCycleResponseData.fromMap(Map<String, dynamic> json) =>
       FeedDataByCycleResponseData(
-        id: json["id"],
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
-        type: json["type"],
-        name: json["name"],
-        weight: json["weight"],
-        proteinPercent: json["protein_percent"],
-        eppEstimationPercent: json["epp_estimation_percent"],
-        price: json["price"],
-        unitId: json["unit_id"],
-        unitName: json["unit_name"],
-        supplierId: json["supplier_id"],
-        supplierName: json["supplier_name"],
-        note: json["note"],
-        activeBool: json["active_bool"],
+        id: json['id'],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
+        type: json['type'],
+        name: json['name'],
+        weight: json['weight'],
+        proteinPercent: json['protein_percent'],
+        eppEstimationPercent: json['epp_estimation_percent'],
+        price: json['price'],
+        unitId: json['unit_id'],
+        unitName: json['unit_name'],
+        supplierId: json['supplier_id'],
+        supplierName: json['supplier_name'],
+        note: json['note'],
+        activeBool: json['active_bool'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
-        "type": type,
-        "name": name,
-        "weight": weight,
-        "protein_percent": proteinPercent,
-        "epp_estimation_percent": eppEstimationPercent,
-        "price": price,
-        "unit_id": unitId,
-        "unit_name": unitName,
-        "supplier_id": supplierId,
-        "supplier_name": supplierName,
-        "note": note,
-        "active_bool": activeBool,
+        'id': id,
+        'fishpond_id': fishpondId,
+        'fishpondcycle_id': fishpondcycleId,
+        'type': type,
+        'name': name,
+        'weight': weight,
+        'protein_percent': proteinPercent,
+        'epp_estimation_percent': eppEstimationPercent,
+        'price': price,
+        'unit_id': unitId,
+        'unit_name': unitName,
+        'supplier_id': supplierId,
+        'supplier_name': supplierName,
+        'note': note,
+        'active_bool': activeBool,
       };
 }
 
@@ -143,33 +143,33 @@ class Pagination {
   String toJson() => json.encode(toMap());
 
   factory Pagination.fromMap(Map<String, dynamic> json) => Pagination(
-        totalData: json["total_data"],
-        totalPage: json["total_page"],
-        totalDisplay: json["total_display"],
-        firstPage: json["first_page"],
-        lastPage: json["last_page"],
-        prev: json["prev"],
-        current: json["current"],
-        next: json["next"],
-        detail: json["detail"] == null
+        totalData: json['total_data'],
+        totalPage: json['total_page'],
+        totalDisplay: json['total_display'],
+        firstPage: json['first_page'],
+        lastPage: json['last_page'],
+        prev: json['prev'],
+        current: json['current'],
+        next: json['next'],
+        detail: json['detail'] == null
             ? []
-            : List<dynamic>.from(json["detail"]!.map((x) => x)),
-        start: json["start"],
-        end: json["end"],
+            : List<dynamic>.from(json['detail']!.map((x) => x)),
+        start: json['start'],
+        end: json['end'],
       );
 
   Map<String, dynamic> toMap() => {
-        "total_data": totalData,
-        "total_page": totalPage,
-        "total_display": totalDisplay,
-        "first_page": firstPage,
-        "last_page": lastPage,
-        "prev": prev,
-        "current": current,
-        "next": next,
-        "detail":
+        'total_data': totalData,
+        'total_page': totalPage,
+        'total_display': totalDisplay,
+        'first_page': firstPage,
+        'last_page': lastPage,
+        'prev': prev,
+        'current': current,
+        'next': next,
+        'detail':
             detail == null ? [] : List<dynamic>.from(detail!.map((x) => x)),
-        "start": start,
-        "end": end,
+        'start': start,
+        'end': end,
       };
 }

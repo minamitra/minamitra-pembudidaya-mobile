@@ -3,7 +3,7 @@ part of 'profile_member_cubit.dart';
 class ProfileMemberState extends Equatable {
   const ProfileMemberState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.tabIndex = 0,
     this.profile,
   });

@@ -47,7 +47,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           (double.parse(widget.pondData!.areaLength!) *
                   double.parse(widget.pondData!.areaWidth!))
               .toStringAsFixed(0);
-      firstStepCubit.pondDeepController.text = widget.pondData!.areaDepth ?? "";
+      firstStepCubit.pondDeepController.text = widget.pondData!.areaDepth ?? '';
     }
   }
 
@@ -60,19 +60,19 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
       return [
         const SizedBox(height: 18.0),
         Text(
-          "Informasi Kolam",
+          'Informasi Kolam',
           style: appTextTheme(context).titleMedium,
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Masukkan detail kolam Anda untuk memastikan data kolam terkelola dengan baik.",
+          'Masukkan detail kolam Anda untuk memastikan data kolam terkelola dengan baik.',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
               ),
         ),
         const SizedBox(height: 12.0),
         Text(
-          "*Wajib diisi",
+          '*Wajib diisi',
           style: appTextTheme(context).labelLarge?.copyWith(
                 color: Colors.red,
                 fontWeight: FontWeight.w500,
@@ -93,11 +93,11 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           controller: firstStepCubit.pondNameController,
           isMandatory: true,
           withUpperLabel: true,
-          labelText: "Nama Kolam",
-          hintText: "Ketik nama kolam",
+          labelText: 'Nama Kolam',
+          hintText: 'Ketik nama kolam',
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Nama kolam tidak boleh kosong";
+              return 'Nama kolam tidak boleh kosong';
             }
             return null;
           },
@@ -108,12 +108,12 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
-          labelText: "Panjang Kolam",
-          hintText: "0",
+          labelText: 'Panjang Kolam',
+          hintText: '0',
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "m",
+              'm',
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -122,17 +122,17 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           ),
           onChanged: (value) {
             firstStepCubit.pondWideController.text =
-                (double.parse(value.isEmpty ? "0" : value) *
+                (double.parse(value.isEmpty ? '0' : value) *
                         double.parse(
                             firstStepCubit.pondWidthController.text.isEmpty
-                                ? "0"
-                                : firstStepCubit.pondWidthController.text))
+                                ? '0'
+                                : firstStepCubit.pondWidthController.text,))
                     .toStringAsFixed(0);
           },
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Panjang lahan tidak boleh kosong";
+              return 'Panjang lahan tidak boleh kosong';
             }
 
             return null;
@@ -144,12 +144,12 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           inputType: TextInputType.phone,
           isMandatory: true,
           withUpperLabel: true,
-          labelText: "Lebar Kolam",
-          hintText: "0",
+          labelText: 'Lebar Kolam',
+          hintText: '0',
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "m",
+              'm',
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -158,14 +158,14 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           ),
           onChanged: (value) {
             firstStepCubit.pondWideController.text =
-                (double.parse(value.isEmpty ? "0" : value) *
+                (double.parse(value.isEmpty ? '0' : value) *
                         double.parse(firstStepCubit.pondlengthController.text))
                     .toStringAsFixed(0);
           },
           suffixConstraints: const BoxConstraints(),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return "Lebar lahan tidak boleh kosong";
+              return 'Lebar lahan tidak boleh kosong';
             }
             return null;
           },
@@ -177,12 +177,12 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           isMandatory: false,
           withUpperLabel: true,
           readOnly: false,
-          labelText: "Kedalaman Kolam",
-          hintText: "0",
+          labelText: 'Kedalaman Kolam',
+          hintText: '0',
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "m",
+              'm',
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -201,12 +201,12 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           isMandatory: false,
           withUpperLabel: true,
           readOnly: true,
-          labelText: "Luas Kolam",
-          hintText: "0",
+          labelText: 'Luas Kolam',
+          hintText: '0',
           suffixWidget: Padding(
             padding: const EdgeInsets.only(right: 18.0),
             child: Text(
-              "m",
+              'm',
               style: appTextTheme(context).bodySmall?.copyWith(
                     color: AppColor.neutral[500],
                     fontWeight: FontWeight.w500,
@@ -231,7 +231,7 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
             child: AppAnimatedSize(
               isShow: true,
               child: AppPrimaryFullButton(
-                "Selanjutnya",
+                'Selanjutnya',
                 () {
                   if (formFirstStepKey.currentState?.validate() ?? false) {
                     widget.rootPageController.nextPage(
@@ -245,11 +245,11 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
                         id: widget.pondData!.id,
                         name: firstStepCubit.pondNameController.text,
                         areaLength: double.parse(
-                            firstStepCubit.pondlengthController.text),
+                            firstStepCubit.pondlengthController.text,),
                         areaWidth: double.parse(
-                            firstStepCubit.pondWidthController.text),
+                            firstStepCubit.pondWidthController.text,),
                         areaDepth: double.parse(
-                            firstStepCubit.pondDeepController.text),
+                            firstStepCubit.pondDeepController.text,),
                       );
                       context.read<AddPondCubit>().setUpdatePond(payload);
                     }

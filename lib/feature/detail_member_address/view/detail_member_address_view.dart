@@ -55,14 +55,14 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.nameAddress ?? "";
-    recieverController.text = widget.nameReceiver ?? "";
-    recieverPhoneController.text = widget.phoneReceiver ?? "";
-    provinceController.text = widget.province ?? "";
-    districtController.text = widget.district ?? "";
-    subdistrictController.text = widget.subdistrict ?? "";
-    villageController.text = widget.village ?? "";
-    addressController.text = widget.fullAddress ?? "";
+    nameController.text = widget.nameAddress ?? '';
+    recieverController.text = widget.nameReceiver ?? '';
+    recieverPhoneController.text = widget.phoneReceiver ?? '';
+    provinceController.text = widget.province ?? '';
+    districtController.text = widget.district ?? '';
+    subdistrictController.text = widget.subdistrict ?? '';
+    villageController.text = widget.village ?? '';
+    addressController.text = widget.fullAddress ?? '';
     isPrimaryAddress = widget.isPrimaryAddress ?? false;
   }
 
@@ -142,14 +142,14 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
     Widget nameAddress() {
       return AppValidatorTextField(
         controller: nameController,
-        labelText: "Nama Alamat",
+        labelText: 'Nama Alamat',
         withUpperLabel: true,
-        hintText: "Contoh. Mina Mitra Kolam 1",
+        hintText: 'Contoh. Mina Mitra Kolam 1',
         isMandatory: true,
         inputType: TextInputType.text,
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Nama alamat tidak boleh kosong";
+            return 'Nama alamat tidak boleh kosong';
           }
           return null;
         },
@@ -159,14 +159,14 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
     Widget recieverName() {
       return AppValidatorTextField(
         controller: recieverController,
-        labelText: "Nama Penerima",
+        labelText: 'Nama Penerima',
         withUpperLabel: true,
-        hintText: "Contoh. Bapak Agus",
+        hintText: 'Contoh. Bapak Agus',
         isMandatory: true,
         inputType: TextInputType.text,
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Nama penerima tidak boleh kosong";
+            return 'Nama penerima tidak boleh kosong';
           }
           return null;
         },
@@ -176,14 +176,14 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
     Widget recieverPhone() {
       return AppValidatorTextField(
         controller: recieverPhoneController,
-        labelText: "Nomor Telepon Penerima",
+        labelText: 'Nomor Telepon Penerima',
         withUpperLabel: true,
-        hintText: "Contoh. 08912332122",
+        hintText: 'Contoh. 08912332122',
         isMandatory: true,
         inputType: TextInputType.phone,
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Nomor telepon tidak boleh kosong";
+            return 'Nomor telepon tidak boleh kosong';
           }
           return null;
         },
@@ -196,8 +196,8 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Provinsi",
-        hintText: "Pilih provinsi",
+        labelText: 'Provinsi',
+        hintText: 'Pilih provinsi',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -205,23 +205,23 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Provinsi tidak boleh kosong";
+            return 'Provinsi tidak boleh kosong';
           }
           return null;
         },
         onTap: bottomSheetShowModal(
           context,
-          "Pilih Provinsi",
+          'Pilih Provinsi',
           [
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh"
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
           ],
         ),
       );
@@ -233,8 +233,8 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Kabupaten",
-        hintText: "Pilih kabupaten",
+        labelText: 'Kabupaten',
+        hintText: 'Pilih kabupaten',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -242,23 +242,23 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Kabupaten tidak boleh kosong";
+            return 'Kabupaten tidak boleh kosong';
           }
           return null;
         },
         onTap: bottomSheetShowModal(
           context,
-          "Pilih Kabupaten",
+          'Pilih Kabupaten',
           [
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh"
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
           ],
         ),
       );
@@ -270,8 +270,8 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Kecamatan",
-        hintText: "Pilih kecamatan",
+        labelText: 'Kecamatan',
+        hintText: 'Pilih kecamatan',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -279,23 +279,23 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Kecamatan tidak boleh kosong";
+            return 'Kecamatan tidak boleh kosong';
           }
           return null;
         },
         onTap: bottomSheetShowModal(
           context,
-          "Pilih kecamatan",
+          'Pilih kecamatan',
           [
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh"
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
           ],
         ),
       );
@@ -307,8 +307,8 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
-        labelText: "Kelurahan",
-        hintText: "Pilih kelurahan",
+        labelText: 'Kelurahan',
+        hintText: 'Pilih kelurahan',
         suffixWidget: const Padding(
           padding: EdgeInsets.only(right: 18.0),
           child: Icon(Icons.arrow_drop_down_rounded),
@@ -316,23 +316,23 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         suffixConstraints: const BoxConstraints(),
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Kelurahan tidak boleh kosong";
+            return 'Kelurahan tidak boleh kosong';
           }
           return null;
         },
         onTap: bottomSheetShowModal(
           context,
-          "Pilih kelurahan",
+          'Pilih kelurahan',
           [
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh",
-            "contoh"
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
+            'contoh',
           ],
         ),
       );
@@ -341,16 +341,16 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
     Widget addressFull() {
       return AppValidatorTextField(
         controller: addressController,
-        labelText: "Alamat lengkap",
+        labelText: 'Alamat lengkap',
         withUpperLabel: true,
         hintText:
-            "Contoh. Jalan tengkurap no 1 RT 01 RW 01 Jawa Tengah Indonesia",
+            'Contoh. Jalan tengkurap no 1 RT 01 RW 01 Jawa Tengah Indonesia',
         isMandatory: true,
         inputType: TextInputType.text,
         maxLines: 3,
         validator: (value) {
           if (value?.isEmpty ?? true) {
-            return "Alamat tidak boleh kosong";
+            return 'Alamat tidak boleh kosong';
           }
           return null;
         },
@@ -362,7 +362,7 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Lokasi Kolam",
+            'Lokasi Kolam',
             style: appTextTheme(context)
                 .titleSmall
                 ?.copyWith(fontWeight: FontWeight.w500),
@@ -374,7 +374,7 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
                   .push(AppTransition.pushTransition(
                 const SetLocationPage(),
                 SetLocationPage.routeSettings(),
-              ))
+              ),)
                   .then((value) {
                 if (value != null) {
                   if (value is MapCallbackData) {}
@@ -410,7 +410,7 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
                   const SizedBox(width: 12.0),
                   Expanded(
                     child: Text(
-                      "Pilih lokasi",
+                      'Pilih lokasi',
                       style: appTextTheme(context).bodySmall?.copyWith(
                             color: AppColor.neutral[400],
                           ),
@@ -433,7 +433,7 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
         children: [
           Expanded(
             child: Text(
-              "Jadikan Alamat Utama",
+              'Jadikan Alamat Utama',
               style: appTextTheme(context)
                   .titleSmall
                   ?.copyWith(fontWeight: FontWeight.w500),
@@ -455,7 +455,7 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
                 });
               },
             ),
-          )
+          ),
         ],
       );
     }
@@ -490,7 +490,7 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
 
     Widget saveButton() {
       return AppPrimaryFullButton(
-        "Simpan",
+        'Simpan',
         () {},
       );
     }

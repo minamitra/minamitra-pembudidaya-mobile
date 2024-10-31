@@ -4,8 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 
 class NavigationItem extends StatelessWidget {
   const NavigationItem(this.callback, this.active, this.img, this.label,
-      {Key? key})
-      : super(key: key);
+      {super.key,});
 
   final VoidCallback callback;
   final bool active;
@@ -29,9 +28,9 @@ class NavigationItem extends StatelessWidget {
           const SizedBox(height: 4),
           active
               ? Text(label,
-                  style: AppTextStyle.primaryDoubleExtraSmallMediumText)
+                  style: AppTextStyle.primaryDoubleExtraSmallMediumText,)
               : Text(label,
-                  style: AppTextStyle.blackDoubleExtraSmallMediumText),
+                  style: AppTextStyle.blackDoubleExtraSmallMediumText,),
         ],
       ),
     );

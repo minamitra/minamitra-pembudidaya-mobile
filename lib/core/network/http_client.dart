@@ -2,6 +2,7 @@
 /// @email dikynugraha1111@gmail.com
 /// @create date 2024-03-24 14:22:33
 /// @modify date 2024-03-24 14:22:33
+library;
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -65,7 +66,7 @@ class AppHttpClient implements HttpClient {
 
   // final AppCrashlytic _crashlytic;
 
-  AppHttpClient(this._client
+  AppHttpClient(this._client,
 
       // this._crashlytic,
       );
@@ -85,7 +86,7 @@ class AppHttpClient implements HttpClient {
         body: body,
       );
       appNetworkLogger(
-        endpoint: "DELETE ENDPOINT => ${url.toString()}",
+        endpoint: 'DELETE ENDPOINT => ${url.toString()}',
         payload: body.toString(),
         response: response.body.toString(),
       );
@@ -132,8 +133,8 @@ class AppHttpClient implements HttpClient {
       );
       appNetworkLogger(
         endpoint:
-            "GET ENDPOINT => ${url.toString()} | HEADERS => ${headers.toString()} | STATUS CODE => ${response.statusCode}",
-        payload: "",
+            'GET ENDPOINT => ${url.toString()} | HEADERS => ${headers.toString()} | STATUS CODE => ${response.statusCode}',
+        payload: '',
         response: response.body.toString(),
       );
       MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -183,15 +184,15 @@ class AppHttpClient implements HttpClient {
     try {
       http.Request request = http.Request('POST', url);
       request.body = body;
-      request.headers['Content-Type'] = "application/json";
-      request.headers['Accept'] = "application/json";
-      request.headers['token'] = headers!["token"]!;
+      request.headers['Content-Type'] = 'application/json';
+      request.headers['Accept'] = 'application/json';
+      request.headers['token'] = headers!['token']!;
 
       final sendData = await request.send();
       final response = await http.Response.fromStream(sendData);
 
       appNetworkLogger(
-        endpoint: "POST ENDPOINT => ${url.toString()}",
+        endpoint: 'POST ENDPOINT => ${url.toString()}',
         payload: body.toString(),
         response: response.body.toString(),
       );
@@ -241,7 +242,7 @@ class AppHttpClient implements HttpClient {
         body: body,
       );
       appNetworkLogger(
-        endpoint: "PUT ENDPOINT => ${url.toString()}",
+        endpoint: 'PUT ENDPOINT => ${url.toString()}',
         payload: body.toString(),
         response: response.body.toString(),
       );
@@ -290,7 +291,7 @@ class AppHttpClient implements HttpClient {
         body: body,
       );
       appNetworkLogger(
-        endpoint: "PATCH ENDPOINT => ${url.toString()}",
+        endpoint: 'PATCH ENDPOINT => ${url.toString()}',
         payload: body.toString(),
         response: response.body.toString(),
       );
@@ -341,14 +342,14 @@ class AppHttpClient implements HttpClient {
         key,
         value.readAsBytesSync(),
         filename: value.path.split('/').last,
-      ));
+      ),);
     });
 
     final streamedResponse = await request.send();
 
     final response = await http.Response.fromStream(streamedResponse);
     appNetworkLogger(
-      endpoint: "MULTIPART POST ENDPOINT => ${url.toString()}",
+      endpoint: 'MULTIPART POST ENDPOINT => ${url.toString()}',
       payload: fields.toString(),
       response: response.body,
     );
@@ -379,7 +380,7 @@ class AppHttpClient implements HttpClient {
   }
 
   factory AppHttpClient.create() {
-    return AppHttpClient(http.Client()
+    return AppHttpClient(http.Client(),
         // AppCrashlyticImpl(),
         );
   }

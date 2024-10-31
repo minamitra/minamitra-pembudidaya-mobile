@@ -69,31 +69,31 @@ class _ActivitySamplingDetailViewState
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-              "Waktu  Perlakuan",
+              'Waktu  Perlakuan',
               widget.data.datetime != null
                   ? AppConvertDateTime().dmyName(widget.data.datetime!)
-                  : "-"),
+                  : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem("MBW", widget.data.mbw ?? "-"),
+          AppWidgetSeparatedItem('MBW', widget.data.mbw ?? '-'),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              "SR", widget.data.sr != null ? "${widget.data.sr}%" : "-"),
+              'SR', widget.data.sr != null ? '${widget.data.sr}%' : '-',),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetDecriptionItem(
-            "Catatan",
-            widget.data.note ?? "-",
+            'Catatan',
+            widget.data.note ?? '-',
           ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           Text(
-            "File Lampiran",
+            'File Lampiran',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                 ),
@@ -121,7 +121,7 @@ class _ActivitySamplingDetailViewState
           children: [
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Hapus",
+                'Hapus',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.trashIcon,
@@ -133,7 +133,7 @@ class _ActivitySamplingDetailViewState
             const SizedBox(width: 16.0),
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Edit",
+                'Edit',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.editIcon,

@@ -27,7 +27,7 @@ class ChangePasswordPage extends StatelessWidget {
       child: BlocListener<ChangePasswordCubit, ChangePasswordState>(
         listener: (context, state) {
           if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
+            if (state.errorMessage == 'TOKEN_EXPIRED') {
               RepositoryProvider.of<AuthenticationRepository>(context).logout();
             } else {
               AppTopSnackBar(context).showDanger(state.errorMessage);
@@ -43,14 +43,14 @@ class ChangePasswordPage extends StatelessWidget {
           }
 
           if (state.status.isSuccessSubmit) {
-            AppTopSnackBar(context).showSuccess("Berhasil mengganti password");
+            AppTopSnackBar(context).showSuccess('Berhasil mengganti password');
             Navigator.of(context).pop();
           }
         },
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            "Ganti Password",
+            'Ganti Password',
           ),
           body: const ChangePasswordView(),
         ),

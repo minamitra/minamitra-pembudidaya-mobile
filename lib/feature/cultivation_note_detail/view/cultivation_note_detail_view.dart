@@ -30,7 +30,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
               height: 36.0,
               width: 36.0,
               child: Image.network(
-                widget.data.userImageUrl ?? "",
+                widget.data.userImageUrl ?? '',
                 fit: BoxFit.cover,
                 errorBuilder: (
                   BuildContext context,
@@ -60,7 +60,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
                 style: appTextTheme(context)
                     .labelLarge
                     ?.copyWith(color: AppColor.neutral[400]),
-              )
+              ),
             ],
           ),
         ],
@@ -73,7 +73,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
               const Padding(
                 padding: EdgeInsets.only(top: 50.0),
                 child: AppEmptyData(
-                  "Belum ada lampiran\ndari pendamping",
+                  'Belum ada lampiran\ndari pendamping',
                   isCenter: true,
                 ),
               ),
@@ -109,7 +109,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
         header(),
         const SizedBox(height: 18.0),
         Text(
-          "PIC: Unknown",
+          'PIC: Unknown',
           style: appTextTheme(context).bodySmall,
         ),
         const SizedBox(height: 18.0),

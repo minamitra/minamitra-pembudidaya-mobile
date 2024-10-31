@@ -1,7 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
@@ -27,7 +26,7 @@ class _ReferralViewState extends State<ReferralView> {
         ),
         const SizedBox(height: 18.0),
         Text(
-          "Undang teman dapat koin",
+          'Undang teman dapat koin',
           textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
@@ -36,7 +35,7 @@ class _ReferralViewState extends State<ReferralView> {
         ),
         const SizedBox(height: 8.0),
         Text(
-          "Untuk setiap teman yang bergabung melalui undangan, kamu mendapatkan 10 koin",
+          'Untuk setiap teman yang bergabung melalui undangan, kamu mendapatkan 10 koin',
           textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
@@ -45,7 +44,7 @@ class _ReferralViewState extends State<ReferralView> {
         ),
         const SizedBox(height: 36.0),
         Text(
-          "Kode Unik Kamu",
+          'Kode Unik Kamu',
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleSmall,
         ),
@@ -64,7 +63,7 @@ class _ReferralViewState extends State<ReferralView> {
               children: [
                 Expanded(
                   child: Text(
-                    "ABC1234",
+                    'ABC1234',
                     style: appTextTheme(context)
                         .titleMedium
                         ?.copyWith(color: AppColor.primary[900]),
@@ -72,10 +71,10 @@ class _ReferralViewState extends State<ReferralView> {
                 ),
                 InkWell(
                   onTap: () {
-                    Clipboard.setData(const ClipboardData(text: "ABC1234"))
+                    Clipboard.setData(const ClipboardData(text: 'ABC1234'))
                         .then((_) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text("Referral berhasil disalin")));
+                          content: Text('Referral berhasil disalin'),),);
                     });
                   },
                   child: Container(
@@ -88,7 +87,7 @@ class _ReferralViewState extends State<ReferralView> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Text(
-                      "Salin",
+                      'Salin',
                       style: appTextTheme(context).titleSmall?.copyWith(
                             color: AppColor.white,
                             fontWeight: FontWeight.w500,
@@ -140,23 +139,23 @@ class _ReferralViewState extends State<ReferralView> {
       return [
         const SizedBox(height: 18.0),
         Text(
-          "Bagaimana Cara Kerjanya?",
+          'Bagaimana Cara Kerjanya?',
           style: appTextTheme(context).titleMedium,
         ),
         const SizedBox(height: 18.0),
         guideItem(
-          index: "1",
-          value: "Salin kode unik dan bagikan ke temanmu",
+          index: '1',
+          value: 'Salin kode unik dan bagikan ke temanmu',
         ),
         const SizedBox(height: 18.0),
         guideItem(
-          index: "2",
-          value: "Temanmu membuat akun baru berdasarkan kode referall",
+          index: '2',
+          value: 'Temanmu membuat akun baru berdasarkan kode referall',
         ),
         const SizedBox(height: 18.0),
         guideItem(
-          index: "3",
-          value: "Saldo 10 koin akan masuk ke koinmu",
+          index: '3',
+          value: 'Saldo 10 koin akan masuk ke koinmu',
         ),
         const SizedBox(height: 18.0),
       ];
@@ -212,20 +211,20 @@ class _ReferralViewState extends State<ReferralView> {
       return [
         const SizedBox(height: 18.0),
         Text(
-          "Statistik",
+          'Statistik',
           style: appTextTheme(context).titleMedium,
         ),
         const SizedBox(height: 18.0),
         statisticItem(
           iconAsset: AppAssets.userInvitedIcon,
-          title: "Teman diundang",
-          value: "50",
+          title: 'Teman diundang',
+          value: '50',
         ),
         const SizedBox(height: 18.0),
         statisticItem(
           iconAsset: AppAssets.pointRewardedIcon,
-          title: "Point didapat",
-          value: "200",
+          title: 'Point didapat',
+          value: '200',
         ),
         const SizedBox(height: 18.0),
       ];
@@ -235,10 +234,10 @@ class _ReferralViewState extends State<ReferralView> {
       return Container(
         padding: const EdgeInsets.all(18.0),
         child: AppPrimaryFullButton(
-          "Bagikan",
+          'Bagikan',
           () {
             Share.share(
-                'Yuk ikut gabung Mitra3M \nPakai kode berikut ini untuk dapatkan keuntungan menarik lainnya :\nABC1234\nhttps://commander.mitra3m.id/ ');
+                'Yuk ikut gabung Mitra3M \nPakai kode berikut ini untuk dapatkan keuntungan menarik lainnya :\nABC1234\nhttps://commander.mitra3m.id/ ',);
           },
           prefixIcon: const Icon(
             Icons.share_outlined,

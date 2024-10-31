@@ -12,13 +12,13 @@ class AddTreatmentResponse {
 
   factory AddTreatmentResponse.fromMap(Map<String, dynamic> json) =>
       AddTreatmentResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : AddTreatmentResponseData.fromMap(json["data"]),
+            : AddTreatmentResponseData.fromMap(json['data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -34,10 +34,10 @@ class AddTreatmentResponseData {
 
   factory AddTreatmentResponseData.fromMap(Map<String, dynamic> json) =>
       AddTreatmentResponseData(
-        activityTreatmentId: json["activity_treatment_id"],
+        activityTreatmentId: json['activity_treatment_id'],
       );
 
   Map<String, dynamic> toMap() => {
-        "activity_treatment_id": activityTreatmentId,
+        'activity_treatment_id': activityTreatmentId,
       };
 }

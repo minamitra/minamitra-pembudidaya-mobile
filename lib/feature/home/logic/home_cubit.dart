@@ -19,17 +19,17 @@ class HomeCubit extends Cubit<HomeState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         bannerResponse: response.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

@@ -5,22 +5,22 @@ class FeedEndpoint {
 
   Uri getFeed(String type) {
     return createUrl(
-      path: "mitra/fishfood/data",
+      path: 'mitra/fishfood/data',
       queryParameters: {
-        "type": type,
+        'type': type,
       },
     );
   }
 
   Uri getSeed() {
     return createUrl(
-      path: "mitra/fishseed/data",
+      path: 'mitra/fishseed/data',
     );
   }
 
   Uri postNewSeed() {
     return createUrl(
-      path: "mitra/fishseed/add-kiloan",
+      path: 'mitra/fishseed/add-kiloan',
     );
   }
 }

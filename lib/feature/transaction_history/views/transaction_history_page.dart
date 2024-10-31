@@ -11,7 +11,7 @@ class TransactionHistoryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appDefaultAppBar(context, "Riwayat Transaksi"),
+      appBar: appDefaultAppBar(context, 'Riwayat Transaksi'),
       body: const TransactionHistoryView(),
     );
   }

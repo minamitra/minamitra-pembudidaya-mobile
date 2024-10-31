@@ -12,9 +12,9 @@ class PrivacyPolicyResponse {
 
   factory PrivacyPolicyResponse.fromMap(Map<String, dynamic> json) =>
       PrivacyPolicyResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : PrivacyPolicyResponseData.fromMap(json["data"]),
+            : PrivacyPolicyResponseData.fromMap(json['data']),
       );
 }
 
@@ -34,8 +34,8 @@ class PrivacyPolicyResponseData {
 
   factory PrivacyPolicyResponseData.fromMap(Map<String, dynamic> json) =>
       PrivacyPolicyResponseData(
-        id: json["id"],
-        key: json["key"],
-        value: json["value"],
+        id: json['id'],
+        key: json['key'],
+        value: json['value'],
       );
 }

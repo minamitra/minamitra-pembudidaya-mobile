@@ -4,25 +4,25 @@ class ProductEndpoint {
   ProductEndpoint();
 
   Uri categoryProduct() {
-    return createUrl(path: "mitra/item-category/data");
+    return createUrl(path: 'mitra/item-category/data');
   }
 
   Uri dataProduct(String search, String categoryId) {
     return createUrl(
-      path: "mitra/item/data",
+      path: 'mitra/item/data',
       queryParameters: {
-        "name[lse]": search,
-        "category_id": categoryId,
-        "pagination_bool": "false",
+        'name[lse]': search,
+        'category_id': categoryId,
+        'pagination_bool': 'false',
       },
     );
   }
 
   Uri detailProduct(String id) {
     return createUrl(
-      path: "mitra/item/detail",
+      path: 'mitra/item/detail',
       queryParameters: {
-        "id": id,
+        'id': id,
       },
     );
   }

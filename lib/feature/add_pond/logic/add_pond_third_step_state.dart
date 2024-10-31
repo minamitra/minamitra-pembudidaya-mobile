@@ -3,7 +3,7 @@ part of 'add_pond_third_step_cubit.dart';
 class AddPondThirdStepState extends Equatable {
   const AddPondThirdStepState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.feedStarter1Data,
     this.feedStarter2Data,
     this.feedStarter3Data,

@@ -12,10 +12,10 @@ class ProductsResponse {
 
   factory ProductsResponse.fromMap(Map<String, dynamic> json) =>
       ProductsResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<ProductsResponseData>.from(
-                json["data"]!.map((x) => ProductsResponseData.fromMap(x))),
+                json['data']!.map((x) => ProductsResponseData.fromMap(x)),),
       );
 }
 
@@ -71,26 +71,26 @@ class ProductsResponseData {
 
   factory ProductsResponseData.fromMap(Map<String, dynamic> json) =>
       ProductsResponseData(
-        id: json["id"],
-        code: json["code"],
-        name: json["name"],
-        categoryId: json["category_id"],
-        itemCategoryParId: json["item_category_par_id"],
-        categoryName: json["category_name"],
-        unitId: json["unit_id"],
-        unitName: json["unit_name"],
-        sellPrice: json["sell_price"],
-        buyPrice: json["buy_price"],
-        stock: json["stock"],
-        supplierId: json["supplier_id"],
-        supplierName: json["supplier_name"],
-        proteinPercent: json["protein_percent"],
-        lemakPercent: json["lemak_percent"],
-        seratKasarPercent: json["serat_kasar_percent"],
-        kadarAbuPercent: json["kadar_abu_percent"],
-        kadarAirPercent: json["kadar_air_percent"],
-        note: json["note"],
-        imageUrl: json["image_url"],
-        activeBool: json["active_bool"],
+        id: json['id'],
+        code: json['code'],
+        name: json['name'],
+        categoryId: json['category_id'],
+        itemCategoryParId: json['item_category_par_id'],
+        categoryName: json['category_name'],
+        unitId: json['unit_id'],
+        unitName: json['unit_name'],
+        sellPrice: json['sell_price'],
+        buyPrice: json['buy_price'],
+        stock: json['stock'],
+        supplierId: json['supplier_id'],
+        supplierName: json['supplier_name'],
+        proteinPercent: json['protein_percent'],
+        lemakPercent: json['lemak_percent'],
+        seratKasarPercent: json['serat_kasar_percent'],
+        kadarAbuPercent: json['kadar_abu_percent'],
+        kadarAirPercent: json['kadar_air_percent'],
+        note: json['note'],
+        imageUrl: json['image_url'],
+        activeBool: json['active_bool'],
       );
 }

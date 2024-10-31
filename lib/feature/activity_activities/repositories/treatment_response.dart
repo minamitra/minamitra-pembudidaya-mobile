@@ -14,14 +14,14 @@ class TreatmentResponse {
 
   factory TreatmentResponse.fromMap(Map<String, dynamic> json) =>
       TreatmentResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<TreatmentResponseData>.from(
-                json["data"]!.map((x) => TreatmentResponseData.fromMap(x))),
+                json['data']!.map((x) => TreatmentResponseData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -66,41 +66,41 @@ class TreatmentResponseData {
 
   factory TreatmentResponseData.fromMap(Map<String, dynamic> json) =>
       TreatmentResponseData(
-        id: json["id"],
-        memberId: json["member_id"],
-        fishpondId: json["fishpond_id"],
-        fishpondcycleId: json["fishpondcycle_id"],
+        id: json['id'],
+        memberId: json['member_id'],
+        fishpondId: json['fishpond_id'],
+        fishpondcycleId: json['fishpondcycle_id'],
         datetime:
-            json["datetime"] == null ? null : DateTime.parse(json["datetime"]),
-        fishAge: json["fish_age"],
-        name: json["name"],
-        cost: json["cost"],
-        note: json["note"],
-        attachmentJsonArray: json["attachment_json_array"] == null
+            json['datetime'] == null ? null : DateTime.parse(json['datetime']),
+        fishAge: json['fish_age'],
+        name: json['name'],
+        cost: json['cost'],
+        note: json['note'],
+        attachmentJsonArray: json['attachment_json_array'] == null
             ? []
-            : List<String>.from(json["attachment_json_array"].map((x) => x)),
-        createDatetime: json["create_datetime"] == null
+            : List<String>.from(json['attachment_json_array'].map((x) => x)),
+        createDatetime: json['create_datetime'] == null
             ? null
-            : DateTime.parse(json["create_datetime"]),
-        createById: json["create_by_id"],
-        createByType: json["create_by_type"],
-        createByName: json["create_by_name"],
+            : DateTime.parse(json['create_datetime']),
+        createById: json['create_by_id'],
+        createByType: json['create_by_type'],
+        createByName: json['create_by_name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "member_id": memberId,
-        "fishpond_id": fishpondId,
-        "fishpondcycle_id": fishpondcycleId,
-        "datetime": datetime!.toIso8601String(),
-        "fish_age": fishAge,
-        "name": name,
-        "cost": cost,
-        "note": note,
-        "attachment_json_array": attachmentJsonArray,
-        "create_datetime": createDatetime!.toIso8601String(),
-        "create_by_id": createById,
-        "create_by_type": createByType,
-        "create_by_name": createByName,
+        'id': id,
+        'member_id': memberId,
+        'fishpond_id': fishpondId,
+        'fishpondcycle_id': fishpondcycleId,
+        'datetime': datetime!.toIso8601String(),
+        'fish_age': fishAge,
+        'name': name,
+        'cost': cost,
+        'note': note,
+        'attachment_json_array': attachmentJsonArray,
+        'create_datetime': createDatetime!.toIso8601String(),
+        'create_by_id': createById,
+        'create_by_type': createByType,
+        'create_by_name': createByName,
       };
 }

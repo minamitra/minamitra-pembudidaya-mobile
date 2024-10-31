@@ -1,13 +1,13 @@
 extension GetHourTime on String {
   int getHourTime() {
     switch (toLowerCase()) {
-      case "pagi":
+      case 'pagi':
         return 7;
-      case "siang":
+      case 'siang':
         return 12;
-      case "sore":
+      case 'sore':
         return 16;
-      case "malam":
+      case 'malam':
         return 20;
       default:
         return 7;

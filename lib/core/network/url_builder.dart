@@ -11,7 +11,7 @@ Uri createUrl({
   String? customBaseURL,
 }) =>
     Uri(
-      scheme: "https",
+      scheme: 'https',
       host: customBaseURL ?? Injection.host,
       path: path,
       queryParameters: queryParameters,

@@ -7,7 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/set_location/logics/set_loc
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/repositories/map_callback_data.dart';
 
 class MapButton extends StatelessWidget {
-  const MapButton(this.controller, {Key? key}) : super(key: key);
+  const MapButton(this.controller, {super.key});
 
   final GoogleMapController? controller;
 
@@ -17,7 +17,7 @@ class MapButton extends StatelessWidget {
       listener: (_, state) {
         if (state.status == SetLocationStateStatus.error) {
           Fluttertoast.showToast(
-            msg: "Error : ${state.error.toString()}",
+            msg: 'Error : ${state.error.toString()}',
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
@@ -38,7 +38,7 @@ class MapButton extends StatelessWidget {
               builder: (_, state) => SizedBox(
                 height: 35,
                 child: AppAnimatedButton(
-                  "Pilih Lokasi",
+                  'Pilih Lokasi',
                   () async {
                     if (controller != null) {
                       await controller!.takeSnapshot().then((value) {
@@ -49,7 +49,7 @@ class MapButton extends StatelessWidget {
                               state.longitude ?? 0,
                             ),
                             value,
-                          ));
+                          ),);
                         }
                       });
                     }

@@ -46,7 +46,7 @@ class _ActivityIncidentDetailViewState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "File Lampiran",
+            'File Lampiran',
             textAlign: TextAlign.start,
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
@@ -119,23 +119,23 @@ class _ActivityIncidentDetailViewState
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                columnText("Judul Laporan", widget.incident.incident ?? "-"),
+                columnText('Judul Laporan', widget.incident.incident ?? '-'),
                 Divider(
                   height: 32.0,
                   thickness: 1,
                   color: AppColor.neutral[100],
                 ),
                 columnText(
-                    "Tanggal",
+                    'Tanggal',
                     widget.incident.datetime != null
                         ? widget.incident.datetime.toString()
-                        : '-'),
+                        : '-',),
                 Divider(
                   height: 32.0,
                   thickness: 1,
                   color: AppColor.neutral[100],
                 ),
-                columnText("Catatan", widget.incident.note ?? "-"),
+                columnText('Catatan', widget.incident.note ?? '-'),
                 Divider(
                   height: 32.0,
                   thickness: 1,
@@ -166,7 +166,7 @@ class _ActivityIncidentDetailViewState
           children: [
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Hapus",
+                'Hapus',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.trashIcon,
@@ -178,7 +178,7 @@ class _ActivityIncidentDetailViewState
             const SizedBox(width: 16.0),
             Expanded(
               child: AppPrimaryOutlineButton(
-                "Edit",
+                'Edit',
                 () {},
                 prefixIcon: Image.asset(
                   AppAssets.editIcon,

@@ -26,13 +26,13 @@ String cycleTypeToString(CycleType type) {
 
 CycleType convertToCycleType(String status) {
   switch (status.toLowerCase()) {
-    case "active":
+    case 'active':
       return CycleType.active;
-    case "ready":
+    case 'ready':
       return CycleType.ready;
-    case "harvest":
+    case 'harvest':
       return CycleType.onBid;
-    case "onbid":
+    case 'onbid':
       return CycleType.onBid;
     default:
       return CycleType.done;

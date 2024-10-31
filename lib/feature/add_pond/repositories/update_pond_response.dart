@@ -12,13 +12,13 @@ class UpdatePondResponse {
 
   factory UpdatePondResponse.fromMap(Map<String, dynamic> json) =>
       UpdatePondResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : UpdatePondResponseData.fromMap(json["data"]),
+            : UpdatePondResponseData.fromMap(json['data']),
       );
 
   Map<String, dynamic> toMap() => {
-        "data": data?.toMap(),
+        'data': data?.toMap(),
       };
 }
 
@@ -34,10 +34,10 @@ class UpdatePondResponseData {
 
   factory UpdatePondResponseData.fromMap(Map<String, dynamic> json) =>
       UpdatePondResponseData(
-        fishpondId: json["fishpond_id"],
+        fishpondId: json['fishpond_id'],
       );
 
   Map<String, dynamic> toMap() => {
-        "fishpond_id": fishpondId,
+        'fishpond_id': fishpondId,
       };
 }

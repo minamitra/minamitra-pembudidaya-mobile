@@ -76,7 +76,7 @@ class _ProfileMemberViewState extends State<ProfileMemberView>
             }
 
             if (state.status.isError) {
-              if (state.errorMessage == "TOKEN_EXPIRED") {
+              if (state.errorMessage == 'TOKEN_EXPIRED') {
                 RepositoryProvider.of<AuthenticationRepository>(context)
                     .logout();
               } else {

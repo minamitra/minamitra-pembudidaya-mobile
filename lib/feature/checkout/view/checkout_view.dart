@@ -130,7 +130,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             return StatefulBuilder(
               builder: (stateContext, setModalState) {
                 return AppBottomSheet(
-                  "Alamat Pengiriman",
+                  'Alamat Pengiriman',
                   height: MediaQuery.of(context).size.height * 0.7,
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -163,7 +163,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                                 ),
                               ),
                               child: AppPrimaryFullButton(
-                                "Simpan",
+                                'Simpan',
                                 () {
                                   if (tempSelectedAddress != null) {
                                     setState(() {
@@ -196,7 +196,7 @@ class _CheckoutViewState extends State<CheckoutView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Alamat Pengiriman",
+              'Alamat Pengiriman',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(fontWeight: FontWeight.w700),
@@ -232,14 +232,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            selectedAddress?.title ?? "Alamat Pengiriman",
+                            selectedAddress?.title ?? 'Alamat Pengiriman',
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
                           ),
                           const SizedBox(height: 8.0),
                           Text(
-                            selectedAddress?.address ?? "-",
+                            selectedAddress?.address ?? '-',
                             style: appTextTheme(context).bodySmall?.copyWith(
                                   color: AppColor.neutral[500],
                                 ),
@@ -270,7 +270,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: AppNetworkImage(
-                      data.imageUrl ?? "",
+                      data.imageUrl ?? '',
                       width: double.infinity,
                       height: double.infinity,
                       fit: BoxFit.cover,
@@ -286,7 +286,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      data.name ?? "-",
+                      data.name ?? '-',
                       style: appTextTheme(context)
                           .bodySmall
                           ?.copyWith(fontWeight: FontWeight.w700),
@@ -295,7 +295,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                     ),
                     const SizedBox(height: 6.0),
                     Text(
-                      data.categoryName ?? "-",
+                      data.categoryName ?? '-',
                       style: appTextTheme(context)
                           .bodySmall
                           ?.copyWith(color: AppColor.neutral[400]),
@@ -304,14 +304,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                     Text(
                       data.sellPrice != null
                           ? appConvertCurrency(double.parse(data.sellPrice!))
-                          : "-",
+                          : '-',
                       style: appTextTheme(context)
                           .bodySmall
                           ?.copyWith(fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 10.0),
@@ -364,7 +364,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                   Icons.add_circle_outline_rounded,
                   color: AppColor.primary[600],
                 ),
-              )
+              ),
             ],
           ),
         ],
@@ -381,7 +381,7 @@ class _CheckoutViewState extends State<CheckoutView> {
               children: [
                 Expanded(
                   child: Text(
-                    "Pesanan Kamu",
+                    'Pesanan Kamu',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -393,7 +393,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                         .push(AppTransition.pushTransition(
                       const ProductsPage(isPick: true),
                       ProductsPage.routeSettings(),
-                    ))
+                    ),)
                         .then((value) {
                       setState(() {
                         listProduct.add(value as ProductsResponseData);
@@ -411,7 +411,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       borderRadius: BorderRadius.circular(100.0),
                     ),
                     child: Text(
-                      "+ Tambah",
+                      '+ Tambah',
                       style: appTextTheme(context).bodySmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
@@ -473,7 +473,7 @@ class _CheckoutViewState extends State<CheckoutView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Detail Pesanan",
+              'Detail Pesanan',
               style: appTextTheme(context).bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -495,7 +495,7 @@ class _CheckoutViewState extends State<CheckoutView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Rincian Biaya",
+              'Rincian Biaya',
               style: appTextTheme(context).bodyMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
@@ -513,13 +513,13 @@ class _CheckoutViewState extends State<CheckoutView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Total Pembayaran",
+                  'Total Pembayaran',
                   style: appTextTheme(context).bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                       ),
                 ),
                 Text(
-                  "Rp 300.000",
+                  'Rp 300.000',
                   style: appTextTheme(context).bodyMedium?.copyWith(
                         fontWeight: FontWeight.w700,
                         color: AppColor.accent,
@@ -604,7 +604,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             return StatefulBuilder(
               builder: (stateContext, setModalState) {
                 return AppBottomSheet(
-                  "Metode Pembayaran",
+                  'Metode Pembayaran',
                   height: MediaQuery.of(context).size.height * 0.7,
                   ListView(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -626,7 +626,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                             const SizedBox(height: 16),
                         itemBuilder: (context, index) {
                           return paymentItem(
-                              listMethodPayment[index], setModalState);
+                              listMethodPayment[index], setModalState,);
                         },
                       ),
                       const SizedBox(height: 24),
@@ -647,12 +647,12 @@ class _CheckoutViewState extends State<CheckoutView> {
                             const SizedBox(height: 16),
                         itemBuilder: (context, index) {
                           return paymentItem(
-                              listMethodBank[index], setModalState);
+                              listMethodBank[index], setModalState,);
                         },
                       ),
                       const SizedBox(height: 36),
                       AppPrimaryFullButton(
-                        "Konfirmasi",
+                        'Konfirmasi',
                         () {
                           if (tempSelectedPaymentMethod != null) {
                             setState(() {
@@ -687,7 +687,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Metode Pembayaran",
+                    'Metode Pembayaran',
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
@@ -718,7 +718,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       children: [
                         Text(
                           selectedPaymentMethod?.name ??
-                              "Pilih Metode Pembayaran",
+                              'Pilih Metode Pembayaran',
                           textAlign: TextAlign.start,
                           style: appTextTheme(context).bodySmall?.copyWith(
                                 fontWeight: FontWeight.w600,
@@ -726,7 +726,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                               ),
                         ),
                         Text(
-                          selectedPaymentMethod?.description ?? "-",
+                          selectedPaymentMethod?.description ?? '-',
                           textAlign: TextAlign.start,
                           style: appTextTheme(context).bodySmall?.copyWith(
                                 fontWeight: FontWeight.w400,
@@ -764,14 +764,14 @@ class _CheckoutViewState extends State<CheckoutView> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    "Total Pembayaran",
+                    'Total Pembayaran',
                     textAlign: TextAlign.start,
                     style: appTextTheme(context).bodySmall?.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                   ),
                   Text(
-                    "Rp 300.000",
+                    'Rp 300.000',
                     style: appTextTheme(context).bodyLarge?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColor.accent,
@@ -782,12 +782,12 @@ class _CheckoutViewState extends State<CheckoutView> {
             ),
             Expanded(
               child: AppPrimaryFullButton(
-                "Buat Pesanan",
+                'Buat Pesanan',
                 () {
                   if (selectedAddress == null ||
                       selectedPaymentMethod == null) {
                     AppTopSnackBar(context).showDanger(
-                        "Pilih alamat dan metode pembayaran terlebih dahulu");
+                        'Pilih alamat dan metode pembayaran terlebih dahulu',);
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
@@ -798,7 +798,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                       selectedPaymentMethod!,
                     ),
                     TransactionDetailPage.routeSettings(),
-                  ));
+                  ),);
                 },
               ),
             ),

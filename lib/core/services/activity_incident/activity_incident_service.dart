@@ -37,7 +37,7 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
 
   @override
   Future<BaseResponse<IncidentResponse>> dataIncident() async {
-    final url = endpoint.dataIncident("waiting,processed");
+    final url = endpoint.dataIncident('waiting,processed');
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -48,7 +48,7 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
 
   @override
   Future<BaseResponse<IncidentResponse>> historyIncident() async {
-    final url = endpoint.dataIncident("rejected,done,failed,canceled");
+    final url = endpoint.dataIncident('rejected,done,failed,canceled');
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -77,7 +77,7 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
     final response = await httpClient.post(
       url,
       header,
-      json.encode({"id": id}),
+      json.encode({'id': id}),
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
@@ -85,7 +85,7 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
 
   @override
   Future<BaseResponse<bool>> updateIncident(
-      UpdateIncidentPayload payload) async {
+      UpdateIncidentPayload payload,) async {
     final url = endpoint.updateIncident();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

@@ -14,8 +14,8 @@ class AppAnimatedButton extends StatefulWidget {
     this.loading = false,
     this.height = 50.0,
     this.width = 50.0,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   AppAnimatedButtonState createState() => AppAnimatedButtonState();

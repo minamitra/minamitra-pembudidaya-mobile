@@ -3,7 +3,7 @@ part of 'register_cubit.dart';
 class RegisterState extends Equatable {
   const RegisterState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
   });
 
   final GlobalState status;

@@ -38,11 +38,11 @@ class FeedTabView extends StatelessWidget {
               ),
               const SizedBox(width: 18.0),
               Text(
-                "- Rp 100.000",
+                '- Rp 100.000',
                 style: appTextTheme(context)
                     .titleSmall
                     ?.copyWith(color: AppColor.accent[900]),
-              )
+              ),
             ],
           ),
           const SizedBox(height: 18.0),

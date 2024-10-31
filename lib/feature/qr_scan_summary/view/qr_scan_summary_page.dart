@@ -11,7 +11,7 @@ class QrScanSummaryPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appDefaultAppBar(context, "Pembayaran"),
+      appBar: appDefaultAppBar(context, 'Pembayaran'),
       body: const QrScanSummaryView(),
     );
   }

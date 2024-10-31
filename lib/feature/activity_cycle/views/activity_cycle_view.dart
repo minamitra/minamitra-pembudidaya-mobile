@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -83,7 +82,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                               0,
                             ),
                             child: const AppEmptyData(
-                                "Belum ada data siklus aktif terbaru"),
+                                'Belum ada data siklus aktif terbaru',),
                           ),
                         )
                       : ListView(
@@ -114,7 +113,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                               0,
                             ),
                             child: const AppEmptyData(
-                                "Belum ada data siklus lelang terbaru"),
+                                'Belum ada data siklus lelang terbaru',),
                           ),
                         )
                       : listCard(
@@ -135,7 +134,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                               0,
                             ),
                             child: const AppEmptyData(
-                                "Belum ada data siklus riwayat terbaru"),
+                                'Belum ada data siklus riwayat terbaru',),
                           ),
                         )
                       : listCard(
@@ -172,15 +171,15 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
     return InkWell(
       onTap: () {
-        if (status != "harvest") {
+        if (status != 'harvest') {
           Navigator.of(context)
               .push(AppTransition.pushTransition(
             ActivityCycleDetailPage(
               data,
-              isReadyHarvest: status == "ready",
+              isReadyHarvest: status == 'ready',
             ),
             ActivityCycleDetailPage.routeSettings(),
-          ))
+          ),)
               .then((value) {
             context.read<ActivityCycleCubit>().init(widget.pondID);
           });
@@ -189,11 +188,11 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
           Navigator.of(context)
               .push(AppTransition.pushTransition(
             ActivityCycleAddHarvestPage(
-              data.id ?? "",
+              data.id ?? '',
               data: data,
             ),
             ActivityCycleAddHarvestPage.routeSettings(),
-          ))
+          ),)
               .then((value) {
             context.read<ActivityCycleCubit>().init(widget.pondID);
           });
@@ -244,12 +243,12 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
             const SizedBox(height: 18.0),
             itemDataCard(
               AppAssets.newFishIcon,
-              "$fishCount Ekor",
+              '$fishCount Ekor',
             ),
             const SizedBox(height: 12.0),
             itemDataCard(
               AppAssets.weigherIconFill,
-              "$fishWeight gram/ekor",
+              '$fishWeight gram/ekor',
             ),
             const SizedBox(height: 12.0),
             Row(
@@ -263,7 +262,7 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                 // ),
                 itemDataCard(
                   AppAssets.targetIconFill,
-                  "$fishWeightTarget gram/ekor",
+                  '$fishWeightTarget gram/ekor',
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
@@ -309,10 +308,10 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
           data: data![index],
           dateTime: AppConvertDateTime()
               .ddmmyyyyhhmm(data[index].tebarDate ?? DateTime.now()),
-          status: isReadyHarvest ? "ready" : (data[index].status ?? "active"),
-          fishCount: data[index].tebarFishTotal ?? "Unknown",
-          fishWeight: data[index].actualPanenBobot ?? "Unknown",
-          fishWeightTarget: data[index].targetPanenBobot ?? "Unknown",
+          status: isReadyHarvest ? 'ready' : (data[index].status ?? 'active'),
+          fishCount: data[index].tebarFishTotal ?? 'Unknown',
+          fishWeight: data[index].actualPanenBobot ?? 'Unknown',
+          fishWeightTarget: data[index].targetPanenBobot ?? 'Unknown',
         );
       },
     );

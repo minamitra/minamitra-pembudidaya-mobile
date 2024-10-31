@@ -13,8 +13,8 @@ class ProductsCubit extends Cubit<ProductsState> {
   final ProductService service;
 
   void getProducts({
-    String name = "",
-    String categoryId = "",
+    String name = '',
+    String categoryId = '',
   }) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
@@ -22,17 +22,17 @@ class ProductsCubit extends Cubit<ProductsState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         products: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

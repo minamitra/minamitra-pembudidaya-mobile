@@ -71,9 +71,9 @@ class AddPondPage extends StatelessWidget {
                     subDistrictName: pondData!.addressSubdistrictName!,
                     villageId: pondData!.addressVillageId!,
                     villageName: pondData!.addressVillageName!,
-                    latitude: pondData!.addressLatitude ?? "",
-                    longitude: pondData!.addressLongitude ?? "",
-                    urlImage: pondData!.imageUrl ?? "",
+                    latitude: pondData!.addressLatitude ?? '',
+                    longitude: pondData!.addressLongitude ?? '',
+                    urlImage: pondData!.imageUrl ?? '',
                   ))
                 : (AddPondSecondStepCubit(
                     RefServiceImpl.create(),
@@ -83,7 +83,7 @@ class AddPondPage extends StatelessWidget {
         ),
         BlocProvider(
             create: (context) =>
-                AddPondThirdStepCubit(FeedServiceImpl.create())..init()),
+                AddPondThirdStepCubit(FeedServiceImpl.create())..init(),),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -98,7 +98,7 @@ class AddPondPage extends StatelessWidget {
               }
 
               if (state.status.isError) {
-                if (state.errorMessage == "TOKEN_EXPIRED") {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
                   RepositoryProvider.of<AuthenticationRepository>(context)
                       .logout();
                 } else {
@@ -109,17 +109,17 @@ class AddPondPage extends StatelessWidget {
               if (state.status.isSuccessSubmit) {
                 if (behaviourPage == BehaviourPage.addNewPond) {
                   AppTopSnackBar(context)
-                      .showSuccess("Berhasil Membuat\nKolam Baru");
-                  Navigator.of(context).pop("refresh");
+                      .showSuccess('Berhasil Membuat\nKolam Baru');
+                  Navigator.of(context).pop('refresh');
                 } else if (behaviourPage == BehaviourPage.addNewCycle) {
                   AppTopSnackBar(context)
-                      .showSuccess("Berhasil Membuat\nSiklus Baru");
+                      .showSuccess('Berhasil Membuat\nSiklus Baru');
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop("refresh");
+                  Navigator.of(context).pop('refresh');
                 } else if (behaviourPage == BehaviourPage.editPond) {
-                  AppTopSnackBar(context).showSuccess("Berhasil Edit\nKolam");
+                  AppTopSnackBar(context).showSuccess('Berhasil Edit\nKolam');
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop("refresh");
+                  Navigator.of(context).pop('refresh');
                 }
               }
             },
@@ -135,7 +135,7 @@ class AddPondPage extends StatelessWidget {
               }
 
               if (state.status.isError) {
-                if (state.errorMessage == "TOKEN_EXPIRED") {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
                   RepositoryProvider.of<AuthenticationRepository>(context)
                       .logout();
                 } else {
@@ -143,12 +143,12 @@ class AddPondPage extends StatelessWidget {
                 }
               }
             },
-          )
+          ),
         ],
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            "Tambah Kolam",
+            'Tambah Kolam',
             onBackButtonPressed: () {
               Navigator.of(context).pop();
             },

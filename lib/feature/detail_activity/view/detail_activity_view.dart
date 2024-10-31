@@ -106,15 +106,15 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   log(widget.pondData.lastFishpondcycleStatus.toString());
                   if (!widget.isCanAccessFeature) {
                     AppTopSnackBar(context).showInfo(
-                        "Maaf data sedang\nDiproses atau telah ditolak");
+                        'Maaf data sedang\nDiproses atau telah ditolak',);
                     return;
                   }
                   if (widget.pondData.lastFishpondcycleStatus
                           .handlingEmptyString()
                           .toLowerCase() ==
-                      "done") {
+                      'done') {
                     AppTopSnackBar(context)
-                        .showInfo("Maaf siklus anda\nTelah berakhir");
+                        .showInfo('Maaf siklus anda\nTelah berakhir');
                     return;
                   }
                   if (context
@@ -125,12 +125,12 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                           ?.isEmpty ??
                       true) {
                     AppTopSnackBar(context).showDanger(
-                        "Siklus tidak ditemukan\nSilahkan tambah siklus");
+                        'Siklus tidak ditemukan\nSilahkan tambah siklus',);
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityActivitiesPage(
-                      widget.pondData.id ?? "0",
+                      widget.pondData.id ?? '0',
                       context
                               .read<DetailActivityCubit>()
                               .state
@@ -138,7 +138,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               ?.data
                               ?.first
                               .id ??
-                          "0",
+                          '0',
                       context
                           .read<DetailActivityCubit>()
                           .state
@@ -148,7 +148,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                           .tebarDate,
                     ),
                     ActivityActivitiesPage.routeSettings(),
-                  ));
+                  ),);
                 },
               ),
               bottomActionItem(
@@ -157,7 +157,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 onTap: () {
                   if (!widget.isCanAccessFeature) {
                     AppTopSnackBar(context).showInfo(
-                        "Maaf data sedang\nDiproses atau telah ditolak");
+                        'Maaf data sedang\nDiproses atau telah ditolak',);
                     return;
                   }
                   if (context
@@ -168,12 +168,12 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                           ?.isEmpty ??
                       true) {
                     AppTopSnackBar(context).showDanger(
-                        "Siklus tidak ditemukan\nSilahkan tambah siklus");
+                        'Siklus tidak ditemukan\nSilahkan tambah siklus',);
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
                     ActivityIncidentPage(
-                      widget.pondData.id ?? "0",
+                      widget.pondData.id ?? '0',
                       context
                               .read<DetailActivityCubit>()
                               .state
@@ -181,10 +181,10 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               ?.data
                               ?.first
                               .id ??
-                          "0",
+                          '0',
                     ),
                     ActivityIncidentPage.routeSettings(),
-                  ));
+                  ),);
                 },
               ),
               bottomActionItem(
@@ -193,7 +193,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 onTap: () {
                   if (!widget.isCanAccessFeature) {
                     AppTopSnackBar(context).showInfo(
-                        "Maaf data sedang\nDiproses atau telah ditolak");
+                        'Maaf data sedang\nDiproses atau telah ditolak',);
                     return;
                   }
                   if (context
@@ -204,13 +204,13 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                           ?.isEmpty ??
                       true) {
                     AppTopSnackBar(context).showDanger(
-                        "Siklus tidak ditemukan\nSilahkan tambah siklus");
+                        'Siklus tidak ditemukan\nSilahkan tambah siklus',);
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    MonitoringPage(widget.pondData.lastFishpondcycleId ?? "0"),
+                    MonitoringPage(widget.pondData.lastFishpondcycleId ?? '0'),
                     MonitoringPage.route,
-                  ));
+                  ),);
                 },
               ),
               bottomActionItem(
@@ -219,13 +219,13 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 onTap: () {
                   if (!widget.isCanAccessFeature) {
                     AppTopSnackBar(context).showInfo(
-                        "Maaf data sedang\nDiproses atau telah ditolak");
+                        'Maaf data sedang\nDiproses atau telah ditolak',);
                     return;
                   }
                   Navigator.of(context).push(AppTransition.pushTransition(
-                    ActivityCyclePage(widget.pondData.id ?? ""),
+                    ActivityCyclePage(widget.pondData.id ?? ''),
                     ActivityCyclePage.routeSettings(),
-                  ));
+                  ),);
                 },
               ),
             ],
@@ -250,11 +250,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                       child: InkWell(
                         onTap: () {},
                         child: Image.network(
-                          widget.pondData.imageUrl ?? "",
+                          widget.pondData.imageUrl ?? '',
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
                             return Image.asset(
-                                AppAssets.dummyDetailActivityBannerImage);
+                                AppAssets.dummyDetailActivityBannerImage,);
                           },
                         ),
                       ),
@@ -315,7 +315,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                         context: context,
                         builder: (modalContext) {
                           return AppBottomSheet(
-                            "Pilih Aksi",
+                            'Pilih Aksi',
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 18.0,
@@ -324,7 +324,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                               child: Column(
                                 children: [
                                   AppPrimaryFullButton(
-                                    "Edit Data",
+                                    'Edit Data',
                                     () {
                                       Navigator.of(context).pop();
                                       Navigator.of(context)
@@ -335,24 +335,24 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                           pondData: widget.pondData,
                                         ),
                                         AddPondPage.routeSettings(),
-                                      ));
+                                      ),);
                                     },
                                   ),
                                   const SizedBox(height: 15.0),
                                   AppPrimaryOutlineFullButton(
-                                    "Hapus Data",
+                                    'Hapus Data',
                                     () {
                                       Navigator.of(context).pop();
                                       showDeleteBottomSheet(
                                         context,
-                                        title: "Hapus Kolam ?",
+                                        title: 'Hapus Kolam ?',
                                         descriptions:
-                                            "Data yang sudah terhapus\ntidak dapat dipulihkan kembali!",
+                                            'Data yang sudah terhapus\ntidak dapat dipulihkan kembali!',
                                         onTapDelete: () {
                                           context
                                               .read<DetailActivityCubit>()
                                               .deletePond(
-                                                  widget.pondData.id ?? "");
+                                                  widget.pondData.id ?? '',);
                                           Navigator.of(context).pop();
                                         },
                                       );
@@ -440,7 +440,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
             ),
             const SizedBox(height: 12.0),
             Text(
-              "${widget.pondData.addressVillageName.handlingEmptyString()}, ${widget.pondData.addressCityName.handlingEmptyString()}, ${widget.pondData.addressProvinceName.handlingEmptyString()}",
+              '${widget.pondData.addressVillageName.handlingEmptyString()}, ${widget.pondData.addressCityName.handlingEmptyString()}, ${widget.pondData.addressProvinceName.handlingEmptyString()}',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: appTextTheme(context).bodySmall?.copyWith(
@@ -466,7 +466,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 Expanded(
                     child: headerInformationsItem(
                         "${appConvert3Digits(double.parse(widget.pondData.areaLength ?? "0") * double.parse(widget.pondData.areaWidth ?? "0"))} m\u00b2",
-                        "Luas Lahan")),
+                        'Luas Lahan',),),
                 SizedBox(
                   height: 38.0,
                   child: VerticalDivider(color: AppColor.neutral[200]),
@@ -474,14 +474,14 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 Expanded(
                     child: headerInformationsItem(
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData!.data![0]
                               .tebarFishTotal ??
-                          "-",
-                  "Jumlah Ikan",
-                )),
+                          '-',
+                  'Jumlah Ikan',
+                ),),
                 SizedBox(
                   height: 38.0,
                   child: VerticalDivider(color: AppColor.neutral[200]),
@@ -489,12 +489,12 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 Expanded(
                     child: headerInformationsItem(
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : "${appConvert3Digits(double.parse(state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum.handleEmptyStringToZero() ?? "0") / 1000)} Kg",
-                  "Total Pakan",
-                )),
+                  'Total Pakan',
+                ),),
               ],
             ),
           );
@@ -567,11 +567,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    "Est Total Pakan: $valueData Kg",
+                    'Est Total Pakan: $valueData Kg',
                     style: appTextTheme(context)
                         .labelLarge
                         ?.copyWith(color: AppColor.primary[500]),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -583,13 +583,13 @@ class _DetailActivityViewState extends State<DetailActivityView> {
     Widget feedSection() {
       Widget actionButton(String lastActiveStatus, String id) {
         switch (lastActiveStatus.toLowerCase()) {
-          case "active":
+          case 'active':
             return AppGreenGradientButton(
-              "Panen",
+              'Panen',
               () {
                 if (!widget.isCanAccessFeature) {
                   AppTopSnackBar(context).showInfo(
-                      "Maaf data sedang\nDiproses atau telah ditolak");
+                      'Maaf data sedang\nDiproses atau telah ditolak',);
                   return;
                 }
                 Navigator.of(context)
@@ -600,29 +600,29 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     isFromCycleDetail: false,
                   ),
                   ActivityCycleAddHarvestPage.routeSettings(),
-                ))
+                ),)
                     .then((value) {
-                  if (value != null && value == "refresh") {
-                    Navigator.of(context).pop("refresh");
+                  if (value != null && value == 'refresh') {
+                    Navigator.of(context).pop('refresh');
                   }
                 });
               },
             );
-          case "harvest":
+          case 'harvest':
             return AppPrimaryGradientButton(
-              "Sedang Panen",
+              'Sedang Panen',
               () {
                 AppTopSnackBar(context).showInfo(
-                    "Siklus sedang Panen\nsilahkan ke menu siklus\nntuk edit data");
+                    'Siklus sedang Panen\nsilahkan ke menu siklus\nntuk edit data',);
                 return;
               },
             );
-          case "-":
-          case "done":
+          case '-':
+          case 'done':
             return AppPrimaryGradientButton(
-              "Mulai Siklus",
+              'Mulai Siklus',
               () {
-                log("pond id ${widget.pondData.id}");
+                log('pond id ${widget.pondData.id}');
                 Navigator.of(context)
                     .push(AppTransition.pushTransition(
                   AddPondPage(
@@ -630,10 +630,10 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     pondID: widget.pondData.id,
                   ),
                   AddPondPage.routeSettings(),
-                ))
+                ),)
                     .then((value) {
-                  if (value != null && value == "refresh") {
-                    Navigator.of(context).pop("refresh");
+                  if (value != null && value == 'refresh') {
+                    Navigator.of(context).pop('refresh');
                   }
                 });
               },
@@ -656,7 +656,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   children: [
                     Expanded(
                       child: Text(
-                        "Siklus Saat Ini",
+                        'Siklus Saat Ini',
                         style: appTextTheme(context)
                             .bodyMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
@@ -666,7 +666,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                       widget.pondData.lastFishpondcycleStatus
                           .handlingEmptyString(),
                       state.onGoingCycleFeedResponseData!.data!.isEmpty
-                          ? ""
+                          ? ''
                           : state.onGoingCycleFeedResponseData!.data![0].id!,
                     ),
                     // widget.pondData.activeBool ?? false
@@ -703,64 +703,64 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 const SizedBox(height: 18.0),
                 detailItem(
-                  "Tanggal Tebar",
+                  'Tanggal Tebar',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : AppConvertDateTime().dmyName(state
-                          .onGoingCycleFeedResponseData!.data![0].tebarDate!),
+                          .onGoingCycleFeedResponseData!.data![0].tebarDate!,),
                 ),
                 AppDividerSmall(),
                 detailItem(
-                  "Ukuran Tebar",
+                  'Ukuran Tebar',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : "${appConvert3Digits(double.tryParse(state.onGoingCycleFeedResponseData?.data?.first.tebarBobot.handleEmptyStringToZero() ?? "0") ?? 0.0)} gr/ekor",
                 ),
                 AppDividerSmall(),
                 detailItem(
-                  "Asal Benih",
+                  'Asal Benih',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData!.data!.first
                               .fishseedName ??
-                          "-",
+                          '-',
                 ),
                 AppDividerSmall(),
                 detailItem(
-                  "Target Bobot Panen",
+                  'Target Bobot Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
-                      : "${double.parse(state.onGoingCycleFeedResponseData!.data!.first.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(0)} gr/ekor",
+                      ? '-'
+                      : '${double.parse(state.onGoingCycleFeedResponseData!.data!.first.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(0)} gr/ekor',
                 ),
                 AppDividerSmall(),
                 detailItem(
-                  "Estimasi Perkiraan Waktu Panen",
+                  'Estimasi Perkiraan Waktu Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : AppConvertDateTime().dmyName(state
                               .onGoingCycleFeedResponseData!
                               .data!
                               .first
                               .estimationPanenDate ??
-                          DateTime.now()),
+                          DateTime.now(),),
                 ),
                 AppDividerSmall(),
                 detailItem(
-                  "Estimasi Perkiraan Tonase Panen",
+                  'Estimasi Perkiraan Tonase Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           state.onGoingCycleFeedResponseData!.data!.isEmpty)
-                      ? "-"
+                      ? '-'
                       : "${appConvert3Digits(double.parse(state.onGoingCycleFeedResponseData?.data?.first.estimationPanenTonase ?? "0.0"))} Kg",
                 ),
                 const SizedBox(height: 36.0),
@@ -782,7 +782,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
               children: [
                 const SizedBox(height: 36.0),
                 Text(
-                  "Pilihan Pakan",
+                  'Pilihan Pakan',
                   style: appTextTheme(context)
                       .bodyMedium
                       ?.copyWith(fontWeight: FontWeight.bold),
@@ -790,23 +790,23 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 const SizedBox(height: 18.0),
                 AppDividerSmall(),
                 detailPakanItem(
-                  "Starter 1",
+                  'Starter 1',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.starter1
                               ?.map((element) => element.name)
                               .toList()
-                              .join(", ") ??
-                          "-",
+                              .join(', ') ??
+                          '-',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : appConvert3Digits(((state
                                       .onGoingCycleFeedResponseData
                                       ?.data
@@ -821,27 +821,27 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                       ?.map((element) => (element.total ?? 0))
                                       .toList() ??
                                   [0.0, 0.0, 0.0])
-                          .reduce((value, element) => value + element))),
+                          .reduce((value, element) => value + element)),),
                 ),
                 AppDividerSmall(),
                 detailPakanItem(
-                  "Starter 2",
+                  'Starter 2',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.starter2
                               ?.map((element) => element.name)
                               .toList()
-                              .join(", ") ??
-                          "-",
+                              .join(', ') ??
+                          '-',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : appConvert3Digits(((state
                                       .onGoingCycleFeedResponseData
                                       ?.data
@@ -856,27 +856,27 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                       ?.map((element) => (element.total ?? 0))
                                       .toList() ??
                                   [0.0, 0.0, 0.0])
-                          .reduce((value, element) => value + element))),
+                          .reduce((value, element) => value + element)),),
                 ),
                 AppDividerSmall(),
                 detailPakanItem(
-                  "Starter 3",
+                  'Starter 3',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.starter3
                               ?.map((element) => element.name)
                               .toList()
-                              .join(", ") ??
-                          "-",
+                              .join(', ') ??
+                          '-',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : appConvert3Digits(((state
                                       .onGoingCycleFeedResponseData
                                       ?.data
@@ -891,27 +891,27 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                       ?.map((element) => (element.total ?? 0))
                                       .toList() ??
                                   [0.0, 0.0, 0.0])
-                          .reduce((value, element) => value + element))),
+                          .reduce((value, element) => value + element)),),
                 ),
                 AppDividerSmall(),
                 detailPakanItem(
-                  "Grower",
+                  'Grower',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.grower
                               ?.map((element) => element.name)
                               .toList()
-                              .join(", ") ??
-                          "-",
+                              .join(', ') ??
+                          '-',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : appConvert3Digits(((state
                                       .onGoingCycleFeedResponseData
                                       ?.data
@@ -926,27 +926,27 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                       ?.map((element) => (element.total ?? 0))
                                       .toList() ??
                                   [0.0, 0.0, 0.0])
-                          .reduce((value, element) => value + element))),
+                          .reduce((value, element) => value + element)),),
                 ),
                 AppDividerSmall(),
                 detailPakanItem(
-                  "Finisher",
+                  'Finisher',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : state.onGoingCycleFeedResponseData?.data?.first
                               .fishfoodJsonObject?.finisher
                               ?.map((element) => element.name)
                               .toList()
-                              .join(", ") ??
-                          "-",
+                              .join(', ') ??
+                          '-',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
-                              "done" ||
+                              'done' ||
                           (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
                               true))
-                      ? "-"
+                      ? '-'
                       : appConvert3Digits(((state
                                       .onGoingCycleFeedResponseData
                                       ?.data
@@ -961,7 +961,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                       ?.map((element) => (element.total ?? 0))
                                       .toList() ??
                                   [0.0, 0.0, 0.0])
-                          .reduce((value, element) => value + element))),
+                          .reduce((value, element) => value + element)),),
                 ),
                 const SizedBox(height: 36.0),
               ],

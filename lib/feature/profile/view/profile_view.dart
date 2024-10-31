@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
@@ -20,7 +19,6 @@ import 'package:minamitra_pembudidaya_mobile/feature/change_password/view/change
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq/views/faq_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/privacy_policy/views/privacy_policy_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile/logic/profile_cubit.dart';
@@ -63,7 +61,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(30.0),
                         child: (state.userData?.imageUrl != null &&
-                                state.userData?.imageUrl != "")
+                                state.userData?.imageUrl != '')
                             ? AppNetworkImage(
                                 state.userData!.imageUrl!,
                                 width: 60.0,
@@ -82,7 +80,7 @@ class _ProfileViewState extends State<ProfileView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            state.userData?.name ?? "-",
+                            state.userData?.name ?? '-',
                             style: appTextTheme(context).titleMedium?.copyWith(
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -152,7 +150,7 @@ class _ProfileViewState extends State<ProfileView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Distribusi Plafon",
+              'Distribusi Plafon',
               style: appTextTheme(context).titleSmall,
             ),
             const SizedBox(height: 8.0),
@@ -160,14 +158,14 @@ class _ProfileViewState extends State<ProfileView> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  "Rp 1.000.000",
+                  'Rp 1.000.000',
                   style: appTextTheme(context).bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                 ),
                 const SizedBox(width: 8.0),
                 Text(
-                  "dari Rp 1.500.000",
+                  'dari Rp 1.500.000',
                   style: appTextTheme(context).labelLarge?.copyWith(
                         color: AppColor.neutral[400],
                         fontWeight: FontWeight.w500,
@@ -217,20 +215,20 @@ class _ProfileViewState extends State<ProfileView> {
             const SizedBox(height: 18.0),
             balanceLegendItem(
               AppColor.primary[500]!,
-              "Kolam 1",
-              "Rp 500.000",
+              'Kolam 1',
+              'Rp 500.000',
             ),
             const SizedBox(height: 8.0),
             balanceLegendItem(
               AppColor.accent[900]!,
-              "Kolam 2",
-              "Rp 250.000",
+              'Kolam 2',
+              'Rp 250.000',
             ),
             const SizedBox(height: 8.0),
             balanceLegendItem(
               AppColor.green[500]!,
-              "Kolam 3",
-              "Rp 250.000",
+              'Kolam 3',
+              'Rp 250.000',
             ),
             const SizedBox(height: 18.0),
             InkWell(
@@ -238,18 +236,18 @@ class _ProfileViewState extends State<ProfileView> {
                 Navigator.of(context).push(AppTransition.pushTransition(
                   const PlafonDistributionPage(),
                   PlafonDistributionPage.routeSettings,
-                ));
+                ),);
               },
               child: Center(
                 child: Text(
-                  "Lihat Selengkapnya",
+                  'Lihat Selengkapnya',
                   textAlign: TextAlign.center,
                   style: appTextTheme(context)
                       .titleSmall
                       ?.copyWith(color: AppColor.secondary[900]),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -289,7 +287,7 @@ class _ProfileViewState extends State<ProfileView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Rp 1.000.000",
+                        'Rp 1.000.000',
                         style: appTextTheme(context).headlineSmall?.copyWith(
                               fontWeight: FontWeight.w700,
                               fontSize: 16.0,
@@ -298,7 +296,7 @@ class _ProfileViewState extends State<ProfileView> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Plafon Terpakai",
+                        'Plafon Terpakai',
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: Colors.white,
                             ),
@@ -309,11 +307,11 @@ class _ProfileViewState extends State<ProfileView> {
                   SizedBox(
                     width: 98.0,
                     child: AppWhiteButton(
-                      "Bayar",
+                      'Bayar',
                       () {},
                       height: 32.0,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -373,7 +371,7 @@ class _ProfileViewState extends State<ProfileView> {
                   Icon(
                     Icons.arrow_forward_ios_rounded,
                     color: AppColor.primary[900],
-                  )
+                  ),
                 ],
               ),
             ),
@@ -391,138 +389,138 @@ class _ProfileViewState extends State<ProfileView> {
     List<Widget> actionMenuList() {
       return [
         actionMenu(
-          "Informasi Pribadi",
-          "Informasi akun milikmu",
+          'Informasi Pribadi',
+          'Informasi akun milikmu',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const ProfileMemberPage(),
               ProfileMemberPage.routeSettings,
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Alamat Saya",
-          "Daftar alamat saya",
+          'Alamat Saya',
+          'Daftar alamat saya',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const AddressMemberPage(),
               AddressMemberPage.routeSettings,
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Ganti Password",
-          "Update password akunmu",
+          'Ganti Password',
+          'Update password akunmu',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const ChangePasswordPage(),
               ChangePasswordPage.routeSettings(),
-            ));
+            ),);
           },
         ),
         const SizedBox(height: 18.0),
         const AppDivider(),
         const SizedBox(height: 18.0),
         actionMenu(
-          "Pengaturan Rekening",
-          "Alamat rekening untuk penarikan saldo",
+          'Pengaturan Rekening',
+          'Alamat rekening untuk penarikan saldo',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage("Pengaturan Rekening"),
+              const CommingSoonPage('Pengaturan Rekening'),
               CommingSoonPage.route(),
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Informasi Point",
-          "Informasi Poin milikmu",
+          'Informasi Point',
+          'Informasi Poin milikmu',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const PointV2Page(),
               PointV2Page.route(),
-            ));
+            ),);
           },
         ),
         const SizedBox(height: 18.0),
         const AppDivider(),
         const SizedBox(height: 18.0),
         actionMenu(
-          "Tentang Kami",
-          "Informasi mengenai Mitra3M",
+          'Tentang Kami',
+          'Informasi mengenai Mitra3M',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const AboutPage(),
               AboutPage.routeSettings,
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "FAQ",
-          "Informasi mengenai Mitra3M",
+          'FAQ',
+          'Informasi mengenai Mitra3M',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const FaqPage(),
               FaqPage.routeSettings(),
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Hubungi Pusat Bantuan",
-          "Hubungi untuk informasi lebih lanjut",
+          'Hubungi Pusat Bantuan',
+          'Hubungi untuk informasi lebih lanjut',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const CallCenterPage(),
               CallCenterPage.routeSettings,
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Syarat dan Ketentuan",
-          "Informasi mengenai Syarat dan Ketentuan",
+          'Syarat dan Ketentuan',
+          'Informasi mengenai Syarat dan Ketentuan',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const TermConditionPage(),
               TermConditionPage.routeSettings,
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Kebijakan Privasi",
-          "Informasi mengenai Kebijakan Privasi",
+          'Kebijakan Privasi',
+          'Informasi mengenai Kebijakan Privasi',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const PrivacyPolicyPage(),
               PrivacyPolicyPage.routeSettings,
-            ));
+            ),);
           },
         ),
         const SizedBox(height: 18.0),
         const AppDivider(),
         const SizedBox(height: 18.0),
         actionMenu(
-          "Undang Teman",
-          "Dapatkan hadiah poin",
+          'Undang Teman',
+          'Dapatkan hadiah poin',
           onTap: () {
             Navigator.of(context).push(AppTransition.pushTransition(
               const ReferralPage(),
               ReferralPage.routeSettings,
-            ));
+            ),);
           },
         ),
         actionMenu(
-          "Keluar",
-          "Keluar dari akun kamu",
+          'Keluar',
+          'Keluar dari akun kamu',
           onTap: () {
             showDialog(
               context: context,
               builder: (_) {
                 return AppDefaultDialog(
-                  title: "Keluar",
-                  subTitle: "Yakin ingin keluar?",
+                  title: 'Keluar',
+                  subTitle: 'Yakin ingin keluar?',
                   buttons: [
                     Expanded(
                       child: AppWhiteButton(
-                        "Batal",
+                        'Batal',
                         () {
                           Navigator.of(context).pop();
                         },
@@ -531,7 +529,7 @@ class _ProfileViewState extends State<ProfileView> {
                     const SizedBox(width: 8.0),
                     Expanded(
                       child: AppPrimaryButton(
-                        "Keluar",
+                        'Keluar',
                         () {
                           context.read<ProfileCubit>().logout();
                         },

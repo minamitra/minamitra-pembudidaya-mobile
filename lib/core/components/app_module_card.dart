@@ -12,8 +12,8 @@ class AppModuleCard extends StatelessWidget {
     this.isLocalAsset = false,
     this.bgColor = AppColor.transparent,
     this.isBorder = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final String name;
   final String icon;

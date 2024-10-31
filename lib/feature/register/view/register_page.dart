@@ -15,7 +15,7 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
-  static RouteSettings routeSettings = appRouteSettings("/register-page");
+  static RouteSettings routeSettings = appRouteSettings('/register-page');
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class RegisterPage extends StatelessWidget {
           }
 
           if (state.status.isError) {
-            if (state.errorMessage == "TOKEN_EXPIRED") {
+            if (state.errorMessage == 'TOKEN_EXPIRED') {
               RepositoryProvider.of<AuthenticationRepository>(context).logout();
             } else {
               AppTopSnackBar(context).showDanger(state.errorMessage);
@@ -55,13 +55,13 @@ class RegisterPage extends StatelessWidget {
 
           if (state.status.isSuccessSubmit) {
             AppTopSnackBar(context)
-                .showSuccess("Berhasil mendaftar\nSilahkan Login !");
+                .showSuccess('Berhasil mendaftar\nSilahkan Login !');
             Navigator.of(context).pop();
           }
         },
         child: Scaffold(
           appBar: AppBar(),
-          body: RegisterView(),
+          body: const RegisterView(),
         ),
       ),
     );

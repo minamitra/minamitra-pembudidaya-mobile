@@ -27,17 +27,17 @@ class TreatmentCubit extends Cubit<TreatmentState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         treatments: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -58,17 +58,17 @@ class TreatmentCubit extends Cubit<TreatmentState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         treatments: treatments.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

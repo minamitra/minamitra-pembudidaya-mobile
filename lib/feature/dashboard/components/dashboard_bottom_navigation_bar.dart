@@ -7,8 +7,8 @@ class DashboardBottomNavigationBar extends StatelessWidget {
   const DashboardBottomNavigationBar(
     this.currentIndex,
     this.onTap, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final int currentIndex;
   final void Function(int index) onTap;
@@ -30,7 +30,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               },
               currentIndex == 0,
               AppAssets.homeIcon,
-              "Beranda",
+              'Beranda',
             ),
             NavigationItem(
               () {
@@ -38,7 +38,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               },
               currentIndex == 1,
               AppAssets.tansactionIcon,
-              "Transaksi",
+              'Transaksi',
             ),
             NavigationItem(
               () {
@@ -46,7 +46,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               },
               currentIndex == 2,
               AppAssets.hearthIcon,
-              "Aktivitas",
+              'Aktivitas',
             ),
             NavigationItem(
               () {
@@ -54,7 +54,7 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               },
               currentIndex == 3,
               AppAssets.userIcon,
-              "Profile",
+              'Profile',
             ),
           ],
         ),

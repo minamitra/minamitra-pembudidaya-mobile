@@ -5,31 +5,31 @@ class AuthenticationEndpoint {
 
   Uri login() {
     return createUrl(
-      path: "mitra/auth/login",
+      path: 'mitra/auth/login',
     );
   }
 
   Uri register() {
     return createUrl(
-      path: "mitra/auth/register",
+      path: 'mitra/auth/register',
     );
   }
 
   Uri userMe() {
     return createUrl(
-      path: "mitra/profile/detail",
+      path: 'mitra/profile/detail',
     );
   }
 
   Uri logout() {
     return createUrl(
-      path: "mitra/auth/logout",
+      path: 'mitra/auth/logout',
     );
   }
 
   Uri userKyc() {
     return createUrl(
-      path: "api/document/identity-verification",
+      path: 'api/document/identity-verification',
     );
   }
 }

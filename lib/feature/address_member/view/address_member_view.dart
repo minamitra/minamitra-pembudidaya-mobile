@@ -37,14 +37,14 @@ class _AddressMemberViewState extends State<AddressMemberView> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "Rumah",
+                          'Rumah',
                           style: appTextTheme(context)
                               .bodyMedium
                               ?.copyWith(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 4.0),
                         Text(
-                          "Amanda Pranata (081234567890)",
+                          'Amanda Pranata (081234567890)',
                           style: appTextTheme(context).bodySmall?.copyWith(
                                 color: AppColor.neutral[500],
                                 fontWeight: FontWeight.w500,
@@ -64,7 +64,7 @@ class _AddressMemberViewState extends State<AddressMemberView> {
                       border: Border.all(color: AppColor.secondary[900]!),
                     ),
                     child: Text(
-                      "Utama",
+                      'Utama',
                       style: appTextTheme(context).labelLarge?.copyWith(
                             color: AppColor.secondary[900],
                             fontWeight: FontWeight.w500,
@@ -75,7 +75,7 @@ class _AddressMemberViewState extends State<AddressMemberView> {
               ),
               const SizedBox(height: 8.0),
               Text(
-                "M8RX+XC, Ps. Martapura, Kec. Martapura, Kabupaten Ogan Komering Ulu Timur, Sumatera Selatan 32313",
+                'M8RX+XC, Ps. Martapura, Kec. Martapura, Kabupaten Ogan Komering Ulu Timur, Sumatera Selatan 32313',
                 style: appTextTheme(context).titleSmall?.copyWith(
                       fontWeight: FontWeight.w500,
                       color: AppColor.neutral[500],
@@ -114,12 +114,12 @@ class _AddressMemberViewState extends State<AddressMemberView> {
           children: [
             const SizedBox(height: 18.0),
             AppPrimaryFullButton(
-              "Tambah",
+              'Tambah',
               () {
                 Navigator.of(context).push(AppTransition.pushTransition(
                   const DetailMemberAddressPage(),
                   DetailMemberAddressPage.routeSettings(),
-                ));
+                ),);
               },
             ),
             const SizedBox(height: 18.0),

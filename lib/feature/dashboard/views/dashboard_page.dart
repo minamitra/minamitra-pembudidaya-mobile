@@ -11,7 +11,7 @@ class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/dashboard");
+      const RouteSettings(name: '/dashboard');
 
   @override
   State<DashboardPage> createState() => _DashboardPageState();

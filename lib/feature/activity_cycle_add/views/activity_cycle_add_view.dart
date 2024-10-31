@@ -36,8 +36,8 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
     return AppValidatorTextField(
       readOnly: true,
       controller: dateController,
-      hintText: "Pilih Tanggal",
-      labelText: "Tanggal",
+      hintText: 'Pilih Tanggal',
+      labelText: 'Tanggal',
       suffixConstraints: const BoxConstraints(
         maxHeight: 50,
         maxWidth: 50,
@@ -69,7 +69,7 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
       },
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Tanggal tidak boleh kosong";
+          return 'Tanggal tidak boleh kosong';
         }
         return null;
       },
@@ -80,8 +80,8 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
     return AppValidatorTextField(
       readOnly: true,
       controller: hourController,
-      hintText: "Pilih Jam",
-      labelText: "Jam",
+      hintText: 'Pilih Jam',
+      labelText: 'Jam',
       suffixConstraints: const BoxConstraints(
         maxHeight: 50,
         maxWidth: 50,
@@ -111,7 +111,7 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
       },
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Jam tidak boleh kosong";
+          return 'Jam tidak boleh kosong';
         }
         return null;
       },
@@ -121,13 +121,13 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
   Widget amountTextField() {
     return AppValidatorTextField(
       controller: amountController,
-      hintText: "Masukan total panen",
-      labelText: "Total Panen",
+      hintText: 'Masukan total panen',
+      labelText: 'Total Panen',
       inputType: TextInputType.number,
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Total panen tidak boleh kosong";
+          return 'Total panen tidak boleh kosong';
         }
         return null;
       },
@@ -135,7 +135,7 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "kg",
+          'kg',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
                 fontWeight: FontWeight.w500,
@@ -148,13 +148,13 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
   Widget priceTextField() {
     return AppValidatorTextField(
       controller: priceController,
-      hintText: "Masukan harga jual",
-      labelText: "Harga Jual",
+      hintText: 'Masukan harga jual',
+      labelText: 'Harga Jual',
       inputType: TextInputType.number,
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Harga jual tidak boleh kosong";
+          return 'Harga jual tidak boleh kosong';
         }
         return null;
       },
@@ -162,7 +162,7 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
       suffixWidget: Padding(
         padding: const EdgeInsets.only(right: 18.0),
         child: Text(
-          "Rp/kg",
+          'Rp/kg',
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
                 fontWeight: FontWeight.w500,
@@ -175,12 +175,12 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
   Widget buyerTextField() {
     return AppValidatorTextField(
       controller: buyerController,
-      hintText: "Masukan nama pembeli",
-      labelText: "Pembeli",
+      hintText: 'Masukan nama pembeli',
+      labelText: 'Pembeli',
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
-          return "Nama pembeli tidak boleh kosong";
+          return 'Nama pembeli tidak boleh kosong';
         }
         return null;
       },
@@ -194,11 +194,11 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
         Wrap(
           children: [
             Text(
-              "Lampiran",
+              'Lampiran',
               style: appTextTheme(context).bodyMedium,
             ),
             Text(
-              " *",
+              ' *',
               style: appTextTheme(context)
                   .bodyMedium
                   ?.copyWith(color: AppColor.red),
@@ -218,7 +218,7 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
                   ),
                   builder: (bottomSheetContext) {
                     return AppImagePickerMenu(
-                      "Upload Gambar",
+                      'Upload Gambar',
                       (type) async {
                         switch (type) {
                           case PhotoSource.camera:
@@ -302,7 +302,7 @@ class _ActivityCycleAddViewState extends State<ActivityCycleAddView> {
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (formKey.currentState!.validate()) {
               return;

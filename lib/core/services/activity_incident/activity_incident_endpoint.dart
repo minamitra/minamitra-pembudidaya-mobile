@@ -5,31 +5,31 @@ class ActivityIncidentEndpoint {
 
   Uri dataIncident(String status) {
     return createUrl(
-      path: "mitra/incident-report/data",
+      path: 'mitra/incident-report/data',
       queryParameters: {
-        "status[in]": status,
+        'status[in]': status,
       },
     );
   }
 
   Uri detailIncident(String id) {
     return createUrl(
-      path: "mitra/incident-report/detail",
+      path: 'mitra/incident-report/detail',
       queryParameters: {
-        "id": id,
+        'id': id,
       },
     );
   }
 
   Uri addIncident() {
-    return createUrl(path: "mitra/incident-report/add");
+    return createUrl(path: 'mitra/incident-report/add');
   }
 
   Uri deleteIncident() {
-    return createUrl(path: "mitra/incident-report/delete");
+    return createUrl(path: 'mitra/incident-report/delete');
   }
 
   Uri updateIncident() {
-    return createUrl(path: "mitra/incident-report/update");
+    return createUrl(path: 'mitra/incident-report/update');
   }
 }

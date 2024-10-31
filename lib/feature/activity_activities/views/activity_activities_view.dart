@@ -156,7 +156,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
                 Icon(
                   Icons.delete_outline_rounded,
                   color: AppColor.neutral[400],
-                )
+                ),
                 // Container(
                 //   padding: const EdgeInsets.symmetric(
                 //     horizontal: 8.0,
@@ -188,7 +188,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
               children: [
                 Image.asset(AppAssets.weigherIconFill, height: 20.0),
                 const SizedBox(width: 12.0),
-                Text("500 Gram", style: appTextTheme(context).titleSmall),
+                Text('500 Gram', style: appTextTheme(context).titleSmall),
               ],
             ),
             // Text(

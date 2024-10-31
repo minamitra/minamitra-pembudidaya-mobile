@@ -23,14 +23,14 @@ class TransactionDetailPage extends StatelessWidget {
   });
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/transaction-detail");
+      const RouteSettings(name: '/transaction-detail');
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Rincian Pesanan",
+        'Rincian Pesanan',
       ),
       backgroundColor: AppColor.neutral[100],
       body: MultiBlocProvider(

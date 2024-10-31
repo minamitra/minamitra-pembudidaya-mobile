@@ -42,7 +42,7 @@ class FeedServiceImpl implements FeedService {
 
   @override
   Future<BaseResponse<FeedFinisherResponse>> getFeedFinisher() async {
-    final uri = endpoint.getFeed("finisher");
+    final uri = endpoint.getFeed('finisher');
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -54,7 +54,7 @@ class FeedServiceImpl implements FeedService {
 
   @override
   Future<BaseResponse<FeedGrowerResponse>> getFeedGrower() async {
-    final uri = endpoint.getFeed("grower");
+    final uri = endpoint.getFeed('grower');
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -95,15 +95,15 @@ class FeedServiceImpl implements FeedService {
       uri,
       header,
       json.encode({
-        "name": name,
-        "price": price,
+        'name': name,
+        'price': price,
       }),
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
 
     return BaseResponse(
       meta: metaResponse,
-      data: metaResponse.result!["data"]["fishseed_id"],
+      data: metaResponse.result!['data']['fishseed_id'],
     );
   }
 }

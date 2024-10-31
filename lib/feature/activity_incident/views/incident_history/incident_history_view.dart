@@ -26,9 +26,9 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
             .push(AppTransition.pushTransition(
           ActivityIncidentDetailPage(incident),
           ActivityIncidentDetailPage.routeSettings(),
-        ))
+        ),)
             .then((value) {
-          if (value != null || value == "refresh") {
+          if (value != null || value == 'refresh') {
             context.read<IncidentHistoryCubit>().getIncidentHistory();
           }
         });
@@ -56,7 +56,7 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
                     Text(
                       incident.datetime != null
                           ? incident.datetime.toString()
-                          : "-",
+                          : '-',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).labelLarge?.copyWith(
                             color: AppColor.black[500],
@@ -69,12 +69,12 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
                   onTap: () {
                     showDeleteBottomSheet(
                       context,
-                      title: "Hapus Sampling",
+                      title: 'Hapus Sampling',
                       descriptions:
-                          "Apakah Anda yakin ingin menghapus sampling ini?",
+                          'Apakah Anda yakin ingin menghapus sampling ini?',
                       onTapDelete: () {
                         context.read<IncidentHistoryCubit>().deleteIncident(
-                              incident.id ?? "",
+                              incident.id ?? '',
                             );
                         Navigator.of(context).pop();
                       },
@@ -124,7 +124,7 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
                       ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -146,7 +146,7 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 124, 16, 0),
                   child: AppEmptyData(
-                      "Belum ada data, tekan tombol + untuk menambahkan aktivitas baru"),
+                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
                 )
               : ListView.separated(
                   shrinkWrap: true,

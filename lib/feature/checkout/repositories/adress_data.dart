@@ -12,14 +12,14 @@ class Address {
 
 List<Address> listAddress = [
   Address(
-    title: "Rumah",
+    title: 'Rumah',
     address:
-        "Martapura, Kabupaten Ogan Komering, Paku Sengkunyit, Kec. Martapura, Ulu Timur, Sumatera Selatan 32313",
-    type: "Utama",
+        'Martapura, Kabupaten Ogan Komering, Paku Sengkunyit, Kec. Martapura, Ulu Timur, Sumatera Selatan 32313',
+    type: 'Utama',
   ),
   Address(
-    title: "Kantor",
+    title: 'Kantor',
     address:
-        "Martapura, Kabupaten Ogan Komering, Paku Sengkunyit, Kec. Martapura, Ulu Timur, Sumatera Selatan 32313",
+        'Martapura, Kabupaten Ogan Komering, Paku Sengkunyit, Kec. Martapura, Ulu Timur, Sumatera Selatan 32313',
   ),
 ];

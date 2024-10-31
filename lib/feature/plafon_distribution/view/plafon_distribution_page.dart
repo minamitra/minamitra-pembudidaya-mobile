@@ -13,9 +13,9 @@ class PlafonDistributionPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Distribusi Plafon",
+        'Distribusi Plafon',
       ),
-      body: PlafonDistributionView(),
+      body: const PlafonDistributionView(),
     );
   }
 }

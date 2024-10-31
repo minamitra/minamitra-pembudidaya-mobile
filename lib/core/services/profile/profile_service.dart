@@ -71,8 +71,8 @@ class ProfileServiceImpl implements ProfileService {
       url,
       header,
       json.encode({
-        "old_password": oldPassword,
-        "new_password": newPassword,
+        'old_password': oldPassword,
+        'new_password': newPassword,
       }),
     );
     final MetaResponse meta = MetaResponse.fromJson(repsonse.body);

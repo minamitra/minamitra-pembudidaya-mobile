@@ -27,13 +27,13 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
     try {
       this.pondCycleID = pondCycleID;
       List<String> companionName =
-          data?.map((value) => value.userName ?? "").toList() ?? [];
+          data?.map((value) => value.userName ?? '').toList() ?? [];
       companionName.toSet().toList();
       emit(state.copyWith(
         status: GlobalState.loaded,
         data: data,
         companionName: companionName,
-      ));
+      ),);
     } catch (e) {}
   }
 
@@ -45,7 +45,7 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await service.getCompanionNotes(
-        pondCycleID: pondCycleID ?? "",
+        pondCycleID: pondCycleID ?? '',
         filterStartDate: startDate,
         filterEndDate: endDate,
         companionName: companionName,
@@ -56,17 +56,17 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         data: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -74,7 +74,7 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response =
-          await service.getCompanionNotes(pondCycleID: pondCycleID ?? "");
+          await service.getCompanionNotes(pondCycleID: pondCycleID ?? '');
       pickedRangeDate = null;
       startDate = null;
       endDate = null;
@@ -82,17 +82,17 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         data: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -100,7 +100,7 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await service.getCompanionNotes(
-        pondCycleID: pondCycleID ?? "",
+        pondCycleID: pondCycleID ?? '',
         filterStartDate: startDate,
         filterEndDate: endDate,
         companionName: name,
@@ -109,17 +109,17 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         data: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -127,7 +127,7 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await service.getCompanionNotes(
-        pondCycleID: pondCycleID ?? "",
+        pondCycleID: pondCycleID ?? '',
         filterStartDate: startDate,
         filterEndDate: endDate,
       );
@@ -135,17 +135,17 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       emit(state.copyWith(
         status: GlobalState.loaded,
         data: response.data.data,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

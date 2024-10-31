@@ -14,12 +14,12 @@ class SetLocationCubit extends Cubit<SetLocationState> {
       emit(state.copyWith(
         latitude: latLng.latitude,
         longitude: latLng.longitude,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: SetLocationStateStatus.error,
         error: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -34,19 +34,19 @@ class SetLocationCubit extends Cubit<SetLocationState> {
       emit(state.copyWith(
         status: SetLocationStateStatus.error,
         error: e.toString(),
-      ));
+      ),);
     }
   }
 
   void endUpdatingLocation() {
     try {
       emit(
-          state.copyWith(status: SetLocationStateStatus.loadedUpdatingLatLong));
+          state.copyWith(status: SetLocationStateStatus.loadedUpdatingLatLong),);
     } catch (e) {
       emit(state.copyWith(
         status: SetLocationStateStatus.error,
         error: e.toString(),
-      ));
+      ),);
     }
   }
 
@@ -55,6 +55,6 @@ class SetLocationCubit extends Cubit<SetLocationState> {
     emit(state.copyWith(
       mapType: type,
       status: SetLocationStateStatus.loaded,
-    ));
+    ),);
   }
 }

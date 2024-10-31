@@ -65,7 +65,7 @@ class _LoginViewState extends State<LoginView> {
           children: [
             const SizedBox(height: 32.0),
             Text(
-              "Selamat Datang",
+              'Selamat Datang',
               textAlign: TextAlign.center,
               style: appTextTheme(context).titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
@@ -74,7 +74,7 @@ class _LoginViewState extends State<LoginView> {
             ),
             const SizedBox(height: 12.0),
             Text(
-              "Silahkan masuk ke akun anda",
+              'Silahkan masuk ke akun anda',
               textAlign: TextAlign.center,
               style: appTextTheme(context).bodyMedium?.copyWith(
                     fontWeight: FontWeight.w400,
@@ -86,18 +86,18 @@ class _LoginViewState extends State<LoginView> {
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppValidatorTextField(
                 controller: emailController,
-                labelText: "Email",
+                labelText: 'Email',
                 withUpperLabel: true,
                 isMandatory: false,
                 autoValidateMode: AutovalidateMode.onUserInteraction,
-                hintText: "Masukan Email",
+                hintText: 'Masukan Email',
                 validator: (String? value) {
                   if (value!.isEmpty) {
-                    return "Email tidak boleh kosong";
-                  } else if (!value.contains("@")) {
-                    return "Email tidak valid";
+                    return 'Email tidak boleh kosong';
+                  } else if (!value.contains('@')) {
+                    return 'Email tidak valid';
                   } else if (!value.isEmail()) {
-                    return "Email tidak valid";
+                    return 'Email tidak valid';
                   }
                   return null;
                 },
@@ -110,11 +110,11 @@ class _LoginViewState extends State<LoginView> {
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   child: AppValidatorTextField(
                     controller: passwordController,
-                    labelText: "Password",
+                    labelText: 'Password',
                     withUpperLabel: true,
                     isMandatory: false,
                     isObscure: !state,
-                    hintText: "Masukan Kata Sandi",
+                    hintText: 'Masukan Kata Sandi',
                     suffixWidget: IconButton(
                       icon:
                           Icon(state ? Icons.visibility : Icons.visibility_off),
@@ -124,9 +124,9 @@ class _LoginViewState extends State<LoginView> {
                     ),
                     validator: (String? value) {
                       if (value!.isEmpty) {
-                        return "Password tidak boleh kosong";
+                        return 'Password tidak boleh kosong';
                       } else if (value.length < 6) {
-                        return "Password minimal 6 karakter";
+                        return 'Password minimal 6 karakter';
                       }
                       return null;
                     },
@@ -140,7 +140,7 @@ class _LoginViewState extends State<LoginView> {
               child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  "Lupa Password ?",
+                  'Lupa Password ?',
                   textAlign: TextAlign.right,
                   style: appTextTheme(context).bodyMedium?.copyWith(
                         fontWeight: FontWeight.w500,
@@ -153,14 +153,14 @@ class _LoginViewState extends State<LoginView> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: AppPrimaryFullButton(
-                "Masuk",
+                'Masuk',
                 () {
                   if (formKey.currentState!.validate()) {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
                     context.read<LoginCubit>().login(LoginRequest(
                           username: emailController.text,
                           password: passwordController.text,
-                        ));
+                        ),);
                     return;
                   }
                 },
@@ -175,7 +175,7 @@ class _LoginViewState extends State<LoginView> {
       return Wrap(
         children: [
           Text(
-            "Belum Mempunyai Akun? ",
+            'Belum Mempunyai Akun? ',
             textAlign: TextAlign.center,
             style: appTextTheme(context).bodySmall?.copyWith(
                   fontWeight: FontWeight.w400,
@@ -186,10 +186,10 @@ class _LoginViewState extends State<LoginView> {
               Navigator.of(context).push(AppTransition.pushTransition(
                 const RegisterPage(),
                 RegisterPage.routeSettings,
-              ));
+              ),);
             },
             child: Text(
-              "Daftar",
+              'Daftar',
               textAlign: TextAlign.center,
               style: appTextTheme(context).bodySmall?.copyWith(
                     fontWeight: FontWeight.w600,

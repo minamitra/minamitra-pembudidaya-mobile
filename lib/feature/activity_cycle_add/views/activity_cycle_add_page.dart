@@ -8,7 +8,7 @@ class ActivityCycleAddPage extends StatelessWidget {
   const ActivityCycleAddPage({super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: "/activity-cycle-add");
+      const RouteSettings(name: '/activity-cycle-add');
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class ActivityCycleAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          "Tambah Aktivitas",
+          'Tambah Aktivitas',
         ),
         backgroundColor: Colors.white,
         // resizeToAvoidBottomInset: false,

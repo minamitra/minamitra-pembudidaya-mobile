@@ -16,7 +16,7 @@ class PrivacyPolicyPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Kebijakan Privasi",
+        'Kebijakan Privasi',
       ),
       body: BlocProvider(
         create: (context) => PrivacyPolicyCubit(

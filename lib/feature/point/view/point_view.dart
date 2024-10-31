@@ -23,47 +23,47 @@ class _PointViewState extends State<PointView>
 
   List<NameIconEntity> listLevel = [
     NameIconEntity(
-      "200",
+      '200',
       AppAssets.silverIcon,
     ),
     NameIconEntity(
-      "400",
+      '400',
       AppAssets.goldIcon,
     ),
     NameIconEntity(
-      "600",
+      '600',
       AppAssets.platinumIcon,
     ),
     NameIconEntity(
-      "800",
+      '800',
       AppAssets.diamondIcon,
     ),
   ];
 
   List<NameIconEntity> listPointInfo = [
     NameIconEntity(
-      "Silver",
+      'Silver',
       AppAssets.silverIcon,
       description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     ),
     NameIconEntity(
-      "Gold",
+      'Gold',
       AppAssets.goldIcon,
       description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     ),
     NameIconEntity(
-      "Platinum",
+      'Platinum',
       AppAssets.platinumIcon,
       description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     ),
     NameIconEntity(
-      "Diamond",
+      'Diamond',
       AppAssets.diamondIcon,
       description:
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     ),
   ];
 
@@ -108,7 +108,7 @@ class _PointViewState extends State<PointView>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "10 Poin",
+                        '10 Poin',
                         style: appTextTheme(context).headlineSmall?.copyWith(
                               fontWeight: FontWeight.w600,
                               fontSize: 16.0,
@@ -117,7 +117,7 @@ class _PointViewState extends State<PointView>
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        "Bronze",
+                        'Bronze',
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: Colors.white,
                             ),
@@ -128,11 +128,11 @@ class _PointViewState extends State<PointView>
                   SizedBox(
                     width: 98.0,
                     child: AppWhiteButton(
-                      "Tukar Poin",
+                      'Tukar Poin',
                       () {},
                       height: 32.0,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -154,7 +154,7 @@ class _PointViewState extends State<PointView>
         Row(
           children: [
             Text(
-              "Poin Bar",
+              'Poin Bar',
               style: appTextTheme(context)
                   .titleMedium
                   ?.copyWith(fontWeight: FontWeight.w700),
@@ -166,7 +166,7 @@ class _PointViewState extends State<PointView>
                   context: context,
                   builder: (bottomSheetContext) {
                     return AppBottomSheet(
-                      "List Member Level",
+                      'List Member Level',
                       ListView(
                         padding: const EdgeInsets.symmetric(horizontal: 16.0),
                         children: [
@@ -199,18 +199,18 @@ class _PointViewState extends State<PointView>
                                                   .titleMedium
                                                   ?.copyWith(
                                                       fontWeight:
-                                                          FontWeight.w700),
+                                                          FontWeight.w700,),
                                             ),
                                             const SizedBox(height: 8.0),
                                             Text(
                                               listPointInfo[index]
                                                       .description ??
-                                                  "-",
+                                                  '-',
                                               style: appTextTheme(context)
                                                   .bodySmall
                                                   ?.copyWith(
                                                       color: AppColor
-                                                          .neutral[400]),
+                                                          .neutral[400],),
                                             ),
                                           ],
                                         ),
@@ -366,7 +366,7 @@ class _PointViewState extends State<PointView>
     Widget tabBody() {
       return TabBarView(
         controller: _tabController,
-        children: [
+        children: const [
           WithdrawPointTab(),
           HistoryWithdrawTab(),
         ],

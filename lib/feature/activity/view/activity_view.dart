@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -114,7 +113,7 @@ class _ActivityViewState extends State<ActivityView> {
                     ?.data
                     ?.firstWhere((element) => element.name == value)
                     .id ??
-                "0";
+                '0';
             context.read<ActivityCubit>().setDashboardWithPond(pondId);
           }
         }
@@ -148,10 +147,10 @@ class _ActivityViewState extends State<ActivityView> {
                 legendIconType: LegendIconType.circle,
                 cornerStyle: CornerStyle.endCurve,
                 maximumValue: 100.0,
-                name: "Aktivitas",
+                name: 'Aktivitas',
                 enableTooltip: true,
                 dataLabelMapper: (ChartDummy data, _) => data.name,
-              )
+              ),
             ],
           ),
         ),
@@ -184,11 +183,11 @@ class _ActivityViewState extends State<ActivityView> {
     Widget data() {
       return Column(
         children: [
-          dataItem("Total Plafon", "Rp 120.000.000"),
+          dataItem('Total Plafon', 'Rp 120.000.000'),
           const SizedBox(height: 12.0),
-          dataItem("Plafon Terpakai", "Rp 50.000.000"),
+          dataItem('Plafon Terpakai', 'Rp 50.000.000'),
           const SizedBox(height: 12.0),
-          dataItem("Sisa Plafon", "Rp 70.000.000"),
+          dataItem('Sisa Plafon', 'Rp 70.000.000'),
         ],
       );
     }
@@ -197,7 +196,7 @@ class _ActivityViewState extends State<ActivityView> {
       return InkWell(
         onTap: () {},
         child: Text(
-          "Selengkapnya",
+          'Selengkapnya',
           textAlign: TextAlign.center,
           style: appTextTheme(context).titleSmall?.copyWith(
                 fontWeight: FontWeight.w500,
@@ -276,7 +275,7 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            isLastStatusDone ? "-" : "$value Kg",
+                            isLastStatusDone ? '-' : '$value Kg',
                             style: appTextTheme(context).titleSmall?.copyWith(
                                   color: const Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w400,
@@ -290,7 +289,7 @@ class _ActivityViewState extends State<ActivityView> {
                           ),
                           const SizedBox(width: 8.0),
                           Text(
-                            isLastStatusDone ? "-" : "$percentage Kg",
+                            isLastStatusDone ? '-' : '$percentage Kg',
                             style: appTextTheme(context).titleSmall?.copyWith(
                                   color: const Color(0xFF94A3B8),
                                   fontWeight: FontWeight.w400,
@@ -309,9 +308,9 @@ class _ActivityViewState extends State<ActivityView> {
                 //       ),
                 // ),
                 const SizedBox(width: 18.0),
-                Icon(
+                const Icon(
                   Icons.arrow_forward_ios_rounded,
-                )
+                ),
               ],
             ),
             const SizedBox(height: 18.0),
@@ -319,7 +318,7 @@ class _ActivityViewState extends State<ActivityView> {
               color: Color(0xFFF3F6F9),
               height: 0,
               thickness: 1.0,
-            )
+            ),
           ],
         ),
       );
@@ -352,24 +351,24 @@ class _ActivityViewState extends State<ActivityView> {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: state.pondReponse?.data?.length ?? 0,
             itemBuilder: (context, index) {
-              if (state.pondReponse?.data?[index].id == "0") {
+              if (state.pondReponse?.data?[index].id == '0') {
                 return const SizedBox();
               }
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: activityItem(
-                  title: state.pondReponse?.data?[index].name ?? "",
+                  title: state.pondReponse?.data?[index].name ?? '',
                   value: appConvert3Digits(double.parse(state
                               .pondReponse?.data?[index].totalFoodRecommendation
                               .handleEmptyStringToZero() ??
-                          "0.0") /
-                      1000),
+                          '0.0',) /
+                      1000,),
                   percentage: appConvert3Digits(double.parse(state
                               .pondReponse?.data?[index].totalFoodActual
                               .handleEmptyStringToZero() ??
-                          "0.0") /
-                      1000),
+                          '0.0',) /
+                      1000,),
                   onTap: () {
                     Navigator.of(context)
                         .push(AppTransition.pushTransition(
@@ -381,19 +380,19 @@ class _ActivityViewState extends State<ActivityView> {
                             false,
                       ),
                       DetailActivityPage.routeSettings(),
-                    ))
+                    ),)
                         .then((value) {
-                      if (value != null && value == "refresh") {
+                      if (value != null && value == 'refresh') {
                         context.read<ActivityCubit>().init();
                       }
                     });
                   },
-                  pondStatus: state.pondReponse?.data?[index].status ?? "",
-                  imageAsset: state.pondReponse?.data?[index].imageUrl ?? "",
+                  pondStatus: state.pondReponse?.data?[index].status ?? '',
+                  imageAsset: state.pondReponse?.data?[index].imageUrl ?? '',
                   isLastStatusDone: state
                           .pondReponse?.data?[index].lastFishpondcycleStatus
                           ?.toLowerCase() ==
-                      "done",
+                      'done',
                 ),
               );
             },
@@ -409,10 +408,10 @@ class _ActivityViewState extends State<ActivityView> {
               .push(AppTransition.pushTransition(
             const AddPondPage(),
             AddPondPage.routeSettings(),
-          ))
+          ),)
               .then((value) {
             if (value != null && value is String) {
-              if (value == "refresh") {
+              if (value == 'refresh') {
                 context.read<ActivityCubit>().init();
               }
             }
@@ -424,12 +423,12 @@ class _ActivityViewState extends State<ActivityView> {
             Icon(Icons.add, color: AppColor.primary[600]),
             const SizedBox(width: 8.0),
             Text(
-              "Tambah Kolam",
+              'Tambah Kolam',
               style: appTextTheme(context).titleSmall?.copyWith(
                     color: AppColor.primary[600],
                     fontWeight: FontWeight.w500,
                   ),
-            )
+            ),
           ],
         ),
       );
@@ -661,8 +660,8 @@ class _ActivityViewState extends State<ActivityView> {
                   const Spacer(),
                   Text(
                     isShowingAllPonds
-                        ? "dari $allPondItemsLength kolam aktif"
-                        : "dari 1 kolam aktif",
+                        ? 'dari $allPondItemsLength kolam aktif'
+                        : 'dari 1 kolam aktif',
                     style: appTextTheme(context)
                         .labelLarge
                         ?.copyWith(color: AppColor.neutralBlueGrey[400]),
@@ -727,7 +726,7 @@ class _ActivityViewState extends State<ActivityView> {
                           isMandatory: false,
                           withUpperLabel: false,
                           readOnly: true,
-                          hintText: "Semua kolam",
+                          hintText: 'Semua kolam',
                           suffixWidget: const Padding(
                             padding: EdgeInsets.only(right: 18.0),
                             child: Icon(Icons.arrow_drop_down_rounded),
@@ -738,9 +737,9 @@ class _ActivityViewState extends State<ActivityView> {
                           },
                           onTap: bottomSheetShowModal(
                             context,
-                            "Pilih Kolam",
+                            'Pilih Kolam',
                             state.pondReponse!.data!
-                                .map((element) => element.name ?? "-")
+                                .map((element) => element.name ?? '-')
                                 .toList(),
                           ),
                         ),
@@ -818,9 +817,9 @@ class _ActivityViewState extends State<ActivityView> {
                                         ?.data?.totalCost ??
                                     0.0,
                               )[index],
-                              (state.selectedPondID ?? "0") == "0",
+                              (state.selectedPondID ?? '0') == '0',
                               state.pondReponse?.data?.length == 1
-                                  ? "0"
+                                  ? '0'
                                   : ((state.pondReponse?.data?.length ?? 1) - 1)
                                       .toString(),
                             ),
@@ -916,18 +915,18 @@ class _ActivityViewState extends State<ActivityView> {
                       ),
                     ),
                     AppPrimaryGradientButton(
-                      "+ Pakan",
+                      '+ Pakan',
                       () {
                         Navigator.of(context).push(AppTransition.pushTransition(
                           AddBulkFeedPage(
                             state.pondReponse?.data
                                     ?.map((element) => element.id)
                                     .toList()
-                                    .join(",") ??
-                                "",
+                                    .join(',') ??
+                                '',
                           ),
                           AddBulkFeedPage.routeSettings(),
-                        ));
+                        ),);
                       },
                     ),
                   ],

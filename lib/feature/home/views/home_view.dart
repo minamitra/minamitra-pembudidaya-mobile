@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,16 +19,13 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart'
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/information_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/point/view/point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatefulWidget {
@@ -59,38 +54,38 @@ class _HomeViewState extends State<HomeView> {
   int levelStep = 1;
   List<NameIconEntity> listLevel = [
     NameIconEntity(
-      "Bronze",
+      'Bronze',
       AppAssets.starIcon,
     ),
     NameIconEntity(
-      "Silver",
+      'Silver',
       AppAssets.medalSilverIcon,
     ),
     NameIconEntity(
-      "Gold",
+      'Gold',
       AppAssets.medalGoldIcon,
     ),
     NameIconEntity(
-      "Platinum",
+      'Platinum',
       AppAssets.crownIcon,
     ),
   ];
 
   List<NameIconEntity> listMenu = [
     NameIconEntity(
-      "Promo 3M",
+      'Promo 3M',
       AppAssets.speakerIcon,
     ),
     NameIconEntity(
-      "Pasar Ikan",
+      'Pasar Ikan',
       AppAssets.locationIcon,
     ),
     NameIconEntity(
-      "Acara 3M",
+      'Acara 3M',
       AppAssets.ticketIcon,
     ),
     NameIconEntity(
-      "Belanja",
+      'Belanja',
       AppAssets.bagIcon,
     ),
   ];
@@ -173,7 +168,7 @@ class _HomeViewState extends State<HomeView> {
                       return InkWell(
                         onTap: () {},
                         child: Image.network(
-                          state.bannerResponse?.data?[index].imageUrl ?? "",
+                          state.bannerResponse?.data?[index].imageUrl ?? '',
                           fit: BoxFit.cover,
                         ),
                       );
@@ -243,11 +238,11 @@ class _HomeViewState extends State<HomeView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Rp 12.500.000",
+                                'Rp 12.500.000',
                                 style: AppTextStyle.blackSemiBoldText,
                               ),
                               Text(
-                                "Sisa plafon anda",
+                                'Sisa plafon anda',
                                 style: AppTextStyle.blackExtraSmallText,
                               ),
                             ],
@@ -255,11 +250,12 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context)
-                                .push(AppTransition.pushTransition(
-                              const QrScanPage(),
-                              QrScanPage.route(),
-                            ));
+                            Navigator.of(context).push(
+                              AppTransition.pushTransition(
+                                const QrScanPage(),
+                                QrScanPage.route(),
+                              ),
+                            );
                           },
                           child: Column(
                             children: [
@@ -277,7 +273,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               const SizedBox(height: 4.0),
                               Text(
-                                "Bayar",
+                                'Bayar',
                                 style: AppTextStyle.blackExtraSmallText,
                               ),
                             ],
@@ -286,11 +282,12 @@ class _HomeViewState extends State<HomeView> {
                         const SizedBox(width: 12.0),
                         InkWell(
                           onTap: () {
-                            Navigator.of(context)
-                                .push(AppTransition.pushTransition(
-                              const TransactionHistoryPage(),
-                              TransactionHistoryPage.route(),
-                            ));
+                            Navigator.of(context).push(
+                              AppTransition.pushTransition(
+                                const TransactionHistoryPage(),
+                                TransactionHistoryPage.route(),
+                              ),
+                            );
                           },
                           child: Column(
                             children: [
@@ -308,7 +305,7 @@ class _HomeViewState extends State<HomeView> {
                               ),
                               const SizedBox(height: 4.0),
                               Text(
-                                "Riwayat",
+                                'Riwayat',
                                 style: AppTextStyle.blackExtraSmallText,
                               ),
                             ],
@@ -336,25 +333,29 @@ class _HomeViewState extends State<HomeView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Level Kamu",
+                'Level Kamu',
                 style: AppTextStyle.blackBoldText,
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const PointV2Page(),
-                    PointV2Page.route(),
-                  ));
+                  Navigator.of(context).push(
+                    AppTransition.pushTransition(
+                      const PointV2Page(),
+                      PointV2Page.route(),
+                    ),
+                  );
                 },
                 child: Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
+                    horizontal: 16.0,
+                    vertical: 8.0,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColor.primary[50],
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: Text(
-                    "Detail",
+                    'Detail',
                     style: AppTextStyle.primarySmallMediumText.copyWith(
                       color: AppColor.secondary,
                     ),
@@ -414,7 +415,7 @@ class _HomeViewState extends State<HomeView> {
           ),
           const SizedBox(height: 12.0),
           Text(
-            "Gabung program Mitra3M, bisa beli pakan sekarang, bayarnya nanti setelah panen.",
+            'Gabung program Mitra3M, bisa beli pakan sekarang, bayarnya nanti setelah panen.',
             style: AppTextStyle.blackExtraSmallText.copyWith(
               color: AppColor.black[600],
             ),
@@ -462,11 +463,11 @@ class _HomeViewState extends State<HomeView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "0 Poin",
+                              '0 Poin',
                               style: AppTextStyle.whiteBoldText,
                             ),
                             Text(
-                              "Lengkapi data kolam sekarang!",
+                              'Lengkapi data kolam sekarang!',
                               style: AppTextStyle.whiteExtraSmallText,
                             ),
                           ],
@@ -476,7 +477,7 @@ class _HomeViewState extends State<HomeView> {
                         height: 32,
                         width: 120,
                         child: AppWhiteButton(
-                          "Lengkapi Data",
+                          'Lengkapi Data',
                           () {
                             context
                                 .read<DashboardBottomNavCubit>()
@@ -503,41 +504,49 @@ class _HomeViewState extends State<HomeView> {
       entity.icon,
       () {
         switch (entity.name) {
-          case "Promo 3M":
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage(
-                "Promo 3M",
-                customTitle: "Promo 3M Akan Segera Hadir",
-                customImage: AppAssets.commingSoonPromoImage,
+          case 'Promo 3M':
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const CommingSoonPage(
+                  'Promo 3M',
+                  customTitle: 'Promo 3M Akan Segera Hadir',
+                  customImage: AppAssets.commingSoonPromoImage,
+                ),
+                CommingSoonPage.route(),
               ),
-              CommingSoonPage.route(),
-            ));
+            );
             break;
-          case "Pasar Ikan":
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage(
-                "Pasar Ikan",
-                customTitle: "Pasar Ikan Akan Segera Hadir",
-                customImage: AppAssets.commingSoonFishStoreImage,
+          case 'Pasar Ikan':
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const CommingSoonPage(
+                  'Pasar Ikan',
+                  customTitle: 'Pasar Ikan Akan Segera Hadir',
+                  customImage: AppAssets.commingSoonFishStoreImage,
+                ),
+                CommingSoonPage.route(),
               ),
-              CommingSoonPage.route(),
-            ));
+            );
             break;
-          case "Acara 3M":
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage(
-                "Acara 3M",
-                customTitle: "Acara 3M Akan Segera Hadir",
-                customImage: AppAssets.commingSoonEventImage,
+          case 'Acara 3M':
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const CommingSoonPage(
+                  'Acara 3M',
+                  customTitle: 'Acara 3M Akan Segera Hadir',
+                  customImage: AppAssets.commingSoonEventImage,
+                ),
+                CommingSoonPage.route(),
               ),
-              CommingSoonPage.route(),
-            ));
+            );
             break;
-          case "Belanja":
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const ProductsPage(),
-              ProductsPage.routeSettings(),
-            ));
+          case 'Belanja':
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const ProductsPage(),
+                ProductsPage.routeSettings(),
+              ),
+            );
             break;
           default:
         }
@@ -579,14 +588,14 @@ class _HomeViewState extends State<HomeView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Acara 3M",
+                    'Acara 3M',
                     style: appTextTheme(context).titleMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                         ),
                   ),
                   const SizedBox(height: 8.0),
                   Text(
-                    "Jangan lewatkan acara menarik kami",
+                    'Jangan lewatkan acara menarik kami',
                     style: appTextTheme(context).labelLarge?.copyWith(
                           color: AppColor.neutral[500],
                         ),
@@ -595,16 +604,18 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             AppWidgetSecondaryChip(
-              text: "Lihat Semua",
+              text: 'Lihat Semua',
               onTap: () {
-                Navigator.of(context).push(AppTransition.pushTransition(
-                  const CommingSoonPage(
-                    "Acara 3M",
-                    customTitle: "Acara 3M Akan Segera Hadir",
-                    customImage: AppAssets.commingSoonEventImage,
+                Navigator.of(context).push(
+                  AppTransition.pushTransition(
+                    const CommingSoonPage(
+                      'Acara 3M',
+                      customTitle: 'Acara 3M Akan Segera Hadir',
+                      customImage: AppAssets.commingSoonEventImage,
+                    ),
+                    CommingSoonPage.route(),
                   ),
-                  CommingSoonPage.route(),
-                ));
+                );
               },
             ),
           ],
@@ -644,10 +655,12 @@ class _HomeViewState extends State<HomeView> {
   Widget referral() {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(AppTransition.pushTransition(
-          const ReferralPage(),
-          ReferralPage.routeSettings,
-        ));
+        Navigator.of(context).push(
+          AppTransition.pushTransition(
+            const ReferralPage(),
+            ReferralPage.routeSettings,
+          ),
+        );
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -669,7 +682,7 @@ class _HomeViewState extends State<HomeView> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: Text(
-          "Promo Mitra3M",
+          'Promo Mitra3M',
           style: appTextTheme(context)
               .titleMedium
               ?.copyWith(fontWeight: FontWeight.w700),
@@ -724,7 +737,7 @@ class _HomeViewState extends State<HomeView> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Text(
-                      "Lihat Semua",
+                      'Lihat Semua',
                       style: appTextTheme(context).titleSmall?.copyWith(
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
@@ -745,7 +758,7 @@ class _HomeViewState extends State<HomeView> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: Text(
-          "Literasi & Informasi",
+          'Literasi & Informasi',
           style: appTextTheme(context)
               .titleMedium
               ?.copyWith(fontWeight: FontWeight.w700),
@@ -770,20 +783,20 @@ class _HomeViewState extends State<HomeView> {
             ),
             const SizedBox(height: 18.0),
             Text(
-              "Cara Mengelola Kualitas Air untuk Hasil Panen Optimal",
+              'Cara Mengelola Kualitas Air untuk Hasil Panen Optimal',
               style: appTextTheme(context).titleMedium?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
             ),
             const SizedBox(height: 8.0),
             Text(
-              "Kualitas air merupakan faktor penting dalam budidaya ikan patin. Dalam artikel ini, kami akan",
+              'Kualitas air merupakan faktor penting dalam budidaya ikan patin. Dalam artikel ini, kami akan',
               style: appTextTheme(context).bodySmall,
             ),
             InkWell(
               onTap: () {},
               child: Text(
-                "Lihat Selengkapnya",
+                'Lihat Selengkapnya',
                 style: appTextTheme(context).bodySmall?.copyWith(
                       color: AppColor.primary[500],
                       fontWeight: FontWeight.w500,
@@ -809,7 +822,8 @@ class _HomeViewState extends State<HomeView> {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: AssetImage(
-                                informationDummyList[index].imageAsset),
+                              informationDummyList[index].imageAsset,
+                            ),
                           ),
                         ),
                       ),
@@ -839,7 +853,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 );
               },
-            )
+            ),
           ],
         ),
       ),

@@ -24,20 +24,20 @@ class UpdateSamplingPayload {
 
   factory UpdateSamplingPayload.fromMap(Map<String, dynamic> json) =>
       UpdateSamplingPayload(
-        id: json["id"],
-        datetime: json["datetime"],
-        mbw: json["mbw"],
-        sr: json["sr"],
-        note: json["note"],
-        attachmentJsonArray: json["attachment_json_array"],
+        id: json['id'],
+        datetime: json['datetime'],
+        mbw: json['mbw'],
+        sr: json['sr'],
+        note: json['note'],
+        attachmentJsonArray: json['attachment_json_array'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "datetime": datetime!.toIso8601String(),
-        "mbw": mbw,
-        "sr": sr,
-        "note": note,
-        "attachment_json_array": attachmentJsonArray,
+        'id': id,
+        'datetime': datetime!.toIso8601String(),
+        'mbw': mbw,
+        'sr': sr,
+        'note': note,
+        'attachment_json_array': attachmentJsonArray,
       };
 }

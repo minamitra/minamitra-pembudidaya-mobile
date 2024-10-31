@@ -11,7 +11,7 @@ class TransactionPage extends StatelessWidget {
     return Scaffold(
       appBar: appDefaultAppBar(
         context,
-        "Transaksi",
+        'Transaksi',
         isBackButton: false,
         actions: [
           Image.asset(

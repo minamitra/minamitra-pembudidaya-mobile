@@ -14,14 +14,14 @@ class ProvinceResponse {
 
   factory ProvinceResponse.fromMap(Map<String, dynamic> json) =>
       ProvinceResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? []
             : List<ProvinceResponseData>.from(
-                json["data"]!.map((x) => ProvinceResponseData.fromMap(x))),
+                json['data']!.map((x) => ProvinceResponseData.fromMap(x)),),
       );
 
   Map<String, dynamic> toMap() => {
-        "data":
+        'data':
             data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
       };
 }
@@ -42,12 +42,12 @@ class ProvinceResponseData {
 
   factory ProvinceResponseData.fromMap(Map<String, dynamic> json) =>
       ProvinceResponseData(
-        id: json["id"],
-        name: json["name"],
+        id: json['id'],
+        name: json['name'],
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "name": name,
+        'id': id,
+        'name': name,
       };
 }

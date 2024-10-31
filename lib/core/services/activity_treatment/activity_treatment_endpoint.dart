@@ -9,33 +9,33 @@ class ActivityTreatmentEndpoint {
     String datetime,
   ) {
     return createUrl(
-      path: "mitra/activity-treatment/data",
+      path: 'mitra/activity-treatment/data',
       queryParameters: {
-        "fishpond_id": fishpondId.toString(),
-        "fishpondcycle_id": fishpondcycleId.toString(),
-        "datetime": datetime,
+        'fishpond_id': fishpondId.toString(),
+        'fishpondcycle_id': fishpondcycleId.toString(),
+        'datetime': datetime,
       },
     );
   }
 
   Uri detailTreatment(String id) {
     return createUrl(
-      path: "mitra/activity-treatment/detail",
+      path: 'mitra/activity-treatment/detail',
       queryParameters: {
-        "id": id,
+        'id': id,
       },
     );
   }
 
   Uri addTreatment() {
-    return createUrl(path: "mitra/activity-treatment/add");
+    return createUrl(path: 'mitra/activity-treatment/add');
   }
 
   Uri deleteTreatment() {
-    return createUrl(path: "mitra/activity-treatment/delete");
+    return createUrl(path: 'mitra/activity-treatment/delete');
   }
 
   Uri updateTreatment() {
-    return createUrl(path: "mitra/activity-treatment/update");
+    return createUrl(path: 'mitra/activity-treatment/update');
   }
 }

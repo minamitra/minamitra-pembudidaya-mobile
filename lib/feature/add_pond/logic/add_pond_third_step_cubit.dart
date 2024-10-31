@@ -28,14 +28,14 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
   final TextEditingController survivalRateController = TextEditingController();
   final TextEditingController pakanGrowerController = TextEditingController();
   final TextEditingController pakanFinisherController = TextEditingController();
-  String seedID = "0";
+  String seedID = '0';
 
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      final feedStarter1Response = await feedService.getFeedStarter("starter1");
-      final feedStarter2Response = await feedService.getFeedStarter("starter2");
-      final feedStarter3Response = await feedService.getFeedStarter("starter3");
+      final feedStarter1Response = await feedService.getFeedStarter('starter1');
+      final feedStarter2Response = await feedService.getFeedStarter('starter2');
+      final feedStarter3Response = await feedService.getFeedStarter('starter3');
       final feedGrowerResponse = await feedService.getFeedGrower();
       final feedFinisherResponse = await feedService.getFeedFinisher();
       final seedResponse = await feedService.getSeed();
@@ -43,7 +43,7 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
       seedCleaningData = seedCleaningData.copyWith(
         data: [
           ...seedCleaningData.data ?? [],
-          SeedResponseData(id: "-1", name: "Benih Baru"),
+          SeedResponseData(id: '-1', name: 'Benih Baru'),
         ],
       );
       emit(state.copyWith(
@@ -54,17 +54,17 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
         feedFinisherData: feedFinisherResponse.data,
         seedResponse: seedCleaningData,
         status: GlobalState.loaded,
-      ));
+      ),);
     } on AppException catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.message,
-      ));
+      ),);
     } catch (e) {
       emit(state.copyWith(
         status: GlobalState.error,
         errorMessage: e.toString(),
-      ));
+      ),);
     }
   }
 }

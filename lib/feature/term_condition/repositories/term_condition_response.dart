@@ -12,9 +12,9 @@ class TermConditionResponse {
 
   factory TermConditionResponse.fromMap(Map<String, dynamic> json) =>
       TermConditionResponse(
-        data: json["data"] == null
+        data: json['data'] == null
             ? null
-            : TermConditionResponseData.fromMap(json["data"]),
+            : TermConditionResponseData.fromMap(json['data']),
       );
 }
 
@@ -34,8 +34,8 @@ class TermConditionResponseData {
 
   factory TermConditionResponseData.fromMap(Map<String, dynamic> json) =>
       TermConditionResponseData(
-        id: json["id"],
-        key: json["key"],
-        value: json["value"],
+        id: json['id'],
+        key: json['key'],
+        value: json['value'],
       );
 }

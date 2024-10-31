@@ -282,28 +282,22 @@ class AppWhiteFullButton extends _CustomButton {
 }
 
 class AppAccentButton extends _CustomButton {
-  AppAccentButton(
-    Widget text,
-    Function() onPressed, {
-    double? height = 53.0,
+  const AppAccentButton(
+    super.text,
+    super.onPressed, {
+    super.height,
   }) : super(
-          text,
-          onPressed,
           buttonStyle: _CustomButtonStyle.accent,
-          height: height,
         );
 }
 
 class AppAccentOutlineButton extends _CustomButton {
-  AppAccentOutlineButton(
-    Widget text,
-    Function() onPressed, {
-    double? height = 53.0,
+  const AppAccentOutlineButton(
+    super.text,
+    super.onPressed, {
+    super.height,
   }) : super(
-          text,
-          onPressed,
           buttonStyle: _CustomButtonStyle.accentOutline,
-          height: height,
         );
 }
 

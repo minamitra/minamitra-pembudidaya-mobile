@@ -63,16 +63,16 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
       if (widget.data != null) {
         dateController.text = widget.data!.datetime != null
             ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
-            : "";
+            : '';
         hourController.text = widget.data!.datetime != null
             ? AppConvertDateTime().jm24(widget.data!.datetime!)
-            : "";
+            : '';
         fishAgeController.text =
-            widget.data!.fishAge != null ? widget.data!.fishAge.toString() : "";
-        treatmentController.text = widget.data!.name ?? "";
+            widget.data!.fishAge != null ? widget.data!.fishAge.toString() : '';
+        treatmentController.text = widget.data!.name ?? '';
         priceController.text =
-            widget.data!.cost != null ? widget.data!.cost.toString() : "";
-        noteController.text = widget.data!.note ?? "";
+            widget.data!.cost != null ? widget.data!.cost.toString() : '';
+        noteController.text = widget.data!.note ?? '';
         if (widget.data!.attachmentJsonArray != null &&
             widget.data!.attachmentJsonArray!.isNotEmpty) {
           convetAttachmentImage(widget.data!.attachmentJsonArray!);
@@ -94,8 +94,8 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
       return AppValidatorTextField(
         readOnly: true,
         controller: dateController,
-        hintText: "Pilih Tanggal",
-        labelText: "Tanggal",
+        hintText: 'Pilih Tanggal',
+        labelText: 'Tanggal',
         suffixConstraints: const BoxConstraints(),
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
@@ -127,7 +127,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         },
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Tanggal tidak boleh kosong";
+            return 'Tanggal tidak boleh kosong';
           }
           return null;
         },
@@ -138,8 +138,8 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
       return AppValidatorTextField(
         readOnly: true,
         controller: hourController,
-        hintText: "Pilih Jam",
-        labelText: "Jam",
+        hintText: 'Pilih Jam',
+        labelText: 'Jam',
         suffixConstraints: const BoxConstraints(
           maxHeight: 50,
           maxWidth: 50,
@@ -162,14 +162,14 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
           ).then((time) {
             setState(() {
               if (time != null) {
-                hourController.text = time.format(context).replaceAll(".", ":");
+                hourController.text = time.format(context).replaceAll('.', ':');
               }
             });
           });
         },
         validator: (String? value) {
           if (value!.isEmpty) {
-            return "Jam tidak boleh kosong";
+            return 'Jam tidak boleh kosong';
           }
           return null;
         },
@@ -179,15 +179,15 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
     Widget fishAge() {
       return AppValidatorTextField(
         controller: fishAgeController,
-        hintText: "0",
-        labelText: "Umur Ikan",
+        hintText: '0',
+        labelText: 'Umur Ikan',
         inputType: TextInputType.number,
         isMandatory: true,
         readOnly: true,
         fillColor: AppColor.neutral[100],
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "Umur ikan tidak boleh kosong";
+            return 'Umur ikan tidak boleh kosong';
           }
           return null;
         },
@@ -195,7 +195,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         suffixWidget: Padding(
           padding: const EdgeInsets.only(right: 18.0),
           child: Text(
-            "hari",
+            'hari',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
@@ -208,12 +208,12 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
     Widget treatment() {
       return AppValidatorTextField(
         controller: treatmentController,
-        hintText: "Masukan perlakuan",
-        labelText: "Perlakuan",
+        hintText: 'Masukan perlakuan',
+        labelText: 'Perlakuan',
         isMandatory: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "Perlakuan tidak boleh kosong";
+            return 'Perlakuan tidak boleh kosong';
           }
           return null;
         },
@@ -223,13 +223,13 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
     Widget price() {
       return AppValidatorTextField(
         controller: priceController,
-        hintText: "0",
-        labelText: "Biaya",
+        hintText: '0',
+        labelText: 'Biaya',
         inputType: TextInputType.number,
         isMandatory: true,
         validator: (String? value) {
           if (value?.isEmpty ?? true) {
-            return "Biaya tidak boleh kosong";
+            return 'Biaya tidak boleh kosong';
           }
           return null;
         },
@@ -237,7 +237,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 18.0),
           child: Text(
-            "Rp ",
+            'Rp ',
             style: appTextTheme(context).bodySmall?.copyWith(
                   fontWeight: FontWeight.w500,
                 ),
@@ -250,8 +250,8 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
     Widget noteTextField() {
       return AppValidatorTextField(
         controller: noteController,
-        hintText: "Masukan catatan",
-        labelText: "Catatan",
+        hintText: 'Masukan catatan',
+        labelText: 'Catatan',
         maxLines: 3,
         // validator: (String? value) {
         //   if (value!.isEmpty) {
@@ -269,7 +269,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
           Wrap(
             children: [
               Text(
-                "Unggah Lampiran",
+                'Unggah Lampiran',
                 style: appTextTheme(context).bodyMedium,
               ),
             ],
@@ -287,7 +287,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                     ),
                     builder: (bottomSheetContext) {
                       return AppImagePickerMenu(
-                        "Upload Gambar",
+                        'Upload Gambar',
                         (type) async {
                           switch (type) {
                             case PhotoSource.camera:
@@ -333,11 +333,11 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
           ),
           const SizedBox(height: 8.0),
           Text(
-            "Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB",
+            'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
             style: appTextTheme(context).labelLarge?.copyWith(
                   color: AppColor.neutral[500],
                 ),
-          )
+          ),
         ],
       );
     }
@@ -380,7 +380,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
           ),
         ),
         child: AppPrimaryFullButton(
-          "Simpan",
+          'Simpan',
           () {
             if (!formKey.currentState!.validate()) {
               return;
@@ -395,7 +395,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                 fishpondId: widget.fishpondId,
                 fishpondcycleId: widget.fishpondcycleId,
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 fishAge: int.parse(fishAgeController.text),
                 name: treatmentController.text,
@@ -408,9 +408,9 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
               return;
             } else {
               UpdateTreatmentPayload payload = UpdateTreatmentPayload(
-                id: widget.data?.id ?? "",
+                id: widget.data?.id ?? '',
                 datetime: DateTime.parse(
-                  "${dateController.text} ${hourController.text}",
+                  '${dateController.text} ${hourController.text}',
                 ),
                 fishAge: int.parse(fishAgeController.text),
                 name: treatmentController.text,
