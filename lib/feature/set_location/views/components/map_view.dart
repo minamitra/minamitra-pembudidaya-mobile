@@ -4,8 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_debounce.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/logics/set_location_cubit.dart';
 
-class MapView extends StatelessWidget {
-  MapView(
+class MapView extends StatefulWidget {
+  const MapView(
     this.initLocation,
     this.onMapCreated, {
     super.key,
@@ -13,6 +13,12 @@ class MapView extends StatelessWidget {
 
   final LatLng initLocation;
   final void Function(GoogleMapController)? onMapCreated;
+
+  @override
+  State<MapView> createState() => _MapViewState();
+}
+
+class _MapViewState extends State<MapView> {
   AppDebounce debounce = AppDebounce(const Duration(milliseconds: 500));
 
   @override
@@ -21,17 +27,19 @@ class MapView extends StatelessWidget {
       builder: (context, state) {
         return GoogleMap(
           initialCameraPosition: CameraPosition(
-            target: initLocation,
+            target: widget.initLocation,
             zoom: 16,
           ),
-          onMapCreated: onMapCreated,
+          onMapCreated: widget.onMapCreated,
           mapType: state.mapType ?? MapType.normal,
           onCameraMove: (camera) {
             debounce.call(() {
-              context.read<SetLocationCubit>().updateLocation(LatLng(
-                    camera.target.latitude,
-                    camera.target.longitude,
-                  ),);
+              context.read<SetLocationCubit>().updateLocation(
+                    LatLng(
+                      camera.target.latitude,
+                      camera.target.longitude,
+                    ),
+                  );
             });
           },
           onCameraMoveStarted: () {

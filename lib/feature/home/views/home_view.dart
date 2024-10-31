@@ -36,7 +36,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final _searchController = TextEditingController();
   int activeIndex = 0;
 
   @override
