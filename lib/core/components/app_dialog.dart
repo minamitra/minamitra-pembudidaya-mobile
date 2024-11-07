@@ -111,10 +111,11 @@ class AppDialog {
         child: Row(
           children: [
             Expanded(
-                child: Text(
-              title,
-              style: appTextTheme(context).bodyMedium,
-            ),),
+              child: Text(
+                title,
+                style: appTextTheme(context).bodyMedium,
+              ),
+            ),
             InkWell(
               onTap: () {
                 Navigator.of(context).pop();

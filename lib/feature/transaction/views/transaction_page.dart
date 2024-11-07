@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/views/transaction_view.dart';
 
 class TransactionPage extends StatelessWidget {
@@ -9,18 +8,10 @@ class TransactionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appDefaultAppBar(
+      appBar: appDefaultAppBarWithBucket(
         context,
         'Transaksi',
         isBackButton: false,
-        actions: [
-          Image.asset(
-            AppAssets.bellIcon,
-            height: 20.0,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 16.0),
-        ],
       ),
       body: const TransactionView(),
     );

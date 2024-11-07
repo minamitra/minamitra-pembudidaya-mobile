@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
@@ -30,9 +31,11 @@ class LocationPermissionServiceImpl implements LocationPermissionService {
     return Geolocator.getPositionStream(locationSettings: locationSettings)
         .listen(
       (Position? position) {
-        print(position == null
-            ? 'Unknown'
-            : '${position.latitude.toString()}, ${position.longitude.toString()}',);
+        log(
+          position == null
+              ? 'Unknown'
+              : '${position.latitude.toString()}, ${position.longitude.toString()}',
+        );
       },
     );
   }

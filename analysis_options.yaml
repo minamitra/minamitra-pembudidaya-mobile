@@ -35,6 +35,8 @@ linter:
     no_literal_bool_comparisons: true
     always_use_package_imports: true
     unnecessary_string_escapes: true
+    avoid_unused_constructor_parameters: true
+    avoid_renaming_method_parameters: true
 
 dart_code_metrics:
   anti-patterns:

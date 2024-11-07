@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/view/history_point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/logic/point_v2_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/section/point_exchange.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/section/point_mission.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -27,22 +26,35 @@ class _PointV2ViewState extends State<PointV2View> {
   final TextEditingController customExchangeValueController =
       TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+  }
+
   List<NameIconEntity> listLevel = [
     NameIconEntity(
-      '200',
-      AppAssets.silverIcon,
+      '0',
+      AppAssets.bronzeV2Icon,
     ),
     NameIconEntity(
-      '400',
-      AppAssets.goldIcon,
+      '100',
+      AppAssets.silverV2Icon,
     ),
     NameIconEntity(
-      '600',
-      AppAssets.platinumIcon,
+      '1K',
+      AppAssets.goldV2Icon,
     ),
     NameIconEntity(
-      '800',
-      AppAssets.diamondIcon,
+      '10K',
+      AppAssets.platinumV2Icon,
+    ),
+    NameIconEntity(
+      '50K',
+      AppAssets.diamondV2Icon,
+    ),
+    NameIconEntity(
+      '100K',
+      AppAssets.championV2Icon,
     ),
   ];
 
@@ -53,24 +65,35 @@ class _PointV2ViewState extends State<PointV2View> {
 
   List<NameIconEntity> listPointInfo = [
     NameIconEntity(
+      'Bronze',
+      AppAssets.bronzeV2Icon,
+      description:
+          'Selesaikan aktivitas untuk mendapatkan poin dan membuka level Bronze.',
+    ),
+    NameIconEntity(
       'Silver',
-      AppAssets.silverIcon,
-      description: 'Kumpulkan 1000 poin untuk mendapatkan lencana silver.',
+      AppAssets.silverV2Icon,
+      description: 'Kumpulkan 100 poin untuk mendapatkan lencana Silver.',
     ),
     NameIconEntity(
       'Gold',
-      AppAssets.goldIcon,
-      description: 'Kumpulkan 3000 poin untuk mendapatkan lencana gold.',
+      AppAssets.goldV2Icon,
+      description: 'Kumpulkan 1.000 poin untuk mendapatkan lencana Gold.',
     ),
     NameIconEntity(
       'Platinum',
-      AppAssets.platinumIcon,
-      description: 'Kumpulkan 7000 poin untuk mendapatkan lencana platinum.',
+      AppAssets.platinumV2Icon,
+      description: 'Kumpulkan 10.000 poin untuk mendapatkan lencana Platinum.',
     ),
     NameIconEntity(
       'Diamond',
-      AppAssets.diamondIcon,
-      description: 'Kumpulkan 10.000 poin untuk mendapatkan lencana diamond.',
+      AppAssets.diamondV2Icon,
+      description: 'Kumpulkan 50.000 poin untuk mendapatkan lencana Diamond.',
+    ),
+    NameIconEntity(
+      'Champion',
+      AppAssets.championV2Icon,
+      description: 'Kumpulkan 100.000 poin untuk mendapatkan lencana Champion.',
     ),
   ];
 
@@ -81,6 +104,70 @@ class _PointV2ViewState extends State<PointV2View> {
     'Maksimal penukaran poin ke saldo atau tarik tunai adalah 10,000 poin Rp 1,000,000',
     'Akumulasi penukaran poin ke saldo atau tarik tunai adalah 10,000 poin atau Rp 1,000,000 per hari',
   ];
+
+  Future showPointInfo() {
+    return showModalBottomSheet(
+      context: context,
+      builder: (bottomSheetContext) {
+        return AppBottomSheet(
+          'List Member Level',
+          ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            children: [
+              ...List.generate(
+                listPointInfo.length,
+                (index) {
+                  return Column(
+                    children: [
+                      const SizedBox(height: 16.0),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            listPointInfo[index].icon,
+                            height: 28.0,
+                            width: 28.0,
+                            fit: BoxFit.cover,
+                          ),
+                          const SizedBox(width: 16.0),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  listPointInfo[index].name,
+                                  style: appTextTheme(context)
+                                      .titleMedium
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                ),
+                                const SizedBox(height: 8.0),
+                                Text(
+                                  listPointInfo[index].description ?? '-',
+                                  style:
+                                      appTextTheme(context).bodySmall?.copyWith(
+                                            color: AppColor.neutral[400],
+                                          ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16.0),
+                      AppDividerSmall(),
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+          height: MediaQuery.sizeOf(context).height * 0.75,
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,10 +194,12 @@ class _PointV2ViewState extends State<PointV2View> {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                const HistoryPointPage(),
-                HistoryPointPage.route,
-              ),);
+              Navigator.of(context).push(
+                AppTransition.pushTransition(
+                  const HistoryPointPage(),
+                  HistoryPointPage.route,
+                ),
+              );
             },
             child: Text(
               'Riwayat',
@@ -122,10 +211,12 @@ class _PointV2ViewState extends State<PointV2View> {
           const SizedBox(width: 8.0),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                const HistoryPointPage(),
-                HistoryPointPage.route,
-              ),);
+              Navigator.of(context).push(
+                AppTransition.pushTransition(
+                  const HistoryPointPage(),
+                  HistoryPointPage.route,
+                ),
+              );
             },
             child: const Icon(
               Icons.history,
@@ -144,17 +235,34 @@ class _PointV2ViewState extends State<PointV2View> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              AppAssets.platinumIcon,
+              AppAssets.bronzeV2Icon,
               height: 64.0,
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 12.0),
-            Text(
-              '7100 Poin',
-              style: appTextTheme(context).titleMedium?.copyWith(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  '7100 Poin',
+                  style: appTextTheme(context).titleMedium?.copyWith(
+                        color: AppColor.white,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                const SizedBox(width: 4.0),
+                InkWell(
+                  onTap: () {
+                    showPointInfo();
+                  },
+                  child: const Icon(
+                    Icons.info_outline,
                     color: AppColor.white,
-                    fontWeight: FontWeight.w700,
+                    size: 18.0,
                   ),
+                ),
+              ],
             ),
             const SizedBox(height: 8.0),
             Text(
@@ -171,67 +279,7 @@ class _PointV2ViewState extends State<PointV2View> {
     Widget headerPointInfo() {
       return InkWell(
         onTap: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (bottomSheetContext) {
-              return AppBottomSheet(
-                'List Member Level',
-                ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  children: [
-                    ...List.generate(
-                      listPointInfo.length,
-                      (index) {
-                        return Column(
-                          children: [
-                            const SizedBox(height: 16.0),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Image.asset(
-                                  listPointInfo[index].icon,
-                                  height: 28.0,
-                                  width: 28.0,
-                                  fit: BoxFit.cover,
-                                ),
-                                const SizedBox(width: 16.0),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        listPointInfo[index].name,
-                                        style: appTextTheme(context)
-                                            .titleMedium
-                                            ?.copyWith(
-                                                fontWeight: FontWeight.w700,),
-                                      ),
-                                      const SizedBox(height: 8.0),
-                                      Text(
-                                        listPointInfo[index].description ?? '-',
-                                        style: appTextTheme(context)
-                                            .bodySmall
-                                            ?.copyWith(
-                                                color: AppColor.neutral[400],),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16.0),
-                            AppDividerSmall(),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                height: MediaQuery.sizeOf(context).height * 0.6,
-              );
-            },
-          );
+          showPointInfo();
         },
         child: Container(
           padding: const EdgeInsets.symmetric(
@@ -249,23 +297,24 @@ class _PointV2ViewState extends State<PointV2View> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ...List.generate(
                       listLevel.length,
                       (index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              listLevel[index].icon,
-                              height: 28.0,
-                              width: 28.0,
-                              fit: BoxFit.cover,
+                        return Expanded(
+                          child: SizedBox(
+                            child: Center(
+                              child: Image.asset(
+                                listLevel[index].icon,
+                                height: 28.0,
+                                width: 28.0,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                          ],
+                          ),
                         );
                       },
                     ),
@@ -312,19 +361,22 @@ class _PointV2ViewState extends State<PointV2View> {
               ),
               const SizedBox(height: 16.0),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ...List.generate(
                       listLevel.length,
                       (index) {
-                        return Text(
-                          listLevel[index].name,
-                          style: appTextTheme(context).titleSmall?.copyWith(
-                                fontWeight: FontWeight.w500,
-                                color: AppColor.white,
-                              ),
+                        return Expanded(
+                          child: Text(
+                            listLevel[index].name,
+                            textAlign: TextAlign.center,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColor.white,
+                                ),
+                          ),
                         );
                       },
                     ),
@@ -370,297 +422,102 @@ class _PointV2ViewState extends State<PointV2View> {
       );
     }
 
-    Widget typeExchangeItem(String exchangeTypeName) {
-      return Container(
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: exchangeTypeName == exchangeTypeController.text
-                ? AppColor.primary[500]!
-                : AppColor.neutral[200]!,
-            width: 1.0,
-          ),
-          borderRadius: BorderRadius.circular(16.0),
-          color: exchangeTypeName == exchangeTypeController.text
-              ? AppColor.primary[50]
-              : AppColor.white,
-        ),
-        child: RadioListTile(
-          contentPadding: const EdgeInsets.all(0),
-          title: Text(
-            exchangeTypeName,
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  color: AppColor.neutral[600],
-                ),
-          ),
-          value: exchangeTypeName,
-          groupValue: exchangeTypeController.text,
-          onChanged: (value) {
-            setState(() {
-              exchangeTypeController.text = value.toString();
-            });
-          },
-        ),
-      );
-    }
-
-    Widget typeExchange() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Tukar Poin',
-            style: appTextTheme(context)
-                .titleMedium
-                ?.copyWith(fontWeight: FontWeight.w700),
-          ),
-          const SizedBox(height: 18.0),
-          typeExchangeItem(exchangeType[0]),
-          const SizedBox(height: 12.0),
-          typeExchangeItem(exchangeType[1]),
-        ],
-      );
-    }
-
-    Widget exchangeGridItem({
-      required bool isActive,
-      required String title,
-      required String value,
-      required Function() onTap,
-    }) {
-      return InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            vertical: 8.0,
-            horizontal: 16.0,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: isActive ? AppColor.primary[50] : AppColor.white,
-            border: Border.all(
-                color:
-                    isActive ? AppColor.primary[500]! : AppColor.neutral[300]!,),
-          ),
-          child: Column(
-            children: [
-              Text(
-                title,
-                style: appTextTheme(context).titleSmall?.copyWith(
-                      color: isActive
-                          ? AppColor.primary[400]
-                          : AppColor.neutral[400],
-                    ),
-              ),
-              const SizedBox(height: 10.0),
-              Text(
-                value,
-                style: appTextTheme(context)
-                    .titleMedium
-                    ?.copyWith(color: AppColor.primary[500]),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget exchangeValue() {
-      return Column(
-        children: [
-          Row(
-            children: [
-              Text(
-                'Nilai Penukaran',
-                style: appTextTheme(context)
-                    .titleMedium
-                    ?.copyWith(fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(width: 8.0),
-              InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (bottomSheetContext) {
-                      return AppBottomSheet(
-                        'Ketentuan Penukaran Point',
-                        ListView(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          children: [
-                            ...List.generate(
-                              tocPoint.length,
-                              (index) {
-                                return Column(
-                                  children: [
-                                    const SizedBox(height: 9.0),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const Padding(
-                                          padding: EdgeInsets.only(top: 4.0),
-                                          child: Icon(
-                                            Icons.circle,
-                                            color: Colors.black,
-                                            size: 8.0,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 12.0),
-                                        Expanded(
-                                          child: Text(
-                                            tocPoint[index],
-                                            style:
-                                                appTextTheme(context).bodySmall,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 9.0),
-                                  ],
-                                );
-                              },
-                            ),
-                          ],
-                        ),
-                        height: MediaQuery.sizeOf(context).height * 0.6,
-                      );
+    Widget tabBar() {
+      return BlocBuilder<PointV2Cubit, PointV2State>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 18.0,
+              vertical: 12.0,
+            ),
+            child: Row(
+              children: [
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<PointV2Cubit>()
+                          .onChangeBodyPointV2(BodyPointV2.mission);
                     },
-                  );
-                },
-                child: Icon(
-                  Icons.help,
-                  color: AppColor.primary[500],
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 16.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: state.bodyPointV2 == BodyPointV2.mission
+                            ? AppColor.primary[600]
+                            : AppColor.neutral[200],
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                      child: Text(
+                        'Misi',
+                        textAlign: TextAlign.center,
+                        style: appTextTheme(context).titleSmall?.copyWith(
+                              color: state.bodyPointV2 == BodyPointV2.mission
+                                  ? AppColor.white
+                                  : AppColor.neutralBlueGrey[500],
+                            ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 18.0),
-          BlocBuilder<PointV2Cubit, PointV2State>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 0,
-                      title: '250 Poin',
-                      value: 'Rp 25.000',
-                      onTap: () {
-                        context
-                            .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(0);
-                      },
+                const SizedBox(width: 18.0),
+                Expanded(
+                  child: InkWell(
+                    onTap: () {
+                      context
+                          .read<PointV2Cubit>()
+                          .onChangeBodyPointV2(BodyPointV2.exchange);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 12.0,
+                        horizontal: 16.0,
+                      ),
+                      decoration: BoxDecoration(
+                        color: state.bodyPointV2 == BodyPointV2.exchange
+                            ? AppColor.primary[600]
+                            : AppColor.neutral[200],
+                        borderRadius: BorderRadius.circular(100.0),
+                      ),
+                      child: Text(
+                        'Tukar Point',
+                        textAlign: TextAlign.center,
+                        style: appTextTheme(context).titleSmall?.copyWith(
+                              color: state.bodyPointV2 == BodyPointV2.exchange
+                                  ? AppColor.white
+                                  : AppColor.neutralBlueGrey[500],
+                            ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 18.0),
-                  Expanded(
-                    child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 1,
-                      title: '500 Poin',
-                      value: 'Rp 50.000',
-                      onTap: () {
-                        context
-                            .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(1);
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-          const SizedBox(height: 18.0),
-          BlocBuilder<PointV2Cubit, PointV2State>(
-            builder: (context, state) {
-              return Row(
-                children: [
-                  Expanded(
-                    child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 2,
-                      title: '1000 Poin',
-                      value: 'Rp 100.000',
-                      onTap: () {
-                        context
-                            .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(2);
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 18.0),
-                  Expanded(
-                    child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 3,
-                      title: '2000 Poin',
-                      value: 'Rp 200.000',
-                      onTap: () {
-                        context
-                            .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(3);
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
-      );
-    }
-
-    Widget customExchangeValue() {
-      return AppValidatorTextField(
-        controller: customExchangeValueController,
-        hintText: '0',
-        labelText: 'Kustom Nominal',
-        inputType: TextInputType.phone,
-        isMandatory: true,
-        validator: (String? value) {
-          if (value?.isEmpty ?? true) {
-            return null;
-          }
-          return null;
-        },
-        suffixConstraints: const BoxConstraints(),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 18.0),
-          child: Text(
-            'Rp ',
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
                 ),
-          ),
-        ),
-        inputFormatters: [AppCurrencyFormatter.currency],
-      );
-    }
-
-    Widget buttonExchange() {
-      return AppPrimaryFullButton(
-        'Submit',
-        () {
-          if (formKey.currentState!.validate()) {
-            context.read<PointV2Cubit>().onSubmitExchange();
-          }
-          null;
+              ],
+            ),
+          );
         },
       );
     }
 
-    Widget form() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            typeExchange(),
-            const SizedBox(height: 18.0),
-            exchangeValue(),
-            const SizedBox(height: 18.0),
-            customExchangeValue(),
-            const SizedBox(height: 32.0),
-            buttonExchange(),
-            const SizedBox(height: 18.0),
-          ],
-        ),
+    Widget bodyData() {
+      return BlocBuilder<PointV2Cubit, PointV2State>(
+        builder: (context, state) {
+          if (state.bodyPointV2 == BodyPointV2.mission) {
+            return const PointMission();
+          } else {
+            return const PointExchange();
+          }
+        },
       );
+    }
+
+    List<Widget> body() {
+      return [
+        tabBar(),
+        const SizedBox(height: 12.0),
+        bodyData(),
+      ];
     }
 
     return Form(
@@ -668,8 +525,7 @@ class _PointV2ViewState extends State<PointV2View> {
       child: ListView(
         children: [
           header(),
-          const SizedBox(height: 18.0),
-          form(),
+          ...body(),
         ],
       ),
     );

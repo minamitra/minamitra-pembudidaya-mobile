@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
@@ -168,12 +169,18 @@ class _ProductsViewState extends State<ProductsView> {
       return InkWell(
         onTap: () {
           if (widget.isPick) {
+            if ((double.tryParse(data.stock ?? '0') ?? 0) == 0) {
+              AppTopSnackBar(context).showInfo('Maaf stok produk kosong');
+              return;
+            }
             Navigator.of(context).pop(data);
           } else {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              ProductDetailPage(data),
-              ProductDetailPage.routeSettings(),
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                ProductDetailPage(data),
+                ProductDetailPage.routeSettings(),
+              ),
+            );
           }
         },
         child: Container(
@@ -198,12 +205,26 @@ class _ProductsViewState extends State<ProductsView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      data.categoryName ?? '-',
-                      textAlign: TextAlign.start,
-                      style: appTextTheme(context).labelLarge?.copyWith(
-                            color: AppColor.neutral[500],
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Text(
+                            data.categoryName ?? '-',
+                            textAlign: TextAlign.start,
+                            style: appTextTheme(context).labelLarge?.copyWith(
+                                  color: AppColor.neutral[500],
+                                ),
                           ),
+                        ),
+                        Text(
+                          "Stok ${(double.tryParse(data.stock ?? '0') ?? 0).toStringAsFixed(0)}",
+                          textAlign: TextAlign.start,
+                          style: appTextTheme(context).labelSmall?.copyWith(
+                                color: AppColor.neutral[500],
+                              ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 6.0),
                     Flexible(

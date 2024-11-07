@@ -6,7 +6,6 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
-import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_desctiption_item.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_separated_item.dart';
 
@@ -17,28 +16,6 @@ class ActivityActivitiesDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget columnText(String title, String value) {
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            title,
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  color: AppColor.neutral[500],
-                ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            value,
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).bodySmall!,
-          ),
-        ],
-      );
-    }
-
     Widget body() {
       return ListView(
         padding: const EdgeInsets.all(16.0),

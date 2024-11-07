@@ -165,7 +165,10 @@ class _BiodataViewState extends State<BiodataView> {
                                   pictureFile = File(document.path);
                                 });
                               }
-                              Navigator.pop(context);
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+
                               break;
                             case PhotoSource.gallery:
                               final document = await pickDocumentImage(
@@ -177,7 +180,10 @@ class _BiodataViewState extends State<BiodataView> {
                                   pictureFile = File(document.path);
                                 });
                               }
-                              Navigator.pop(context);
+                              if (context.mounted) {
+                                Navigator.pop(context);
+                              }
+
                               break;
                           }
                         },
@@ -483,7 +489,9 @@ class _BiodataViewState extends State<BiodataView> {
             gender: selectedGender?.value ?? '',
             job: jobController.text,
           );
-          context.read<ProfileMemberCubit>().updateProfile(payload, tempFile);
+          if (context.mounted) {
+            context.read<ProfileMemberCubit>().updateProfile(payload, tempFile);
+          }
           setState(() {
             isEditable = true;
           });

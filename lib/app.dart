@@ -5,11 +5,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/cloud_messaging/cloud_messaging_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/login_register/view/login_register_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/splash/view/splash_view.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class App extends StatefulWidget {
@@ -22,6 +24,13 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   NavigatorState get _navigator => _navigatorKey.currentState!;
+
+  @override
+  void initState() {
+    super.initState();
+    appCloudMessaging
+        .setupFirebaseCloudMessagingWithFlutterNotifications(context);
+  }
 
   @override
   Widget build(BuildContext context) {

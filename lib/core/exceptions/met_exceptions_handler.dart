@@ -10,7 +10,7 @@ class MetaExceptionHanlder {
     this.responseBody,
   );
 
-  handleByErrorCode() {
+  void handleByErrorCode() {
     String message =
         MetaResponse.fromJson(responseBody).message ?? 'Unknown Error';
 

@@ -20,44 +20,42 @@ class DashboardBottomNavigationBar extends StatelessWidget {
       shadowColor: AppColor.black,
       padding: const EdgeInsets.all(0),
       height: 64,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            NavigationItem(
-              () {
-                onTap(0);
-              },
-              currentIndex == 0,
-              AppAssets.homeIcon,
-              'Beranda',
-            ),
-            NavigationItem(
-              () {
-                onTap(1);
-              },
-              currentIndex == 1,
-              AppAssets.tansactionIcon,
-              'Transaksi',
-            ),
-            NavigationItem(
-              () {
-                onTap(2);
-              },
-              currentIndex == 2,
-              AppAssets.hearthIcon,
-              'Aktivitas',
-            ),
-            NavigationItem(
-              () {
-                onTap(3);
-              },
-              currentIndex == 3,
-              AppAssets.userIcon,
-              'Profile',
-            ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          NavigationItem(
+            () {
+              onTap(0);
+            },
+            currentIndex == 0,
+            AppAssets.homeIcon,
+            'Beranda',
+          ),
+          NavigationItem(
+            () {
+              onTap(1);
+            },
+            currentIndex == 1,
+            AppAssets.tansactionIcon,
+            'Transaksi',
+          ),
+          NavigationItem(
+            () {
+              onTap(2);
+            },
+            currentIndex == 2,
+            AppAssets.hearthIcon,
+            'Aktivitas',
+          ),
+          NavigationItem(
+            () {
+              onTap(3);
+            },
+            currentIndex == 3,
+            AppAssets.userIcon,
+            'Profile',
+          ),
+        ],
       ),
     );
   }

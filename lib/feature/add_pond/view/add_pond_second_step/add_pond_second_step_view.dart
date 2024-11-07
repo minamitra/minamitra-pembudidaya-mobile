@@ -64,7 +64,9 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
 
   Future<void> convertImageUrl(String imageUrl) async {
     final http.Response imagePath = await http.get(Uri.parse(imageUrl));
-    context.read<MultipleImageCubit>().setImage(imagePath.bodyBytes);
+    if (mounted) {
+      context.read<MultipleImageCubit>().setImage(imagePath.bodyBytes);
+    }
   }
 
   Function() bottomSheetShowModal(
@@ -198,7 +200,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                       if (context.mounted) {
                         if (size > 2000000) {
                           AppTopSnackBar(context).showDanger(
-                              'Ukuran gambar melebihi\nBatas maks 2MB',);
+                            'Ukuran gambar melebihi\nBatas maks 2MB',
+                          );
                           Navigator.of(bottomSheetContext).pop();
                           return;
                         }
@@ -219,7 +222,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                       if (context.mounted) {
                         if (size > 2000000) {
                           AppTopSnackBar(context).showDanger(
-                              'Ukuran gambar melebihi\nBatas maks 2MB',);
+                            'Ukuran gambar melebihi\nBatas maks 2MB',
+                          );
                           Navigator.of(bottomSheetContext).pop();
                           return;
                         }
@@ -396,10 +400,12 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           return InkWell(
             onTap: () {
               Navigator.of(context)
-                  .push(AppTransition.pushTransition(
-                const SetLocationPage(),
-                SetLocationPage.routeSettings(),
-              ),)
+                  .push(
+                AppTransition.pushTransition(
+                  const SetLocationPage(),
+                  SetLocationPage.routeSettings(),
+                ),
+              )
                   .then((value) {
                 if (value != null) {
                   if (value is MapCallbackData) {
@@ -416,13 +422,14 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                 ? Stack(
                     children: [
                       ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.memory(
-                            state.snapshotMap!,
-                            fit: BoxFit.cover,
-                            height: 180.0,
-                            width: double.infinity,
-                          ),),
+                        borderRadius: BorderRadius.circular(20.0),
+                        child: Image.memory(
+                          state.snapshotMap!,
+                          fit: BoxFit.cover,
+                          height: 180.0,
+                          width: double.infinity,
+                        ),
+                      ),
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20.0),

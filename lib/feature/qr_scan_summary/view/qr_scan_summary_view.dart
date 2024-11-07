@@ -17,6 +17,15 @@ class QrScanSummaryView extends StatefulWidget {
 class _QrScanSummaryViewState extends State<QrScanSummaryView> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController nominalController = TextEditingController();
+  final FocusNode nominalFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).requestFocus(nominalFocus);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +60,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
             const SizedBox(height: 18.0),
             AppValidatorTextField(
               controller: nominalController,
+              focusNode: nominalFocus,
               labelText: 'Nominal Transaksi',
               isMandatory: true,
               withUpperLabel: true,
@@ -60,6 +70,7 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                 padding: EdgeInsets.only(left: 12.0),
                 child: Text('Rp '),
               ),
+              onEditingComplete: () {},
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Nominal harus diisi';
@@ -94,11 +105,12 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                 vertical: 14.0,
               ),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16.0),
-                  color: AppColor.white,
-                  border: Border.all(
-                    color: const Color(0xFFE5E7EB),
-                  ),),
+                borderRadius: BorderRadius.circular(16.0),
+                color: AppColor.white,
+                border: Border.all(
+                  color: const Color(0xFFE5E7EB),
+                ),
+              ),
               child: Row(
                 children: [
                   Image.asset(
@@ -243,11 +255,12 @@ class _QrScanSummaryViewState extends State<QrScanSummaryView> {
                                   vertical: 14.0,
                                 ),
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16.0),
-                                    color: AppColor.white,
-                                    border: Border.all(
-                                      color: const Color(0xFFE5E7EB),
-                                    ),),
+                                  borderRadius: BorderRadius.circular(16.0),
+                                  color: AppColor.white,
+                                  border: Border.all(
+                                    color: const Color(0xFFE5E7EB),
+                                  ),
+                                ),
                                 child: Row(
                                   children: [
                                     Image.asset(

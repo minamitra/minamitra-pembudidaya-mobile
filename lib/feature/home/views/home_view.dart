@@ -22,6 +22,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dum
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan_summary/view/qr_scan_summary_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -92,60 +93,60 @@ class _HomeViewState extends State<HomeView> {
   Widget header() {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          decoration: BoxDecoration(
-            color: AppColor.primary[800],
-            border: Border.all(width: 0.0),
-          ),
-          child: Row(
-            children: [
-              Image.asset(
-                AppAssets.newLogoIcon2,
-                height: 20.0,
-              ),
-              // Expanded(
-              //   child: Container(
-              //     decoration: BoxDecoration(
-              //       color: AppColor.white,
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //     height: 40,
-              //     child: TextField(
-              //       controller: _searchController,
-              //       textAlignVertical: TextAlignVertical.center,
-              //       textInputAction: TextInputAction.search,
-              //       style: AppTextStyle.blackSmallText,
-              //       decoration: InputDecoration(
-              //         isCollapsed: true,
-              //         hintStyle: AppTextStyle.blackSmallText,
-              //         hintText: 'Cari produk',
-              //         prefixIcon: const Icon(
-              //           Icons.search,
-              //           color: AppColor.black,
-              //         ),
-              //         border: InputBorder.none,
-              //         contentPadding: EdgeInsets.zero,
-              //         fillColor: AppColor.white,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              const Expanded(child: SizedBox()),
-              // Image.asset(
-              //   AppAssets.basketIcon,
-              //   height: 20.0,
-              //   fit: BoxFit.cover,
-              // ),
-              const SizedBox(width: 16.0),
-              Image.asset(
-                AppAssets.bellIcon,
-                height: 20.0,
-                fit: BoxFit.cover,
-              ),
-            ],
-          ),
-        ),
+        // Container(
+        //   padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+        //   decoration: BoxDecoration(
+        //     color: AppColor.primary[800],
+        //     border: Border.all(width: 0.0),
+        //   ),
+        //   child: Row(
+        //     children: [
+        //       Image.asset(
+        //         AppAssets.newLogoIcon2,
+        //         height: 20.0,
+        //       ),
+        //       // Expanded(
+        //       //   child: Container(
+        //       //     decoration: BoxDecoration(
+        //       //       color: AppColor.white,
+        //       //       borderRadius: BorderRadius.circular(10.0),
+        //       //     ),
+        //       //     height: 40,
+        //       //     child: TextField(
+        //       //       controller: _searchController,
+        //       //       textAlignVertical: TextAlignVertical.center,
+        //       //       textInputAction: TextInputAction.search,
+        //       //       style: AppTextStyle.blackSmallText,
+        //       //       decoration: InputDecoration(
+        //       //         isCollapsed: true,
+        //       //         hintStyle: AppTextStyle.blackSmallText,
+        //       //         hintText: 'Cari produk',
+        //       //         prefixIcon: const Icon(
+        //       //           Icons.search,
+        //       //           color: AppColor.black,
+        //       //         ),
+        //       //         border: InputBorder.none,
+        //       //         contentPadding: EdgeInsets.zero,
+        //       //         fillColor: AppColor.white,
+        //       //       ),
+        //       //     ),
+        //       //   ),
+        //       // ),
+        //       const Expanded(child: SizedBox()),
+        //       // Image.asset(
+        //       //   AppAssets.basketIcon,
+        //       //   height: 20.0,
+        //       //   fit: BoxFit.cover,
+        //       // ),
+        //       const SizedBox(width: 16.0),
+        //       Image.asset(
+        //         AppAssets.bellIcon,
+        //         height: 20.0,
+        //         fit: BoxFit.cover,
+        //       ),
+        //     ],
+        //   ),
+        // ),
         BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state.status.isLoading) {
@@ -159,7 +160,7 @@ class _HomeViewState extends State<HomeView> {
             return Container(
               color: AppColor.primary[800],
               child: Stack(
-                alignment: Alignment.center,
+                alignment: Alignment.topCenter,
                 children: [
                   CarouselSlider.builder(
                     itemCount: state.bannerResponse?.data?.length,
@@ -866,9 +867,7 @@ class _HomeViewState extends State<HomeView> {
         context.read<HomeCubit>().init();
         context.read<ActivityCubit>().init();
       },
-      offset: 24.0,
       child: ListView(
-        padding: const EdgeInsets.only(top: 16.0),
         children: [
           header(),
           const SizedBox(height: 16.0),

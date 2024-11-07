@@ -10,12 +10,14 @@ class AppBottomSheet extends StatelessWidget {
   final Widget _body;
   final double height;
   final List<Widget> actions;
+  final bool isNeedAppBar;
 
   const AppBottomSheet(
     this._title,
     this._body, {
     this.height = 300,
     this.actions = const [],
+    this.isNeedAppBar = true,
     super.key,
   });
 
@@ -48,31 +50,33 @@ class AppBottomSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16.0),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    _title,
-                    textAlign: TextAlign.start,
-                    style: appTextTheme(context).titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.black,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+          if (isNeedAppBar) ...[
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      _title,
+                      textAlign: TextAlign.start,
+                      style: appTextTheme(context).titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColor.black,
+                          ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-                ...actions,
-              ],
+                  ...actions,
+                ],
+              ),
             ),
-          ),
-          Divider(
-            color: AppColor.neutral[300],
-            thickness: 0.5,
-            height: 32,
-          ),
+            Divider(
+              color: AppColor.neutral[300],
+              thickness: 0.5,
+              height: 32,
+            ),
+          ],
           Expanded(child: _body),
         ],
       ),

@@ -5,7 +5,7 @@ enum QRScanType { scan, generate }
 class QrscanState extends Equatable {
   const QrscanState({
     this.status = GlobalState.initial,
-    this.errorMessage = "",
+    this.errorMessage = '',
     this.qrScanType = QRScanType.scan,
   });
 

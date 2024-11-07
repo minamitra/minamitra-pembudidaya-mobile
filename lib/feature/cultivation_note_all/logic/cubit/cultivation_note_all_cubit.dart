@@ -29,12 +29,21 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       List<String> companionName =
           data?.map((value) => value.userName ?? '').toList() ?? [];
       companionName.toSet().toList();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: data,
-        companionName: companionName,
-      ),);
-    } catch (e) {}
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: data,
+          companionName: companionName,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
   }
 
   Future<void> pickNotesByRangeDate({
@@ -53,20 +62,26 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       this.pickedRangeDate = pickedRangeDate;
       this.startDate = startDate;
       this.endDate = endDate;
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -79,20 +94,26 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
       startDate = null;
       endDate = null;
       companionName = null;
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -106,20 +127,26 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
         companionName: name,
       );
       companionName = name;
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -132,20 +159,26 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
         filterEndDate: endDate,
       );
       companionName = null;
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        data: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          data: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

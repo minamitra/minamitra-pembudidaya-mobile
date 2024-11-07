@@ -1,6 +1,8 @@
+
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
@@ -293,11 +295,17 @@ class _CheckoutViewState extends State<CheckoutView> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 6.0),
+                    const SizedBox(height: 2.0),
                     Text(
                       data.categoryName ?? '-',
                       style: appTextTheme(context)
                           .bodySmall
+                          ?.copyWith(color: AppColor.neutral[400]),
+                    ),
+                    Text(
+                      "Stok. ${(double.tryParse(data.stock ?? '0') ?? 0).toStringAsFixed(0)}",
+                      style: appTextTheme(context)
+                          .labelLarge
                           ?.copyWith(color: AppColor.neutral[400]),
                     ),
                     const SizedBox(height: 18.0),
@@ -335,11 +343,30 @@ class _CheckoutViewState extends State<CheckoutView> {
               const Spacer(),
               InkWell(
                 onTap: () {
-                  if (listAmountItem[index] > 1) {
-                    setState(() {
-                      listAmountItem[index]--;
-                    });
+                  if (listProduct[index].quantity! == 1) {
+                    if (listProduct.length > 1) {
+                      showDeleteBottomSheet(
+                        context,
+                        title: 'Hapus Item',
+                        descriptions:
+                            'Yakin ingin menghapus\nproduk ${listProduct[index].name} ?',
+                        onTapDelete: () {
+                          Navigator.of(context).pop();
+                          setState(() {
+                            listProduct.removeAt(index);
+                          });
+                        },
+                      );
+                      return;
+                    } else {
+                      return;
+                    }
                   }
+                  setState(() {
+                    listProduct[index] = listProduct[index].copyWith(
+                      quantity: listProduct[index].quantity! - 1,
+                    );
+                  });
                 },
                 child: Icon(
                   Icons.remove_circle_outline_rounded,
@@ -348,7 +375,7 @@ class _CheckoutViewState extends State<CheckoutView> {
               ),
               const SizedBox(width: 8.0),
               Text(
-                listAmountItem[index].toString(),
+                listProduct[index].quantity.toString(),
                 style: appTextTheme(context)
                     .bodySmall
                     ?.copyWith(fontWeight: FontWeight.w700),
@@ -356,8 +383,18 @@ class _CheckoutViewState extends State<CheckoutView> {
               const SizedBox(width: 8.0),
               InkWell(
                 onTap: () {
+                  if (listProduct[index].quantity! >
+                      ((double.tryParse(listProduct[index].stock.toString()) ??
+                              1) -
+                          1)) {
+                    AppTopSnackBar(context)
+                        .showDanger('Maaf stok tidak mencukupi');
+                    return;
+                  }
                   setState(() {
-                    listAmountItem[index]++;
+                    listProduct[index] = listProduct[index].copyWith(
+                      quantity: listProduct[index].quantity! + 1,
+                    );
                   });
                 },
                 child: Icon(
@@ -390,14 +427,41 @@ class _CheckoutViewState extends State<CheckoutView> {
                 InkWell(
                   onTap: () {
                     Navigator.of(context)
-                        .push(AppTransition.pushTransition(
-                      const ProductsPage(isPick: true),
-                      ProductsPage.routeSettings(),
-                    ),)
+                        .push(
+                      AppTransition.pushTransition(
+                        const ProductsPage(isPick: true),
+                        ProductsPage.routeSettings(),
+                      ),
+                    )
                         .then((value) {
                       setState(() {
-                        listProduct.add(value as ProductsResponseData);
-                        listAmountItem.add(1);
+                        int index = listProduct
+                            .indexWhere((element) => element.id == value.id);
+                        index == -1
+                            ? listProduct.add(value as ProductsResponseData)
+                            : {
+                                if (listProduct[index].quantity! >
+                                    ((double.tryParse(
+                                              listProduct[index]
+                                                  .stock
+                                                  .toString(),
+                                            ) ??
+                                            1) -
+                                        1))
+                                  {
+                                    AppTopSnackBar(context).showDanger(
+                                      'Maaf stok tidak mencukupi',
+                                    ),
+                                  }
+                                else
+                                  {
+                                    listProduct[index] =
+                                        listProduct[index].copyWith(
+                                      quantity:
+                                          listProduct[index].quantity! + 1,
+                                    ),
+                                  },
+                              };
                       });
                     });
                   },
@@ -626,7 +690,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                             const SizedBox(height: 16),
                         itemBuilder: (context, index) {
                           return paymentItem(
-                              listMethodPayment[index], setModalState,);
+                            listMethodPayment[index],
+                            setModalState,
+                          );
                         },
                       ),
                       const SizedBox(height: 24),
@@ -647,7 +713,9 @@ class _CheckoutViewState extends State<CheckoutView> {
                             const SizedBox(height: 16),
                         itemBuilder: (context, index) {
                           return paymentItem(
-                              listMethodBank[index], setModalState,);
+                            listMethodBank[index],
+                            setModalState,
+                          );
                         },
                       ),
                       const SizedBox(height: 36),
@@ -787,18 +855,48 @@ class _CheckoutViewState extends State<CheckoutView> {
                   if (selectedAddress == null ||
                       selectedPaymentMethod == null) {
                     AppTopSnackBar(context).showDanger(
-                        'Pilih alamat dan metode pembayaran terlebih dahulu',);
+                      'Pilih alamat dan metode pembayaran terlebih dahulu',
+                    );
                     return;
                   }
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    TransactionDetailPage(
-                      listProduct,
-                      listAmountItem,
-                      selectedAddress!,
-                      selectedPaymentMethod!,
-                    ),
-                    TransactionDetailPage.routeSettings(),
-                  ),);
+                  showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AppDefaultDialog(
+                        title: 'Proses Pesanan',
+                        subTitle: 'Yakin ingin memproses pesanan?',
+                        buttons: [
+                          Expanded(
+                            child: AppWhiteButton(
+                              'Batal',
+                              () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 8.0),
+                          Expanded(
+                            child: AppPrimaryButton(
+                              'Proses',
+                              () {
+                                Navigator.of(context).push(
+                                  AppTransition.pushTransition(
+                                    TransactionDetailPage(
+                                      listProduct,
+                                      listAmountItem,
+                                      selectedAddress!,
+                                      selectedPaymentMethod!,
+                                    ),
+                                    TransactionDetailPage.routeSettings(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ),

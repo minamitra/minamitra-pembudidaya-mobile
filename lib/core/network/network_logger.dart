@@ -3,10 +3,11 @@
 /// @create date 2024-03-24 14:22:40
 /// @modify date 2024-03-24 14:22:40
 library;
+
 import 'dart:developer';
 import 'package:flutter/foundation.dart';
 
-appNetworkLogger({
+void appNetworkLogger({
   required String endpoint,
   required String payload,
   required String response,

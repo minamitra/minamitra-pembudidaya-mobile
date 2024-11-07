@@ -86,7 +86,8 @@ class _LocationScreenState extends State<LocationScreen> {
                 );
               case InitFirstLocationStatus.loaded:
                 context.read<SetLocationCubit>().updateLocation(
-                    context.read<InitFirstLocationCubit>().latLng,);
+                      context.read<InitFirstLocationCubit>().latLng,
+                    );
                 return mapView(context.read<InitFirstLocationCubit>().latLng);
             }
           },

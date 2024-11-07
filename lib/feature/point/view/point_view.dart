@@ -198,8 +198,8 @@ class _PointViewState extends State<PointView>
                                               style: appTextTheme(context)
                                                   .titleMedium
                                                   ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.w700,),
+                                                    fontWeight: FontWeight.w700,
+                                                  ),
                                             ),
                                             const SizedBox(height: 8.0),
                                             Text(
@@ -209,8 +209,9 @@ class _PointViewState extends State<PointView>
                                               style: appTextTheme(context)
                                                   .bodySmall
                                                   ?.copyWith(
-                                                      color: AppColor
-                                                          .neutral[400],),
+                                                    color:
+                                                        AppColor.neutral[400],
+                                                  ),
                                             ),
                                           ],
                                         ),

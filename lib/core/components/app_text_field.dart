@@ -97,6 +97,7 @@ class AppValidatorTextField extends StatelessWidget {
   final Widget? prefixWidget;
   final List<TextInputFormatter>? inputFormatters;
   final String? descLabel;
+  final void Function()? onEditingComplete;
 
   const AppValidatorTextField({
     super.key,
@@ -137,6 +138,7 @@ class AppValidatorTextField extends StatelessWidget {
     this.prefixWidget,
     this.inputFormatters,
     this.descLabel,
+    this.onEditingComplete,
   });
 
   // listInputType
@@ -291,6 +293,7 @@ class AppValidatorTextField extends StatelessWidget {
             color: textColor,
           ),
           onFieldSubmitted: onFieldSubmitted,
+          onEditingComplete: onEditingComplete,
           decoration: InputDecoration(
             focusColor: AppColor.primary,
             filled: true,
@@ -347,7 +350,9 @@ class DecimalInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue,) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     // Check if input already has a decimal point
     if (newValue.text.contains('.')) {
       // Split input into parts: before and after the decimal point
@@ -389,13 +394,10 @@ class AppSearchField extends AppValidatorTextField {
     super.suffixText,
     super.prefixText,
     super.decimalDigit,
-    ContentPadding? contentPadding,
     super.maxLines,
-    Widget? prefixIcon,
     super.onFieldSubmitted,
     Color? fillColor,
     super.textColor = null,
-    bool withUpperLabel = true,
     super.isMandatory,
     super.regexFormater,
     super.onTap,

@@ -52,7 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '204455506381',
     projectId: 'mitra3m-ae108',
     authDomain: 'mitra3m-ae108.firebaseapp.com',
-    storageBucket: 'mitra3m-ae108.appspot.com',
+    storageBucket: 'mitra3m-ae108.firebasestorage.app',
     measurementId: 'G-8PP2PM4VY9',
   );
 
@@ -61,7 +61,7 @@ class DefaultFirebaseOptions {
     appId: '1:204455506381:android:663a1f04864b28a7fd1484',
     messagingSenderId: '204455506381',
     projectId: 'mitra3m-ae108',
-    storageBucket: 'mitra3m-ae108.appspot.com',
+    storageBucket: 'mitra3m-ae108.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -69,7 +69,8 @@ class DefaultFirebaseOptions {
     appId: '1:204455506381:ios:d60c837799e6afd5fd1484',
     messagingSenderId: '204455506381',
     projectId: 'mitra3m-ae108',
-    storageBucket: 'mitra3m-ae108.appspot.com',
+    storageBucket: 'mitra3m-ae108.firebasestorage.app',
     iosBundleId: 'com.example.minamitraPembudidayaMobile',
   );
+
 }

@@ -8,6 +8,7 @@ import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_serv
 import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/dashboard/dashboard_bottom_nav_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/cloud_messaging/cloud_messaging_service.dart';
 import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
 
 // shortcut for app theme
@@ -16,12 +17,14 @@ ColorScheme appColorScheme(BuildContext context) =>
     Theme.of(context).colorScheme;
 // Set your environment here
 const Environment env = Environment.development;
+late AppCloudMessaging appCloudMessaging;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  appCloudMessaging = AppCloudMessagingImpl.create();
   runApp(MyApp());
 }
 

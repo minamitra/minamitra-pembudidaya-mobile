@@ -2,6 +2,8 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/notification/view/notification_page.dart';
 
 PreferredSizeWidget appDefaultAppBar(
   BuildContext context,
@@ -29,7 +31,8 @@ PreferredSizeWidget appDefaultAppBar(
     centerTitle: isCenterTitle,
     backgroundColor: bgColor,
     titleSpacing: isBackButton ? 0 : 16,
-    elevation: 0,
+    elevation: 1,
+    shadowColor: Colors.black,
     leading: isBackButton
         ? customLeading ??
             IconButton(
@@ -90,23 +93,28 @@ Widget appSliverDefaultAppBar({
 
 PreferredSizeWidget appDefaultAppBarWithBucket(
   BuildContext context,
-  String title,
-) {
+  String title, {
+  bool isBackButton = false,
+}) {
   return appDefaultAppBar(
     context,
     title,
-    isBackButton: false,
+    isBackButton: isBackButton,
     actions: [
-      // Image.asset(
-      //   AppAssets.basketIcon,
-      //   height: 20.0,
-      //   fit: BoxFit.cover,
-      // ),
-      // const SizedBox(width: 16.0),
-      Image.asset(
-        AppAssets.bellIcon,
-        height: 20.0,
-        fit: BoxFit.cover,
+      InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            AppTransition.pushTransition(
+              const NotificationPage(),
+              NotificationPage.routeSettings(),
+            ),
+          );
+        },
+        child: Image.asset(
+          AppAssets.bellIcon,
+          height: 20.0,
+          fit: BoxFit.cover,
+        ),
       ),
       const SizedBox(width: 16.0),
     ],

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/home/home_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/views/home_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/notification/view/notification_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -20,7 +24,36 @@ class HomePage extends StatelessWidget {
           create: (context) => ActivityCubit(PondServiceImpl.create())..init(),
         ),
       ],
-      child: const HomeView(),
+      child: Scaffold(
+        appBar: appDefaultAppBar(
+          context,
+          '',
+          isBackButton: false,
+          customTitle: Image.asset(
+            AppAssets.newLogoIcon2,
+            height: 20.0,
+          ),
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  AppTransition.pushTransition(
+                    const NotificationPage(),
+                    NotificationPage.routeSettings(),
+                  ),
+                );
+              },
+              child: Image.asset(
+                AppAssets.bellIcon,
+                height: 20.0,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 16.0),
+          ],
+        ),
+        body: const HomeView(),
+      ),
     );
   }
 }

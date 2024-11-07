@@ -73,8 +73,11 @@ class _ReferralViewState extends State<ReferralView> {
                   onTap: () {
                     Clipboard.setData(const ClipboardData(text: 'ABC1234'))
                         .then((_) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                          content: Text('Referral berhasil disalin'),),);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Referral berhasil disalin'),
+                        ),
+                      );
                     });
                   },
                   child: Container(
@@ -237,7 +240,8 @@ class _ReferralViewState extends State<ReferralView> {
           'Bagikan',
           () {
             Share.share(
-                'Yuk ikut gabung Mitra3M \nPakai kode berikut ini untuk dapatkan keuntungan menarik lainnya :\nABC1234\nhttps://commander.mitra3m.id/ ',);
+              'Yuk ikut gabung Mitra3M \nPakai kode berikut ini untuk dapatkan keuntungan menarik lainnya :\nABC1234\nhttps://commander.mitra3m.id/ ',
+            );
           },
           prefixIcon: const Icon(
             Icons.share_outlined,

@@ -35,17 +35,19 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));
     final provinceResponse = await refService.province();
-    emit(state.copyWith(
-      provinceData: provinceResponse.data,
-      districtData: null,
-      subDistrictData: null,
-      villageData: null,
-      selectedProvince: null,
-      selectedDistrict: null,
-      selectedSubDistrict: null,
-      selectedVillage: null,
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        provinceData: provinceResponse.data,
+        districtData: null,
+        subDistrictData: null,
+        villageData: null,
+        selectedProvince: null,
+        selectedDistrict: null,
+        selectedSubDistrict: null,
+        selectedVillage: null,
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   Future<void> initWithExistData({
@@ -66,91 +68,101 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
     final districtResponse = await refService.district(provinceId);
     final subDistrictResponse = await refService.subDistrict(districtId);
     final villageResponse = await refService.village(subDistrictId);
-    emit(state.copyWith(
-      provinceData: provinceResponse.data,
-      districtData: districtResponse.data,
-      subDistrictData: subDistrictResponse.data,
-      villageData: villageResponse.data,
-      selectedProvince: ProvinceResponseData(
-        id: provinceId,
-        name: provinceName,
+    emit(
+      state.copyWith(
+        provinceData: provinceResponse.data,
+        districtData: districtResponse.data,
+        subDistrictData: subDistrictResponse.data,
+        villageData: villageResponse.data,
+        selectedProvince: ProvinceResponseData(
+          id: provinceId,
+          name: provinceName,
+        ),
+        selectedDistrict: DistrictResponseData(
+          id: districtId,
+          name: districtName,
+        ),
+        selectedSubDistrict: SubDistrictResponseData(
+          id: subDistrictId,
+          name: subDistrictName,
+        ),
+        selectedVillage: VillageResponseData(
+          id: villageId,
+          name: villageName,
+        ),
+        latitude: latitude,
+        longitude: longitude,
+        urlImage: urlImage,
+        status: GlobalState.loaded,
       ),
-      selectedDistrict: DistrictResponseData(
-        id: districtId,
-        name: districtName,
-      ),
-      selectedSubDistrict: SubDistrictResponseData(
-        id: subDistrictId,
-        name: subDistrictName,
-      ),
-      selectedVillage: VillageResponseData(
-        id: villageId,
-        name: villageName,
-      ),
-      latitude: latitude,
-      longitude: longitude,
-      urlImage: urlImage,
-      status: GlobalState.loaded,
-    ),);
+    );
   }
 
   Future<void> selectProvince(ProvinceResponseData province) async {
     final districtResponse = await refService.district(province.id ?? '');
-    emit(state.copyWith(
-      selectedProvince: province,
-      provinceData: state.provinceData,
-      selectedDistrict: null,
-      selectedSubDistrict: null,
-      selectedVillage: null,
-      districtData: districtResponse.data,
-      subDistrictData: null,
-      villageData: null,
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        selectedProvince: province,
+        provinceData: state.provinceData,
+        selectedDistrict: null,
+        selectedSubDistrict: null,
+        selectedVillage: null,
+        districtData: districtResponse.data,
+        subDistrictData: null,
+        villageData: null,
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   Future<void> selectDistrict(DistrictResponseData district) async {
     final subDistrictResponse = await refService.subDistrict(district.id ?? '');
-    emit(state.copyWith(
-      selectedProvince: state.selectedProvince,
-      provinceData: state.provinceData,
-      districtData: state.districtData,
-      selectedDistrict: district,
-      selectedSubDistrict: null,
-      selectedVillage: null,
-      status: GlobalState.loaded,
-      subDistrictData: subDistrictResponse.data,
-      villageData: null,
-    ),);
+    emit(
+      state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: district,
+        selectedSubDistrict: null,
+        selectedVillage: null,
+        status: GlobalState.loaded,
+        subDistrictData: subDistrictResponse.data,
+        villageData: null,
+      ),
+    );
   }
 
   Future<void> selectSubDistrict(SubDistrictResponseData subDistrict) async {
     final villageResponse = await refService.village(subDistrict.id ?? '');
-    emit(state.copyWith(
-      selectedProvince: state.selectedProvince,
-      provinceData: state.provinceData,
-      districtData: state.districtData,
-      selectedDistrict: state.selectedDistrict,
-      subDistrictData: state.subDistrictData,
-      selectedSubDistrict: subDistrict,
-      selectedVillage: null,
-      status: GlobalState.loaded,
-      villageData: villageResponse.data,
-    ),);
+    emit(
+      state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: subDistrict,
+        selectedVillage: null,
+        status: GlobalState.loaded,
+        villageData: villageResponse.data,
+      ),
+    );
   }
 
   void selectVillage(VillageResponseData village) {
-    emit(state.copyWith(
-      selectedProvince: state.selectedProvince,
-      provinceData: state.provinceData,
-      districtData: state.districtData,
-      selectedDistrict: state.selectedDistrict,
-      subDistrictData: state.subDistrictData,
-      selectedSubDistrict: state.selectedSubDistrict,
-      villageData: state.villageData,
-      selectedVillage: village,
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: village,
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   void changeLocationOnMap(
@@ -158,96 +170,110 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
     String longitude,
     Uint8List? snapshot,
   ) {
-    emit(state.copyWith(
-      latitude: latitude,
-      longitude: longitude,
-      snapshotMap: snapshot,
-      selectedProvince: state.selectedProvince,
-      provinceData: state.provinceData,
-      districtData: state.districtData,
-      selectedDistrict: state.selectedDistrict,
-      subDistrictData: state.subDistrictData,
-      selectedSubDistrict: state.selectedSubDistrict,
-      villageData: state.villageData,
-      selectedVillage: state.selectedVillage,
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        latitude: latitude,
+        longitude: longitude,
+        snapshotMap: snapshot,
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: state.selectedVillage,
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   Future<void> uploadImage(File image) async {
-    emit(state.copyWith(
-      selectedProvince: state.selectedProvince,
-      provinceData: state.provinceData,
-      districtData: state.districtData,
-      selectedDistrict: state.selectedDistrict,
-      subDistrictData: state.subDistrictData,
-      selectedSubDistrict: state.selectedSubDistrict,
-      villageData: state.villageData,
-      selectedVillage: state.selectedVillage,
-      status: GlobalState.showDialogLoading,
-    ),);
+    emit(
+      state.copyWith(
+        selectedProvince: state.selectedProvince,
+        provinceData: state.provinceData,
+        districtData: state.districtData,
+        selectedDistrict: state.selectedDistrict,
+        subDistrictData: state.subDistrictData,
+        selectedSubDistrict: state.selectedSubDistrict,
+        villageData: state.villageData,
+        selectedVillage: state.selectedVillage,
+        status: GlobalState.showDialogLoading,
+      ),
+    );
     try {
       final response = await cdnService.uploadImage(image);
-      emit(state.copyWith(
-        selectedProvince: state.selectedProvince,
-        provinceData: state.provinceData,
-        districtData: state.districtData,
-        selectedDistrict: state.selectedDistrict,
-        subDistrictData: state.subDistrictData,
-        selectedSubDistrict: state.selectedSubDistrict,
-        villageData: state.villageData,
-        selectedVillage: state.selectedVillage,
-        urlImage: response.data.data?.fileuri ?? '',
-        status: GlobalState.hideDialogLoading,
-      ),);
+      emit(
+        state.copyWith(
+          selectedProvince: state.selectedProvince,
+          provinceData: state.provinceData,
+          districtData: state.districtData,
+          selectedDistrict: state.selectedDistrict,
+          subDistrictData: state.subDistrictData,
+          selectedSubDistrict: state.selectedSubDistrict,
+          villageData: state.villageData,
+          selectedVillage: state.selectedVillage,
+          urlImage: response.data.data?.fileuri ?? '',
+          status: GlobalState.hideDialogLoading,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        selectedProvince: state.selectedProvince,
-        provinceData: state.provinceData,
-        districtData: state.districtData,
-        selectedDistrict: state.selectedDistrict,
-        subDistrictData: state.subDistrictData,
-        selectedSubDistrict: state.selectedSubDistrict,
-        villageData: state.villageData,
-        selectedVillage: state.selectedVillage,
-        status: GlobalState.hideDialogLoading,
-      ),);
-      emit(state.copyWith(
-        selectedProvince: state.selectedProvince,
-        provinceData: state.provinceData,
-        districtData: state.districtData,
-        selectedDistrict: state.selectedDistrict,
-        subDistrictData: state.subDistrictData,
-        selectedSubDistrict: state.selectedSubDistrict,
-        villageData: state.villageData,
-        selectedVillage: state.selectedVillage,
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          selectedProvince: state.selectedProvince,
+          provinceData: state.provinceData,
+          districtData: state.districtData,
+          selectedDistrict: state.selectedDistrict,
+          subDistrictData: state.subDistrictData,
+          selectedSubDistrict: state.selectedSubDistrict,
+          villageData: state.villageData,
+          selectedVillage: state.selectedVillage,
+          status: GlobalState.hideDialogLoading,
+        ),
+      );
+      emit(
+        state.copyWith(
+          selectedProvince: state.selectedProvince,
+          provinceData: state.provinceData,
+          districtData: state.districtData,
+          selectedDistrict: state.selectedDistrict,
+          subDistrictData: state.subDistrictData,
+          selectedSubDistrict: state.selectedSubDistrict,
+          villageData: state.villageData,
+          selectedVillage: state.selectedVillage,
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        selectedProvince: state.selectedProvince,
-        provinceData: state.provinceData,
-        districtData: state.districtData,
-        selectedDistrict: state.selectedDistrict,
-        subDistrictData: state.subDistrictData,
-        selectedSubDistrict: state.selectedSubDistrict,
-        villageData: state.villageData,
-        selectedVillage: state.selectedVillage,
-        status: GlobalState.hideDialogLoading,
-      ),);
-      emit(state.copyWith(
-        selectedProvince: state.selectedProvince,
-        provinceData: state.provinceData,
-        districtData: state.districtData,
-        selectedDistrict: state.selectedDistrict,
-        subDistrictData: state.subDistrictData,
-        selectedSubDistrict: state.selectedSubDistrict,
-        villageData: state.villageData,
-        selectedVillage: state.selectedVillage,
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          selectedProvince: state.selectedProvince,
+          provinceData: state.provinceData,
+          districtData: state.districtData,
+          selectedDistrict: state.selectedDistrict,
+          subDistrictData: state.subDistrictData,
+          selectedSubDistrict: state.selectedSubDistrict,
+          villageData: state.villageData,
+          selectedVillage: state.selectedVillage,
+          status: GlobalState.hideDialogLoading,
+        ),
+      );
+      emit(
+        state.copyWith(
+          selectedProvince: state.selectedProvince,
+          provinceData: state.provinceData,
+          districtData: state.districtData,
+          selectedDistrict: state.selectedDistrict,
+          subDistrictData: state.subDistrictData,
+          selectedSubDistrict: state.selectedSubDistrict,
+          villageData: state.villageData,
+          selectedVillage: state.selectedVillage,
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

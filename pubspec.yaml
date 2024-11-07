@@ -69,12 +69,15 @@ dependencies:
   qr_flutter: ^4.1.0
   mobile_scanner: ^5.2.3
   flutter_widget_from_html: ^0.15.2
-  path_provider: ^2.1.4
+  path_provider: ^2.1.5
   easy_image_viewer: ^1.5.1
   share_plus: ^10.0.3
   money_formatter: ^0.0.6
   currency_text_input_formatter: ^2.2.3
   pull_to_refresh: ^2.0.0
+  timer_count_down: ^2.2.2
+  firebase_messaging: ^14.7.10
+  flutter_local_notifications: ^18.0.0
 
 dev_dependencies:
   flutter_test:

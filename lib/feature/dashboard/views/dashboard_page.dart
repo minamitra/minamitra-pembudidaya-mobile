@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/views/home_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile/view/profile_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/views/transaction_page.dart';
+import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -26,6 +27,13 @@ class _DashboardPageState extends State<DashboardPage> {
   ];
 
   final PageStorageBucket bucket = PageStorageBucket();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    appCloudMessaging.setFirebaseCloudMessagingHandler(context);
+  }
 
   @override
   Widget build(BuildContext context) {

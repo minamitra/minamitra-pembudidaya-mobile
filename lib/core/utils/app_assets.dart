@@ -19,6 +19,10 @@ class AppAssets {
   static const String withdrawalIcon = '$iconPath/withdrawal-icon.png';
   static const String walletWhiteIcon = '$iconPath/wallet-white-icon.png';
   static const String activityIcon = '$iconPath/activity-icon.png';
+  static const String emptyNotificationIcon =
+      '$iconPath/empty-notification-icon.png';
+  static const String dummyNotificationImage =
+      '$imagePath/dummy-notif-image.png';
 
   // Icon General
   static const String fishIcon = '$iconPath/fish-icon.png';
@@ -145,6 +149,13 @@ class AppAssets {
   static const String goldIcon = '$iconPath/gold-icon.png';
   static const String platinumIcon = '$iconPath/platinum-icon.png';
   static const String diamondIcon = '$iconPath/diamond-icon.png';
+  static const String bronzeV2Icon = '$iconPath/bronze-v2-icon.png';
+  static const String silverV2Icon = '$iconPath/silver-v2-icon.png';
+  static const String goldV2Icon = '$iconPath/gold-v2-icon.png';
+  static const String platinumV2Icon = '$iconPath/platinum-v2-icon.png';
+  static const String diamondV2Icon = '$iconPath/diamond-v2-icon.png';
+  static const String championV2Icon = '$iconPath/champion-v2-icon.png';
+  static const String pointGainIcon = '$iconPath/point-gain-icon.png';
 
   // FAQ
   static const String questionIcon = '$iconPath/question-icon.png';

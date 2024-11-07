@@ -12,10 +12,22 @@ class PointV2Cubit extends Cubit<PointV2State> {
 
   void onChangeGridExchangeValue(int index) {
     emit(state.copyWith(status: GlobalState.onUpdating));
-    emit(state.copyWith(
-      status: GlobalState.loaded,
-      selectedGridExchange: index,
-    ),);
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        selectedGridExchange: index,
+      ),
+    );
+  }
+
+  void onChangeBodyPointV2(BodyPointV2 bodyPointV2) {
+    emit(state.copyWith(status: GlobalState.onUpdating));
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        bodyPointV2: bodyPointV2,
+      ),
+    );
   }
 
   Future<void> onSubmitExchange() async {

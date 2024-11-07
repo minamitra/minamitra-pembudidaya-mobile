@@ -15,7 +15,8 @@ class ProductsResponse {
         data: json['data'] == null
             ? []
             : List<ProductsResponseData>.from(
-                json['data']!.map((x) => ProductsResponseData.fromMap(x)),),
+                json['data']!.map((x) => ProductsResponseData.fromMap(x)),
+              ),
       );
 }
 
@@ -41,6 +42,7 @@ class ProductsResponseData {
   String? note;
   String? imageUrl;
   bool? activeBool;
+  int? quantity;
 
   ProductsResponseData({
     this.id,
@@ -64,6 +66,7 @@ class ProductsResponseData {
     this.note,
     this.imageUrl,
     this.activeBool,
+    this.quantity = 1,
   });
 
   factory ProductsResponseData.fromJson(String str) =>
@@ -93,4 +96,54 @@ class ProductsResponseData {
         imageUrl: json['image_url'],
         activeBool: json['active_bool'],
       );
+
+  ProductsResponseData copyWith({
+    String? id,
+    String? code,
+    String? name,
+    String? categoryId,
+    String? itemCategoryParId,
+    String? categoryName,
+    String? unitId,
+    String? unitName,
+    String? sellPrice,
+    String? buyPrice,
+    String? stock,
+    String? supplierId,
+    String? supplierName,
+    String? proteinPercent,
+    String? lemakPercent,
+    String? seratKasarPercent,
+    String? kadarAbuPercent,
+    String? kadarAirPercent,
+    String? note,
+    String? imageUrl,
+    bool? activeBool,
+    int? quantity,
+  }) {
+    return ProductsResponseData(
+      id: id ?? this.id,
+      code: code ?? this.code,
+      name: name ?? this.name,
+      categoryId: categoryId ?? this.categoryId,
+      itemCategoryParId: itemCategoryParId ?? this.itemCategoryParId,
+      categoryName: categoryName ?? this.categoryName,
+      unitId: unitId ?? this.unitId,
+      unitName: unitName ?? this.unitName,
+      sellPrice: sellPrice ?? this.sellPrice,
+      buyPrice: buyPrice ?? this.buyPrice,
+      stock: stock ?? this.stock,
+      supplierId: supplierId ?? this.supplierId,
+      supplierName: supplierName ?? this.supplierName,
+      proteinPercent: proteinPercent ?? this.proteinPercent,
+      lemakPercent: lemakPercent ?? this.lemakPercent,
+      seratKasarPercent: seratKasarPercent ?? this.seratKasarPercent,
+      kadarAbuPercent: kadarAbuPercent ?? this.kadarAbuPercent,
+      kadarAirPercent: kadarAirPercent ?? this.kadarAirPercent,
+      note: note ?? this.note,
+      imageUrl: imageUrl ?? this.imageUrl,
+      activeBool: activeBool ?? this.activeBool,
+      quantity: quantity ?? this.quantity,
+    );
+  }
 }

@@ -57,19 +57,20 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           InkWell(
             onTap: () {},
             child: Container(
-                width: 36,
-                height: 36,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.white.withOpacity(0.25),
-                ),
-                child: Image.asset(
-                  AppAssets.shareIcon,
-                  width: 24,
-                  height: 24,
-                  fit: BoxFit.cover,
-                ),),
+              width: 36,
+              height: 36,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColor.white.withOpacity(0.25),
+              ),
+              child: Image.asset(
+                AppAssets.shareIcon,
+                width: 24,
+                height: 24,
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ],
       ),
@@ -182,7 +183,9 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                     width: 8,
                     height: 8,
                     decoration: BoxDecoration(
-                      color: AppColor.green[500],
+                      color: double.parse(widget.data.stock!).round() > 0
+                          ? AppColor.green[500]
+                          : AppColor.red[500],
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -225,12 +228,14 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 fit: BoxFit.cover,
               ),
               const SizedBox(width: 16.0),
-              Text(
-                widget.data.supplierName ?? '-',
-                textAlign: TextAlign.start,
-                style: appTextTheme(context).titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+              Expanded(
+                child: Text(
+                  widget.data.supplierName ?? '-',
+                  textAlign: TextAlign.start,
+                  style: appTextTheme(context).titleSmall?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
               ),
             ],
           ),
@@ -336,10 +341,11 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                       height: 32,
                     ),
                     rowText(
-                        'Kadar Air',
-                        widget.data.kadarAirPercent == null
-                            ? '-'
-                            : '${double.parse(widget.data.kadarAirPercent!).round()}%',),
+                      'Kadar Air',
+                      widget.data.kadarAirPercent == null
+                          ? '-'
+                          : '${double.parse(widget.data.kadarAirPercent!).round()}%',
+                    ),
                     Divider(
                       color: AppColor.neutral[200],
                       thickness: 1,
@@ -474,9 +480,11 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text('4.8',
-                  textAlign: TextAlign.start,
-                  style: appTextTheme(context).titleSmall!,),
+              Text(
+                '4.8',
+                textAlign: TextAlign.start,
+                style: appTextTheme(context).titleSmall!,
+              ),
               const SizedBox(width: 6.0),
               Image.asset(
                 AppAssets.starSingleIcon,
@@ -561,11 +569,16 @@ class _ProductDetailViewState extends State<ProductDetailView> {
       child: AppPrimaryFullButton(
         'Beli Sekarang',
         () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            CheckoutPage(widget.data),
-            CheckoutPage.route,
-          ),);
+          if (double.parse(widget.data.stock!).round() > 0) {
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                CheckoutPage(widget.data),
+                CheckoutPage.route,
+              ),
+            );
+          }
         },
+        isActive: double.parse(widget.data.stock!).round() > 0,
       ),
     );
   }

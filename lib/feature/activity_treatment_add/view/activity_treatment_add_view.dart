@@ -84,7 +84,9 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
   Future<void> convetAttachmentImage(List<String> images) async {
     Future.forEach(images, (element) async {
       http.Response imagePath = await http.get(Uri.parse(element));
-      context.read<MultiImageCubit>().setImage(imagePath.bodyBytes);
+      if (mounted) {
+        context.read<MultiImageCubit>().setImage(imagePath.bodyBytes);
+      }
     });
   }
 

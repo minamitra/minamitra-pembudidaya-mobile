@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/product/product_service.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/logics/product_category_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/logics/products_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_view.dart';
@@ -18,17 +17,10 @@ class ProductsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appDefaultAppBar(
+      appBar: appDefaultAppBarWithBucket(
         context,
         'Belanja',
-        actions: [
-          Image.asset(
-            AppAssets.bellIcon,
-            height: 20.0,
-            fit: BoxFit.cover,
-          ),
-          const SizedBox(width: 16.0),
-        ],
+        isBackButton: true,
       ),
       body: MultiBlocProvider(
         providers: [

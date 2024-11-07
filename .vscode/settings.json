@@ -5,5 +5,13 @@
   },
   "files.watcherExclude": {
     "**/.fvm": true
-  }
+  },
+  "editor.rulers": [
+      
+  ],
+  "[dart]": {
+        "editor.rulers": [
+
+    ],
+    },
 }
