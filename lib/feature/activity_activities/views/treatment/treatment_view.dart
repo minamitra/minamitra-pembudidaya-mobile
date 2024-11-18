@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -37,10 +38,12 @@ class _TreatmentViewState extends State<TreatmentView> {
       return InkWell(
         onTap: () {
           Navigator.of(context)
-              .push(AppTransition.pushTransition(
-            ActivityTreatmentDetailPage(data, widget.dateDistribution),
-            ActivityTreatmentDetailPage.routeSettings(),
-          ),)
+              .push(
+            AppTransition.pushTransition(
+              ActivityTreatmentDetailPage(data, widget.dateDistribution),
+              ActivityTreatmentDetailPage.routeSettings(),
+            ),
+          )
               .then((value) {
             if (value == 'refresh') {
               context.read<TreatmentCubit>().init(
@@ -71,7 +74,9 @@ class _TreatmentViewState extends State<TreatmentView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : '-',
+                        data.datetime != null
+                            ? AppConvertDateTime().ddmmyyyyhhmm(data.datetime!)
+                            : '-',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -113,7 +118,8 @@ class _TreatmentViewState extends State<TreatmentView> {
                   const SizedBox(width: 12.0),
                   Text(
                     appConvertCurrency(
-                        data.cost != null ? double.parse(data.cost!) : 0,),
+                      data.cost != null ? double.parse(data.cost!) : 0,
+                    ),
                     style: appTextTheme(context).titleSmall,
                   ),
                 ],
@@ -137,7 +143,8 @@ class _TreatmentViewState extends State<TreatmentView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
                   child: AppEmptyData(
-                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
+                    'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
+                  ),
                 )
               : ListView.separated(
                   shrinkWrap: true,

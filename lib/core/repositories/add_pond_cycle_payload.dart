@@ -5,8 +5,8 @@ class AddPondCyclePayload {
   String? tebarDate;
   int? tebarFishTotal;
   int? fishseedId;
-  int? tebarBobot;
-  int? targetPanenBobot;
+  double? tebarBobot;
+  double? targetPanenBobot;
   int? srTarget;
   FishfoodJsonObject? fishfoodJsonObject;
   int? estimationFishfoodEpp;
@@ -48,8 +48,8 @@ class AddPondCyclePayload {
     String? tebarDate,
     int? tebarFishTotal,
     int? fishseedId,
-    int? tebarBobot,
-    int? targetPanenBobot,
+    double? tebarBobot,
+    double? targetPanenBobot,
     int? srTarget,
     FishfoodJsonObject? fishfoodJsonObject,
     int? estimationFishfoodEpp,
@@ -105,23 +105,28 @@ class FishfoodJsonObject {
         starter1: json['starter1'] == null
             ? []
             : List<Finisher>.from(
-                json['starter1']!.map((x) => Finisher.fromMap(x)),),
+                json['starter1']!.map((x) => Finisher.fromMap(x)),
+              ),
         starter2: json['starter2'] == null
             ? []
             : List<Finisher>.from(
-                json['starter2']!.map((x) => Finisher.fromMap(x)),),
+                json['starter2']!.map((x) => Finisher.fromMap(x)),
+              ),
         starter3: json['starter3'] == null
             ? []
             : List<Finisher>.from(
-                json['starter3']!.map((x) => Finisher.fromMap(x)),),
+                json['starter3']!.map((x) => Finisher.fromMap(x)),
+              ),
         grower: json['grower'] == null
             ? []
             : List<Finisher>.from(
-                json['grower']!.map((x) => Finisher.fromMap(x)),),
+                json['grower']!.map((x) => Finisher.fromMap(x)),
+              ),
         finisher: json['finisher'] == null
             ? []
             : List<Finisher>.from(
-                json['finisher']!.map((x) => Finisher.fromMap(x)),),
+                json['finisher']!.map((x) => Finisher.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {

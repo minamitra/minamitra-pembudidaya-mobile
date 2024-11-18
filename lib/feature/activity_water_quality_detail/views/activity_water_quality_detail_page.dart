@@ -8,8 +8,13 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityWaterQualityDetailPage extends StatelessWidget {
   final WaterQualityResponseData data;
+  final DateTime tebarDate;
 
-  const ActivityWaterQualityDetailPage(this.data, {super.key});
+  const ActivityWaterQualityDetailPage(
+    this.data, {
+    required this.tebarDate,
+    super.key,
+  });
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: '/activity-water-quality-detail-page');
@@ -23,15 +28,19 @@ class ActivityWaterQualityDetailPage extends StatelessWidget {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                ActivityWaterQualityAddPage(
-                  int.parse(data.fishpondId ?? '1'),
-                  int.parse(data.fishpondcycleId ?? '1'),
-                  isEdit: true,
-                  data: data,
+              Navigator.of(context).push(
+                AppTransition.pushTransition(
+                  ActivityWaterQualityAddPage(
+                    int.parse(data.fishpondId ?? '1'),
+                    int.parse(data.fishpondcycleId ?? '1'),
+                    isEdit: true,
+                    data: data,
+                    initDateTime: data.datetime ?? DateTime.now(),
+                    tebarDate: tebarDate,
+                  ),
+                  ActivityWaterQualityAddPage.routeSettings,
                 ),
-                ActivityWaterQualityAddPage.routeSettings,
-              ),);
+              );
             },
             child: Text(
               'Edit',

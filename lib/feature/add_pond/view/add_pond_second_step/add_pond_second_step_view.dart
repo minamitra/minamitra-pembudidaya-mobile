@@ -59,6 +59,8 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           widget.pondData!.imageUrl != null) {
         convertImageUrl(widget.pondData!.imageUrl!);
       }
+      addPondSecondStepCubit.fullAddressController.text =
+          widget.pondData?.address ?? '';
     }
   }
 
@@ -670,6 +672,21 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                 ),
         ),
         const SizedBox(height: 18.0),
+        AppValidatorTextField(
+          controller: addPondSecondStepCubit.fullAddressController,
+          isMandatory: true,
+          withUpperLabel: true,
+          labelText: 'Alamat Lengkap',
+          hintText: 'Masukan alamat lengkap',
+          maxLines: 3,
+          validator: (value) {
+            if (value?.isEmpty ?? true) {
+              return 'Alamat lengkap tidak boleh kosong';
+            }
+            return null;
+          },
+        ),
+        const SizedBox(height: 18.0),
         Text(
           'Lokasi Kolam',
           style: appTextTheme(context)
@@ -752,6 +769,10 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
                               addressLongitude:
                                   stateSecondStep.longitude.toString(),
                               imageUrl: stateSecondStep.urlImage,
+                              address: context
+                                  .read<AddPondSecondStepCubit>()
+                                  .fullAddressController
+                                  .text,
                             );
                             context
                                 .read<AddPondCubit>()

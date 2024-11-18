@@ -19,6 +19,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
   final DateTime dateDistribution;
   final bool isEdit;
   final TreatmentResponseData? data;
+  final DateTime initDateTime;
 
   const ActivityTreatmentAddPage(
     this.fishpondId,
@@ -26,6 +27,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
     this.dateDistribution, {
     this.isEdit = false,
     this.data,
+    required this.initDateTime,
     super.key,
   });
 
@@ -73,9 +75,11 @@ class ActivityTreatmentAddPage extends StatelessWidget {
             }
 
             if (state.status.isSuccessSubmit) {
-              AppTopSnackBar(context).showSuccess(isEdit
-                  ? 'Berhasil Edit\nPerlakuan!'
-                  : 'Berhasil Membuat\nPerlakuan Baru!',);
+              AppTopSnackBar(context).showSuccess(
+                isEdit
+                    ? 'Berhasil Edit\nPerlakuan!'
+                    : 'Berhasil Membuat\nPerlakuan Baru!',
+              );
               Navigator.of(context).pop('refresh');
               if (isEdit) {
                 Navigator.of(context).pop('refresh');
@@ -93,6 +97,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
               dateDistribution,
               isEdit,
               data,
+              initDateTime: initDateTime,
             );
           },
         ),

@@ -31,6 +31,7 @@ class AddPondSecondStepCubit extends Cubit<AddPondSecondStepState> {
   final TextEditingController districtController = TextEditingController();
   final TextEditingController subdisctrictController = TextEditingController();
   final TextEditingController villageController = TextEditingController();
+  final TextEditingController fullAddressController = TextEditingController();
 
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));

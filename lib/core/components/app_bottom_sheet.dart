@@ -171,6 +171,7 @@ Future showDeleteBottomSheet(
   required Function() onTapDelete,
   IconData? icon,
   String? buttonTitle,
+  String? cancelTitle,
 }) {
   return showModalBottomSheet(
     context: context,
@@ -210,7 +211,7 @@ Future showDeleteBottomSheet(
               ),
               const SizedBox(height: 18.0),
               AppWhiteFullButton(
-                'Batalkan',
+                cancelTitle ?? 'Batalkan',
                 () {
                   Navigator.of(context).pop();
                 },

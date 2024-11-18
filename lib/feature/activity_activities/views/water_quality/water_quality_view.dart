@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/water_quality_cubit.dart';
@@ -15,11 +16,13 @@ class WaterQualityView extends StatefulWidget {
   final int fishpondId;
   final int fishpondcycleId;
   final String datetime;
+  final DateTime tebarDate;
 
   const WaterQualityView(
     this.fishpondId,
     this.fishpondcycleId,
     this.datetime, {
+    required this.tebarDate,
     super.key,
   });
 
@@ -34,10 +37,15 @@ class _WaterQualityViewState extends State<WaterQualityView> {
       return InkWell(
         onTap: () {
           Navigator.of(context)
-              .push(AppTransition.pushTransition(
-            ActivityWaterQualityDetailPage(data),
-            ActivityWaterQualityDetailPage.routeSettings(),
-          ),)
+              .push(
+            AppTransition.pushTransition(
+              ActivityWaterQualityDetailPage(
+                data,
+                tebarDate: widget.tebarDate,
+              ),
+              ActivityWaterQualityDetailPage.routeSettings(),
+            ),
+          )
               .then((value) {
             if (value == 'refresh') {
               context.read<WaterQualityCubit>().init(
@@ -70,7 +78,9 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : '-',
+                        data.datetime != null
+                            ? AppConvertDateTime().ddmmyyyyhhmm(data.datetime!)
+                            : '-',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -147,13 +157,17 @@ class _WaterQualityViewState extends State<WaterQualityView> {
                 children: [
                   Image.asset(AppAssets.phNewIcon, height: 20.0),
                   const SizedBox(width: 8.0),
-                  Text(data.ph != null ? data.ph.toString() : '-',
-                      style: appTextTheme(context).titleSmall,),
+                  Text(
+                    data.ph != null ? data.ph.toString() : '-',
+                    style: appTextTheme(context).titleSmall,
+                  ),
                   const SizedBox(width: 24.0),
                   Image.asset(AppAssets.temperatureIcon, height: 20.0),
                   const SizedBox(width: 8.0),
-                  Text(data.ph != null ? '${data.ph.toString()} °C' : '-',
-                      style: appTextTheme(context).titleSmall,),
+                  Text(
+                    data.ph != null ? '${data.ph.toString()} °C' : '-',
+                    style: appTextTheme(context).titleSmall,
+                  ),
                 ],
               ),
             ],
@@ -175,7 +189,8 @@ class _WaterQualityViewState extends State<WaterQualityView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
                   child: AppEmptyData(
-                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
+                    'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
+                  ),
                 )
               : ListView.separated(
                   shrinkWrap: true,

@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
@@ -42,15 +43,28 @@ class _ActivityWaterQualityDetailViewState
             scrollDirection: Axis.horizontal,
             itemCount: attachmentJsonArray.length,
             itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: AspectRatio(
-                  aspectRatio: 2 / 1,
-                  child: AppNetworkImage(
-                    attachmentJsonArray[index],
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
+              return InkWell(
+                onTap: () {
+                  showImageViewer(
+                    context,
+                    Image.network(attachmentJsonArray[index]).image,
+                    immersive: false,
+                    useSafeArea: true,
+                    swipeDismissible: true,
+                    doubleTapZoomable: true,
+                    backgroundColor: Colors.black.withOpacity(0.7),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: AspectRatio(
+                    aspectRatio: 2 / 1,
+                    child: AppNetworkImage(
+                      attachmentJsonArray[index],
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               );
@@ -69,62 +83,71 @@ class _ActivityWaterQualityDetailViewState
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-              'Waktu  Perlakuan',
-              widget.data.datetime != null
-                  ? AppConvertDateTime().dmyName(widget.data.datetime!)
-                  : '-',),
-          const SizedBox(height: 18.0),
-          AppDividerSmall(),
-          const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem('Ketinggian Air',
-              widget.data.level != null ? '${widget.data.level} cm' : '-',),
+            'Waktu  Perlakuan',
+            widget.data.datetime != null
+                ? AppConvertDateTime().dmyName(widget.data.datetime!)
+                : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'pH', widget.data.ph != null ? widget.data.ph! : '-',),
+            'Ketinggian Air',
+            widget.data.level != null ? '${widget.data.level} cm' : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'Satinitas',
-              widget.data.salinitas != null
-                  ? '${widget.data.salinitas} ppt'
-                  : '-',),
+            'pH',
+            widget.data.ph != null ? widget.data.ph! : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'Suhu',
-              widget.data.temperature != null
-                  ? '${widget.data.temperature}°C'
-                  : '-',),
+            'Satinitas',
+            widget.data.salinitas != null
+                ? '${widget.data.salinitas} ppt'
+                : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'DO', widget.data.dO != null ? '${widget.data.dO} mg/L' : '-',),
+            'Suhu',
+            widget.data.temperature != null
+                ? '${widget.data.temperature}°C'
+                : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'Kecerahan',
-              widget.data.clarity != null
-                  ? '${widget.data.clarity} mg/L'
-                  : '-',),
-          const SizedBox(height: 18.0),
-          AppDividerSmall(),
-          const SizedBox(height: 18.0),
-          AppWidgetSeparatedItem('Warna Air',
-              widget.data.waterColor != null ? widget.data.waterColor! : '-',),
+            'DO',
+            widget.data.dO != null ? '${widget.data.dO} mg/L' : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'Cuaca',
-              widget.data.waterWeather != null
-                  ? widget.data.waterWeather!
-                  : '-',),
+            'Kecerahan',
+            widget.data.clarity != null ? '${widget.data.clarity} mg/L' : '-',
+          ),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+            'Warna Air',
+            widget.data.waterColor != null ? widget.data.waterColor! : '-',
+          ),
+          const SizedBox(height: 18.0),
+          AppDividerSmall(),
+          const SizedBox(height: 18.0),
+          AppWidgetSeparatedItem(
+            'Cuaca',
+            widget.data.waterWeather != null ? widget.data.waterWeather! : '-',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),

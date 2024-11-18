@@ -259,23 +259,17 @@ class _AttachmentViewState extends State<AttachmentView> {
       return AppPrimaryButton(
         'Simpan',
         () async {
-          File tempKtpFile;
-          File tempEkusukaFile;
           if (ktpPictureFile == null && ekusukaCardPictureFile == null) {
-            AppTopSnackBar(context)
-                .showDanger('Mohon lengkapi data terlebih dahulu');
+            AppTopSnackBar(context).showDanger(
+              'Mohon ganti atau lengkapi lampiran\nterlebih dahulu',
+            );
             return;
           }
-          if (ktpPictureFile != null && ekusukaCardPictureFile != null) {
-            tempKtpFile = ktpPictureFile!;
-            tempEkusukaFile = ekusukaCardPictureFile!;
-          } else {
-            tempKtpFile = ktpPictureFile!;
-            tempEkusukaFile = ekusukaCardPictureFile!;
-          }
           context.read<ProfileMemberCubit>().updateAttachmentProfile(
-                tempKtpFile,
-                tempEkusukaFile,
+                ktpPictureFile,
+                ekusukaCardPictureFile,
+                ktpImageExist: widget.profile.ktpUrl ?? '',
+                ekusukaImageExist: widget.profile.ekusukaUrl ?? '',
               );
         },
       );

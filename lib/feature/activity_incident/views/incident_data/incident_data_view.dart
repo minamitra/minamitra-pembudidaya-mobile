@@ -23,9 +23,12 @@ class _IncidentDataViewState extends State<IncidentDataView> {
     return InkWell(
       onTap: () {
         Navigator.of(context)
-            .push(AppTransition.pushTransition(
-                ActivityIncidentDetailPage(incident),
-                ActivityIncidentDetailPage.routeSettings(),),)
+            .push(
+          AppTransition.pushTransition(
+            ActivityIncidentDetailPage(incident),
+            ActivityIncidentDetailPage.routeSettings(),
+          ),
+        )
             .then((value) {
           if (value != null || value == 'refresh') {
             context.read<IncidentDataCubit>().getIncidentData();
@@ -95,9 +98,13 @@ class _IncidentDataViewState extends State<IncidentDataView> {
                   height: 20.0,
                 ),
                 const SizedBox(width: 12.0),
-                Text(
-                  incident.note ?? '-',
-                  style: appTextTheme(context).titleSmall,
+                Expanded(
+                  child: Text(
+                    incident.note ?? '-',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: appTextTheme(context).titleSmall,
+                  ),
                 ),
               ],
             ),
@@ -145,7 +152,8 @@ class _IncidentDataViewState extends State<IncidentDataView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 124, 16, 0),
                   child: AppEmptyData(
-                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
+                    'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
+                  ),
                 )
               : ListView.separated(
                   shrinkWrap: true,

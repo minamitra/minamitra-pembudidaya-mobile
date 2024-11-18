@@ -27,6 +27,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends StatefulWidget {
@@ -51,23 +52,31 @@ class _HomeViewState extends State<HomeView> {
     AppAssets.banner3Image,
   ];
 
-  int levelStep = 1;
+  int levelStep = 3;
   List<NameIconEntity> listLevel = [
     NameIconEntity(
       'Bronze',
-      AppAssets.starIcon,
+      AppAssets.bronzeV2Icon,
     ),
     NameIconEntity(
       'Silver',
-      AppAssets.medalSilverIcon,
+      AppAssets.silverV2Icon,
     ),
     NameIconEntity(
       'Gold',
-      AppAssets.medalGoldIcon,
+      AppAssets.goldV2Icon,
     ),
     NameIconEntity(
       'Platinum',
-      AppAssets.crownIcon,
+      AppAssets.platinumV2Icon,
+    ),
+    NameIconEntity(
+      'Diamond',
+      AppAssets.diamondV2Icon,
+    ),
+    NameIconEntity(
+      'Champion',
+      AppAssets.championV2Icon,
     ),
   ];
 
@@ -379,14 +388,15 @@ class _HomeViewState extends State<HomeView> {
                           height: 24.0,
                           width: 24.0,
                           fit: BoxFit.cover,
-                          color: index < levelStep
-                              ? AppColor.accent
-                              : AppColor.black[300],
+                          color: index < levelStep ? null : AppColor.black[300],
                         ),
                         const SizedBox(height: 8.0),
                         Text(
                           listLevel[index].name,
-                          style: AppTextStyle.blackExtraSmallText.copyWith(
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyle.blackDoubleExtraSmallMediumText
+                              .copyWith(
                             color: index < levelStep
                                 ? AppColor.black
                                 : AppColor.black[300],
@@ -403,15 +413,14 @@ class _HomeViewState extends State<HomeView> {
             ],
           ),
           const SizedBox(height: 12.0),
-          LinearProgressBar(
-            maxSteps: listLevel.length,
-            progressType:
-                LinearProgressBar.progressTypeLinear, // Use Linear progress
-            currentStep: levelStep,
-            minHeight: 7,
+          LinearPercentIndicator(
+            animation: true,
+            lineHeight: 8.0,
+            animationDuration: 1000,
+            percent: 0.4,
+            barRadius: const Radius.circular(10.0),
             progressColor: AppColor.accent,
             backgroundColor: AppColor.black[300],
-            borderRadius: BorderRadius.circular(10), //  NEW
           ),
           const SizedBox(height: 12.0),
           Text(
@@ -541,12 +550,18 @@ class _HomeViewState extends State<HomeView> {
             );
             break;
           case 'Belanja':
-            Navigator.of(context).push(
+            Navigator.of(context)
+                .push(
               AppTransition.pushTransition(
                 const ProductsPage(),
                 ProductsPage.routeSettings(),
               ),
-            );
+            )
+                .then((value) {
+              if (value == 'changeBottomNav1') {
+                context.read<DashboardBottomNavCubit>().changeIndex(1);
+              }
+            });
             break;
           default:
         }

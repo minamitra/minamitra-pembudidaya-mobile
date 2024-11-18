@@ -16,11 +16,13 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dar
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_rename_file.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/treatment_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/logics/activity_treatment_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/add_treatment_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_treatment_add/repositories/update_treatment_payload.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ActivityTreatmentAddView extends StatefulWidget {
   final int fishpondId;
@@ -28,6 +30,7 @@ class ActivityTreatmentAddView extends StatefulWidget {
   final DateTime dateDistribution;
   final bool isEdit;
   final TreatmentResponseData? data;
+  final DateTime initDateTime;
 
   const ActivityTreatmentAddView(
     this.fishpondId,
@@ -35,6 +38,7 @@ class ActivityTreatmentAddView extends StatefulWidget {
     this.dateDistribution,
     this.isEdit,
     this.data, {
+    required this.initDateTime,
     super.key,
   });
 
@@ -51,6 +55,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
   final TextEditingController treatmentController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  String dateymDash = '';
 
   DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
@@ -59,11 +64,15 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
   @override
   void initState() {
     super.initState();
+    dateController.text = AppConvertDateTime().dmyName(widget.initDateTime);
+    dateymDash = AppConvertDateTime().ymdDash(widget.initDateTime);
+    fishAgeController.text =
+        ((widget.initDateTime.difference(widget.dateDistribution).inHours / 24)
+                    .round() +
+                1)
+            .toString();
     if (widget.isEdit) {
       if (widget.data != null) {
-        dateController.text = widget.data!.datetime != null
-            ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
-            : '';
         hourController.text = widget.data!.datetime != null
             ? AppConvertDateTime().jm24(widget.data!.datetime!)
             : '';
@@ -111,16 +120,18 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: dateNow,
-            firstDate: firstDate,
+            initialDate: widget.data?.datetime ?? dateNow,
+            firstDate: widget.dateDistribution,
             lastDate: lastDate,
           ).then((date) {
             setState(() {
               if (date != null) {
-                dateController.text = AppConvertDateTime().ymdDash(date);
+                dateController.text = AppConvertDateTime().dmyName(date);
+                dateymDash = AppConvertDateTime().ymdDash(date);
                 fishAgeController.text =
-                    (date.difference(widget.dateDistribution).inHours / 24)
-                        .round()
+                    ((date.difference(widget.dateDistribution).inHours / 24)
+                                .round() +
+                            1)
                         .toString();
                 // fishAgeController.text = "test";
               }
@@ -397,7 +408,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
                 fishpondId: widget.fishpondId,
                 fishpondcycleId: widget.fishpondcycleId,
                 datetime: DateTime.parse(
-                  '${dateController.text} ${hourController.text}',
+                  '$dateymDash ${hourController.text}',
                 ),
                 fishAge: int.parse(fishAgeController.text),
                 name: treatmentController.text,
@@ -412,7 +423,7 @@ class _ActivityTreatmentAddViewState extends State<ActivityTreatmentAddView> {
               UpdateTreatmentPayload payload = UpdateTreatmentPayload(
                 id: widget.data?.id ?? '',
                 datetime: DateTime.parse(
-                  '${dateController.text} ${hourController.text}',
+                  '$dateymDash ${hourController.text}',
                 ),
                 fishAge: int.parse(fishAgeController.text),
                 name: treatmentController.text,

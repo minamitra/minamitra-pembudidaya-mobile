@@ -46,8 +46,11 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: cycleTypeColor(convertToCycleType(
-            widget.isReadyHarvest ? 'ready' : widget.data.status ?? 'active',),),
+        color: cycleTypeColor(
+          convertToCycleType(
+            widget.isReadyHarvest ? 'ready' : widget.data.status ?? 'active',
+          ),
+        ),
         borderRadius: BorderRadius.circular(8.0),
       ),
       child: Text(
@@ -104,9 +107,9 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           const SizedBox(height: 24.0),
           textRow(
-              'Tanggal Tebar',
-              AppConvertDateTime()
-                  .dmy(widget.data.tebarDate ?? DateTime.now()),),
+            'Tanggal Tebar',
+            AppConvertDateTime().dmy(widget.data.tebarDate ?? DateTime.now()),
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
@@ -123,7 +126,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           textRow(
             'Bobot Tebar',
-            '${widget.data.tebarBobot} gram/ekor',
+            '${double.parse(widget.data.tebarBobot.handleEmptyStringToZero()).toStringAsFixed(2)} gram/ekor',
           ),
           Divider(
             height: 32.0,
@@ -141,7 +144,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           textRow(
             'Target Bobot Panen Tebar',
-            '${widget.data.targetPanenBobot} gram/ekor',
+            '${double.parse(widget.data.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(2)} gram/ekor',
           ),
           Divider(
             height: 32.0,
@@ -258,9 +261,13 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           ),
           const SizedBox(height: 24.0),
           textRow(
-              'Tanggal Panen',
-              AppConvertDateTime().edmy(DateTime.parse(
-                  widget.data.actualPanenDate ?? DateTime.now().toString(),),),),
+            'Tanggal Panen',
+            AppConvertDateTime().edmy(
+              DateTime.parse(
+                widget.data.actualPanenDate ?? DateTime.now().toString(),
+              ),
+            ),
+          ),
           Divider(
             height: 32.0,
             thickness: 1,
@@ -306,11 +313,15 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           style: appTextTheme(context).bodySmall,
         ),
         const SizedBox(height: 16.0),
-        textRow('${data.sellRequest} kg',
-            appConvertCurrency(data.sellUnitPrice.toDouble()),),
+        textRow(
+          '${data.sellRequest} kg',
+          appConvertCurrency(data.sellUnitPrice.toDouble()),
+        ),
         const SizedBox(height: 8.0),
         textRow(
-            'Sub Total', appConvertCurrency(data.sellTotalPrice.toDouble()),),
+          'Sub Total',
+          appConvertCurrency(data.sellTotalPrice.toDouble()),
+        ),
         Divider(
           height: 32.0,
           thickness: 1,
@@ -383,10 +394,12 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
       child: AppPrimaryFullButton(
         'Panen Sekarang',
         () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            ActivityCycleAddHarvestPage(widget.data.id ?? ''),
-            ActivityCycleAddHarvestPage.routeSettings(),
-          ),);
+          Navigator.of(context).push(
+            AppTransition.pushTransition(
+              ActivityCycleAddHarvestPage(widget.data.id ?? ''),
+              ActivityCycleAddHarvestPage.routeSettings(),
+            ),
+          );
         },
       ),
     );

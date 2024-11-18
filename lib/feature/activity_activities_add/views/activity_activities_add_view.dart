@@ -17,10 +17,16 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/rep
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesAddView extends StatefulWidget {
-  const ActivityActivitiesAddView(this.tebarDate, {this.editData, super.key});
+  const ActivityActivitiesAddView(
+    this.tebarDate, {
+    this.editData,
+    required this.initDateTime,
+    super.key,
+  });
 
   final DateTime tebarDate;
   final FeedActivityResponseData? editData;
+  final DateTime initDateTime;
 
   @override
   State<ActivityActivitiesAddView> createState() =>
@@ -38,7 +44,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
   final TextEditingController hourController = TextEditingController();
   final TextEditingController fishAgeController = TextEditingController();
 
-  DateTime dateNow = DateTime.now();
+  // DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 45));
   DateTime lastDate = DateTime.now();
 
@@ -67,7 +73,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
       noteController.text = widget.editData!.note ?? '';
     } else {
       firstDate = widget.tebarDate;
-      dateController.text = AppConvertDateTime().dmyName(dateNow);
+      dateController.text = AppConvertDateTime().dmyName(widget.initDateTime);
     }
 
     // fishAgeController.text =
@@ -107,8 +113,8 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
           onTap: () {
             showDatePicker(
               context: context,
-              initialDate: dateNow,
-              firstDate: firstDate,
+              initialDate: widget.initDateTime,
+              firstDate: widget.tebarDate,
               lastDate: lastDate,
             ).then((date) {
               setState(() {
@@ -367,10 +373,12 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                                           ?.accumulationTotalFeedBefore ??
                                       0) /
                                   1000) +
-                              double.parse(context
-                                  .read<ActivityActivitiesAddCubit>()
-                                  .amountController
-                                  .text,))
+                              double.parse(
+                                context
+                                    .read<ActivityActivitiesAddCubit>()
+                                    .amountController
+                                    .text,
+                              ))
                           .toStringAsFixed(2);
                     },
                     child: Container(
@@ -672,15 +680,19 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                     fishpondcycleId:
                         int.parse(activityCubit.fishPondCycleID ?? '0'),
                     datetime: activityCubit.state.selectedDate,
-                    fishAge: int.tryParse(activityCubit.state
-                                .feedRecomendationResponse?.data?.fishAge ??
-                            '1',) ??
+                    fishAge: int.tryParse(
+                          activityCubit.state.feedRecomendationResponse?.data
+                                  ?.fishAge ??
+                              '1',
+                        ) ??
                         1,
                     recommendation: activityCubit
                         .state.feedRecomendationResponse?.data?.suggestFeed,
                     actual: actualAmount * 1000,
-                    total: (double.tryParse(activityCubit
-                                .totalAmountFeedFromInitController.text,) ??
+                    total: (double.tryParse(
+                              activityCubit
+                                  .totalAmountFeedFromInitController.text,
+                            ) ??
                             0) *
                         1000,
                     fishfoodId: activityCubit.state.fishFoodID,

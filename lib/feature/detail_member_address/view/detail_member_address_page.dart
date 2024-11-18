@@ -76,7 +76,7 @@ class DetailMemberAddressPage extends StatelessWidget {
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            'Detail Alamat',
+            existData != null ? 'Ubah Alamat' : 'Tambah Alamat',
           ),
           body: DetailMemberAddressView(existData: existData),
         ),

@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
@@ -84,18 +85,37 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
                 return Container(
                   height: 150.0,
                   width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 18.0),
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-                  child: Image.network(
-                    widget.data.attachmentJsonArray?[index],
-                    errorBuilder: (
-                      BuildContext context,
-                      Object obj,
-                      StackTrace? trace,
-                    ) {
-                      return const SizedBox();
-                    },
-                    fit: BoxFit.cover,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        showImageViewer(
+                          context,
+                          Image.network(
+                            widget.data.attachmentJsonArray?[index] ?? '',
+                          ).image,
+                          immersive: false,
+                          useSafeArea: true,
+                          swipeDismissible: true,
+                          doubleTapZoomable: true,
+                          backgroundColor: Colors.black.withOpacity(0.7),
+                        );
+                      },
+                      child: Image.network(
+                        widget.data.attachmentJsonArray?[index],
+                        errorBuilder: (
+                          BuildContext context,
+                          Object obj,
+                          StackTrace? trace,
+                        ) {
+                          return const SizedBox();
+                        },
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 );
               },
@@ -108,11 +128,11 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
         const SizedBox(height: 18.0),
         header(),
         const SizedBox(height: 18.0),
-        Text(
-          'PIC: Unknown',
-          style: appTextTheme(context).bodySmall,
-        ),
-        const SizedBox(height: 18.0),
+        // Text(
+        //   'PIC: Unknown',
+        //   style: appTextTheme(context).bodySmall,
+        // ),
+        // const SizedBox(height: 18.0),
         AppDividerSmall(),
         const SizedBox(height: 18.0),
         Text(

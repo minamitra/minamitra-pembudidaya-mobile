@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/location_service/location_permission.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/set_location/logics/init_first_location_cubit.dart';
@@ -9,7 +10,9 @@ import 'package:minamitra_pembudidaya_mobile/feature/set_location/views/set_loca
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class SetLocationPage extends StatelessWidget {
-  const SetLocationPage({super.key});
+  const SetLocationPage({this.initLatLng, super.key});
+
+  final LatLng? initLatLng;
 
   static RouteSettings routeSettings() {
     return const RouteSettings(name: '/Set-location-page');
@@ -22,15 +25,21 @@ class SetLocationPage extends StatelessWidget {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider<RequesLocationCubit>(create: (BuildContext context) {
-          return RequesLocationCubit()..checkLocationPermission();
-        },),
-        BlocProvider<InitFirstLocationCubit>(create: (BuildContext context) {
-          return InitFirstLocationCubit();
-        },),
-        BlocProvider<SetLocationCubit>(create: (BuildContext context) {
-          return SetLocationCubit();
-        },),
+        BlocProvider<RequesLocationCubit>(
+          create: (BuildContext context) {
+            return RequesLocationCubit()..checkLocationPermission();
+          },
+        ),
+        BlocProvider<InitFirstLocationCubit>(
+          create: (BuildContext context) {
+            return InitFirstLocationCubit();
+          },
+        ),
+        BlocProvider<SetLocationCubit>(
+          create: (BuildContext context) {
+            return SetLocationCubit();
+          },
+        ),
       ],
       child: BlocListener<SetLocationCubit, SetLocationState>(
         listener: (context, state) {
@@ -59,7 +68,9 @@ class SetLocationPage extends StatelessWidget {
                 case LocationPermissionStatus.granted:
                   if (context.read<InitFirstLocationCubit>().state ==
                       InitFirstLocationStatus.initial) {
-                    context.read<InitFirstLocationCubit>().getLocation();
+                    context
+                        .read<InitFirstLocationCubit>()
+                        .getLocation(initLatLng: initLatLng);
                   }
                   return const LocationScreen();
               }

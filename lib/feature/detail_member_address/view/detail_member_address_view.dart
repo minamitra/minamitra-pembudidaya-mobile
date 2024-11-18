@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
@@ -411,7 +412,16 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
                   Navigator.of(context)
                       .push(
                     AppTransition.pushTransition(
-                      const SetLocationPage(),
+                      SetLocationPage(
+                        initLatLng: widget.existData != null
+                            ? LatLng(
+                                double.parse(widget.existData!.latitude ?? '0'),
+                                double.parse(
+                                  widget.existData!.longitude ?? '0',
+                                ),
+                              )
+                            : null,
+                      ),
                       SetLocationPage.routeSettings(),
                     ),
                   )
@@ -506,7 +516,9 @@ class _DetailMemberAddressViewState extends State<DetailMemberAddressView> {
                             const SizedBox(width: 12.0),
                             Expanded(
                               child: Text(
-                                'Pilih lokasi',
+                                widget.existData != null
+                                    ? 'Ganti lokasi'
+                                    : 'Pilih lokasi',
                                 style:
                                     appTextTheme(context).bodySmall?.copyWith(
                                           color: AppColor.neutral[400],

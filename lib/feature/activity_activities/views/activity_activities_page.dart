@@ -45,12 +45,14 @@ class ActivityActivitiesPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) =>
-                ActivityActivitiesCubit(FeedActivityServiceImpl.create())
-                  ..init(pondCycleID),),
+          create: (context) =>
+              ActivityActivitiesCubit(FeedActivityServiceImpl.create())
+                ..init(pondCycleID),
+        ),
         BlocProvider(
-            create: (context) =>
-                ActivityFeedCubit(FeedActivityServiceImpl.create()),),
+          create: (context) =>
+              ActivityFeedCubit(FeedActivityServiceImpl.create()),
+        ),
         BlocProvider(
           create: (context) => TreatmentCubit(
             ActivityTreatmentServiceImpl.create(),
@@ -114,17 +116,21 @@ class ActivityActivitiesPage extends StatelessWidget {
                       if ((tebarDate ?? DateTime.now())
                           .isAfter(DateTime.now())) {
                         AppTopSnackBar(context).showInfo(
-                            'Belum waktunya melakukan kegiatan\nTebar awal pada ${AppConvertDateTime().dmyName((tebarDate ?? DateTime.now()))}',);
+                          'Belum waktunya melakukan kegiatan\nTebar awal pada ${AppConvertDateTime().dmyName((tebarDate ?? DateTime.now()))}',
+                        );
                       }
                       Navigator.of(context)
-                          .push(AppTransition.pushTransition(
-                        ActivityActivitiesAddPage(
-                          pondID,
-                          pondCycleID,
-                          tebarDate ?? DateTime.now(),
+                          .push(
+                        AppTransition.pushTransition(
+                          ActivityActivitiesAddPage(
+                            pondID,
+                            pondCycleID,
+                            tebarDate ?? DateTime.now(),
+                            initDateTime: state.selectedDate ?? DateTime.now(),
+                          ),
+                          ActivityActivitiesAddPage.routeSettings(),
                         ),
-                        ActivityActivitiesAddPage.routeSettings(),
-                      ),)
+                      )
                           .then((value) {
                         if (value != null && value == 'refresh') {
                           context.read<ActivityActivitiesCubit>().refreshData();
@@ -133,33 +139,41 @@ class ActivityActivitiesPage extends StatelessWidget {
                       break;
                     case 1:
                       Navigator.of(context)
-                          .push(AppTransition.pushTransition(
-                        ActivityTreatmentAddPage(
-                          int.parse(pondID),
-                          int.parse(pondCycleID),
-                          tebarDate ?? DateTime.now(),
+                          .push(
+                        AppTransition.pushTransition(
+                          ActivityTreatmentAddPage(
+                            int.parse(pondID),
+                            int.parse(pondCycleID),
+                            tebarDate ?? DateTime.now(),
+                            initDateTime: state.selectedDate ?? DateTime.now(),
+                          ),
+                          ActivityTreatmentAddPage.routeSettings,
                         ),
-                        ActivityTreatmentAddPage.routeSettings,
-                      ),)
+                      )
                           .then((value) {
                         if (value != null && value == 'refresh') {
                           context.read<TreatmentCubit>().init(
                                 int.parse(pondID),
                                 int.parse(pondCycleID),
                                 AppConvertDateTime().ymdDash(
-                                    state.selectedDate ?? DateTime.now(),),
+                                  state.selectedDate ?? DateTime.now(),
+                                ),
                               );
                         }
                       });
                     case 2:
                       Navigator.of(context)
-                          .push(AppTransition.pushTransition(
-                        ActivitySamplingAddPage(
-                          int.parse(pondID),
-                          int.parse(pondCycleID),
+                          .push(
+                        AppTransition.pushTransition(
+                          ActivitySamplingAddPage(
+                            int.parse(pondID),
+                            int.parse(pondCycleID),
+                            initDateTime: state.selectedDate ?? DateTime.now(),
+                            tebarDate: tebarDate ?? DateTime.now(),
+                          ),
+                          ActivitySamplingAddPage.routeSettings,
                         ),
-                        ActivitySamplingAddPage.routeSettings,
-                      ),)
+                      )
                           .then((value) {
                         if (value != null && value == 'refresh') {
                           context.read<SamplingCubit>().init(
@@ -173,13 +187,17 @@ class ActivityActivitiesPage extends StatelessWidget {
                       });
                     case 3:
                       Navigator.of(context)
-                          .push(AppTransition.pushTransition(
-                        ActivityWaterQualityAddPage(
-                          int.parse(pondID),
-                          int.parse(pondCycleID),
+                          .push(
+                        AppTransition.pushTransition(
+                          ActivityWaterQualityAddPage(
+                            int.parse(pondID),
+                            int.parse(pondCycleID),
+                            initDateTime: state.selectedDate ?? DateTime.now(),
+                            tebarDate: tebarDate ?? DateTime.now(),
+                          ),
+                          ActivityWaterQualityAddPage.routeSettings,
                         ),
-                        ActivityWaterQualityAddPage.routeSettings,
-                      ),)
+                      )
                           .then((value) {
                         if (value != null && value == 'refresh') {
                           context.read<WaterQualityCubit>().init(
@@ -193,14 +211,17 @@ class ActivityActivitiesPage extends StatelessWidget {
                       });
                       break;
                     default:
-                      Navigator.of(context).push(AppTransition.pushTransition(
-                        ActivityActivitiesAddPage(
-                          pondID,
-                          pondCycleID,
-                          tebarDate ?? DateTime.now(),
+                      Navigator.of(context).push(
+                        AppTransition.pushTransition(
+                          ActivityActivitiesAddPage(
+                            pondID,
+                            pondCycleID,
+                            tebarDate ?? DateTime.now(),
+                            initDateTime: state.selectedDate ?? DateTime.now(),
+                          ),
+                          ActivityActivitiesAddPage.routeSettings(),
                         ),
-                        ActivityActivitiesAddPage.routeSettings(),
-                      ),);
+                      );
                       break;
                   }
                 },

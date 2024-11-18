@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_incident/activity_incident_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/logics/incident_data_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/logics/incident_history_cubit.dart';
@@ -36,34 +39,66 @@ class ActivityIncidentPage extends StatelessWidget {
           )..getIncidentHistory(),
         ),
       ],
-      child: Scaffold(
-        appBar: appDefaultAppBar(
-          context,
-          'Kejadian',
-        ),
-        floatingActionButton: Builder(builder: (context) {
-          return FloatingActionButton(
-            shape: const CircleBorder(),
-            onPressed: () {
-              Navigator.of(context)
-                  .push(AppTransition.pushTransition(
-                ActivityIncidentAddPage(
-                  int.parse(fishpondId),
-                  int.parse(fishpondcycleId),
-                ),
-                ActivityIncidentAddPage.routeSettings,
-              ),)
-                  .then((value) {
-                if (value != null && value == 'refresh') {
-                  context.read<IncidentDataCubit>().getIncidentData();
-                  context.read<IncidentHistoryCubit>().getIncidentHistory();
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<IncidentDataCubit, IncidentDataState>(
+            listener: (context, state) {
+              if (state.status.isError) {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
+                  RepositoryProvider.of<AuthenticationRepository>(context)
+                      .logout();
+                } else {
+                  AppTopSnackBar(context).showDanger(state.errorMessage);
                 }
-              });
+              }
             },
-            child: const Icon(Icons.add),
-          );
-        },),
-        body: const ActivityIncidentView(),
+          ),
+          BlocListener<IncidentHistoryCubit, IncidentHistoryState>(
+            listener: (context, state) {
+              if (state.status.isError) {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
+                  RepositoryProvider.of<AuthenticationRepository>(context)
+                      .logout();
+                } else {
+                  AppTopSnackBar(context).showDanger(state.errorMessage);
+                }
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: appDefaultAppBar(
+            context,
+            'Kejadian',
+          ),
+          floatingActionButton: Builder(
+            builder: (context) {
+              return FloatingActionButton(
+                shape: const CircleBorder(),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(
+                    AppTransition.pushTransition(
+                      ActivityIncidentAddPage(
+                        int.parse(fishpondId),
+                        int.parse(fishpondcycleId),
+                      ),
+                      ActivityIncidentAddPage.routeSettings,
+                    ),
+                  )
+                      .then((value) {
+                    if (value != null && value == 'refresh') {
+                      context.read<IncidentDataCubit>().getIncidentData();
+                      context.read<IncidentHistoryCubit>().getIncidentHistory();
+                    }
+                  });
+                },
+                child: const Icon(Icons.add),
+              );
+            },
+          ),
+          body: const ActivityIncidentView(),
+        ),
       ),
     );
   }

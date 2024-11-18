@@ -78,6 +78,12 @@ dependencies:
   timer_count_down: ^2.2.2
   firebase_messaging: ^14.7.10
   flutter_local_notifications: ^18.0.0
+  system_info2: ^4.0.0
+  time_picker_spinner_pop_up: ^2.0.0
+  flutter_datetime_picker_plus: ^2.2.0
+  path: ^1.9.0
+  permission_handler: ^11.3.1
+  timeline_tile: ^2.0.0
 
 dev_dependencies:
   flutter_test:

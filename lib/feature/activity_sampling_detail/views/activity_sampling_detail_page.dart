@@ -8,8 +8,13 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivitySamplingDetailPage extends StatelessWidget {
   final SamplingResponseData data;
+  final DateTime tebarDate;
 
-  const ActivitySamplingDetailPage(this.data, {super.key});
+  const ActivitySamplingDetailPage(
+    this.data, {
+    required this.tebarDate,
+    super.key,
+  });
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: '/activity-sampling-detail-page');
@@ -23,15 +28,19 @@ class ActivitySamplingDetailPage extends StatelessWidget {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                ActivitySamplingAddPage(
-                  int.parse(data.fishpondId ?? '1'),
-                  int.parse(data.fishpondcycleId ?? '1'),
-                  isEdit: true,
-                  data: data,
+              Navigator.of(context).push(
+                AppTransition.pushTransition(
+                  ActivitySamplingAddPage(
+                    int.parse(data.fishpondId ?? '1'),
+                    int.parse(data.fishpondcycleId ?? '1'),
+                    isEdit: true,
+                    data: data,
+                    tebarDate: tebarDate,
+                    initDateTime: data.datetime ?? DateTime.now(),
+                  ),
+                  ActivitySamplingAddPage.routeSettings,
                 ),
-                ActivitySamplingAddPage.routeSettings,
-              ),);
+              );
             },
             child: Text(
               'Edit',

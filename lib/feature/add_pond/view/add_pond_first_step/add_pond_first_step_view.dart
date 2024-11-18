@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
@@ -124,9 +125,10 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
             firstStepCubit.pondWideController.text =
                 (double.parse(value.isEmpty ? '0' : value) *
                         double.parse(
-                            firstStepCubit.pondWidthController.text.isEmpty
-                                ? '0'
-                                : firstStepCubit.pondWidthController.text,))
+                          firstStepCubit.pondWidthController.text.isEmpty
+                              ? '0'
+                              : firstStepCubit.pondWidthController.text,
+                        ))
                     .toStringAsFixed(0);
           },
           suffixConstraints: const BoxConstraints(),
@@ -137,6 +139,10 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
 
             return null;
           },
+          inputFormatters: [
+            DecimalInputFormatter(decimalRange: 2),
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+          ],
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -169,6 +175,10 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
             }
             return null;
           },
+          inputFormatters: [
+            DecimalInputFormatter(decimalRange: 2),
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+          ],
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -193,6 +203,10 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
           validator: (value) {
             return null;
           },
+          inputFormatters: [
+            DecimalInputFormatter(decimalRange: 2),
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+          ],
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -245,11 +259,14 @@ class _AddPondFirstStepViewState extends State<AddPondFirstStepView> {
                         id: widget.pondData!.id,
                         name: firstStepCubit.pondNameController.text,
                         areaLength: double.parse(
-                            firstStepCubit.pondlengthController.text,),
+                          firstStepCubit.pondlengthController.text,
+                        ),
                         areaWidth: double.parse(
-                            firstStepCubit.pondWidthController.text,),
+                          firstStepCubit.pondWidthController.text,
+                        ),
                         areaDepth: double.parse(
-                            firstStepCubit.pondDeepController.text,),
+                          firstStepCubit.pondDeepController.text,
+                        ),
                       );
                       context.read<AddPondCubit>().setUpdatePond(payload);
                     }

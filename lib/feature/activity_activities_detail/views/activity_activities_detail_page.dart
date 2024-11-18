@@ -24,15 +24,24 @@ class ActivityActivitiesDetailPage extends StatelessWidget {
         actions: [
           InkWell(
             onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                ActivityActivitiesAddPage(
-                  data.fishpondId ?? '',
-                  data.fishpondcycleId ?? '',
-                  tebarDate,
-                  editData: data,
+              Navigator.of(context)
+                  .push(
+                AppTransition.pushTransition(
+                  ActivityActivitiesAddPage(
+                    data.fishpondId ?? '',
+                    data.fishpondcycleId ?? '',
+                    tebarDate,
+                    editData: data,
+                    initDateTime: data.datetime ?? DateTime.now(),
+                  ),
+                  ActivityActivitiesAddPage.routeSettings(),
                 ),
-                ActivityActivitiesAddPage.routeSettings(),
-              ),);
+              )
+                  .then((value) {
+                if (value == 'refresh') {
+                  Navigator.of(context).pop('refresh');
+                }
+              });
             },
             child: Text(
               'Edit',

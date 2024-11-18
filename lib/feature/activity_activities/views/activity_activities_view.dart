@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:easy_date_timeline/easy_date_timeline.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
@@ -15,6 +19,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/s
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/treatment/treatment_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/water_quality/water_quality_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 
 class ActivityActivitiesView extends StatefulWidget {
   final int fishpondId;
@@ -36,6 +41,8 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late String finalDate;
+  EasyInfiniteDateTimelineController controller =
+      EasyInfiniteDateTimelineController();
 
   @override
   void initState() {
@@ -102,12 +109,14 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
                       widget.fishpondcycleId,
                       AppConvertDateTime()
                           .ymdDash(state.selectedDate ?? DateTime.now()),
+                      tebarDate: widget.dateDistribution,
                     ),
                     WaterQualityView(
                       widget.fishpondId,
                       widget.fishpondcycleId,
                       AppConvertDateTime()
                           .ymdDash(state.selectedDate ?? DateTime.now()),
+                      tebarDate: widget.dateDistribution,
                     ),
                   ],
           );
@@ -211,46 +220,146 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
   }
 
   Widget calendar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 0.0),
-      child: EasyDateTimeLine(
-        activeColor: AppColor.primary,
-        initialDate: DateTime.now(),
-        locale: 'in_ID',
-        onDateChange: (selectedDate) {
-          context.read<ActivityActivitiesCubit>().changeDateTime(selectedDate);
-          finalDate = AppConvertDateTime().ymdDash(selectedDate);
-          context.read<TreatmentCubit>().init(
-                widget.fishpondId,
-                widget.fishpondcycleId,
-                finalDate,
-              );
-          context.read<SamplingCubit>().init(
-                widget.fishpondId,
-                widget.fishpondcycleId,
-                finalDate,
-              );
-          context.read<WaterQualityCubit>().init(
-                widget.fishpondId,
-                widget.fishpondcycleId,
-                finalDate,
-              );
-        },
-        headerProps: const EasyHeaderProps(
-          dateFormatter: DateFormatter.fullDateDMonthAsStrY(),
-          monthPickerType: MonthPickerType.dropDown,
-        ),
-        dayProps: EasyDayProps(
-          height: 76,
-          dayStructure: DayStructure.dayNumDayStr,
-          inactiveDayStyle: DayStyle(
-            decoration: BoxDecoration(
-              color: AppColor.white,
-              borderRadius: BorderRadius.circular(12.0),
-            ),
+    return BlocBuilder<ActivityActivitiesCubit, ActivityActivitiesState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 0.0),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18.0,
+                  vertical: 12.0,
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        AppConvertDateTime()
+                            .dmyName(state.selectedDate ?? DateTime.now()),
+                        style: appTextTheme(context).titleMedium,
+                      ),
+                    ),
+
+                    InkWell(
+                      onTap: () {
+                        DatePicker.showDatePicker(
+                          currentTime: state.selectedDate,
+                          minTime: widget.dateDistribution,
+                          maxTime: widget.dateDistribution
+                              .add(const Duration(days: 1080)),
+                          context,
+                          showTitleActions: true,
+                          onChanged: (date) {},
+                          onConfirm: (date) {
+                            context
+                                .read<ActivityActivitiesCubit>()
+                                .changeDateTime(date);
+                            finalDate = AppConvertDateTime().ymdDash(date);
+                            context.read<TreatmentCubit>().init(
+                                  widget.fishpondId,
+                                  widget.fishpondcycleId,
+                                  finalDate,
+                                );
+                            context.read<SamplingCubit>().init(
+                                  widget.fishpondId,
+                                  widget.fishpondcycleId,
+                                  finalDate,
+                                );
+                            context.read<WaterQualityCubit>().init(
+                                  widget.fishpondId,
+                                  widget.fishpondcycleId,
+                                  finalDate,
+                                );
+                            controller.animateToDate(date);
+                          },
+                          locale: LocaleType.id,
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 4.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.circular(8.0),
+                          border: Border.all(
+                            color: AppColor.neutral[200]!,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            Text(
+                              AppConvertDateTime()
+                                  .mmm(state.selectedDate ?? DateTime.now()),
+                              style: appTextTheme(context)
+                                  .titleSmall
+                                  ?.copyWith(fontWeight: FontWeight.w500),
+                            ),
+                            const SizedBox(width: 4.0),
+                            Icon(
+                              Icons.arrow_drop_down_rounded,
+                              color: AppColor.neutral[400],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // IconButton(
+                    //   onPressed: () {
+                    //     ;
+                    //   },
+                    //   icon: const Icon(Icons.today_rounded),
+                    // ),
+                  ],
+                ),
+              ),
+              EasyInfiniteDateTimeLine(
+                firstDate: widget.dateDistribution,
+                lastDate:
+                    widget.dateDistribution.add(const Duration(days: 1080)),
+                focusDate: state.selectedDate ?? DateTime.now(),
+                activeColor: AppColor.primary,
+                locale: 'in_ID',
+                controller: controller,
+                showTimelineHeader: false,
+                onDateChange: (selectedDate) {
+                  context
+                      .read<ActivityActivitiesCubit>()
+                      .changeDateTime(selectedDate);
+                  finalDate = AppConvertDateTime().ymdDash(selectedDate);
+                  context.read<TreatmentCubit>().init(
+                        widget.fishpondId,
+                        widget.fishpondcycleId,
+                        finalDate,
+                      );
+                  context.read<SamplingCubit>().init(
+                        widget.fishpondId,
+                        widget.fishpondcycleId,
+                        finalDate,
+                      );
+                  context.read<WaterQualityCubit>().init(
+                        widget.fishpondId,
+                        widget.fishpondcycleId,
+                        finalDate,
+                      );
+                },
+                dayProps: EasyDayProps(
+                  height: 76,
+                  dayStructure: DayStructure.monthDayNumDayStr,
+                  inactiveDayStyle: DayStyle(
+                    decoration: BoxDecoration(
+                      color: AppColor.white,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 

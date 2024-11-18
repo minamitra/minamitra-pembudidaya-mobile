@@ -175,12 +175,18 @@ class _ProductsViewState extends State<ProductsView> {
             }
             Navigator.of(context).pop(data);
           } else {
-            Navigator.of(context).push(
+            Navigator.of(context)
+                .push(
               AppTransition.pushTransition(
                 ProductDetailPage(data),
                 ProductDetailPage.routeSettings(),
               ),
-            );
+            )
+                .then((value) {
+              if (value == 'changeBottomNav1') {
+                Navigator.of(context).pop('changeBottomNav1');
+              }
+            });
           }
         },
         child: Container(

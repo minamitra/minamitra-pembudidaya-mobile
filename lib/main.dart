@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/app.dart';
@@ -10,6 +11,19 @@ import 'package:minamitra_pembudidaya_mobile/core/logic/dashboard/dashboard_bott
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cloud_messaging/cloud_messaging_service.dart';
 import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(
+  RemoteMessage message,
+  // AppCloudMessaging mainCloudMessaging,
+) async {
+  await Firebase.initializeApp();
+  // mainCloudMessaging
+  //     .showFirebaseCloudNotificationWithFlutterNotification(message);
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  debugPrint('Handling a background message: ${message.notification!.title}');
+}
 
 // shortcut for app theme
 TextTheme appTextTheme(BuildContext context) => Theme.of(context).textTheme;
@@ -24,6 +38,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   appCloudMessaging = AppCloudMessagingImpl.create();
   runApp(MyApp());
 }

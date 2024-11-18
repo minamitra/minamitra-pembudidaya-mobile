@@ -14,11 +14,16 @@ class InitFirstLocationCubit extends Cubit<InitFirstLocationStatus> {
 
   late LatLng latLng;
 
-  Future<void> getLocation() async {
+  Future<void> getLocation({LatLng? initLatLng}) async {
     emit(InitFirstLocationStatus.loading);
     try {
       final location = await Geolocator.getCurrentPosition();
-      latLng = LatLng(location.latitude, location.longitude);
+      if (initLatLng != null) {
+        latLng = initLatLng;
+      } else {
+        latLng = LatLng(location.latitude, location.longitude);
+      }
+
       emit(InitFirstLocationStatus.loaded);
     } catch (e) {
       emit(InitFirstLocationStatus.error);

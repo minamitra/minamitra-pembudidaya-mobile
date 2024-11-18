@@ -18,12 +18,16 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
   final int fishpondcycleId;
   final bool isEdit;
   final WaterQualityResponseData? data;
+  final DateTime tebarDate;
+  final DateTime initDateTime;
 
   const ActivityWaterQualityAddPage(
     this.fishpondId,
     this.fishpondcycleId, {
     this.isEdit = false,
     this.data,
+    required this.tebarDate,
+    required this.initDateTime,
     super.key,
   });
 
@@ -71,9 +75,11 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
             }
 
             if (state.status.isSuccessSubmit) {
-              AppTopSnackBar(context).showSuccess(isEdit
-                  ? 'Berhasil Edit\nKualitas Air!'
-                  : 'Berhasil Membuat\nKualitas Air Baru!',);
+              AppTopSnackBar(context).showSuccess(
+                isEdit
+                    ? 'Berhasil Edit\nKualitas Air!'
+                    : 'Berhasil Membuat\nKualitas Air Baru!',
+              );
               Navigator.of(context).pop('refresh');
               if (isEdit) {
                 Navigator.of(context).pop('refresh');
@@ -90,6 +96,8 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
               fishpondcycleId,
               isEdit,
               data,
+              tebarDate: tebarDate,
+              initDateTime: initDateTime,
             );
           },
         ),

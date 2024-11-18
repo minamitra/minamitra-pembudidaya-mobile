@@ -34,4 +34,8 @@ class AppConvertDateTime {
   String ddmmyyyyhhmm(DateTime dateTime) {
     return DateFormat('dd-MM-yyyy HH:mm WIB', countryCode).format(dateTime);
   }
+
+  String mmm(DateTime dateTime) {
+    return DateFormat('MMM', countryCode).format(dateTime);
+  }
 }

@@ -28,10 +28,18 @@ class _FeedingViewState extends State<FeedingView> {
     Widget itemCard(FeedActivityResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(AppTransition.pushTransition(
-            ActivityActivitiesDetailPage(data, widget.tebarDate),
-            ActivityActivitiesDetailPage.routeSettings(),
-          ),);
+          Navigator.of(context)
+              .push(
+            AppTransition.pushTransition(
+              ActivityActivitiesDetailPage(data, widget.tebarDate),
+              ActivityActivitiesDetailPage.routeSettings(),
+            ),
+          )
+              .then((value) {
+            if (value == 'refresh') {
+              context.read<ActivityActivitiesCubit>().refreshData();
+            }
+          });
         },
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -90,8 +98,9 @@ class _FeedingViewState extends State<FeedingView> {
                   Image.asset(AppAssets.weigherIconFill, height: 20.0),
                   const SizedBox(width: 12.0),
                   Text(
-                      "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(2)} Kg",
-                      style: appTextTheme(context).titleSmall,),
+                    "${(double.parse(data.actual?.handleEmptyStringToZero() ?? "0") / 1000).toStringAsFixed(2)} Kg",
+                    style: appTextTheme(context).titleSmall,
+                  ),
                 ],
               ),
             ],
@@ -107,7 +116,8 @@ class _FeedingViewState extends State<FeedingView> {
             child: Padding(
               padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
               child: AppEmptyData(
-                  'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
+                'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
+              ),
             ),
           );
         }

@@ -37,7 +37,7 @@ class _AppRefresherState extends State<AppRefresher> {
       controller: _refreshController,
       onRefresh: () async {
         widget.onRefresh();
-        await Future.delayed(const Duration(milliseconds: 1500));
+        await Future.delayed(const Duration(milliseconds: 1800));
         _refreshController.refreshCompleted();
       },
       child: widget.child,

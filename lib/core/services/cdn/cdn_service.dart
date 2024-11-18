@@ -33,6 +33,7 @@ class CdnServiceImpl implements CdnService {
       {},
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    await Future.delayed(const Duration(seconds: 1));
     return BaseResponse(
       meta: metaResponse,
       data: CDNImageResponse.fromMap(metaResponse.result!),

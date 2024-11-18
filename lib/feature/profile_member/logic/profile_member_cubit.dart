@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/cdn_response.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/profile/profile_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
@@ -23,30 +25,38 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
 
   void changeTabIndex(int index) {
     emit(state.copyWith(status: GlobalState.onUpdating));
-    emit(state.copyWith(
-      status: GlobalState.loaded,
-      tabIndex: index,
-    ),);
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        tabIndex: index,
+      ),
+    );
   }
 
   void getProfile() async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final response = await profileService.detailProfile();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        profile: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          profile: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -61,28 +71,42 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.loading));
       final response = await profileService.detailProfile();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        profile: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          profile: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
-  void updateAttachmentProfile(File ktpImage, File ekusukaImage) async {
+  void updateAttachmentProfile(
+    File? ktpImage,
+    File? ekusukaImage, {
+    String? ktpImageExist,
+    String? ekusukaImageExist,
+  }) async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
-      final ktpUrl = await cdnService.uploadImage(ktpImage);
-      final ekusukaUrl = await cdnService.uploadImage(ekusukaImage);
+      final BaseResponse<CDNImageResponse>? ktpUrl =
+          ktpImage != null ? await cdnService.uploadImage(ktpImage) : null;
+      final BaseResponse<CDNImageResponse>? ekusukaUrl = ekusukaImage != null
+          ? await cdnService.uploadImage(ekusukaImage)
+          : null;
       final payload = UpdateProfilePayload(
         nik: state.profile!.nik,
         name: state.profile!.name,
@@ -93,29 +117,35 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
         gender: state.profile!.gender,
         job: state.profile!.job,
         imageUrl: state.profile!.imageUrl,
-        ktpUrl: ktpUrl.data.data!.fileuri,
-        ekusukaUrl: ekusukaUrl.data.data!.fileuri,
+        ktpUrl: ktpUrl?.data.data?.fileuri ?? ktpImageExist,
+        ekusukaUrl: ekusukaUrl?.data.data?.fileuri ?? ekusukaImageExist,
       );
       await profileService.updateProfile(payload);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.loading));
       final response = await profileService.detailProfile();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        profile: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          profile: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

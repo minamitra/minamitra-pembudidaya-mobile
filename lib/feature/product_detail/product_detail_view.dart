@@ -107,6 +107,10 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           context,
           Image.network(widget.data.imageUrl ?? '').image,
           immersive: false,
+          useSafeArea: true,
+          swipeDismissible: true,
+          doubleTapZoomable: true,
+          backgroundColor: Colors.black.withOpacity(0.7),
         );
       },
       child: SizedBox(
@@ -570,12 +574,18 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         'Beli Sekarang',
         () {
           if (double.parse(widget.data.stock!).round() > 0) {
-            Navigator.of(context).push(
+            Navigator.of(context)
+                .push(
               AppTransition.pushTransition(
                 CheckoutPage(widget.data),
                 CheckoutPage.route,
               ),
-            );
+            )
+                .then((value) {
+              if (value == 'changeBottomNav1') {
+                Navigator.of(context).pop('changeBottomNav1');
+              }
+            });
           }
         },
         isActive: double.parse(widget.data.stock!).round() > 0,

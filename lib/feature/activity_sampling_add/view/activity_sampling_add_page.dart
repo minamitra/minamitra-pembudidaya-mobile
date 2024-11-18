@@ -18,12 +18,16 @@ class ActivitySamplingAddPage extends StatelessWidget {
   final int fishpondcycleId;
   final bool isEdit;
   final SamplingResponseData? data;
+  final DateTime tebarDate;
+  final DateTime initDateTime;
 
   const ActivitySamplingAddPage(
     this.fishpondId,
     this.fishpondcycleId, {
     this.isEdit = false,
     this.data,
+    required this.tebarDate,
+    required this.initDateTime,
     super.key,
   });
 
@@ -72,9 +76,11 @@ class ActivitySamplingAddPage extends StatelessWidget {
             }
 
             if (state.status.isSuccessSubmit) {
-              AppTopSnackBar(context).showSuccess(isEdit
-                  ? 'Berhasil Edit\nSampling!'
-                  : 'Berhasil Membuat\nSampling Baru!',);
+              AppTopSnackBar(context).showSuccess(
+                isEdit
+                    ? 'Berhasil Edit\nSampling!'
+                    : 'Berhasil Membuat\nSampling Baru!',
+              );
               Navigator.of(context).pop('refresh');
               if (isEdit) {
                 Navigator.of(context).pop('refresh');
@@ -91,6 +97,8 @@ class ActivitySamplingAddPage extends StatelessWidget {
               fishpondcycleId,
               isEdit,
               data,
+              tebarDate: tebarDate,
+              initDateTime: initDateTime,
             );
           },
         ),

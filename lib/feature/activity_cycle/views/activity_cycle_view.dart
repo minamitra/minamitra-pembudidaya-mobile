@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
@@ -6,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/logic/activity_cycle_cubit.dart';
@@ -82,7 +82,8 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                               0,
                             ),
                             child: const AppEmptyData(
-                                'Belum ada data siklus aktif terbaru',),
+                              'Belum ada data siklus aktif terbaru',
+                            ),
                           ),
                         )
                       : ListView(
@@ -113,7 +114,8 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                               0,
                             ),
                             child: const AppEmptyData(
-                                'Belum ada data siklus lelang terbaru',),
+                              'Belum ada data siklus lelang terbaru',
+                            ),
                           ),
                         )
                       : listCard(
@@ -134,7 +136,8 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                               0,
                             ),
                             child: const AppEmptyData(
-                                'Belum ada data siklus riwayat terbaru',),
+                              'Belum ada data siklus riwayat terbaru',
+                            ),
                           ),
                         )
                       : listCard(
@@ -173,26 +176,30 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
       onTap: () {
         if (status != 'harvest') {
           Navigator.of(context)
-              .push(AppTransition.pushTransition(
-            ActivityCycleDetailPage(
-              data,
-              isReadyHarvest: status == 'ready',
+              .push(
+            AppTransition.pushTransition(
+              ActivityCycleDetailPage(
+                data,
+                isReadyHarvest: status == 'ready',
+              ),
+              ActivityCycleDetailPage.routeSettings(),
             ),
-            ActivityCycleDetailPage.routeSettings(),
-          ),)
+          )
               .then((value) {
             context.read<ActivityCycleCubit>().init(widget.pondID);
           });
         } else {
           // Navigate to edit panen
           Navigator.of(context)
-              .push(AppTransition.pushTransition(
-            ActivityCycleAddHarvestPage(
-              data.id ?? '',
-              data: data,
+              .push(
+            AppTransition.pushTransition(
+              ActivityCycleAddHarvestPage(
+                data.id ?? '',
+                data: data,
+              ),
+              ActivityCycleAddHarvestPage.routeSettings(),
             ),
-            ActivityCycleAddHarvestPage.routeSettings(),
-          ),)
+          )
               .then((value) {
             context.read<ActivityCycleCubit>().init(widget.pondID);
           });
@@ -230,14 +237,14 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
                     // ),
                   ],
                 ),
-                InkWell(
-                  onTap: () {},
-                  child: Icon(
-                    Icons.delete_outline,
-                    color: AppColor.neutral[400],
-                    size: 20.0,
-                  ),
-                ),
+                // InkWell(
+                //   onTap: () {},
+                //   child: Icon(
+                //     Icons.delete_outline,
+                //     color: AppColor.neutral[400],
+                //     size: 20.0,
+                //   ),
+                // ),
               ],
             ),
             const SizedBox(height: 18.0),
@@ -307,11 +314,15 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
         return itemCard(
           data: data![index],
           dateTime: AppConvertDateTime()
-              .ddmmyyyyhhmm(data[index].tebarDate ?? DateTime.now()),
+              .dmyName(data[index].tebarDate ?? DateTime.now()),
           status: isReadyHarvest ? 'ready' : (data[index].status ?? 'active'),
           fishCount: data[index].tebarFishTotal ?? 'Unknown',
-          fishWeight: data[index].actualPanenBobot ?? 'Unknown',
-          fishWeightTarget: data[index].targetPanenBobot ?? 'Unknown',
+          fishWeight: double.parse(
+            data[index].actualPanenBobot.handleEmptyStringToZero(),
+          ).toStringAsFixed(2),
+          fishWeightTarget: double.parse(
+            data[index].targetPanenBobot.handleEmptyStringToZero(),
+          ).toStringAsFixed(2),
         );
       },
     );

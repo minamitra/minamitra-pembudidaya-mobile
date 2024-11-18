@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
@@ -25,12 +26,16 @@ class ActivitySamplingAddView extends StatefulWidget {
   final int fishpondcycleId;
   final bool isEdit;
   final SamplingResponseData? data;
+  final DateTime tebarDate;
+  final DateTime initDateTime;
 
   const ActivitySamplingAddView(
     this.fishpondId,
     this.fishpondcycleId,
     this.isEdit,
     this.data, {
+    required this.tebarDate,
+    required this.initDateTime,
     super.key,
   });
 
@@ -47,17 +52,15 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
   final TextEditingController srController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
 
-  DateTime dateNow = DateTime.now();
-  DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
+  // DateTime dateNow = DateTime.now();
+  // DateTime firstDate = DateTime.now().subtract(const Duration(days: 365));
   DateTime lastDate = DateTime.now().add(const Duration(days: 365));
 
   @override
   void initState() {
     super.initState();
+    dateController.text = AppConvertDateTime().ymdDash(widget.initDateTime);
     if (widget.isEdit) {
-      dateController.text = widget.data!.datetime != null
-          ? AppConvertDateTime().ymdDash(widget.data!.datetime!)
-          : '';
       hourController.text = widget.data!.datetime != null
           ? AppConvertDateTime().jm24(widget.data!.datetime!)
           : '';
@@ -103,8 +106,8 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         onTap: () {
           showDatePicker(
             context: context,
-            initialDate: dateNow,
-            firstDate: firstDate,
+            initialDate: widget.initDateTime,
+            firstDate: widget.tebarDate,
             lastDate: lastDate,
           ).then((date) {
             setState(() {
@@ -170,7 +173,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
         controller: mbwController,
         hintText: '0',
         labelText: 'MBW',
-        inputType: TextInputType.number,
+        inputType: TextInputType.phone,
         isMandatory: true,
         withUpperLabel: true,
         validator: (String? value) {
@@ -190,6 +193,10 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
                 ),
           ),
         ),
+        inputFormatters: [
+          DecimalInputFormatter(decimalRange: 2),
+          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+        ],
       );
     }
 

@@ -4,7 +4,9 @@ import 'package:path_provider/path_provider.dart';
 
 File convertUint8ListToFile(Uint8List uint8List) {
   final tempDir = Directory.systemTemp;
-  final tempFile = File('${tempDir.path}/temp.png');
+  final tempFile = File(
+    '${tempDir.path}/temp-${DateTime.now().year}-${DateTime.now().day}-${DateTime.now().hour}-${DateTime.now().minute}-${DateTime.now().second}-${DateTime.now().millisecond}-${DateTime.now().microsecond}.png',
+  );
   tempFile.writeAsBytesSync(uint8List);
   return tempFile;
 }

@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/logic/sampling_cubit.dart';
@@ -15,11 +16,13 @@ class SamplingView extends StatefulWidget {
   final int fishpondId;
   final int fishpondcycleId;
   final String datetime;
+  final DateTime tebarDate;
 
   const SamplingView(
     this.fishpondId,
     this.fishpondcycleId,
     this.datetime, {
+    required this.tebarDate,
     super.key,
   });
 
@@ -34,10 +37,15 @@ class _SamplingViewState extends State<SamplingView> {
       return InkWell(
         onTap: () {
           Navigator.of(context)
-              .push(AppTransition.pushTransition(
-            ActivitySamplingDetailPage(data),
-            ActivitySamplingDetailPage.routeSettings(),
-          ),)
+              .push(
+            AppTransition.pushTransition(
+              ActivitySamplingDetailPage(
+                data,
+                tebarDate: widget.tebarDate,
+              ),
+              ActivitySamplingDetailPage.routeSettings(),
+            ),
+          )
               .then((value) {
             if (value == 'refresh') {
               context.read<SamplingCubit>().init(
@@ -68,7 +76,9 @@ class _SamplingViewState extends State<SamplingView> {
                       ),
                       const SizedBox(height: 8.0),
                       Text(
-                        data.datetime != null ? data.datetime.toString() : '-',
+                        data.datetime != null
+                            ? AppConvertDateTime().ddmmyyyyhhmm(data.datetime!)
+                            : '-',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).labelLarge?.copyWith(
                               color: AppColor.black[500],
@@ -138,7 +148,8 @@ class _SamplingViewState extends State<SamplingView> {
               ? const Padding(
                   padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
                   child: AppEmptyData(
-                      'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',),
+                    'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
+                  ),
                 )
               : ListView.separated(
                   shrinkWrap: true,

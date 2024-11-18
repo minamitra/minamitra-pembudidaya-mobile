@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
@@ -421,7 +421,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         const SizedBox(height: 18.0),
         AppValidatorTextField(
           controller: addPondThirdStepCubit.fishCountController,
-          inputType: TextInputType.phone,
+          inputType: TextInputType.number,
           isMandatory: true,
           withUpperLabel: true,
           labelText: 'Jumlah Tebar',
@@ -471,6 +471,10 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
             return null;
           },
+          inputFormatters: [
+            DecimalInputFormatter(decimalRange: 2),
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+          ],
         ),
         const SizedBox(height: 18.0),
         AppValidatorTextField(
@@ -497,6 +501,10 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             }
             return null;
           },
+          inputFormatters: [
+            DecimalInputFormatter(decimalRange: 2),
+            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+          ],
         ),
         const SizedBox(height: 18.0),
         BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
@@ -563,7 +571,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
         const SizedBox(height: 18.0),
         AppValidatorTextField(
           controller: addPondThirdStepCubit.survivalRateController,
-          inputType: TextInputType.phone,
+          inputType: TextInputType.number,
           isMandatory: false,
           withUpperLabel: true,
           labelText: 'Target Survival Rate',
@@ -859,18 +867,15 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
                         if (formThirdStepKey.currentState?.validate() ??
                             false) {
-                          // widget.rootPageController.nextPage(
-                          //   duration: const Duration(milliseconds: 300),
-                          //   curve: Curves.easeInOut,
-                          // );
                           final int? survivalRaate = int.tryParse(
-                              addPondThirdStepCubit
-                                  .survivalRateController.text,);
+                            addPondThirdStepCubit.survivalRateController.text,
+                          );
                           if (survivalRaate == null ||
                               survivalRaate < 0 ||
                               survivalRaate > 100) {
                             AppTopSnackBar(context).showDanger(
-                                'Survival Rate harus\nangka antara 0 - 100',);
+                              'Survival Rate harus\nangka antara 0 - 100',
+                            );
                             return;
                           }
 
@@ -878,32 +883,42 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
                           List<FeedStarterResponseData> selectedStarter1Data =
                               addPondThirdStepCubit.state.feedStarter1Data?.data
-                                      ?.where((element) => selectedPakanStarter1
-                                          .contains(element.name),)
+                                      ?.where(
+                                        (element) => selectedPakanStarter1
+                                            .contains(element.name),
+                                      )
                                       .toList() ??
                                   [];
                           List<FeedStarterResponseData> selectedStarter2Data =
                               addPondThirdStepCubit.state.feedStarter2Data?.data
-                                      ?.where((element) => selectedPakanStarter2
-                                          .contains(element.name),)
+                                      ?.where(
+                                        (element) => selectedPakanStarter2
+                                            .contains(element.name),
+                                      )
                                       .toList() ??
                                   [];
                           List<FeedStarterResponseData> selectedStarter3Data =
                               addPondThirdStepCubit.state.feedStarter3Data?.data
-                                      ?.where((element) => selectedPakanStarter3
-                                          .contains(element.name),)
+                                      ?.where(
+                                        (element) => selectedPakanStarter3
+                                            .contains(element.name),
+                                      )
                                       .toList() ??
                                   [];
                           List<FeedGrowerResponseData> selecterGrowerData =
                               addPondThirdStepCubit.state.feedGrowerData?.data
-                                      ?.where((element) => selectedPakanGrower
-                                          .contains(element.name),)
+                                      ?.where(
+                                        (element) => selectedPakanGrower
+                                            .contains(element.name),
+                                      )
                                       .toList() ??
                                   [];
                           List<FeedFinisherResponseData> selecterFinisherData =
                               addPondThirdStepCubit.state.feedFinisherData?.data
-                                      ?.where((element) => selectedPakanFinisher
-                                          .contains(element.name),)
+                                      ?.where(
+                                        (element) => selectedPakanFinisher
+                                            .contains(element.name),
+                                      )
                                       .toList() ??
                                   [];
 
@@ -936,15 +951,21 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                     tebarDate: addPondThirdStepCubit
                                         .dateController.text,
                                     tebarFishTotal: int.parse(
-                                        addPondThirdStepCubit
-                                            .fishCountController.text,),
-                                    tebarBobot: int.parse(addPondThirdStepCubit
-                                        .spreadController.text,),
-                                    targetPanenBobot: int.parse(
-                                        addPondThirdStepCubit
-                                            .targetController.text,),
-                                    srTarget: int.parse(addPondThirdStepCubit
-                                        .survivalRateController.text,),
+                                      addPondThirdStepCubit
+                                          .fishCountController.text,
+                                    ),
+                                    tebarBobot: double.parse(
+                                      addPondThirdStepCubit
+                                          .spreadController.text,
+                                    ),
+                                    targetPanenBobot: double.parse(
+                                      addPondThirdStepCubit
+                                          .targetController.text,
+                                    ),
+                                    srTarget: int.parse(
+                                      addPondThirdStepCubit
+                                          .survivalRateController.text,
+                                    ),
                                     fishfoodJsonObject: FishfoodJsonObject(
                                       starter1: selecterStarter1Finisher,
                                       starter2: selecterStarter2Finisher,
@@ -956,14 +977,16 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                         addPondThirdStepCubit.seedID == '-1'
                                             ? null
                                             : int.parse(
-                                                addPondThirdStepCubit.seedID,),
+                                                addPondThirdStepCubit.seedID,
+                                              ),
                                     estimationFishfoodEpp: 75,
                                   ),
                                   name: seedOriginNameController.text,
                                   price: int.parse(
-                                      seedOriginPriceController.text.isEmpty
-                                          ? '0'
-                                          : seedOriginPriceController.text,),
+                                    seedOriginPriceController.text.isEmpty
+                                        ? '0'
+                                        : seedOriginPriceController.text,
+                                  ),
                                 );
                           } else {
                             context.read<AddPondCubit>().addPond(
@@ -971,15 +994,19 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                     name: addPondFirstStepCubit
                                         .pondNameController.text,
                                     areaLength: double.parse(
-                                        addPondFirstStepCubit
-                                            .pondlengthController.text,),
+                                      addPondFirstStepCubit
+                                          .pondlengthController.text,
+                                    ),
                                     areaWidth: double.parse(
-                                        addPondFirstStepCubit
-                                            .pondWidthController.text,),
+                                      addPondFirstStepCubit
+                                          .pondWidthController.text,
+                                    ),
                                     areaDepth: double.parse(
-                                        addPondFirstStepCubit
-                                            .pondDeepController.text,),
-                                    address: '',
+                                      addPondFirstStepCubit
+                                          .pondDeepController.text,
+                                    ),
+                                    address: addPondSecondStepCubit
+                                        .fullAddressController.text,
                                     addressLatitude:
                                         addPondSecondStepCubit.state.latitude,
                                     addressLongitude:
@@ -1008,15 +1035,21 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                     tebarDate: addPondThirdStepCubit
                                         .dateController.text,
                                     tebarFishTotal: int.parse(
-                                        addPondThirdStepCubit
-                                            .fishCountController.text,),
-                                    tebarBobot: int.parse(addPondThirdStepCubit
-                                        .spreadController.text,),
-                                    targetPanenBobot: int.parse(
-                                        addPondThirdStepCubit
-                                            .targetController.text,),
-                                    srTarget: int.parse(addPondThirdStepCubit
-                                        .survivalRateController.text,),
+                                      addPondThirdStepCubit
+                                          .fishCountController.text,
+                                    ),
+                                    tebarBobot: double.parse(
+                                      addPondThirdStepCubit
+                                          .spreadController.text,
+                                    ),
+                                    targetPanenBobot: double.parse(
+                                      addPondThirdStepCubit
+                                          .targetController.text,
+                                    ),
+                                    srTarget: int.parse(
+                                      addPondThirdStepCubit
+                                          .survivalRateController.text,
+                                    ),
                                     fishfoodJsonObject: FishfoodJsonObject(
                                       starter1: selecterStarter1Finisher,
                                       starter2: selecterStarter2Finisher,
@@ -1028,14 +1061,16 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                         addPondThirdStepCubit.seedID == '-1'
                                             ? null
                                             : int.parse(
-                                                addPondThirdStepCubit.seedID,),
+                                                addPondThirdStepCubit.seedID,
+                                              ),
                                     estimationFishfoodEpp: 75,
                                   ),
                                   seedName: seedOriginNameController.text,
                                   seedPrice: int.parse(
-                                      seedOriginPriceController.text.isEmpty
-                                          ? '0'
-                                          : seedOriginPriceController.text,),
+                                    seedOriginPriceController.text.isEmpty
+                                        ? '0'
+                                        : seedOriginPriceController.text,
+                                  ),
                                 );
                           }
 

@@ -17,6 +17,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
     this.fishPondCycleID,
     this.tebarDate, {
     this.editData,
+    required this.initDateTime,
     super.key,
   });
 
@@ -24,6 +25,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
   final String fishPondCycleID;
   final DateTime tebarDate;
   final FeedActivityResponseData? editData;
+  final DateTime initDateTime;
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: '/activity-activities-add');
@@ -40,7 +42,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
               fishPondID,
               fishPondCycleID,
               tebarDate,
-              selectedDate: editData?.datetime,
+              selectedDate: editData?.datetime ?? initDateTime,
               editData: editData,
             ),
       child:
@@ -67,7 +69,6 @@ class ActivityActivitiesAddPage extends StatelessWidget {
               AppTopSnackBar(context)
                   .showSuccess('Berhasil mengubah aktivitas');
               Navigator.of(context).pop('refresh');
-              Navigator.of(context).pop('refresh');
             } else {
               AppTopSnackBar(context)
                   .showSuccess('Berhasil menambahkan aktivitas');
@@ -86,6 +87,7 @@ class ActivityActivitiesAddPage extends StatelessWidget {
             body: ActivityActivitiesAddView(
               tebarDate,
               editData: editData,
+              initDateTime: initDateTime,
             ),
           );
         },

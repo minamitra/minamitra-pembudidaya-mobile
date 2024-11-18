@@ -60,35 +60,44 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       totalAmountFeedFromInitController.text =
           (((response.data.data?.accumulationTotalFeedBefore ?? 0) +
                       double.parse(
-                          amountController.text.handleEmptyStringToZero(),)) /
+                        amountController.text.handleEmptyStringToZero(),
+                      )) /
                   1000)
               .toStringAsFixed(2);
 
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        selectedDate: DateTime.now(),
-        feedRecomendationResponse: response.data,
-        feedDataByCycleResponse: fishFeedByCycleResponse.data,
-        fishAge: diferentInDays,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          selectedDate: selectedDate,
+          feedRecomendationResponse: response.data,
+          feedDataByCycleResponse: fishFeedByCycleResponse.data,
+          fishAge: diferentInDays,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> changeDateTime(DateTime dateTime) async {
-    emit(state.copyWith(
-      status: GlobalState.loading,
-      fishFoodID: null,
-    ),);
+    emit(
+      state.copyWith(
+        status: GlobalState.loading,
+        fishFoodID: null,
+      ),
+    );
     try {
       int diferentInDays =
           dateTime.difference(tebarDate ?? DateTime.now()).inDays;
@@ -103,23 +112,29 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       totalAmountFeedFromInitController.text =
           ((response.data.data?.accumulationTotalFeedBefore ?? 0) / 1000)
               .toStringAsFixed(7);
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        selectedDate: dateTime,
-        feedRecomendationResponse: response.data,
-        feedDataByCycleResponse: fishFeedByCycleResponse.data,
-        fishAge: diferentInDays,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          selectedDate: dateTime,
+          feedRecomendationResponse: response.data,
+          feedDataByCycleResponse: fishFeedByCycleResponse.data,
+          fishAge: diferentInDays,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -143,16 +158,20 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

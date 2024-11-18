@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
@@ -43,15 +44,28 @@ class _ActivityTreatmentDetailViewState
             scrollDirection: Axis.horizontal,
             itemCount: attachmentJsonArray.length,
             itemBuilder: (context, index) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: AspectRatio(
-                  aspectRatio: 2 / 1,
-                  child: AppNetworkImage(
-                    attachmentJsonArray[index],
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
+              return InkWell(
+                onTap: () {
+                  showImageViewer(
+                    context,
+                    Image.network(attachmentJsonArray[index]).image,
+                    immersive: false,
+                    useSafeArea: true,
+                    swipeDismissible: true,
+                    doubleTapZoomable: true,
+                    backgroundColor: Colors.black.withOpacity(0.7),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: AspectRatio(
+                    aspectRatio: 2 / 1,
+                    child: AppNetworkImage(
+                      attachmentJsonArray[index],
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               );
@@ -70,10 +84,11 @@ class _ActivityTreatmentDetailViewState
         children: [
           const SizedBox(height: 2.0),
           AppWidgetSeparatedItem(
-              'Waktu  Perlakuan',
-              widget.data.datetime != null
-                  ? AppConvertDateTime().dmyName(widget.data.datetime!)
-                  : '',),
+            'Waktu  Perlakuan',
+            widget.data.datetime != null
+                ? AppConvertDateTime().dmyName(widget.data.datetime!)
+                : '',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),
@@ -86,10 +101,11 @@ class _ActivityTreatmentDetailViewState
           AppDividerSmall(),
           const SizedBox(height: 18.0),
           AppWidgetSeparatedItem(
-              'Biaya',
-              widget.data.cost != null
-                  ? appConvertCurrency(double.parse(widget.data.cost!))
-                  : '',),
+            'Biaya',
+            widget.data.cost != null
+                ? appConvertCurrency(double.parse(widget.data.cost!))
+                : '',
+          ),
           const SizedBox(height: 18.0),
           AppDividerSmall(),
           const SizedBox(height: 18.0),

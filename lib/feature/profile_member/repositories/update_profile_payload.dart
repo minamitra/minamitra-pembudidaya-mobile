@@ -42,8 +42,8 @@ class UpdateProfilePayload {
       'gender': gender,
       'job': job,
       'image_url': imageUrl,
-      'ktp_url': ktpUrl,
-      'ekusuka_url': ekusukaUrl,
+      if (ktpUrl != null) 'ktp_url': ktpUrl,
+      if (ekusukaUrl != null) 'ekusuka_url': ekusukaUrl,
       'other_attachment_json_array': otherAttachmentJsonArray,
     };
   }

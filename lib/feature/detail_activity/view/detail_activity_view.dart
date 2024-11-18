@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
@@ -220,7 +221,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   Navigator.of(context).push(
                     AppTransition.pushTransition(
                       MonitoringPage(
-                          widget.pondData.lastFishpondcycleId ?? '0',),
+                        widget.pondData.lastFishpondcycleId ?? '0',
+                      ),
                       MonitoringPage.route,
                     ),
                   );
@@ -258,49 +260,84 @@ class _DetailActivityViewState extends State<DetailActivityView> {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                CarouselSlider.builder(
-                  itemCount: 1,
-                  itemBuilder: (context, index, realIndex) {
-                    return AspectRatio(
-                      aspectRatio: 375 / 262,
-                      child: InkWell(
-                        onTap: () {},
-                        child: Image.network(
-                          widget.pondData.imageUrl ?? '',
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) {
-                            return Image.asset(
-                              AppAssets.dummyDetailActivityBannerImage,
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  },
-                  options: CarouselOptions(
-                    viewportFraction: 1,
-                    reverse: true,
-                    initialPage: 0,
-                    aspectRatio: 375 / 262,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        activeIndex = index;
-                      });
+                AspectRatio(
+                  aspectRatio: 375 / 262,
+                  child: InkWell(
+                    onTap: () {
+                      showImageViewer(
+                        context,
+                        Image.network(widget.pondData.imageUrl ?? '').image,
+                        immersive: false,
+                        useSafeArea: true,
+                        swipeDismissible: true,
+                        doubleTapZoomable: true,
+                        backgroundColor: Colors.black.withOpacity(0.7),
+                      );
                     },
-                  ),
-                ),
-                Positioned(
-                  bottom: 16,
-                  child: AnimatedSmoothIndicator(
-                    activeIndex: activeIndex,
-                    count: 1,
-                    effect: const ExpandingDotsEffect(
-                      dotHeight: 7,
-                      dotWidth: 7,
-                      activeDotColor: AppColor.white,
+                    child: Image.network(
+                      widget.pondData.imageUrl ?? '',
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset(
+                          AppAssets.dummyDetailActivityBannerImage,
+                        );
+                      },
                     ),
                   ),
                 ),
+                // CarouselSlider.builder(
+                //   itemCount: 1,
+                //   itemBuilder: (context, index, realIndex) {
+                //     return AspectRatio(
+                //       aspectRatio: 375 / 262,
+                //       child: InkWell(
+                //         onTap: () {
+                //           showImageViewer(
+                //             context,
+                //             Image.network(widget.pondData.imageUrl ?? '').image,
+                //             immersive: false,
+                //             useSafeArea: true,
+                //             swipeDismissible: true,
+                //             doubleTapZoomable: true,
+                //             backgroundColor: Colors.black.withOpacity(0.7),
+                //           );
+                //         },
+                //         child: Image.network(
+                //           widget.pondData.imageUrl ?? '',
+                //           fit: BoxFit.cover,
+                //           errorBuilder: (context, error, stackTrace) {
+                //             return Image.asset(
+                //               AppAssets.dummyDetailActivityBannerImage,
+                //             );
+                //           },
+                //         ),
+                //       ),
+                //     );
+                //   },
+                //   options: CarouselOptions(
+                //     viewportFraction: 1,
+                //     reverse: false,
+                //     initialPage: 0,
+                //     aspectRatio: 375 / 262,
+                //     onPageChanged: (index, reason) {
+                //       setState(() {
+                //         activeIndex = index;
+                //       });
+                //     },
+                //   ),
+                // ),
+                // Positioned(
+                //   bottom: 16,
+                //   child: AnimatedSmoothIndicator(
+                //     activeIndex: activeIndex,
+                //     count: 1,
+                //     effect: const ExpandingDotsEffect(
+                //       dotHeight: 7,
+                //       dotWidth: 7,
+                //       activeDotColor: AppColor.white,
+                //     ),
+                //   ),
+                // ),
                 Positioned(
                   top: 8.0,
                   left: 18.0,
@@ -851,7 +888,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                   : state.onGoingCycleFeedResponseData?.data
                                           ?.first.fishfoodJsonObject?.starter1
                                           ?.map(
-                                              (element) => (element.total ?? 0),)
+                                            (element) => (element.total ?? 0),
+                                          )
                                           .toList() ??
                                       [0.0, 0.0, 0.0])
                               .reduce((value, element) => value + element)),
@@ -889,7 +927,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                   : state.onGoingCycleFeedResponseData?.data
                                           ?.first.fishfoodJsonObject?.starter2
                                           ?.map(
-                                              (element) => (element.total ?? 0),)
+                                            (element) => (element.total ?? 0),
+                                          )
                                           .toList() ??
                                       [0.0, 0.0, 0.0])
                               .reduce((value, element) => value + element)),
@@ -927,7 +966,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                   : state.onGoingCycleFeedResponseData?.data
                                           ?.first.fishfoodJsonObject?.starter3
                                           ?.map(
-                                              (element) => (element.total ?? 0),)
+                                            (element) => (element.total ?? 0),
+                                          )
                                           .toList() ??
                                       [0.0, 0.0, 0.0])
                               .reduce((value, element) => value + element)),
@@ -965,7 +1005,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                   : state.onGoingCycleFeedResponseData?.data
                                           ?.first.fishfoodJsonObject?.grower
                                           ?.map(
-                                              (element) => (element.total ?? 0),)
+                                            (element) => (element.total ?? 0),
+                                          )
                                           .toList() ??
                                       [0.0, 0.0, 0.0])
                               .reduce((value, element) => value + element)),
@@ -1003,7 +1044,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                   : state.onGoingCycleFeedResponseData?.data
                                           ?.first.fishfoodJsonObject?.finisher
                                           ?.map(
-                                              (element) => (element.total ?? 0),)
+                                            (element) => (element.total ?? 0),
+                                          )
                                           .toList() ??
                                       [0.0, 0.0, 0.0])
                               .reduce((value, element) => value + element)),
