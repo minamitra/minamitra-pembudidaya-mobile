@@ -1,10 +1,12 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_dashboard_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/pond_response.dart';
 
 part 'activity_state.dart';
@@ -13,57 +15,71 @@ class ActivityCubit extends Cubit<ActivityState> {
   ActivityCubit(this.pondService) : super(const ActivityState());
 
   final PondService pondService;
+  bool isLastPage = false;
 
-  void init() async {
+  Future<void> init({String limit = '7'}) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      BaseResponse<PondResponse> response = await pondService.getPonds();
-      response.data.data = [
-        PondResponseData(
-          id: '0',
-          name: 'Semua Kolam',
+      isLastPage = false;
+      BaseResponse<PondResponse> response =
+          await pondService.getPonds(limit: limit);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          pondReponse: response.data.data,
+          currentPage: response.data.pagination?.current,
         ),
-        ...response.data.data!,
-      ];
-      final pondDashboardResponse = await pondService.getPondsDashboard();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        pondReponse: response.data,
-        pondDashboardResponse: pondDashboardResponse.data,
-      ),);
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
-  Future<void> setDashboardWithPond(String pondId) async {
-    emit(state.copyWith(status: GlobalState.loading));
+  Future<void> loadMoreData() async {
+    emit(state.copyWith(status: GlobalState.loadMore));
     try {
-      final pondDashboardResponse =
-          await pondService.getPondsDashboard(pondID: pondId);
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        pondDashboardResponse: pondDashboardResponse.data,
-        selectedPondID: pondId,
-      ),);
+      if (!isLastPage) {
+        final response = await pondService.getPonds(
+          page: ((state.currentPage ?? 1) + 1).toString(),
+        );
+        isLastPage =
+            response.data.pagination?.totalPage == (state.currentPage ?? 1) + 1;
+        emit(
+          state.copyWith(
+            status: GlobalState.loaded,
+            pondReponse: (state.pondReponse ?? []) + (response.data.data ?? []),
+            currentPage: response.data.pagination?.current,
+          ),
+        );
+      } else {
+        emit(state.copyWith(status: GlobalState.loaded));
+      }
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message.toString(),
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

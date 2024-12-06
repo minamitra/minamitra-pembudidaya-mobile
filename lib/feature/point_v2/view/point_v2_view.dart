@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -52,10 +53,6 @@ class _PointV2ViewState extends State<PointV2View> {
       '50K',
       AppAssets.diamondV2Icon,
     ),
-    NameIconEntity(
-      '100K',
-      AppAssets.championV2Icon,
-    ),
   ];
 
   List<String> exchangeType = [
@@ -89,11 +86,6 @@ class _PointV2ViewState extends State<PointV2View> {
       'Diamond',
       AppAssets.diamondV2Icon,
       description: 'Kumpulkan 50.000 poin untuk mendapatkan lencana Diamond.',
-    ),
-    NameIconEntity(
-      'Champion',
-      AppAssets.championV2Icon,
-      description: 'Kumpulkan 100.000 poin untuk mendapatkan lencana Champion.',
     ),
   ];
 
@@ -522,11 +514,15 @@ class _PointV2ViewState extends State<PointV2View> {
 
     return Form(
       key: formKey,
-      child: ListView(
-        children: [
-          header(),
-          ...body(),
-        ],
+      child: AppRefresher(
+        offset: 55.0,
+        onRefresh: () {},
+        child: ListView(
+          children: [
+            header(),
+            ...body(),
+          ],
+        ),
       ),
     );
   }

@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/finance_detail/views/finance_detail_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/finance_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/monitoring_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/finance_header_data.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/finance_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/line_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -17,344 +31,409 @@ class FinanceView extends StatefulWidget {
 class _FinanceViewState extends State<FinanceView> {
   final TextEditingController parameterController = TextEditingController();
 
-  List<String> dataKeuanganDummy = [
-    'Biaya Pakan',
-    'Estimasi Biaya Produksi',
-    'Ekstimasi Harga Jual',
-    'Potensi Revenue',
-    'Potesnsi Profit',
-    'Estimasi HPP (Rp/kg)',
-  ];
-
-  @override
-  void initState() {
-    parameterController.text = dataKeuanganDummy.first;
-    super.initState();
-  }
-
-  // final List<SalesData> chartData = [
-  //   SalesData(2010, 35),
-  //   SalesData(2011, 28),
-  //   SalesData(2012, 34),
-  //   SalesData(2013, 32),
-  //   SalesData(2014, 40)
-  // ];
-
-  Function() bottomSheetShowModal(
-    BuildContext context,
-    String title,
-    List<String> data,
-  ) {
-    return () {
-      showModalBottomSheet(
-        isDismissible: true,
-        enableDrag: true,
-        context: context,
-        builder: (modalContext) {
-          return StatefulBuilder(
-            builder: (stateContext, setModalState) {
-              return AppBottomSheet(
-                title,
-                height: MediaQuery.of(context).size.height * 0.5,
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: ListView.separated(
-                          shrinkWrap: true,
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          itemCount: data.length,
-                          separatorBuilder: (context, index) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Divider(
-                              color: AppColor.neutral[100],
-                              thickness: 1.0,
-                              height: 0.0,
-                            ),
-                          ),
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                setModalState(() {
-                                  parameterController.text = data[index];
-                                });
-                                Navigator.of(context).pop(data[index]);
-                              },
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 12.0),
-                                child: Text(
-                                  data[index],
-                                  textAlign: TextAlign.start,
-                                  style:
-                                      appTextTheme(context).bodySmall?.copyWith(
-                                            fontWeight: FontWeight.w600,
-                                            color: data[index] ==
-                                                    parameterController.text
-                                                ? AppColor.primary[500]
-                                                : AppColor.black,
-                                          ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
-        },
-      ).then((value) {
-        if (value != null) {
-          if (value is String) {}
-        }
-      });
-    };
-  }
-
   @override
   Widget build(BuildContext context) {
-    Widget parameter() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: AppValidatorTextField(
-          controller: parameterController,
-          withUpperLabel: true,
-          readOnly: true,
-          labelText: 'Parameter',
-          hintText: 'Pilih parameter',
-          suffixWidget: const Padding(
-            padding: EdgeInsets.only(right: 18.0),
-            child: Icon(Icons.arrow_drop_down_rounded),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            if (value?.isEmpty ?? true) {
-              return 'Parameter tidak boleh kosong';
-            }
-            return null;
-          },
-          onTap: bottomSheetShowModal(
-            context,
-            'Pilih Parameter',
-            dataKeuanganDummy,
-          ),
-        ),
-      );
-    }
-
-    Widget xSetter() {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+    Widget itemValueFinanceItem({
+      required String title,
+      required String value,
+      Color? color,
+      CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.start,
+    }) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: crossAxisAlignment,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(color: AppColor.neutral[300]!),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      bottomLeft: Radius.circular(10.0),
-                    ),
-                    border: Border.all(color: Colors.white),
-                    color: AppColor.neutral[100],
-                  ),
-                  child: const Text('DoC'),
+          Text(
+            title,
+            style: appTextTheme(context).titleSmall?.copyWith(
+                  color: AppColor.neutral[400],
                 ),
-                SizedBox(
-                  height: 44.0,
-                  child: VerticalDivider(
-                    width: 2.0,
-                    color: AppColor.neutral[300],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  child: const Text('0'),
-                ),
-                SizedBox(
-                  height: 44.0,
-                  child: VerticalDivider(
-                    width: 2.0,
-                    color: AppColor.neutral[300],
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      bottomLeft: Radius.circular(10.0),
-                    ),
-                    border: Border.all(color: Colors.white),
-                    color: AppColor.neutral[100],
-                  ),
-                  child: const Icon(Icons.arrow_forward),
-                ),
-                SizedBox(
-                  height: 44.0,
-                  child: VerticalDivider(
-                    width: 2.0,
-                    color: AppColor.neutral[300],
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 14.0,
-                  ),
-                  child: Text('100'),
-                ),
-              ],
-            ),
           ),
-          const SizedBox(width: 18),
-          const Icon(Icons.refresh_outlined),
+          const SizedBox(height: 8.0),
+          Text(
+            value,
+            style: appTextTheme(context).titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: color,
+                ),
+          ),
         ],
       );
     }
 
-    Widget lineChart() {
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        physics: const BouncingScrollPhysics(),
-        child: Container(
-          margin: const EdgeInsets.only(right: 18.0),
-          width: MediaQuery.sizeOf(context).width * 1.5,
-          child: SfCartesianChart(
-            borderWidth: 2.0,
-            plotAreaBorderWidth: 2.0,
-            legend: const Legend(
-              isVisible: true,
-            ),
-            primaryXAxis: NumericAxis(
-              title: const AxisTitle(text: 'DoC (hari)'),
-              minimum: 0,
-              maximum: 100,
-              interval: 10,
-              majorGridLines: MajorGridLines(
-                width: 1.5,
-                color: AppColor.neutral[200],
-                dashArray: const [8, 10],
-              ),
-            ),
-            primaryYAxis: NumericAxis(
-              title: const AxisTitle(text: 'Biaya Pakan'),
-              minimum: 0,
-              maximum: 100,
-              interval: 10,
-              majorGridLines: MajorGridLines(
-                width: 1.5,
-                color: AppColor.neutral[200],
-                dashArray: const [8, 10],
-              ),
-            ),
-            series: <CartesianSeries>[
-              // Renders line chart
-              LineSeries<LineDummy, int>(
-                dataSource: lineDummyData,
-                xValueMapper: (LineDummy sales, _) => sales.xAxis,
-                yValueMapper: (LineDummy sales, _) => sales.yAxis,
-                width: 4.0,
-                color: AppColor.primary,
-                legendIconType: LegendIconType.seriesType,
-                isVisibleInLegend: true,
-                legendItemText: 'Target',
-              ),
-              LineSeries<LineDummy, int>(
-                dataSource: lineDummyData2,
-                xValueMapper: (LineDummy sales, _) => sales.xAxis,
-                yValueMapper: (LineDummy sales, _) => sales.yAxis,
-                width: 4.0,
-                color: AppColor.accent,
-                legendIconType: LegendIconType.seriesType,
-                isVisibleInLegend: true,
-                legendItemText: 'Aktual',
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    Widget notes() {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+    Widget cardFinanceItem({
+      bool isActive = true,
+      required FinanceResponseData data,
+    }) {
+      return Container(
+        padding: const EdgeInsets.all(18.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'Lengkapi data pakan Anda untuk mendapatkan estimasi yang lebih akurat',
-              style: appTextTheme(context).labelLarge?.copyWith(
-                    color: AppColor.yellow[600],
-                  ),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              padding: const EdgeInsets.all(12.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4.0),
-                border: Border.all(color: AppColor.yellow[600]!),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Biaya Pakan = Total Pakan (kg) x Harga Pakan',
+            Row(
+              children: [
+                Image.asset(
+                  AppAssets.cycleIcon,
+                  height: 20.0,
+                ),
+                const SizedBox(width: 12.0),
+                Expanded(
+                  child: Text(
+                    '${AppConvertDateTime().dmyName(data.periodeSiklusStart ?? DateTime.now())} - ${AppConvertDateTime().dmyName(data.periodeSiklusEnd ?? DateTime.now())}',
                     style: appTextTheme(context).labelLarge?.copyWith(
-                          color: AppColor.yellow[600],
-                          fontWeight: FontWeight.w600,
+                          color: AppColor.primary[600],
+                          fontWeight: FontWeight.w700,
                         ),
                   ),
-                  const SizedBox(height: 4.0),
-                  Text(
-                    '*Perhitungan prediksi biaya ini tidak termasuk listrik, gaji karyawan dan biaya persiapan budaya',
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color:
+                        isActive ? AppColor.green[50] : AppColor.neutral[100],
+                    borderRadius: BorderRadius.circular(4.0),
+                    border: Border.all(
+                      color: isActive
+                          ? AppColor.green[500]!
+                          : AppColor.neutral[400]!,
+                    ),
+                  ),
+                  child: Text(
+                    isActive
+                        ? data.status?.toLowerCase() == 'harvest'
+                            ? 'Proses Panen'
+                            : 'Berjalan'
+                        : 'Selesai',
+                    textAlign: TextAlign.start,
                     style: appTextTheme(context).labelLarge?.copyWith(
-                          color: AppColor.yellow[600],
+                          fontWeight: FontWeight.w400,
+                          color: isActive
+                              ? AppColor.green[500]
+                              : AppColor.neutral[400],
                         ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 18.0),
+            const SizedBox(height: 12.0),
+            AppDividerSmall(),
+            const SizedBox(height: 12.0),
+            Row(
+              children: [
+                Expanded(
+                  child: itemValueFinanceItem(
+                    title: 'HPP Per Kilogram',
+                    value: appConvertCurrency(data.hppPerKg ?? 0.0),
+                  ),
+                ),
+                Expanded(
+                  child: itemValueFinanceItem(
+                    title: 'HPP Per Ekor',
+                    value: appConvertCurrency(data.hppPerEkor ?? 0.0),
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12.0),
+            Row(
+              children: [
+                Expanded(
+                  child: itemValueFinanceItem(
+                    title: 'Biaya Produksi',
+                    value: appConvertCurrency(
+                      data.totalBiayaProduksi?.toDouble() ?? 0.0,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: itemValueFinanceItem(
+                    title: 'Laba/Rugi',
+                    value: appConvertCurrency(data.labaRugi?.toDouble() ?? 0.0),
+                    color: AppColor.green[500],
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       );
     }
 
-    return const CommingSoonView();
+    Widget headerItemData({
+      required String title,
+      required String value,
+      required String imageAsset,
+      required String allPondItemsLength,
+      bool isShowingAllPonds = true,
+    }) {
+      return Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        margin: const EdgeInsets.only(left: 18.0),
+        padding: const EdgeInsets.all(18.0),
+        height: 100.0,
+        width: MediaQuery.of(context).size.width * 0.725,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          color: AppColor.neutralBlueGrey[400],
+                          fontWeight: FontWeight.w600,
+                        ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: appTextTheme(context).headlineMedium,
+                  ),
+                ],
+              ),
+            ),
+            Image.asset(
+              imageAsset,
+              height: 36.0,
+              width: 36.0,
+              fit: BoxFit.cover,
+            ),
+          ],
+        ),
+      );
+    }
 
-    // Column(
-    //   children: [
-    //     const SizedBox(height: 18),
-    //     parameter(),
-    //     const SizedBox(height: 18),
-    //     xSetter(),
-    //     Expanded(child: lineChart()),
-    //     notes(),
-    //   ],
-    // );
+    Widget wrappedHeaderItemData(
+      ActivityHeaderDataWrapped data,
+      bool isShowingAllPonds,
+      String allPondItemsLength,
+    ) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          headerItemData(
+            title: data.listActivtyHeaderDataDummy[0].title,
+            value: data.listActivtyHeaderDataDummy[0].value,
+            imageAsset: data.listActivtyHeaderDataDummy[0].imageAsset,
+            isShowingAllPonds: isShowingAllPonds,
+            allPondItemsLength: allPondItemsLength,
+          ),
+          const SizedBox(height: 18.0),
+          if (data.listActivtyHeaderDataDummy.length > 1)
+            headerItemData(
+              title: data.listActivtyHeaderDataDummy[1].title,
+              value: data.listActivtyHeaderDataDummy[1].value,
+              imageAsset: data.listActivtyHeaderDataDummy[1].imageAsset,
+              isShowingAllPonds: isShowingAllPonds,
+              allPondItemsLength: allPondItemsLength,
+            ),
+        ],
+      );
+    }
+
+    Widget headerData() {
+      return BlocBuilder<FinanceCubit, FinanceState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              200,
+              double.infinity,
+              8.0,
+              margin: EdgeInsets.symmetric(
+                horizontal: 18.0,
+                vertical: 18.0,
+              ),
+            );
+          }
+
+          return Container(
+            color: AppColor.neutral[100],
+            child: Column(
+              children: [
+                const SizedBox(height: 18.0),
+                BlocBuilder<FinanceCubit, FinanceState>(
+                  builder: (context, state) {
+                    if (state.status.isLoading) {
+                      return const AppShimmer(
+                        180,
+                        double.infinity,
+                        8.0,
+                        margin: EdgeInsets.symmetric(horizontal: 18.0),
+                      );
+                    }
+
+                    return SizedBox(
+                      height: 225.0,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: financeHeaderDataWrapped(
+                          totalProductionCost:
+                              state.financeSummary?.data?.totalBiayaProduksi ??
+                                  0.0,
+                          totalRevenue:
+                              state.financeSummary?.data?.totalPendapatan ??
+                                  0.0,
+                          hppPerHead:
+                              state.financeSummary?.data?.hppPerEkor ?? 0.0,
+                          totalProfitLoss:
+                              state.financeSummary?.data?.labaRugi ?? 0.0,
+                          hppPerKg: state.financeSummary?.data?.hppPerKg ?? 0.0,
+                          totalProfitLossPercentage:
+                              state.financeSummary?.data?.persentaseLabaRugi ??
+                                  0.0,
+                        ).length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: financeHeaderDataWrapped(
+                                          totalProductionCost: state
+                                                  .financeSummary
+                                                  ?.data
+                                                  ?.totalBiayaProduksi ??
+                                              0.0,
+                                          totalRevenue: state.financeSummary
+                                                  ?.data?.totalPendapatan ??
+                                              0.0,
+                                          hppPerHead: state.financeSummary?.data
+                                                  ?.hppPerEkor ??
+                                              0.0,
+                                          totalProfitLoss: state.financeSummary
+                                                  ?.data?.labaRugi ??
+                                              0.0,
+                                          hppPerKg: state.financeSummary?.data
+                                                  ?.hppPerKg ??
+                                              0.0,
+                                          totalProfitLossPercentage: state
+                                                  .financeSummary
+                                                  ?.data
+                                                  ?.persentaseLabaRugi ??
+                                              0.0,
+                                        ).length -
+                                        1 ==
+                                    index
+                                ? const EdgeInsets.only(right: 18.0)
+                                : EdgeInsets.zero,
+                            child: wrappedHeaderItemData(
+                              financeHeaderDataWrapped(
+                                totalProductionCost: state.financeSummary?.data
+                                        ?.totalBiayaProduksi ??
+                                    0.0,
+                                totalRevenue: state.financeSummary?.data
+                                        ?.totalPendapatan ??
+                                    0.0,
+                                hppPerHead:
+                                    state.financeSummary?.data?.hppPerEkor ??
+                                        0.0,
+                                totalProfitLoss:
+                                    state.financeSummary?.data?.labaRugi ?? 0.0,
+                                hppPerKg:
+                                    state.financeSummary?.data?.hppPerKg ?? 0.0,
+                                totalProfitLossPercentage: state.financeSummary
+                                        ?.data?.persentaseLabaRugi ??
+                                    0.0,
+                              )[index],
+                              true,
+                              '5',
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(height: 18.0),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    Widget listData() {
+      return BlocBuilder<FinanceCubit, FinanceState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: 10,
+              separatorBuilder: (context, index) {
+                return Divider(
+                  color: AppColor.neutral[100],
+                  thickness: 18.0,
+                );
+              },
+              itemBuilder: (context, index) {
+                return const AppShimmer(
+                  150,
+                  double.infinity,
+                  0,
+                );
+              },
+            );
+          }
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: state.finance?.data?.length ?? 0,
+            separatorBuilder: (context, index) {
+              return Divider(
+                color: AppColor.neutral[100],
+                thickness: 18.0,
+              );
+            },
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    AppTransition.pushTransition(
+                      FinanceDetailPage(
+                        context.read<FinanceCubit>().fishPondID,
+                        state.finance!.data![index],
+                      ),
+                      FinanceDetailPage.route(),
+                    ),
+                  );
+                },
+                child: cardFinanceItem(
+                  isActive: state.finance?.data![index].status != 'done',
+                  data: state.finance!.data![index],
+                ),
+              );
+            },
+          );
+        },
+      );
+    }
+
+    return AppRefresher(
+      onRefresh: () {
+        context.read<FinanceCubit>().refresh();
+      },
+      child: ListView(
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          headerData(),
+          listData(),
+          const SizedBox(height: 75.0),
+        ],
+      ),
+    );
   }
 }

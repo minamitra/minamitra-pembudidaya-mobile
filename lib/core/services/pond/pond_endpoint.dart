@@ -15,11 +15,15 @@ class PondEndpoint {
     return createUrl(path: 'mitra/fishpond/update');
   }
 
-  Uri getPond() {
+  Uri getPond(
+    String limit,
+    String page,
+  ) {
     return createUrl(
       path: 'mitra/fishpond/data',
       queryParameters: {
-        'pagination_bool': 'false',
+        'limit': limit,
+        'page': page,
       },
     );
   }

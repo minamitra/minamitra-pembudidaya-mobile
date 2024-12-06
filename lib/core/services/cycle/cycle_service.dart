@@ -34,6 +34,9 @@ abstract class CycleService {
     String? filterEndDate,
     String? companionName,
   });
+  Future<BaseResponse<FeedCycleHistoryResponseData>> getCycleDetail({
+    required String fishPondCycleID,
+  });
 }
 
 class CycleServiceImpl implements CycleService {
@@ -160,6 +163,19 @@ class CycleServiceImpl implements CycleService {
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     final CompanionNotesResponse data =
         CompanionNotesResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
+  }
+
+  @override
+  Future<BaseResponse<FeedCycleHistoryResponseData>> getCycleDetail({
+    required String fishPondCycleID,
+  }) async {
+    final uri = endpoint.getCycleDetail(fishPondCycleID: fishPondCycleID);
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(uri, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final FeedCycleHistoryResponseData data =
+        FeedCycleHistoryResponseData.fromMap(meta.result!['data']);
     return BaseResponse(meta: meta, data: data);
   }
 }

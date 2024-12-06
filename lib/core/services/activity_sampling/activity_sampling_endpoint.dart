@@ -6,14 +6,15 @@ class ActivitySamplingEndpoint {
   Uri dataSampling(
     int fishpondId,
     int fishpondcycleId,
-    String datetime,
+    String? datetime,
   ) {
     return createUrl(
       path: 'mitra/activity-sampling/data',
       queryParameters: {
         'fishpond_id': fishpondId.toString(),
         'fishpondcycle_id': fishpondcycleId.toString(),
-        'datetime': datetime,
+        if (datetime != null) 'datetime': datetime,
+        'pagination_bool': 'false',
       },
     );
   }

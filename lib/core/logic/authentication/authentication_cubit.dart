@@ -22,40 +22,54 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     try {
       authenticationStatusSubscription =
           authenticationRepository.streamedStatus.listen(
-        (status) => emit(state.copyWith(status: status)),
+        (status) {
+          emit(state.copyWith(status: status));
+        },
       );
       await authenticationRepository.initAuthenticationStatus();
       // await fcmTokenRepository.syncFCMToken();
     } on TokenExpired catch (e) {
-      emit(state.copyWith(
-        status: AuthenticationStatus.unauthenticated,
-        message: e.message.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.unauthenticated,
+          message: e.message.toString(),
+        ),
+      );
     } on TokenNotFound catch (e) {
-      emit(state.copyWith(
-        status: AuthenticationStatus.unknown,
-        message: e.message.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.unknown,
+          message: e.message.toString(),
+        ),
+      );
     } on FailedAuthorizingProfile catch (e) {
-      emit(state.copyWith(
-        status: AuthenticationStatus.error,
-        message: e.message.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.error,
+          message: e.message.toString(),
+        ),
+      );
     } on FailedSaveUserProfile catch (e) {
-      emit(state.copyWith(
-        status: AuthenticationStatus.error,
-        message: e.message.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.error,
+          message: e.message.toString(),
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: AuthenticationStatus.error,
-        message: e.message.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.error,
+          message: e.message.toString(),
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: AuthenticationStatus.error,
-        message: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: AuthenticationStatus.error,
+          message: e.toString(),
+        ),
+      );
     }
   }
 }

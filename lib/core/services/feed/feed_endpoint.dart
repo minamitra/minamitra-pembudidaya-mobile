@@ -12,9 +12,15 @@ class FeedEndpoint {
     );
   }
 
-  Uri getSeed() {
+  Uri getSeed({
+    String? createdBy,
+  }) {
     return createUrl(
       path: 'mitra/fishseed/data',
+      queryParameters: {
+        'pagination_bool': 'false',
+        if (createdBy != null) 'create_by_type': createdBy,
+      },
     );
   }
 

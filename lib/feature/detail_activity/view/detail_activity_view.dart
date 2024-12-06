@@ -218,10 +218,16 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     );
                     return;
                   }
+
                   Navigator.of(context).push(
                     AppTransition.pushTransition(
                       MonitoringPage(
+                        widget.pondData.id ?? '0',
                         widget.pondData.lastFishpondcycleId ?? '0',
+                        isCycleDone: widget.pondData.lastFishpondcycleStatus
+                                .handlingEmptyString()
+                                .toLowerCase() ==
+                            'done',
                       ),
                       MonitoringPage.route,
                     ),
@@ -229,7 +235,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 },
               ),
               bottomActionItem(
-                'Siklus',
+                'Panen',
                 AppAssets.cartIcon,
                 onTap: () {
                   if (!widget.isCanAccessFeature) {
@@ -642,7 +648,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
     }
 
     Widget feedSection() {
-      Widget actionButton(String lastActiveStatus, String id) {
+      Widget actionButton(
+        String lastActiveStatus,
+        String id, {
+        DateTime? tebarDate,
+      }) {
         switch (lastActiveStatus.toLowerCase()) {
           case 'active':
             return AppGreenGradientButton(
@@ -661,6 +671,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                       id,
                       // state.onGoingCycleFeedResponseData?.data?[0].id ?? "",
                       isFromCycleDetail: false,
+                      tebarDate: tebarDate,
                     ),
                     ActivityCycleAddHarvestPage.routeSettings(),
                   ),
@@ -735,6 +746,11 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                       state.onGoingCycleFeedResponseData!.data!.isEmpty
                           ? ''
                           : state.onGoingCycleFeedResponseData!.data![0].id!,
+                      tebarDate:
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty
+                              ? DateTime.now()
+                              : state.onGoingCycleFeedResponseData!.data!.first
+                                  .tebarDate,
                     ),
                     // widget.pondData.activeBool ?? false
                     //     ? AppGreenGradientButton(

@@ -83,6 +83,10 @@ class _ProfileMemberViewState extends State<ProfileMemberView>
                 AppTopSnackBar(context).showDanger(state.errorMessage);
               }
             }
+
+            if (state.status.isSuccessSubmit) {
+              AppTopSnackBar(context).showSuccess('Berhasil merubah data');
+            }
           },
           builder: (context, state) {
             if (state.status.isLoading) {
@@ -90,17 +94,24 @@ class _ProfileMemberViewState extends State<ProfileMemberView>
                 child: CircularProgressIndicator(),
               );
             }
-            if (state.status.isLoaded) {
-              return TabBarView(
+
+            if (state.status.isError) {
+              TabBarView(
                 controller: _tabController,
-                children: [
-                  BiodataView(state.profile!),
-                  AttachmentView(state.profile!),
+                children: const [
+                  SizedBox(),
+                  SizedBox(),
                 ],
               );
             }
 
-            return const SizedBox();
+            return TabBarView(
+              controller: _tabController,
+              children: [
+                BiodataView(state.profile!),
+                AttachmentView(state.profile!),
+              ],
+            );
           },
         ),
       );

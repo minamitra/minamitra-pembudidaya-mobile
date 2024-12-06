@@ -30,6 +30,7 @@ class AppAssets {
   static const String weightIcon = '$iconPath/weight-icon.png';
   static const String targetIconFill = '$iconPath/target-icon-fill.png';
   static const String stickyNoteIcon = '$iconPath/sticky-note-icon.png';
+  static const String cycleIcon = '$iconPath/cycle-icon.png';
 
   // Image
   static const String circleImage = '$imagePath/circle-image.png';
@@ -61,6 +62,7 @@ class AppAssets {
   static const String ticketIcon = '$iconPath/ticket-icon.png';
   static const String bagIcon = '$iconPath/bag-icon.png';
   static const String dummyEventImage = '$imagePath/event-dummy-image.png';
+
   static const String referralImage = '$imagePath/referral-image.png';
   static const String specialPriceIcon = '$iconPath/special-price-icon.png';
   static const String economicalFeedIcon = '$iconPath/economical-feed-icon.png';
@@ -80,6 +82,7 @@ class AppAssets {
       '$imagePath/comming-soon-event-image.png';
   static const String commingSoonFishStoreImage =
       '$imagePath/comming-soon-fish-store-image.png';
+  static const String dummyEventListImage = '$imagePath/dummy-event-image.png';
 
   // Transaction
   static const String product1Image = '$imagePath/product-1-image.png';
@@ -173,4 +176,30 @@ class AppAssets {
   static const String briBankIcon = '$iconPath/bri-bank-icon.png';
   static const String walletOutlineIcon = '$iconPath/wallet-outline-icon.png';
   static const String qrCodeIcon = '$iconPath/qr-code-icon.png';
+
+  // Finance Assets
+  static const String productionCostSummaryIcon =
+      '$iconPath/production-cost-summary-icon.png';
+  static const String overviewProductionCostIcon =
+      '$iconPath/overview-production-cost-icon.png';
+  static const String overviewRevenueIcon =
+      '$iconPath/overview-revenue-icon.png';
+  static const String overviewHppPerTailIcon =
+      '$iconPath/overview-hpp-per-tail-icon.png';
+  static const String overviewTotalProfitLossIcon =
+      '$iconPath/overview-total-profit-loss-icon.png';
+  static const String overviewTotalProfitLossPercentageIcon =
+      '$iconPath/overview-total-profit-loss-percentage-icon.png';
+  static const String totalIncomeSummaryIcon =
+      '$iconPath/total-income-summary-icon.png';
+
+  // Voucher
+  static const String voucherBoxIcon = '$iconPath/voucher-box-icon.png';
+  static const String voucherTicketIcon = '$iconPath/voucher-ticket-icon.png';
+  static const String voucherBoxCardImage =
+      '$imagePath/voucher-box-card-image.png';
+  static const String voucherTicketCardImage =
+      '$imagePath/voucher-ticket-card-image.png';
+  static const String voucherBannerDummyImage =
+      '$imagePath/voucher-banner-dummy-image.png';
 }

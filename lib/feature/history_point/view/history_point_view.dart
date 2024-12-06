@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/logic/history_point_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point_detail/view/history_point_detail_page.dart';
@@ -28,14 +32,49 @@ class _HistoryPointViewState extends State<HistoryPointView> {
   @override
   Widget build(BuildContext context) {
     Widget searchField() {
-      return Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: AppValidatorTextField(
-          controller: searchController,
-          withUpperLabel: false,
-          hintText: 'Cari data ...',
-          onChanged: (value) {},
-        ),
+      return BlocBuilder<HistoryPointCubit, HistoryPointState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: AppValidatorTextField(
+              controller: searchController,
+              withUpperLabel: false,
+              hintText: state.selectedDate == null
+                  ? 'Cari berdasar tanggal ...'
+                  : AppConvertDateTime().dmyName(state.selectedDate!),
+              suffixWidget: state.selectedDate == null
+                  ? const Icon(
+                      Icons.date_range_outlined,
+                      color: AppColor.primary,
+                    )
+                  : InkWell(
+                      onTap: () {
+                        context.read<HistoryPointCubit>().onFilterByDate(null);
+                      },
+                      child: const Icon(
+                        Icons.cancel_outlined,
+                        color: AppColor.primary,
+                      ),
+                    ),
+              readOnly: true,
+              onTap: () {
+                DatePicker.showDatePicker(
+                  currentTime: state.selectedDate,
+                  minTime: DateTime.now().subtract(const Duration(days: 720)),
+                  maxTime: DateTime.now(),
+                  context,
+                  showTitleActions: true,
+                  onChanged: (date) {},
+                  onConfirm: (date) {
+                    context.read<HistoryPointCubit>().onFilterByDate(date);
+                  },
+                  locale: LocaleType.id,
+                );
+              },
+              onChanged: (value) {},
+            ),
+          );
+        },
       );
     }
 
@@ -64,7 +103,7 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                         label: Text(
                           listFilter[index],
                           textAlign: TextAlign.start,
-                          style: state.selectedFilter == index
+                          style: state.selectedFilter == listFilter[index]
                               ? appTextTheme(context)
                                   .titleSmall
                                   ?.copyWith(color: AppColor.secondary[900])
@@ -72,14 +111,17 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                                   .bodySmall
                                   ?.copyWith(color: AppColor.neutral[500]),
                         ),
-                        selected: state.selectedFilter == index,
+                        selected: state.selectedFilter == listFilter[index],
                         onSelected: (value) {
+                          if (state.status.isLoading) {
+                            return;
+                          }
                           context
                               .read<HistoryPointCubit>()
-                              .onChangeFilter(index);
+                              .onChangeFilter(listFilter[index]);
                         },
                         side: BorderSide(
-                          color: state.selectedFilter == index
+                          color: state.selectedFilter == listFilter[index]
                               ? AppColor.secondary[900]!
                               : AppColor.neutralBlueGrey[200]!,
                         ),
@@ -170,39 +212,64 @@ class _HistoryPointViewState extends State<HistoryPointView> {
 
     Widget listHistory() {
       // If data is empty
-      // return const Center(
-      //   child: AppEmptyData(
-      //     "Oops, Belum Ada Riwayat",
-      //     isCenter: true,
-      //     descriptions:
-      //         "Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ",
-      //   ),
-      // );
 
-      return ListView.separated(
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        itemCount: 10,
-        separatorBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0),
-            child: AppDividerSmall(),
-          );
-        },
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                const HistoryPointDetailPage(),
-                HistoryPointDetailPage.route,
-              ),);
+      return BlocBuilder<HistoryPointCubit, HistoryPointState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return const AppShimmer(
+                  100,
+                  double.infinity,
+                  8.0,
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 18.0,
+                    vertical: 8.0,
+                  ),
+                );
+              },
+            );
+          }
+          // return const Center(
+          //   child: AppEmptyData(
+          //     "Oops, Belum Ada Riwayat",
+          //     isCenter: true,
+          //     descriptions:
+          //         "Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ",
+          //   ),
+          // );
+
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            itemCount: 10,
+            separatorBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: AppDividerSmall(),
+              );
             },
-            child: listHistoryItem(
-              title: 'Tarik Tunai',
-              dateTime: '12 Januari 2021',
-              point: 100,
-              balance: '+ Rp 50,000',
-            ),
+            itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () {
+                  Navigator.of(context).push(
+                    AppTransition.pushTransition(
+                      const HistoryPointDetailPage(),
+                      HistoryPointDetailPage.route,
+                    ),
+                  );
+                },
+                child: listHistoryItem(
+                  title: 'Tarik Tunai',
+                  dateTime: '12 Januari 2021',
+                  point: 100,
+                  balance: '+ Rp 50,000',
+                ),
+              );
+            },
           );
         },
       );

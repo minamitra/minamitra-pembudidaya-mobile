@@ -56,8 +56,12 @@ class AppDefaultCard extends StatelessWidget {
 
 // -------PICK IMAGE CARD----------
 class AppPickImageCard extends StatelessWidget {
-  const AppPickImageCard(this.onTap,
-      {required this.listImage, required this.onTapImage, super.key,});
+  const AppPickImageCard(
+    this.onTap, {
+    required this.listImage,
+    required this.onTapImage,
+    super.key,
+  });
 
   final List<Uint8List> listImage;
   final void Function() onTap;
@@ -188,8 +192,12 @@ class AppPickImageCard extends StatelessWidget {
 }
 
 class AppPickImageNetworkCard extends StatelessWidget {
-  const AppPickImageNetworkCard(this.onTap,
-      {required this.listImage, required this.onTapImage, super.key,});
+  const AppPickImageNetworkCard(
+    this.onTap, {
+    required this.listImage,
+    required this.onTapImage,
+    super.key,
+  });
 
   final List<String> listImage;
   final void Function() onTap;

@@ -1,7 +1,9 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/repositories/incident_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -70,13 +72,28 @@ class _ActivityIncidentDetailViewState
                     separatorBuilder: (context, index) =>
                         const SizedBox(width: 8.0),
                     itemBuilder: (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: AspectRatio(
-                          aspectRatio: 3 / 2,
-                          child: Image.asset(
-                            widget.incident.attachmentJsonArray![index],
-                            fit: BoxFit.cover,
+                      return InkWell(
+                        onTap: () {
+                          showImageViewer(
+                            context,
+                            Image.network(
+                              widget.incident.attachmentJsonArray?[index] ?? '',
+                            ).image,
+                            immersive: false,
+                            useSafeArea: true,
+                            swipeDismissible: true,
+                            doubleTapZoomable: true,
+                            backgroundColor: Colors.black.withOpacity(0.7),
+                          );
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(8.0),
+                          child: AspectRatio(
+                            aspectRatio: 3 / 2,
+                            child: Image.network(
+                              widget.incident.attachmentJsonArray![index],
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       );
@@ -126,10 +143,12 @@ class _ActivityIncidentDetailViewState
                   color: AppColor.neutral[100],
                 ),
                 columnText(
-                    'Tanggal',
-                    widget.incident.datetime != null
-                        ? widget.incident.datetime.toString()
-                        : '-',),
+                  'Tanggal',
+                  widget.incident.datetime != null
+                      ? AppConvertDateTime()
+                          .ddmmyyyyhhmm(widget.incident.datetime!)
+                      : '-',
+                ),
                 Divider(
                   height: 32.0,
                   thickness: 1,

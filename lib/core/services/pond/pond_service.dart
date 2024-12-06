@@ -16,12 +16,17 @@ import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/updat
 abstract class PondService {
   Future<BaseResponse<AddPondResponse>> addPond(AddPondPayload payload);
   Future<BaseResponse<bool>> addPondCycle(AddPondCyclePayload payload);
-  Future<BaseResponse<PondResponse>> getPonds();
-  Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
-      {String? pondID,});
+  Future<BaseResponse<PondResponse>> getPonds({
+    String limit = '7',
+    String page = '1',
+  });
+  Future<BaseResponse<PondDashboardResponse>> getPondsDashboard({
+    String? pondID,
+  });
   Future<BaseResponse<bool>> deletePond(String pondID);
   Future<BaseResponse<UpdatePondResponse>> updatePond(
-      UpdatePondPayload payload,);
+    UpdatePondPayload payload,
+  );
 }
 
 class PondServiceImpl implements PondService {
@@ -71,8 +76,14 @@ class PondServiceImpl implements PondService {
   }
 
   @override
-  Future<BaseResponse<PondResponse>> getPonds() async {
-    final url = endpoint.getPond();
+  Future<BaseResponse<PondResponse>> getPonds({
+    String limit = '7',
+    String page = '1',
+  }) async {
+    final url = endpoint.getPond(
+      limit,
+      page,
+    );
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse meta = MetaResponse.fromJson(response.body);
@@ -81,8 +92,9 @@ class PondServiceImpl implements PondService {
   }
 
   @override
-  Future<BaseResponse<PondDashboardResponse>> getPondsDashboard(
-      {String? pondID,}) async {
+  Future<BaseResponse<PondDashboardResponse>> getPondsDashboard({
+    String? pondID,
+  }) async {
     final url = endpoint.getPondDashboard(pondID);
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
@@ -107,7 +119,8 @@ class PondServiceImpl implements PondService {
 
   @override
   Future<BaseResponse<UpdatePondResponse>> updatePond(
-      UpdatePondPayload payload,) async {
+    UpdatePondPayload payload,
+  ) async {
     final url = endpoint.updatePond();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

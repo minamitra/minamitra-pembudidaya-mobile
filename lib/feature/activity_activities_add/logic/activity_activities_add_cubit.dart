@@ -46,7 +46,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       );
       final fishFeedByCycleResponse = await service.getFeedDataByCycle(
         fishPondCycleID,
-        AppConvertDateTime().ymdDash(DateTime.now()),
+        AppConvertDateTime().ymdDash(selectedDate ?? DateTime.now()),
       );
       this.fishPondID = fishPondID;
       this.fishPondCycleID = fishPondCycleID;
@@ -111,7 +111,7 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
       );
       totalAmountFeedFromInitController.text =
           ((response.data.data?.accumulationTotalFeedBefore ?? 0) / 1000)
-              .toStringAsFixed(7);
+              .toStringAsFixed(2);
       emit(
         state.copyWith(
           status: GlobalState.loaded,

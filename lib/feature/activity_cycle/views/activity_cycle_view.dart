@@ -52,8 +52,8 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
         labelPadding: const EdgeInsets.all(0),
         isScrollable: false,
         tabs: const [
-          Tab(text: 'Aktif'),
-          Tab(text: 'Lelang'),
+          Tab(text: 'Kolam Aktif'),
+          Tab(text: 'Dalam Lelang'),
           Tab(text: 'Riwayat'),
         ],
       ),
@@ -302,8 +302,9 @@ class _ActivityCycleViewState extends State<ActivityCycleView>
 
   Widget listCard(
     List<FeedCycleHistoryResponseData>? data,
-    bool isReadyHarvest,
-  ) {
+    bool isReadyHarvest, {
+    bool isDoneHarvest = false,
+  }) {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       shrinkWrap: true,

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/resume_activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/view/activity_view.dart';
 
 class ActivityPage extends StatelessWidget {
@@ -19,13 +23,45 @@ class ActivityPage extends StatelessWidget {
         BlocProvider<ActivityCubit>(
           create: (context) => ActivityCubit(PondServiceImpl.create())..init(),
         ),
-      ],
-      child: Scaffold(
-        appBar: appDefaultAppBarWithBucket(
-          context,
-          'Aktivitas',
+        BlocProvider<ResumeActivityCubit>(
+          create: (context) =>
+              ResumeActivityCubit(PondServiceImpl.create())..init(),
         ),
-        body: const ActivityView(),
+      ],
+      child: MultiBlocListener(
+        listeners: [
+          BlocListener<ActivityCubit, ActivityState>(
+            listener: (context, state) {
+              if (state.status.isError) {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
+                  RepositoryProvider.of<AuthenticationRepository>(context)
+                      .logout();
+                } else {
+                  AppTopSnackBar(context).showDanger(state.errorMessage);
+                }
+              }
+            },
+          ),
+          BlocListener<ResumeActivityCubit, ResumeActivityState>(
+            listener: (context, state) {
+              if (state.status.isError) {
+                if (state.errorMessage == 'TOKEN_EXPIRED') {
+                  RepositoryProvider.of<AuthenticationRepository>(context)
+                      .logout();
+                } else {
+                  AppTopSnackBar(context).showDanger(state.errorMessage);
+                }
+              }
+            },
+          ),
+        ],
+        child: Scaffold(
+          appBar: appDefaultAppBarWithBucket(
+            context,
+            'Aktivitas',
+          ),
+          body: const ActivityView(),
+        ),
       ),
     );
   }

@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/monitoring_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/view/section/cultivation_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/view/section/finance_view.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/view/section/resume_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class MonitoringView extends StatefulWidget {
-  const MonitoringView({super.key});
+  const MonitoringView(
+    this.pondID,
+    this.pondCycleID, {
+    required this.isCycleDone,
+    super.key,
+  });
+
+  final String pondID;
+  final String pondCycleID;
+  final bool isCycleDone;
 
   @override
   State<MonitoringView> createState() => _MonitoringViewState();
@@ -17,7 +31,18 @@ class _MonitoringViewState extends State<MonitoringView>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(() {
+      context.read<MonitoringCubit>().onChangeIndex(_tabController.index);
+    });
+
+    if (widget.isCycleDone) {
+      context.read<CultivationCubit>().setupData(
+            widget.pondID,
+            widget.pondCycleID,
+          );
+    }
+
     super.initState();
   }
 
@@ -44,6 +69,7 @@ class _MonitoringViewState extends State<MonitoringView>
           tabs: const [
             Tab(text: 'Budidaya'),
             Tab(text: 'Keuangan'),
+            Tab(text: 'Resume'),
           ],
         ),
       );
@@ -52,9 +78,17 @@ class _MonitoringViewState extends State<MonitoringView>
     Widget bodyTab() {
       return TabBarView(
         controller: _tabController,
-        children: const [
-          CultivationView(),
+        children: [
+          widget.isCycleDone
+              ? const AppEmptyData(
+                  'Siklus Berakhir',
+                  descriptions:
+                      'Silahkan buat siklus baru untuk melihat analisa data',
+                  isCenter: true,
+                )
+              : const CultivationView(),
           FinanceView(),
+          ResumeView(),
         ],
       );
     }

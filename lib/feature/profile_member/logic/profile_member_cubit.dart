@@ -18,8 +18,10 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
   final ProfileService profileService;
   final CdnService cdnService;
 
-  ProfileMemberCubit(this.profileService, this.cdnService)
-      : super(const ProfileMemberState());
+  ProfileMemberCubit(
+    this.profileService,
+    this.cdnService,
+  ) : super(const ProfileMemberState());
 
   Future<void> init() async {}
 
@@ -71,6 +73,7 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.loading));
       final response = await profileService.detailProfile();
+      emit(state.copyWith(status: GlobalState.successSubmit));
       emit(
         state.copyWith(
           status: GlobalState.loaded,
@@ -94,42 +97,84 @@ class ProfileMemberCubit extends Cubit<ProfileMemberState> {
     }
   }
 
-  void updateAttachmentProfile(
-    File? ktpImage,
-    File? ekusukaImage, {
-    String? ktpImageExist,
-    String? ekusukaImageExist,
-  }) async {
+  void updateAttachmentProfile() async {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
-      final BaseResponse<CDNImageResponse>? ktpUrl =
-          ktpImage != null ? await cdnService.uploadImage(ktpImage) : null;
-      final BaseResponse<CDNImageResponse>? ekusukaUrl = ekusukaImage != null
-          ? await cdnService.uploadImage(ekusukaImage)
-          : null;
       final payload = UpdateProfilePayload(
         nik: state.profile!.nik,
         name: state.profile!.name,
         email: state.profile!.email,
         mobilephone: state.profile!.mobilephone,
         birthPlace: state.profile!.birthPlace,
-        birthDate: AppConvertDateTime().ymdDash(state.profile!.birthDate!),
+        birthDate: AppConvertDateTime()
+            .ymdDash(state.profile!.birthDate ?? DateTime.now()),
         gender: state.profile!.gender,
         job: state.profile!.job,
         imageUrl: state.profile!.imageUrl,
-        ktpUrl: ktpUrl?.data.data?.fileuri ?? ktpImageExist,
-        ekusukaUrl: ekusukaUrl?.data.data?.fileuri ?? ekusukaImageExist,
+        ktpUrl: state.profile?.ktpUrl ?? '',
+        ekusukaUrl: state.profile?.ekusukaUrl ?? '',
       );
       await profileService.updateProfile(payload);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(state.copyWith(status: GlobalState.loading));
       final response = await profileService.detailProfile();
+      emit(state.copyWith(status: GlobalState.successSubmit));
       emit(
         state.copyWith(
           status: GlobalState.loaded,
           profile: response.data.data,
         ),
       );
+    } on AppException catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
+    } catch (e) {
+      emit(state.copyWith(status: GlobalState.hideDialogLoading));
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  Future<void> uploadImage({
+    File? ktpImage,
+    File? ekusukaImage,
+  }) async {
+    emit(state.copyWith(status: GlobalState.showDialogLoading));
+    try {
+      if (ktpImage != null) {
+        final BaseResponse<CDNImageResponse> ktpUrl =
+            await cdnService.uploadImage(ktpImage);
+        ProfileResponseData profile = state.profile!;
+        profile.ktpUrl = ktpUrl.data.data?.fileuri ?? '';
+        emit(state.copyWith(status: GlobalState.hideDialogLoading));
+        emit(
+          state.copyWith(
+            status: GlobalState.loaded,
+            profile: profile,
+          ),
+        );
+      } else if (ekusukaImage != null) {
+        final BaseResponse<CDNImageResponse> ekusukaUrl =
+            await cdnService.uploadImage(ekusukaImage);
+        ProfileResponseData profile = state.profile!;
+        profile.ekusukaUrl = ekusukaUrl.data.data?.fileuri ?? '';
+        emit(state.copyWith(status: GlobalState.hideDialogLoading));
+        emit(
+          state.copyWith(
+            status: GlobalState.loaded,
+            profile: profile,
+          ),
+        );
+      }
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
       emit(

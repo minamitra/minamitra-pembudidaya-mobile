@@ -9,10 +9,12 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 class ActivitySamplingDetailPage extends StatelessWidget {
   final SamplingResponseData data;
   final DateTime tebarDate;
+  final bool isHistoricalData;
 
   const ActivitySamplingDetailPage(
     this.data, {
     required this.tebarDate,
+    required this.isHistoricalData,
     super.key,
   });
 
@@ -26,29 +28,30 @@ class ActivitySamplingDetailPage extends StatelessWidget {
         context,
         'Detail Sampling',
         actions: [
-          InkWell(
-            onTap: () {
-              Navigator.of(context).push(
-                AppTransition.pushTransition(
-                  ActivitySamplingAddPage(
-                    int.parse(data.fishpondId ?? '1'),
-                    int.parse(data.fishpondcycleId ?? '1'),
-                    isEdit: true,
-                    data: data,
-                    tebarDate: tebarDate,
-                    initDateTime: data.datetime ?? DateTime.now(),
+          if (!isHistoricalData)
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(
+                  AppTransition.pushTransition(
+                    ActivitySamplingAddPage(
+                      int.parse(data.fishpondId ?? '1'),
+                      int.parse(data.fishpondcycleId ?? '1'),
+                      isEdit: true,
+                      data: data,
+                      tebarDate: tebarDate,
+                      initDateTime: data.datetime ?? DateTime.now(),
+                    ),
+                    ActivitySamplingAddPage.routeSettings,
                   ),
-                  ActivitySamplingAddPage.routeSettings,
-                ),
-              );
-            },
-            child: Text(
-              'Edit',
-              style: appTextTheme(context)
-                  .bodyMedium
-                  ?.copyWith(color: Colors.white),
+                );
+              },
+              child: Text(
+                'Edit',
+                style: appTextTheme(context)
+                    .bodyMedium
+                    ?.copyWith(color: Colors.white),
+              ),
             ),
-          ),
           const SizedBox(width: 16.0),
         ],
       ),

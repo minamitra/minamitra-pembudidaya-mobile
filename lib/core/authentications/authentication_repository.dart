@@ -87,7 +87,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   // }
 
   @override
-  Future<void> logout({bool isRequestServiceAPI = true}) async {
+  Future<void> logout({bool isRequestServiceAPI = false}) async {
     if (isRequestServiceAPI) await authenticationService.logout();
     await _storageService.clearSecureStorage();
     _controller.add(AuthenticationStatus.unauthenticated);

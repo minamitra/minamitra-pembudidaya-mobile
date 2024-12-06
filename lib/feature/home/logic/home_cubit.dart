@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/home/home_service.dart';
@@ -15,21 +18,38 @@ class HomeCubit extends Cubit<HomeState> {
   void init() async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
+      await FirebaseCrashlytics.instance.recordError(
+        'Error Check on Dashboard',
+        StackTrace.current,
+        reason: 'a fatal error dashboard',
+        fatal: true,
+        information: [
+          'Check on dashboard at information',
+        ],
+      );
+      await FirebaseCrashlytics.instance.sendUnsentReports();
       final response = await service.homeBanner();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        bannerResponse: response.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          bannerResponse: response.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      log(e.message.toString());
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

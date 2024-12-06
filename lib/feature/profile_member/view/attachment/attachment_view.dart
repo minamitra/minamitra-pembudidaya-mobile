@@ -24,35 +24,35 @@ class AttachmentView extends StatefulWidget {
 }
 
 class _AttachmentViewState extends State<AttachmentView> {
-  Uint8List? ktpPicture;
-  File? ktpPictureFile;
-  Uint8List? ekusukaCardPicture;
-  File? ekusukaCardPictureFile;
+  // Uint8List? ktpPicture;
+  // File? ktpPictureFile;
+  // Uint8List? ekusukaCardPicture;
+  // File? ekusukaCardPictureFile;
 
   @override
   void initState() {
     super.initState();
-    if (widget.profile.ktpUrl != null && widget.profile.ktpUrl != '') {
-      convertKtpImageUrl(widget.profile.ktpUrl!);
-    }
-    if (widget.profile.ekusukaUrl != null && widget.profile.ekusukaUrl != '') {
-      convertEkusukaImageUrl(widget.profile.ekusukaUrl!);
-    }
+    // if (widget.profile.ktpUrl != null && widget.profile.ktpUrl != '') {
+    //   convertKtpImageUrl(widget.profile.ktpUrl!);
+    // }
+    // if (widget.profile.ekusukaUrl != null && widget.profile.ekusukaUrl != '') {
+    //   convertEkusukaImageUrl(widget.profile.ekusukaUrl!);
+    // }
   }
 
-  void convertKtpImageUrl(String image) async {
-    http.Response imagePath = await http.get(Uri.parse(image));
-    setState(() {
-      ktpPicture = imagePath.bodyBytes;
-    });
-  }
+  // void convertKtpImageUrl(String image) async {
+  //   http.Response imagePath = await http.get(Uri.parse(image));
+  //   setState(() {
+  //     ktpPicture = imagePath.bodyBytes;
+  //   });
+  // }
 
-  void convertEkusukaImageUrl(String image) async {
-    http.Response imagePath = await http.get(Uri.parse(image));
-    setState(() {
-      ekusukaCardPicture = imagePath.bodyBytes;
-    });
-  }
+  // void convertEkusukaImageUrl(String image) async {
+  //   http.Response imagePath = await http.get(Uri.parse(image));
+  //   setState(() {
+  //     ekusukaCardPicture = imagePath.bodyBytes;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class _AttachmentViewState extends State<AttachmentView> {
               ),
               builder: (bottomSheetContext) {
                 return AppImagePickerMenu(
-                  'Upload Gambar',
+                  'Upload KTP',
                   (type) async {
                     switch (type) {
                       case PhotoSource.camera:
@@ -81,9 +81,12 @@ class _AttachmentViewState extends State<AttachmentView> {
                           ImageSource.camera,
                         );
                         if (document != null) {
-                          setState(() {
-                            ktpPictureFile = File(document.path);
-                          });
+                          if (context.mounted) {
+                            context
+                                .read<ProfileMemberCubit>()
+                                .uploadImage(ktpImage: File(document.path));
+                            Navigator.of(context).pop();
+                          }
                         }
                         break;
                       case PhotoSource.gallery:
@@ -92,9 +95,12 @@ class _AttachmentViewState extends State<AttachmentView> {
                           ImageSource.gallery,
                         );
                         if (document != null) {
-                          setState(() {
-                            ktpPictureFile = File(document.path);
-                          });
+                          if (context.mounted) {
+                            context
+                                .read<ProfileMemberCubit>()
+                                .uploadImage(ktpImage: File(document.path));
+                            Navigator.of(context).pop();
+                          }
                         }
                         break;
                     }
@@ -103,46 +109,45 @@ class _AttachmentViewState extends State<AttachmentView> {
               },
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              border: Border.all(
-                color: appColorScheme(context).outlineVariant,
-                width: 1,
-              ),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: AspectRatio(
-              aspectRatio: 2 / 1,
-              child: (ktpPicture == null && ktpPictureFile == null)
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          AppAssets.uploadIcon,
-                          width: 20,
-                          height: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Unggah Foto',
-                          textAlign: TextAlign.start,
-                          style: appTextTheme(context).bodyMedium?.copyWith(
-                                color: AppColor.neutral[400],
-                              ),
-                        ),
-                      ],
-                    )
-                  : ktpPictureFile == null
-                      ? Image.memory(
-                          ktpPicture!,
-                          fit: BoxFit.cover,
+          child: BlocBuilder<ProfileMemberCubit, ProfileMemberState>(
+            builder: (context, state) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    color: appColorScheme(context).outlineVariant,
+                    width: 1,
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: (state.profile?.ktpUrl?.isEmpty ?? true)
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              AppAssets.uploadIcon,
+                              width: 20,
+                              height: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'Unggah Foto',
+                              textAlign: TextAlign.start,
+                              style: appTextTheme(context).bodyMedium?.copyWith(
+                                    color: AppColor.neutral[400],
+                                  ),
+                            ),
+                          ],
                         )
-                      : Image.file(
-                          ktpPictureFile!,
+                      : Image.network(
+                          state.profile!.ktpUrl!,
                           fit: BoxFit.cover,
                         ),
-            ),
+                ),
+              );
+            },
           ),
         ),
         const SizedBox(height: 8.0),
@@ -171,7 +176,7 @@ class _AttachmentViewState extends State<AttachmentView> {
               ),
               builder: (bottomSheetContext) {
                 return AppImagePickerMenu(
-                  'Upload Gambar',
+                  'Upload Kartu E-Kusuka',
                   (type) async {
                     switch (type) {
                       case PhotoSource.camera:
@@ -180,9 +185,12 @@ class _AttachmentViewState extends State<AttachmentView> {
                           ImageSource.camera,
                         );
                         if (document != null) {
-                          setState(() {
-                            ekusukaCardPictureFile = File(document.path);
-                          });
+                          if (context.mounted) {
+                            context
+                                .read<ProfileMemberCubit>()
+                                .uploadImage(ekusukaImage: File(document.path));
+                            Navigator.of(context).pop();
+                          }
                         }
                         break;
                       case PhotoSource.gallery:
@@ -191,9 +199,12 @@ class _AttachmentViewState extends State<AttachmentView> {
                           ImageSource.gallery,
                         );
                         if (document != null) {
-                          setState(() {
-                            ekusukaCardPictureFile = File(document.path);
-                          });
+                          if (context.mounted) {
+                            context
+                                .read<ProfileMemberCubit>()
+                                .uploadImage(ekusukaImage: File(document.path));
+                            Navigator.of(context).pop();
+                          }
                         }
                         break;
                     }
@@ -202,19 +213,20 @@ class _AttachmentViewState extends State<AttachmentView> {
               },
             );
           },
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              border: Border.all(
-                color: appColorScheme(context).outlineVariant,
-                width: 1,
-              ),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: AspectRatio(
-              aspectRatio: 2 / 1,
-              child:
-                  (ekusukaCardPicture == null && ekusukaCardPictureFile == null)
+          child: BlocBuilder<ProfileMemberCubit, ProfileMemberState>(
+            builder: (context, state) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(
+                    color: appColorScheme(context).outlineVariant,
+                    width: 1,
+                  ),
+                ),
+                clipBehavior: Clip.antiAlias,
+                child: AspectRatio(
+                  aspectRatio: 2 / 1,
+                  child: (state.profile?.ekusukaUrl?.isEmpty ?? true)
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -233,16 +245,13 @@ class _AttachmentViewState extends State<AttachmentView> {
                             ),
                           ],
                         )
-                      : ekusukaCardPictureFile == null
-                          ? Image.memory(
-                              ekusukaCardPicture!,
-                              fit: BoxFit.cover,
-                            )
-                          : Image.file(
-                              ekusukaCardPictureFile!,
-                              fit: BoxFit.cover,
-                            ),
-            ),
+                      : Image.network(
+                          state.profile!.ekusukaUrl!,
+                          fit: BoxFit.cover,
+                        ),
+                ),
+              );
+            },
           ),
         ),
         const SizedBox(height: 8.0),
@@ -256,21 +265,21 @@ class _AttachmentViewState extends State<AttachmentView> {
     }
 
     Widget button() {
-      return AppPrimaryButton(
-        'Simpan',
-        () async {
-          if (ktpPictureFile == null && ekusukaCardPictureFile == null) {
-            AppTopSnackBar(context).showDanger(
-              'Mohon ganti atau lengkapi lampiran\nterlebih dahulu',
-            );
-            return;
-          }
-          context.read<ProfileMemberCubit>().updateAttachmentProfile(
-                ktpPictureFile,
-                ekusukaCardPictureFile,
-                ktpImageExist: widget.profile.ktpUrl ?? '',
-                ekusukaImageExist: widget.profile.ekusukaUrl ?? '',
-              );
+      return BlocBuilder<ProfileMemberCubit, ProfileMemberState>(
+        builder: (context, state) {
+          return AppPrimaryButton(
+            'Simpan',
+            () async {
+              if ((state.profile?.ekusukaUrl?.isEmpty ?? true) &&
+                  (state.profile?.ktpUrl?.isEmpty ?? true)) {
+                AppTopSnackBar(context).showDanger(
+                  'Mohon ganti atau lengkapi lampiran\nterlebih dahulu',
+                );
+                return;
+              }
+              context.read<ProfileMemberCubit>().updateAttachmentProfile();
+            },
+          );
         },
       );
     }

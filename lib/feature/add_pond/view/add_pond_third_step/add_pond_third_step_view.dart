@@ -568,29 +568,29 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                 child: customSeedPrice(),
               )
             : const SizedBox(),
-        const SizedBox(height: 18.0),
-        AppValidatorTextField(
-          controller: addPondThirdStepCubit.survivalRateController,
-          inputType: TextInputType.number,
-          isMandatory: false,
-          withUpperLabel: true,
-          labelText: 'Target Survival Rate',
-          hintText: '0',
-          suffixWidget: Padding(
-            padding: const EdgeInsets.only(right: 18.0),
-            child: Text(
-              '%',
-              style: appTextTheme(context).bodySmall?.copyWith(
-                    color: AppColor.neutral[500],
-                    fontWeight: FontWeight.w500,
-                  ),
-            ),
-          ),
-          suffixConstraints: const BoxConstraints(),
-          validator: (value) {
-            return null;
-          },
-        ),
+        // const SizedBox(height: 18.0),
+        // AppValidatorTextField(
+        //   controller: addPondThirdStepCubit.survivalRateController,
+        //   inputType: TextInputType.number,
+        //   isMandatory: false,
+        //   withUpperLabel: true,
+        //   labelText: 'Target Survival Rate',
+        //   hintText: '0',
+        //   suffixWidget: Padding(
+        //     padding: const EdgeInsets.only(right: 18.0),
+        //     child: Text(
+        //       '%',
+        //       style: appTextTheme(context).bodySmall?.copyWith(
+        //             color: AppColor.neutral[500],
+        //             fontWeight: FontWeight.w500,
+        //           ),
+        //     ),
+        //   ),
+        //   suffixConstraints: const BoxConstraints(),
+        //   validator: (value) {
+        //     return null;
+        //   },
+        // ),
         const SizedBox(height: 18.0),
         BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
           builder: (context, state) {
@@ -867,14 +867,28 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
 
                         if (formThirdStepKey.currentState?.validate() ??
                             false) {
-                          final int? survivalRaate = int.tryParse(
-                            addPondThirdStepCubit.survivalRateController.text,
+                          // final int? survivalRaate = int.tryParse(
+                          //   addPondThirdStepCubit.survivalRateController.text,
+                          // );
+                          // if (survivalRaate == null ||
+                          //     survivalRaate < 0 ||
+                          //     survivalRaate > 100) {
+                          //   AppTopSnackBar(context).showDanger(
+                          //     'Survival Rate harus\nangka antara 0 - 100',
+                          //   );
+                          //   return;
+                          // }
+
+                          final double? bobotTebar = double.tryParse(
+                            addPondThirdStepCubit.spreadController.text,
                           );
-                          if (survivalRaate == null ||
-                              survivalRaate < 0 ||
-                              survivalRaate > 100) {
+                          final double? targetBobot = double.tryParse(
+                            addPondThirdStepCubit.targetController.text,
+                          );
+
+                          if ((bobotTebar ?? 0) >= (targetBobot ?? 0)) {
                             AppTopSnackBar(context).showDanger(
-                              'Survival Rate harus\nangka antara 0 - 100',
+                              'Target bobot panen harus lebih besar dari bobot tebar',
                             );
                             return;
                           }
@@ -962,10 +976,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                       addPondThirdStepCubit
                                           .targetController.text,
                                     ),
-                                    srTarget: int.parse(
-                                      addPondThirdStepCubit
-                                          .survivalRateController.text,
-                                    ),
+                                    srTarget: 100,
                                     fishfoodJsonObject: FishfoodJsonObject(
                                       starter1: selecterStarter1Finisher,
                                       starter2: selecterStarter2Finisher,
@@ -1046,10 +1057,7 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                       addPondThirdStepCubit
                                           .targetController.text,
                                     ),
-                                    srTarget: int.parse(
-                                      addPondThirdStepCubit
-                                          .survivalRateController.text,
-                                    ),
+                                    srTarget: 100,
                                     fishfoodJsonObject: FishfoodJsonObject(
                                       starter1: selecterStarter1Finisher,
                                       starter2: selecterStarter2Finisher,

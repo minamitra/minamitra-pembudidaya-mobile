@@ -84,6 +84,8 @@ dependencies:
   path: ^1.9.0
   permission_handler: ^11.3.1
   timeline_tile: ^2.0.0
+  firebase_analytics: ^10.10.7
+  firebase_crashlytics: ^3.5.7
 
 dev_dependencies:
   flutter_test:

@@ -19,12 +19,14 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
     this.id, {
     this.isFromCycleDetail = true,
     this.data,
+    this.tebarDate,
     super.key,
   });
 
   final String id;
   final bool isFromCycleDetail;
   final FeedCycleHistoryResponseData? data;
+  final DateTime? tebarDate;
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: '/activity-cycle-add-harvest');
@@ -41,9 +43,10 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
                 ..initImage(image: data?.panenAttachmentJsonArray),
         ),
         BlocProvider<ActivityCycleAddHarvestCubit>(
-            create: (BuildContext context) => ActivityCycleAddHarvestCubit(
-                  CycleServiceImpl.create(),
-                )..init(data: data),),
+          create: (BuildContext context) => ActivityCycleAddHarvestCubit(
+            CycleServiceImpl.create(),
+          )..init(data: data),
+        ),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -71,8 +74,11 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
                 AppTopSnackBar(context)
                     .showSuccess('Berhasil menambahkan panen');
                 if (isFromCycleDetail) {
-                  Navigator.of(context).popUntil(ModalRoute.withName(
-                      ActivityCyclePage.routeSettings().name ?? '',),);
+                  Navigator.of(context).popUntil(
+                    ModalRoute.withName(
+                      ActivityCyclePage.routeSettings().name ?? '',
+                    ),
+                  );
                 } else {
                   Navigator.of(context).pop();
                   Navigator.of(context).pop('refresh');
@@ -110,6 +116,7 @@ class ActivityCycleAddHarvestPage extends StatelessWidget {
           body: ActivityCycleAddHarvestView(
             id,
             data: data,
+            tebarDate: tebarDate,
           ),
         ),
       ),

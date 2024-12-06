@@ -38,7 +38,7 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
       final feedStarter3Response = await feedService.getFeedStarter('starter3');
       final feedGrowerResponse = await feedService.getFeedGrower();
       final feedFinisherResponse = await feedService.getFeedFinisher();
-      final seedResponse = await feedService.getSeed();
+      final seedResponse = await feedService.getSeed(createdBy: 'user');
       SeedResponse seedCleaningData = seedResponse.data;
       seedCleaningData = seedCleaningData.copyWith(
         data: [
@@ -46,25 +46,31 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
           SeedResponseData(id: '-1', name: 'Benih Baru'),
         ],
       );
-      emit(state.copyWith(
-        feedStarter1Data: feedStarter1Response.data,
-        feedStarter2Data: feedStarter2Response.data,
-        feedStarter3Data: feedStarter3Response.data,
-        feedGrowerData: feedGrowerResponse.data,
-        feedFinisherData: feedFinisherResponse.data,
-        seedResponse: seedCleaningData,
-        status: GlobalState.loaded,
-      ),);
+      emit(
+        state.copyWith(
+          feedStarter1Data: feedStarter1Response.data,
+          feedStarter2Data: feedStarter2Response.data,
+          feedStarter3Data: feedStarter3Response.data,
+          feedGrowerData: feedGrowerResponse.data,
+          feedFinisherData: feedFinisherResponse.data,
+          seedResponse: seedCleaningData,
+          status: GlobalState.loaded,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

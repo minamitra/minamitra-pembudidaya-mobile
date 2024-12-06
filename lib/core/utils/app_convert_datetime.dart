@@ -32,7 +32,7 @@ class AppConvertDateTime {
   }
 
   String ddmmyyyyhhmm(DateTime dateTime) {
-    return DateFormat('dd-MM-yyyy HH:mm WIB', countryCode).format(dateTime);
+    return DateFormat('dd-MM-yyyy HH:mm', countryCode).format(dateTime);
   }
 
   String mmm(DateTime dateTime) {

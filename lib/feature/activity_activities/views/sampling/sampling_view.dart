@@ -17,12 +17,14 @@ class SamplingView extends StatefulWidget {
   final int fishpondcycleId;
   final String datetime;
   final DateTime tebarDate;
+  final bool isHistoricalData;
 
   const SamplingView(
     this.fishpondId,
     this.fishpondcycleId,
     this.datetime, {
     required this.tebarDate,
+    this.isHistoricalData = false,
     super.key,
   });
 
@@ -42,6 +44,7 @@ class _SamplingViewState extends State<SamplingView> {
               ActivitySamplingDetailPage(
                 data,
                 tebarDate: widget.tebarDate,
+                isHistoricalData: widget.isHistoricalData,
               ),
               ActivitySamplingDetailPage.routeSettings(),
             ),
@@ -87,30 +90,31 @@ class _SamplingViewState extends State<SamplingView> {
                     ],
                   ),
                   const Spacer(),
-                  InkWell(
-                    onTap: () {
-                      showDeleteBottomSheet(
-                        context,
-                        title: 'Hapus Sampling',
-                        descriptions:
-                            'Apakah Anda yakin ingin menghapus sampling ini?',
-                        onTapDelete: () {
-                          context.read<SamplingCubit>().deleteSampling(
-                                data.id ?? '',
-                                widget.fishpondId,
-                                widget.fishpondcycleId,
-                                widget.datetime,
-                              );
-                          Navigator.of(context).pop();
-                        },
-                      );
-                    },
-                    child: Image.asset(
-                      AppAssets.trashIcon,
-                      height: 20.0,
-                      color: AppColor.neutral[400],
+                  if (!widget.isHistoricalData)
+                    InkWell(
+                      onTap: () {
+                        showDeleteBottomSheet(
+                          context,
+                          title: 'Hapus Sampling',
+                          descriptions:
+                              'Apakah Anda yakin ingin menghapus sampling ini?',
+                          onTapDelete: () {
+                            context.read<SamplingCubit>().deleteSampling(
+                                  data.id ?? '',
+                                  widget.fishpondId,
+                                  widget.fishpondcycleId,
+                                  widget.datetime,
+                                );
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      },
+                      child: Image.asset(
+                        AppAssets.trashIcon,
+                        height: 20.0,
+                        color: AppColor.neutral[400],
+                      ),
                     ),
-                  ),
                 ],
               ),
               const SizedBox(height: 18.0),
@@ -145,12 +149,22 @@ class _SamplingViewState extends State<SamplingView> {
 
         if (state.status.isLoaded) {
           return state.samplings!.isEmpty
-              ? const Padding(
-                  padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
-                  child: AppEmptyData(
-                    'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
-                  ),
-                )
+              ? widget.isHistoricalData
+                  ? const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
+                      child: Center(
+                        child: AppEmptyData(
+                          'Tidak ada data ditemukan',
+                          isCenter: true,
+                        ),
+                      ),
+                    )
+                  : const Padding(
+                      padding: EdgeInsets.fromLTRB(16, 84, 16, 0),
+                      child: AppEmptyData(
+                        'Belum ada data, tekan tombol + untuk menambahkan aktivitas baru',
+                      ),
+                    )
               : ListView.separated(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),

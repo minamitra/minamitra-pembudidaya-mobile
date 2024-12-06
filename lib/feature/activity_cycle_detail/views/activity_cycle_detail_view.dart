@@ -1,3 +1,4 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
@@ -91,6 +92,103 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
     );
   }
 
+  Widget detailPakanItem(
+    String title,
+    String feeData,
+    String valueData,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            maxLines: 2,
+            style: appTextTheme(context)
+                .bodySmall
+                ?.copyWith(color: AppColor.neutral[500]),
+          ),
+          const SizedBox(width: 8.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  feeData,
+                  textAlign: TextAlign.end,
+                  maxLines: 3,
+                  style: appTextTheme(context).bodySmall?.copyWith(
+                        color: AppColor.neutral[800],
+                        fontWeight: FontWeight.w500,
+                      ),
+                ),
+                const SizedBox(height: 8.0),
+                Text(
+                  'Est Total Pakan: $valueData Kg',
+                  style: appTextTheme(context)
+                      .labelLarge
+                      ?.copyWith(color: AppColor.primary[500]),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget pondInfo() {
+    return Container(
+      color: AppColor.white,
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Informasi Kolam',
+            textAlign: TextAlign.center,
+            style: appTextTheme(context).titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
+          const SizedBox(height: 24.0),
+          textRow(
+            'Nama kolam',
+            widget.data.fishpondName.handlingEmptyString(),
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
+            'Alamat kolam',
+            '${widget.data.fishpondAddress} Kel. ${widget.data.fishpondAddressVillageName} Kec. ${widget.data.fishpondAddressSubdistrictName} Kab. ${widget.data.fishpondAddressCityName} Prov. ${widget.data.fishpondAddressProvinceName}',
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
+            'Luas kolam',
+            '${double.parse(widget.data.fishpondAreaTotal ?? '0').toStringAsFixed(2)} m\u00b2',
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
+            'Kedalaman kolam',
+            '${double.parse(widget.data.fishpondAreaDepth ?? '0').toStringAsFixed(2)} m',
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget cycleInfo() {
     return Container(
       color: AppColor.white,
@@ -108,7 +206,8 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           const SizedBox(height: 24.0),
           textRow(
             'Tanggal Tebar',
-            AppConvertDateTime().dmy(widget.data.tebarDate ?? DateTime.now()),
+            AppConvertDateTime()
+                .dmyName(widget.data.tebarDate ?? DateTime.now()),
           ),
           Divider(
             height: 32.0,
@@ -134,8 +233,8 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            'Asal Benih',
-            widget.data.fishpondName.handlingEmptyString(),
+            'Densitas',
+            double.parse(widget.data.densitas ?? '0').toStringAsFixed(2),
           ),
           Divider(
             height: 32.0,
@@ -143,7 +242,29 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            'Target Bobot Panen Tebar',
+            'Asal Benih',
+            widget.data.fishseedName.handlingEmptyString(),
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
+            'Total biomassa tebar',
+            '${((double.parse(
+                  widget.data.tebarFishTotal.handleEmptyStringToZero(),
+                ) * double.parse(
+                  widget.data.tebarBobot.handleEmptyStringToZero(),
+                )) / 1000).toStringAsFixed(2)} Kg',
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
+            'Target Bobot Panen',
             '${double.parse(widget.data.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(2)} gram/ekor',
           ),
           Divider(
@@ -161,12 +282,9 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
-            'Pakan Starter',
-            widget.data.fishfoodJsonObject?.starter
-                    ?.map((element) => element.name ?? '-')
-                    .toList()
-                    .join(', ') ??
-                '-',
+            'Estimasi tanggal panen',
+            AppConvertDateTime()
+                .dmyName(widget.data.estimationPanenDate ?? DateTime.now()),
           ),
           Divider(
             height: 32.0,
@@ -174,25 +292,128 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
+            'Estimasi tonnase panen',
+            '${widget.data.estimationPanenTonase.handlingEmptyString()} Kg',
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          detailPakanItem(
+            'Pakan Starter 1',
+            widget.data.fishfoodJsonObject?.starter1
+                    ?.map((element) => element.name ?? '-')
+                    .toList()
+                    .join(', ') ??
+                '-',
+            appConvert3Digits(
+              ((widget.data.fishfoodJsonObject?.starter1?.isEmpty ?? true
+                      ? [0.0, 0.0, 0.0]
+                      : widget.data.fishfoodJsonObject?.starter1
+                              ?.map(
+                                (element) => (element.total ?? 0),
+                              )
+                              .toList() ??
+                          [0.0, 0.0, 0.0])
+                  .reduce((value, element) => value + element)),
+            ),
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          detailPakanItem(
+            'Pakan Starter 2',
+            widget.data.fishfoodJsonObject?.starter2
+                    ?.map((element) => element.name ?? '-')
+                    .toList()
+                    .join(', ') ??
+                '-',
+            appConvert3Digits(
+              ((widget.data.fishfoodJsonObject?.starter2?.isEmpty ?? true
+                      ? [0.0, 0.0, 0.0]
+                      : widget.data.fishfoodJsonObject?.starter2
+                              ?.map(
+                                (element) => (element.total ?? 0),
+                              )
+                              .toList() ??
+                          [0.0, 0.0, 0.0])
+                  .reduce((value, element) => value + element)),
+            ),
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          detailPakanItem(
+            'Pakan Starter 3',
+            widget.data.fishfoodJsonObject?.starter3
+                    ?.map((element) => element.name ?? '-')
+                    .toList()
+                    .join(', ') ??
+                '-',
+            appConvert3Digits(
+              ((widget.data.fishfoodJsonObject?.starter3?.isEmpty ?? true
+                      ? [0.0, 0.0, 0.0]
+                      : widget.data.fishfoodJsonObject?.starter3
+                              ?.map(
+                                (element) => (element.total ?? 0),
+                              )
+                              .toList() ??
+                          [0.0, 0.0, 0.0])
+                  .reduce((value, element) => value + element)),
+            ),
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          detailPakanItem(
             'Pakan Grower',
             widget.data.fishfoodJsonObject?.grower
                     ?.map((element) => element.name ?? '-')
                     .toList()
                     .join(', ') ??
                 '-',
+            appConvert3Digits(
+              ((widget.data.fishfoodJsonObject?.grower?.isEmpty ?? true
+                      ? [0.0, 0.0, 0.0]
+                      : widget.data.fishfoodJsonObject?.grower
+                              ?.map(
+                                (element) => (element.total ?? 0),
+                              )
+                              .toList() ??
+                          [0.0, 0.0, 0.0])
+                  .reduce((value, element) => value + element)),
+            ),
           ),
           Divider(
             height: 32.0,
             thickness: 1,
             color: AppColor.neutral[100],
           ),
-          textRow(
+          detailPakanItem(
             'Pakan Finisher',
             widget.data.fishfoodJsonObject?.finisher
                     ?.map((element) => element.name ?? '-')
                     .toList()
                     .join(', ') ??
                 '-',
+            appConvert3Digits(
+              ((widget.data.fishfoodJsonObject?.finisher?.isEmpty ?? true
+                      ? [0.0, 0.0, 0.0]
+                      : widget.data.fishfoodJsonObject?.finisher
+                              ?.map(
+                                (element) => (element.total ?? 0),
+                              )
+                              .toList() ??
+                          [0.0, 0.0, 0.0])
+                  .reduce((value, element) => value + element)),
+            ),
           ),
         ],
       ),
@@ -229,11 +450,26 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
                   //   listFile[index],
                   //   fit: BoxFit.cover,
                   // ),
-                  child: AppNetworkImage(
-                    widget.data.panenAttachmentJsonArray?[index] ?? '',
-                    width: double.infinity,
-                    height: double.infinity,
-                    fit: BoxFit.cover,
+                  child: InkWell(
+                    onTap: () {
+                      showImageViewer(
+                        context,
+                        Image.network(
+                          widget.data.panenAttachmentJsonArray?[index] ?? '',
+                        ).image,
+                        immersive: false,
+                        useSafeArea: true,
+                        swipeDismissible: true,
+                        doubleTapZoomable: true,
+                        backgroundColor: Colors.black.withOpacity(0.7),
+                      );
+                    },
+                    child: AppNetworkImage(
+                      widget.data.panenAttachmentJsonArray?[index] ?? '',
+                      width: double.infinity,
+                      height: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               );
@@ -253,7 +489,7 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Informasi Siklus',
+            'Informasi Panen',
             textAlign: TextAlign.center,
             style: appTextTheme(context).titleMedium?.copyWith(
                   fontWeight: FontWeight.w700,
@@ -274,8 +510,17 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
             color: AppColor.neutral[100],
           ),
           textRow(
+            'Total Bobot Panen',
+            '${double.parse(widget.data.actualPanenBobot.handleEmptyStringToZero()).toStringAsFixed(2)} gram/ekor',
+          ),
+          Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          textRow(
             'Total Panen',
-            '${widget.data.actualPanenBobot} kg',
+            '${double.parse(widget.data.actualPanenTonase.handleEmptyStringToZero()).toStringAsFixed(2)} Kg',
           ),
           Divider(
             height: 32.0,
@@ -396,7 +641,10 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
         () {
           Navigator.of(context).push(
             AppTransition.pushTransition(
-              ActivityCycleAddHarvestPage(widget.data.id ?? ''),
+              ActivityCycleAddHarvestPage(
+                widget.data.id ?? '',
+                tebarDate: widget.data.tebarDate ?? DateTime.now(),
+              ),
               ActivityCycleAddHarvestPage.routeSettings(),
             ),
           );
@@ -414,6 +662,8 @@ class _ActivityCycleDetailViewState extends State<ActivityCycleDetailView> {
           children: [
             const SizedBox(height: 16.0),
             statusBar(context),
+            const SizedBox(height: 16.0),
+            pondInfo(),
             const SizedBox(height: 16.0),
             cycleInfo(),
             convertToCycleType(widget.data.status ?? 'active') == CycleType.done

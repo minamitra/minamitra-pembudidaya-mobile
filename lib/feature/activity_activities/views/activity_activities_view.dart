@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:easy_date_timeline/easy_date_timeline.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
@@ -19,7 +16,6 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/s
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/treatment/treatment_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/views/water_quality/water_quality_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
-import 'package:time_picker_spinner_pop_up/time_picker_spinner_pop_up.dart';
 
 class ActivityActivitiesView extends StatefulWidget {
   final int fishpondId;
@@ -251,6 +247,7 @@ class _ActivityActivitiesViewState extends State<ActivityActivitiesView>
                           context,
                           showTitleActions: true,
                           onChanged: (date) {},
+                          onCancel: () {},
                           onConfirm: (date) {
                             context
                                 .read<ActivityActivitiesCubit>()

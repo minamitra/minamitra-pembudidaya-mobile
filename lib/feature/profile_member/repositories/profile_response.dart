@@ -97,7 +97,8 @@ class ProfileResponseData {
         otherAttachmentJsonArray: json['other_attachment_json_array'] == null
             ? null
             : List<String>.from(
-                json['other_attachment_json_array'].map((x) => x),),
+                json['other_attachment_json_array'].map((x) => x),
+              ),
         address: json['address'],
         adrressLatitude: json['adrress_latitude'],
         adrressLongitude: json['adrress_longitude'],

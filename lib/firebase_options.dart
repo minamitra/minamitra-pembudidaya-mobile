@@ -72,5 +72,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'mitra3m-ae108.firebasestorage.app',
     iosBundleId: 'com.example.minamitraPembudidayaMobile',
   );
-
 }

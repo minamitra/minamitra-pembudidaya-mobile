@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,13 +12,16 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_lazy_load.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/resume_activity_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/activity_header_data_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/view/add_bulk_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/resume_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -31,11 +35,23 @@ class ActivityView extends StatefulWidget {
 class _ActivityViewState extends State<ActivityView> {
   final TextEditingController pondController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
+  final AppLazyLoad _lazyLoad = AppLazyLoad();
+
   int page = 0;
 
   @override
   void initState() {
     super.initState();
+    _lazyLoad.onListener(
+      onLoadMore: () {
+        if (context.read<ActivityCubit>().state.status.isLoadMore ||
+            context.read<ActivityCubit>().state.status.isLoading) {
+          return;
+        } else {
+          context.read<ActivityCubit>().loadMoreData();
+        }
+      },
+    );
   }
 
   Function() bottomSheetShowModal(
@@ -107,14 +123,13 @@ class _ActivityViewState extends State<ActivityView> {
           if (value is String) {
             pondController.text = value;
             String pondId = context
-                    .read<ActivityCubit>()
+                    .read<ResumeActivityCubit>()
                     .state
-                    .pondReponse
-                    ?.data
+                    .fishpond
                     ?.firstWhere((element) => element.name == value)
                     .id ??
                 '0';
-            context.read<ActivityCubit>().setDashboardWithPond(pondId);
+            context.read<ResumeActivityCubit>().setDashboardWithPond(pondId);
           }
         }
       });
@@ -349,48 +364,51 @@ class _ActivityViewState extends State<ActivityView> {
           return ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: state.pondReponse?.data?.length ?? 0,
+            itemCount: state.pondReponse?.length ?? 0,
             itemBuilder: (context, index) {
-              if (state.pondReponse?.data?[index].id == '0') {
-                return const SizedBox();
-              }
-
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                 child: activityItem(
-                  title: state.pondReponse?.data?[index].name ?? '',
-                  value: appConvert3Digits(double.parse(state
-                              .pondReponse?.data?[index].totalFoodRecommendation
-                              .handleEmptyStringToZero() ??
-                          '0.0',) /
-                      1000,),
-                  percentage: appConvert3Digits(double.parse(state
-                              .pondReponse?.data?[index].totalFoodActual
-                              .handleEmptyStringToZero() ??
-                          '0.0',) /
-                      1000,),
+                  title: state.pondReponse?[index].name ?? '',
+                  value: appConvert3Digits(
+                    double.parse(
+                          state.pondReponse?[index].totalFoodRecommendation
+                                  .handleEmptyStringToZero() ??
+                              '0.0',
+                        ) /
+                        1000,
+                  ),
+                  percentage: appConvert3Digits(
+                    double.parse(
+                          state.pondReponse?[index].totalFoodActual
+                                  .handleEmptyStringToZero() ??
+                              '0.0',
+                        ) /
+                        1000,
+                  ),
                   onTap: () {
                     Navigator.of(context)
-                        .push(AppTransition.pushTransition(
-                      DetailActivityPage(
-                        state.pondReponse!.data![index],
-                        isCanAccessFeature: state
-                                .pondReponse!.data![index].status
-                                ?.isCanSeeDetail() ??
-                            false,
+                        .push(
+                      AppTransition.pushTransition(
+                        DetailActivityPage(
+                          state.pondReponse![index],
+                          isCanAccessFeature: state.pondReponse![index].status
+                                  ?.isCanSeeDetail() ??
+                              false,
+                        ),
+                        DetailActivityPage.routeSettings(),
                       ),
-                      DetailActivityPage.routeSettings(),
-                    ),)
+                    )
                         .then((value) {
                       if (value != null && value == 'refresh') {
                         context.read<ActivityCubit>().init();
                       }
                     });
                   },
-                  pondStatus: state.pondReponse?.data?[index].status ?? '',
-                  imageAsset: state.pondReponse?.data?[index].imageUrl ?? '',
+                  pondStatus: state.pondReponse?[index].status ?? '',
+                  imageAsset: state.pondReponse?[index].imageUrl ?? '',
                   isLastStatusDone: state
-                          .pondReponse?.data?[index].lastFishpondcycleStatus
+                          .pondReponse?[index].lastFishpondcycleStatus
                           ?.toLowerCase() ==
                       'done',
                 ),
@@ -405,10 +423,12 @@ class _ActivityViewState extends State<ActivityView> {
       return InkWell(
         onTap: () {
           Navigator.of(context)
-              .push(AppTransition.pushTransition(
-            const AddPondPage(),
-            AddPondPage.routeSettings(),
-          ),)
+              .push(
+            AppTransition.pushTransition(
+              const AddPondPage(),
+              AddPondPage.routeSettings(),
+            ),
+          )
               .then((value) {
             if (value != null && value is String) {
               if (value == 'refresh') {
@@ -710,7 +730,7 @@ class _ActivityViewState extends State<ActivityView> {
     }
 
     Widget headerData() {
-      return BlocBuilder<ActivityCubit, ActivityState>(
+      return BlocBuilder<ResumeActivityCubit, ResumeActivityState>(
         builder: (context, state) {
           return Container(
             color: AppColor.neutral[100],
@@ -738,16 +758,17 @@ class _ActivityViewState extends State<ActivityView> {
                           onTap: bottomSheetShowModal(
                             context,
                             'Pilih Kolam',
-                            state.pondReponse!.data!
-                                .map((element) => element.name ?? '-')
-                                .toList(),
+                            state.fishpond
+                                    ?.map((element) => element.name ?? '-')
+                                    .toList() ??
+                                [],
                           ),
                         ),
                 ),
                 const SizedBox(height: 18.0),
-                BlocBuilder<ActivityCubit, ActivityState>(
-                  builder: (context, state) {
-                    if (state.status.isLoading) {
+                BlocBuilder<ResumeActivityCubit, ResumeActivityState>(
+                  builder: (context, resumeState) {
+                    if (resumeState.status.isLoading) {
                       return const AppShimmer(
                         180,
                         double.infinity,
@@ -763,36 +784,38 @@ class _ActivityViewState extends State<ActivityView> {
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: activityHeaderDataWrappedList(
-                          biomassaValue:
-                              state.pondDashboardResponse?.data?.totalBiomas ??
-                                  0.0,
-                          srValue: state.pondDashboardResponse?.data
+                          biomassaValue: resumeState
+                                  .pondDashboardResponse?.data?.totalBiomas ??
+                              0.0,
+                          srValue: resumeState.pondDashboardResponse?.data
                                   ?.avgSurvivalRate ??
                               0.0,
-                          pakanValue:
-                              state.pondDashboardResponse?.data?.totalFeeding ??
-                                  0.0,
-                          estimasiJualValue:
-                              state.pondDashboardResponse?.data?.totalCost ??
-                                  0.0,
+                          pakanValue: resumeState
+                                  .pondDashboardResponse?.data?.totalFeeding ??
+                              0.0,
+                          estimasiJualValue: resumeState
+                                  .pondDashboardResponse?.data?.totalCost ??
+                              0.0,
                         ).length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: activityHeaderDataWrappedList(
-                                          biomassaValue: state
+                                          biomassaValue: resumeState
                                                   .pondDashboardResponse
                                                   ?.data
                                                   ?.totalBiomas ??
                                               0.0,
-                                          srValue: state.pondDashboardResponse
-                                                  ?.data?.avgSurvivalRate ??
+                                          srValue: resumeState
+                                                  .pondDashboardResponse
+                                                  ?.data
+                                                  ?.avgSurvivalRate ??
                                               0.0,
-                                          pakanValue: state
+                                          pakanValue: resumeState
                                                   .pondDashboardResponse
                                                   ?.data
                                                   ?.totalFeeding ??
                                               0.0,
-                                          estimasiJualValue: state
+                                          estimasiJualValue: resumeState
                                                   .pondDashboardResponse
                                                   ?.data
                                                   ?.totalCost ??
@@ -804,23 +827,25 @@ class _ActivityViewState extends State<ActivityView> {
                                 : EdgeInsets.zero,
                             child: wrappedHeaderItemData(
                               activityHeaderDataWrappedList(
-                                biomassaValue: state.pondDashboardResponse?.data
-                                        ?.totalBiomas ??
+                                biomassaValue: resumeState.pondDashboardResponse
+                                        ?.data?.totalBiomas ??
                                     0.0,
-                                srValue: state.pondDashboardResponse?.data
+                                srValue: resumeState.pondDashboardResponse?.data
                                         ?.avgSurvivalRate ??
                                     0.0,
-                                pakanValue: state.pondDashboardResponse?.data
-                                        ?.totalFeeding ??
+                                pakanValue: resumeState.pondDashboardResponse
+                                        ?.data?.totalFeeding ??
                                     0.0,
-                                estimasiJualValue: state.pondDashboardResponse
-                                        ?.data?.totalCost ??
+                                estimasiJualValue: resumeState
+                                        .pondDashboardResponse
+                                        ?.data
+                                        ?.totalCost ??
                                     0.0,
                               )[index],
-                              (state.selectedPondID ?? '0') == '0',
-                              state.pondReponse?.data?.length == 1
+                              (resumeState.selectedPondID ?? '0') == '0',
+                              (resumeState.fishpond?.length ?? 1) == 1
                                   ? '0'
-                                  : ((state.pondReponse?.data?.length ?? 1) - 1)
+                                  : ((resumeState.fishpond?.length ?? 1) - 1)
                                       .toString(),
                             ),
                           );
@@ -917,16 +942,18 @@ class _ActivityViewState extends State<ActivityView> {
                     AppPrimaryGradientButton(
                       '+ Pakan',
                       () {
-                        Navigator.of(context).push(AppTransition.pushTransition(
-                          AddBulkFeedPage(
-                            state.pondReponse?.data
-                                    ?.map((element) => element.id)
-                                    .toList()
-                                    .join(',') ??
-                                '',
+                        Navigator.of(context).push(
+                          AppTransition.pushTransition(
+                            AddBulkFeedPage(
+                              state.pondReponse
+                                      ?.map((element) => element.id)
+                                      .toList()
+                                      .join(',') ??
+                                  '',
+                            ),
+                            AddBulkFeedPage.routeSettings(),
                           ),
-                          AddBulkFeedPage.routeSettings(),
-                        ),);
+                        );
                       },
                     ),
                   ],
@@ -944,17 +971,27 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
+    Widget onLoadMore() {
+      return BlocBuilder<ActivityCubit, ActivityState>(
+        builder: (context, state) {
+          return AppLoadMoreWidget(status: state.status.isLoadMore);
+        },
+      );
+    }
+
     return AppRefresher(
       onRefresh: () {
         context.read<ActivityCubit>().init();
       },
       child: ListView(
+        controller: _lazyLoad.controller,
         children: [
           headerData(),
           addPond(),
           listActivityItem(),
           const SizedBox(height: 18.0),
           addButton(),
+          onLoadMore(),
           const SizedBox(height: 18.0),
         ],
       ),

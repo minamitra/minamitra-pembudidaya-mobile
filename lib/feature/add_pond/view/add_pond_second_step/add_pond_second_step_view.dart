@@ -251,7 +251,7 @@ class _AddPondSecondStepViewState extends State<AddPondSecondStepView> {
           Wrap(
             children: [
               Text(
-                'Unggah Lampiran',
+                'Foto Kolam',
                 style: appTextTheme(context).bodyMedium,
               ),
               Text(

@@ -5,30 +5,25 @@ class ActivityState extends Equatable {
     this.status = GlobalState.initial,
     this.errorMessage = '',
     this.pondReponse,
-    this.pondDashboardResponse,
-    this.selectedPondID,
+    this.currentPage,
   });
 
   final GlobalState status;
   final String errorMessage;
-  final PondResponse? pondReponse;
-  final PondDashboardResponse? pondDashboardResponse;
-  final String? selectedPondID;
+  final List<PondResponseData>? pondReponse;
+  final int? currentPage;
 
   ActivityState copyWith({
     GlobalState? status,
     String? errorMessage,
-    PondResponse? pondReponse,
-    PondDashboardResponse? pondDashboardResponse,
-    String? selectedPondID,
+    List<PondResponseData>? pondReponse,
+    int? currentPage,
   }) {
     return ActivityState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       pondReponse: pondReponse ?? this.pondReponse,
-      pondDashboardResponse:
-          pondDashboardResponse ?? this.pondDashboardResponse,
-      selectedPondID: selectedPondID ?? this.selectedPondID,
+      currentPage: currentPage ?? this.currentPage,
     );
   }
 
@@ -37,7 +32,6 @@ class ActivityState extends Equatable {
         status,
         errorMessage,
         pondReponse,
-        pondDashboardResponse,
-        selectedPondID,
+        currentPage,
       ];
 }

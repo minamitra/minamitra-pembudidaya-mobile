@@ -13,7 +13,7 @@ abstract class ActivitySamplingService {
   Future<BaseResponse<SamplingResponse>> dataSampling(
     int fishpondId,
     int fishpondcycleId,
-    String datetime,
+    String? datetime,
   );
   Future<BaseResponse<bool>> addSampling(AddSamplingPayload payload);
   Future<BaseResponse<bool>> deleteSampling(String id);
@@ -43,7 +43,7 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
   Future<BaseResponse<SamplingResponse>> dataSampling(
     int fishpondId,
     int fishpondcycleId,
-    String datetime,
+    String? datetime,
   ) async {
     final url = endpoint.dataSampling(
       fishpondId,
@@ -86,7 +86,8 @@ class ActivitySamplingServiceImpl implements ActivitySamplingService {
 
   @override
   Future<BaseResponse<bool>> updateSampling(
-      UpdateSamplingPayload payload,) async {
+    UpdateSamplingPayload payload,
+  ) async {
     final url = endpoint.updateSampling();
     final header = await headerProvider.headers;
     final response = await httpClient.post(

@@ -34,6 +34,7 @@ class AppWidgetChip extends StatelessWidget {
         ),
         child: Text(
           text,
+          textAlign: TextAlign.center,
           style: appTextTheme(context).titleSmall?.copyWith(
                 color: textColor,
                 fontWeight: FontWeight.w500,

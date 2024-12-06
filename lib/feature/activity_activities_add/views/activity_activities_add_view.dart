@@ -46,7 +46,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
 
   // DateTime dateNow = DateTime.now();
   DateTime firstDate = DateTime.now().subtract(const Duration(days: 45));
-  DateTime lastDate = DateTime.now();
+  DateTime lastDate = DateTime.now().add(const Duration(days: 1800));
 
   List<String> listType = ['pagi', 'siang', 'sore', 'malam'];
   List<String> selectedTypeOfFeed = [];
@@ -328,6 +328,14 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
             8.0,
           );
         }
+
+        if ((state.feedRecomendationResponse?.data?.suggestFeed
+                    ?.toStringAsFixed(2) ??
+                '0.00') ==
+            '0.00') {
+          return const SizedBox();
+        }
+
         return Column(
           children: [
             Container(

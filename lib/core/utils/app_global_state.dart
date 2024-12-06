@@ -8,6 +8,7 @@ enum GlobalState {
   refresh,
   successSubmit,
   onUpdating,
+  loadMore,
 }
 
 extension GlobalStateExtension on GlobalState {
@@ -20,4 +21,5 @@ extension GlobalStateExtension on GlobalState {
   bool get isRefresh => this == GlobalState.refresh;
   bool get isSuccessSubmit => this == GlobalState.successSubmit;
   bool get isOnUpdating => this == GlobalState.onUpdating;
+  bool get isLoadMore => this == GlobalState.loadMore;
 }

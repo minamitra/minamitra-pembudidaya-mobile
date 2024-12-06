@@ -4,22 +4,26 @@ class HistoryPointState extends Equatable {
   const HistoryPointState({
     this.status = GlobalState.initial,
     this.errorMessage = '',
-    this.selectedFilter = -1,
+    this.selectedFilter = 'Semua',
+    this.selectedDate,
   });
 
   final GlobalState status;
   final String errorMessage;
-  final int selectedFilter;
+  final String selectedFilter;
+  final DateTime? selectedDate;
 
   HistoryPointState copyWith({
     GlobalState? status,
     String? errorMessage,
-    int? selectedFilter,
+    String? selectedFilter,
+    DateTime? selectedDate,
   }) {
     return HistoryPointState(
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       selectedFilter: selectedFilter ?? this.selectedFilter,
+      selectedDate: selectedDate,
     );
   }
 
@@ -28,5 +32,6 @@ class HistoryPointState extends Equatable {
         status,
         errorMessage,
         selectedFilter,
+        selectedDate ?? DateTime.now(),
       ];
 }

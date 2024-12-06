@@ -34,7 +34,7 @@ class ActivityCyclePage extends StatelessWidget {
         child: Scaffold(
           appBar: appDefaultAppBar(
             context,
-            'Siklus',
+            'Aktivitas Panen',
           ),
           body: ActivityCycleView(pondID),
         ),

@@ -24,20 +24,60 @@ class SamplingCubit extends Cubit<SamplingState> {
         fishpondcycleId,
         datetime,
       );
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        samplings: response.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          samplings: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
+  void initAllData(
+    int fishpondId,
+    int fishpondcycleId,
+  ) async {
+    emit(state.copyWith(status: GlobalState.loading));
+    try {
+      final response = await service.dataSampling(
+        fishpondId,
+        fishpondcycleId,
+        null,
+      );
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          samplings: response.data.data,
+        ),
+      );
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -55,20 +95,26 @@ class SamplingCubit extends Cubit<SamplingState> {
         fishpondcycleId,
         datetime,
       );
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        samplings: samplings.data.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          samplings: samplings.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

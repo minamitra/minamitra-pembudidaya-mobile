@@ -16,12 +16,22 @@ class CultivationCubit extends Cubit<CultivationState> {
 
   final CycleService service;
 
+  String pondID = '';
   String pondCycleID = '';
   final TextEditingController docStartController =
       TextEditingController(text: '0');
   final TextEditingController docEndController = TextEditingController();
 
+  void setupData(
+    String pondID,
+    String pondCycleID,
+  ) {
+    this.pondCycleID = pondCycleID;
+    this.pondID = pondID;
+  }
+
   Future<void> init(
+    String pondID,
     String pondCycleID,
     String filterName,
   ) async {
@@ -34,6 +44,7 @@ class CultivationCubit extends Cubit<CultivationState> {
       final companionNotesResponse =
           await service.getCompanionNotes(pondCycleID: pondCycleID);
       this.pondCycleID = pondCycleID;
+      this.pondID = pondID;
       GraphResponseData? datas = response.data.data?.copyWith(
         data: [
           GraphResponseDataItem(

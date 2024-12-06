@@ -14,7 +14,9 @@ abstract class FeedService {
   Future<BaseResponse<FeedStarterResponse>> getFeedStarter(String type);
   Future<BaseResponse<FeedGrowerResponse>> getFeedGrower();
   Future<BaseResponse<FeedFinisherResponse>> getFeedFinisher();
-  Future<BaseResponse<SeedResponse>> getSeed();
+  Future<BaseResponse<SeedResponse>> getSeed({
+    String? createdBy,
+  });
   Future<BaseResponse<int>> addNewFishFeed(
     String name,
     int price,
@@ -77,8 +79,8 @@ class FeedServiceImpl implements FeedService {
   }
 
   @override
-  Future<BaseResponse<SeedResponse>> getSeed() async {
-    final uri = endpoint.getSeed();
+  Future<BaseResponse<SeedResponse>> getSeed({String? createdBy}) async {
+    final uri = endpoint.getSeed(createdBy: createdBy);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);

@@ -22,10 +22,16 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityCycleAddHarvestView extends StatefulWidget {
-  const ActivityCycleAddHarvestView(this.id, {this.data, super.key});
+  const ActivityCycleAddHarvestView(
+    this.id, {
+    this.data,
+    this.tebarDate,
+    super.key,
+  });
 
   final String id;
   final FeedCycleHistoryResponseData? data;
+  final DateTime? tebarDate;
 
   @override
   State<ActivityCycleAddHarvestView> createState() =>
@@ -49,11 +55,14 @@ class _ActivityCycleAddHarvestViewState
 
   @override
   void initState() {
-    log('data: ${widget.data}');
+    log('data: ${widget.data?.actualPanenDate}');
     super.initState();
     if (widget.data != null) {
-      dateController.text = AppConvertDateTime().dmyName(DateTime.parse(
-          widget.data?.actualPanenDate ?? DateTime.now().toString(),),);
+      dateController.text = AppConvertDateTime().dmyName(
+        DateTime.parse(
+          widget.data?.actualPanenDate ?? DateTime.now().toString(),
+        ),
+      );
       sizeController.text =
           double.parse(widget.data!.actualPanenBobot ?? '0').toStringAsFixed(0);
       totalController.text = double.parse(widget.data!.actualPanenTonase ?? '0')
@@ -64,6 +73,8 @@ class _ActivityCycleAddHarvestViewState
   }
 
   AppValidatorTextField dateTextField(BuildContext context) {
+    // log(widget.data?.tebarDate?.toIso8601String() ?? 'kosong');
+    // log(widget.tebarDate?.toIso8601String() ?? 'kosong');
     return AppValidatorTextField(
       readOnly: true,
       controller: dateController,
@@ -88,7 +99,8 @@ class _ActivityCycleAddHarvestViewState
         showDatePicker(
           context: context,
           initialDate: dateNow,
-          firstDate: firstDate,
+          firstDate:
+              widget.data?.tebarDate ?? widget.tebarDate ?? DateTime.now(),
           lastDate: lastDate,
         ).then((date) {
           setState(() {
@@ -389,8 +401,10 @@ class _ActivityCycleAddHarvestViewState
                       .isNotEmpty) {
                     state.buyerData[index].sellTotalPriceController.text =
                         (int.parse(value) *
-                                int.parse(state.buyerData[index]
-                                    .sellUnitPriceController.text,))
+                                int.parse(
+                                  state.buyerData[index].sellUnitPriceController
+                                      .text,
+                                ))
                             .toString();
                   }
                 }
@@ -415,11 +429,12 @@ class _ActivityCycleAddHarvestViewState
                       .onChangeSellUnitPrice(index, int.parse(value));
                   if (state
                       .buyerData[index].sellRequestController.text.isNotEmpty) {
-                    state.buyerData[index].sellTotalPriceController.text =
-                        (int.parse(state.buyerData[index].sellRequestController
-                                    .text,) *
-                                int.parse(value))
-                            .toString();
+                    state.buyerData[index].sellTotalPriceController
+                        .text = (int.parse(
+                              state.buyerData[index].sellRequestController.text,
+                            ) *
+                            int.parse(value))
+                        .toString();
                   }
                 }
               },

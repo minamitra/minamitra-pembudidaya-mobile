@@ -31,6 +31,7 @@ class PondDashboardResponseData {
   double? avgSurvivalRate;
   double? salesEstimate;
   double? totalCost;
+  List<Fishpond>? fishpond;
 
   PondDashboardResponseData({
     this.totalFishpondActive,
@@ -39,6 +40,7 @@ class PondDashboardResponseData {
     this.avgSurvivalRate,
     this.salesEstimate,
     this.totalCost,
+    this.fishpond,
   });
 
   factory PondDashboardResponseData.fromJson(String str) =>
@@ -56,6 +58,11 @@ class PondDashboardResponseData {
             double.parse(json['avg_survival_rate']?.toString() ?? '0'),
         salesEstimate: double.parse(json['sales_estimate']?.toString() ?? '0'),
         totalCost: double.parse(json['total_cost']?.toString() ?? '0'),
+        fishpond: json['fishpond'] == null
+            ? []
+            : List<Fishpond>.from(
+                json['fishpond']!.map((x) => Fishpond.fromMap(x)),
+              ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -64,5 +71,29 @@ class PondDashboardResponseData {
         'total_feeding': totalFeeding,
         'avg_survival_rate': avgSurvivalRate,
         'sales_estimate': salesEstimate,
+      };
+}
+
+class Fishpond {
+  final String? id;
+  final String? name;
+
+  Fishpond({
+    this.id,
+    this.name,
+  });
+
+  factory Fishpond.fromJson(String str) => Fishpond.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory Fishpond.fromMap(Map<String, dynamic> json) => Fishpond(
+        id: json['id'],
+        name: json['name'],
+      );
+
+  Map<String, dynamic> toMap() => {
+        'id': id,
+        'name': name,
       };
 }
