@@ -18,16 +18,6 @@ class HomeCubit extends Cubit<HomeState> {
   void init() async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      await FirebaseCrashlytics.instance.recordError(
-        'Error Check on Dashboard',
-        StackTrace.current,
-        reason: 'a fatal error dashboard',
-        fatal: true,
-        information: [
-          'Check on dashboard at information',
-        ],
-      );
-      await FirebaseCrashlytics.instance.sendUnsentReports();
       final response = await service.homeBanner();
       emit(
         state.copyWith(

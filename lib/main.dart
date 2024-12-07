@@ -6,6 +6,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:minamitra_pembudidaya_mobile/app.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/injections/env.dart';
@@ -48,9 +49,18 @@ void main() async {
   appCloudMessaging = AppCloudMessagingImpl.create();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
-    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    FirebaseCrashlytics.instance.recordError(
+      'Error instance $error',
+      stack,
+      fatal: true,
+    );
     return true;
   };
+  await FlutterDownloader.initialize(
+    debug:
+        true, // optional: set to false to disable printing logs to console (default: true)
+    // ignoreSsl: true // option: set to false to disable working with http links (default: false)
+  );
   runApp(MyApp());
 }
 

@@ -44,8 +44,8 @@ class DashboardBottomNavigationBar extends StatelessWidget {
               onTap(2);
             },
             currentIndex == 2,
-            AppAssets.hearthIcon,
-            'Aktivitas',
+            AppAssets.fishBottomNavIcon,
+            'Budidaya',
           ),
           NavigationItem(
             () {

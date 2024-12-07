@@ -8,6 +8,8 @@
         android:name="${applicationName}"
         android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        android:exported="true"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC67QM9ohMXQVSXqpI0JvUyWlTSb_U7dq0" />
@@ -19,7 +21,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
@@ -45,6 +47,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <provider android:name="vn.hunghd.flutterdownloader.DownloadedFileProvider"
+            android:authorities="com.example.minamitra_pembudidaya_mobile.flutter_downloader.provider"
+            android:exported="false" android:grantUriPermissions="true">
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and

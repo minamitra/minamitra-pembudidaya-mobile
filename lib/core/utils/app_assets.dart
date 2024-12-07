@@ -43,6 +43,7 @@ class AppAssets {
   static const String tansactionIcon = '$iconPath/transaction-icon.png';
   static const String hearthIcon = '$iconPath/hearth-icon.png';
   static const String userIcon = '$iconPath/user-icon.png';
+  static const String fishBottomNavIcon = '$iconPath/fish-bottom-nav-icon.png';
 
   // Home
   static const String banner1Image = '$imagePath/banner-1-image.png';
