@@ -7,7 +7,8 @@ class AppLazyLoad {
     controller = ScrollController();
     controller.addListener(() {
       if (controller.offset >= controller.position.maxScrollExtent &&
-          !controller.position.outOfRange) {
+          !controller.position.outOfRange &&
+          controller.offset > 0.0) {
         onLoadMore();
       }
       if (addListener != null) {
