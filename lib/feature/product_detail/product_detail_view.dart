@@ -12,8 +12,13 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ProductDetailView extends StatefulWidget {
   final ProductsResponseData data;
+  final bool isProductPromo;
 
-  const ProductDetailView(this.data, {super.key});
+  const ProductDetailView(
+    this.data,
+    this.isProductPromo, {
+    super.key,
+  });
 
   @override
   State<ProductDetailView> createState() => _ProductDetailViewState();
@@ -167,14 +172,51 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                 ),
           ),
           const SizedBox(height: 12.0),
-          Text(
-            widget.data.sellPrice == null
-                ? '-'
-                : appConvertCurrency(double.parse(widget.data.sellPrice!)),
-            textAlign: TextAlign.start,
-            style: appTextTheme(context).headlineSmall?.copyWith(
-                  color: AppColor.accent,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (widget.isProductPromo) ...[
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.red[600],
+                    borderRadius: BorderRadius.circular(4.0),
+                  ),
+                  child: Text(
+                    '10% Off',
+                    textAlign: TextAlign.start,
+                    style: appTextTheme(context)
+                        .labelLarge
+                        ?.copyWith(color: AppColor.white),
+                  ),
                 ),
+                const SizedBox(width: 8.0),
+                Flexible(
+                  child: Text(
+                    'Rp 200.000',
+                    textAlign: TextAlign.start,
+                    maxLines: 1,
+                    style: appTextTheme(context).titleSmall?.copyWith(
+                          color: AppColor.neutral[400],
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                  ),
+                ),
+                const SizedBox(width: 8.0),
+              ],
+              Text(
+                widget.data.sellPrice == null
+                    ? '-'
+                    : appConvertCurrency(double.parse(widget.data.sellPrice!)),
+                textAlign: TextAlign.start,
+                style: appTextTheme(context).headlineSmall?.copyWith(
+                      color: AppColor.accent,
+                    ),
+              ),
+            ],
           ),
           const SizedBox(height: 12.0),
           Row(
@@ -577,7 +619,10 @@ class _ProductDetailViewState extends State<ProductDetailView> {
             Navigator.of(context)
                 .push(
               AppTransition.pushTransition(
-                CheckoutPage(widget.data),
+                CheckoutPage(
+                  widget.data,
+                  isProductPromo: widget.isProductPromo,
+                ),
                 CheckoutPage.route,
               ),
             )

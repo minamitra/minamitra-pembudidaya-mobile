@@ -164,6 +164,26 @@ class AppCustomBottomSheet extends StatelessWidget {
   }
 }
 
+Future appBottomSheetShowModalCustom(
+  BuildContext context,
+  String title,
+  Widget body, {
+  List<Widget>? actions,
+  double? height,
+}) {
+  return showModalBottomSheet(
+    context: context,
+    builder: (modalContext) {
+      return AppBottomSheet(
+        title,
+        body,
+        height: height ?? MediaQuery.of(context).size.height * 0.5,
+        actions: actions ?? [],
+      );
+    },
+  );
+}
+
 Future showDeleteBottomSheet(
   BuildContext context, {
   required String title,
@@ -241,7 +261,6 @@ Function() appBottomSheetShowModal(
           builder: (stateContext, setModalState) {
             return AppBottomSheet(
               title,
-              height: MediaQuery.of(context).size.height * 0.5,
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
@@ -286,6 +305,7 @@ Function() appBottomSheetShowModal(
                   ],
                 ),
               ),
+              height: MediaQuery.of(context).size.height * 0.5,
             );
           },
         );

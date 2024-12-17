@@ -818,6 +818,17 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                 ),
                 AppDividerSmall(),
                 detailItem(
+                  'Komoditas',
+                  (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
+                              'done' ||
+                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                      ? '-'
+                      : state.onGoingCycleFeedResponseData!.data!.first
+                              .commodityName ??
+                          '-',
+                ),
+                AppDividerSmall(),
+                detailItem(
                   'Target Bobot Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||

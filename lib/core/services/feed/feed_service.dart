@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_starter_resp
 import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/seed_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_endpoint.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/commodity_response.dart';
 
 abstract class FeedService {
   Future<BaseResponse<FeedStarterResponse>> getFeedStarter(String type);
@@ -21,6 +22,7 @@ abstract class FeedService {
     String name,
     int price,
   );
+  Future<BaseResponse<CommodityResponse>> getCommodity();
 }
 
 class FeedServiceImpl implements FeedService {
@@ -106,6 +108,20 @@ class FeedServiceImpl implements FeedService {
     return BaseResponse(
       meta: metaResponse,
       data: metaResponse.result!['data']['fishseed_id'],
+    );
+  }
+
+  @override
+  Future<BaseResponse<CommodityResponse>> getCommodity() async {
+    final uri = endpoint.getCommodity();
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(uri, header);
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    final CommodityResponse data =
+        CommodityResponse.fromMap(metaResponse.result!);
+    return BaseResponse(
+      meta: metaResponse,
+      data: data,
     );
   }
 }

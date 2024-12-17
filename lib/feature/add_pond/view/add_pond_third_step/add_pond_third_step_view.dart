@@ -568,6 +568,53 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                 child: customSeedPrice(),
               )
             : const SizedBox(),
+        const SizedBox(height: 18.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return AppValidatorTextField(
+              controller: addPondThirdStepCubit.commodityController,
+              inputType: TextInputType.text,
+              isMandatory: true,
+              withUpperLabel: true,
+              readOnly: true,
+              labelText: 'Komoditas',
+              hintText: 'Pilih komoditas',
+              suffixWidget: const Padding(
+                padding: EdgeInsets.only(right: 18.0),
+                child: Icon(Icons.arrow_drop_down_rounded),
+              ),
+              suffixConstraints: const BoxConstraints(),
+              validator: (value) {
+                if (value?.isEmpty ?? true) {
+                  return 'Komoditas tidak boleh kosong';
+                }
+                return null;
+              },
+              onTap: appBottomSheetShowModal(
+                context,
+                'Komoditas',
+                state.commodityData
+                    .map((element) => element.name ?? '')
+                    .toList(),
+                (value) {
+                  addPondThirdStepCubit.commodityController.text = value;
+                  addPondThirdStepCubit.commodityID = state.commodityData
+                          .firstWhere((element) => element.name == value)
+                          .id ??
+                      '';
+                },
+              ),
+            );
+          },
+        ),
         // const SizedBox(height: 18.0),
         // AppValidatorTextField(
         //   controller: addPondThirdStepCubit.survivalRateController,
@@ -991,6 +1038,10 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                                 addPondThirdStepCubit.seedID,
                                               ),
                                     estimationFishfoodEpp: 75,
+                                    commodityID: int.tryParse(
+                                          addPondThirdStepCubit.commodityID,
+                                        ) ??
+                                        1,
                                   ),
                                   name: seedOriginNameController.text,
                                   price: int.parse(
@@ -1072,6 +1123,10 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
                                                 addPondThirdStepCubit.seedID,
                                               ),
                                     estimationFishfoodEpp: 75,
+                                    commodityID: int.tryParse(
+                                          addPondThirdStepCubit.commodityID,
+                                        ) ??
+                                        1,
                                   ),
                                   seedName: seedOriginNameController.text,
                                   seedPrice: int.parse(

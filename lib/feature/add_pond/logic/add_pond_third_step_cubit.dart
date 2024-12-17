@@ -8,6 +8,7 @@ import 'package:minamitra_pembudidaya_mobile/core/repositories/feed_starter_resp
 import 'package:minamitra_pembudidaya_mobile/core/repositories/seed_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/feed/feed_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/commodity_response.dart';
 
 part 'add_pond_third_step_state.dart';
 
@@ -28,7 +29,9 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
   final TextEditingController survivalRateController = TextEditingController();
   final TextEditingController pakanGrowerController = TextEditingController();
   final TextEditingController pakanFinisherController = TextEditingController();
+  final TextEditingController commodityController = TextEditingController();
   String seedID = '0';
+  String commodityID = '0';
 
   Future<void> init() async {
     emit(state.copyWith(status: GlobalState.loading));
@@ -38,7 +41,8 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
       final feedStarter3Response = await feedService.getFeedStarter('starter3');
       final feedGrowerResponse = await feedService.getFeedGrower();
       final feedFinisherResponse = await feedService.getFeedFinisher();
-      final seedResponse = await feedService.getSeed(createdBy: 'user');
+      final seedResponse = await feedService.getSeed();
+      final commodityResponse = await feedService.getCommodity();
       SeedResponse seedCleaningData = seedResponse.data;
       seedCleaningData = seedCleaningData.copyWith(
         data: [
@@ -54,6 +58,7 @@ class AddPondThirdStepCubit extends Cubit<AddPondThirdStepState> {
           feedGrowerData: feedGrowerResponse.data,
           feedFinisherData: feedFinisherResponse.data,
           seedResponse: seedCleaningData,
+          commodityData: commodityResponse.data.data,
           status: GlobalState.loaded,
         ),
       );

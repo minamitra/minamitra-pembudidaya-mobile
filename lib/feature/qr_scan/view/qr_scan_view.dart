@@ -65,11 +65,12 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
                     );
                   },
                   onDetect: (barcode) {
-                    Navigator.of(context)
-                        .pushReplacement(AppTransition.pushTransition(
-                      const QrScanSummaryPage(),
-                      QrScanSummaryPage.route(),
-                    ),);
+                    Navigator.of(context).pushReplacement(
+                      AppTransition.pushTransition(
+                        const QrScanSummaryPage(),
+                        QrScanSummaryPage.route(),
+                      ),
+                    );
                   },
                 ),
               ),
@@ -126,8 +127,8 @@ class _QrScanViewState extends State<QrScanView> with WidgetsBindingObserver {
                       size: 320,
                       gapless: false,
                       embeddedImage: const AssetImage(AppAssets.newLogoIcon2),
-                      embeddedImageStyle:
-                          const QrEmbeddedImageStyle(size: Size(547 / 3, 112 / 3)),
+                      embeddedImageStyle: const QrEmbeddedImageStyle(
+                          size: Size(547 / 3, 112 / 3)),
                     ),
                   ],
                 ),

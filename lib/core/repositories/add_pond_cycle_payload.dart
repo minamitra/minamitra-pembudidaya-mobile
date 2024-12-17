@@ -10,6 +10,7 @@ class AddPondCyclePayload {
   int? srTarget;
   FishfoodJsonObject? fishfoodJsonObject;
   int? estimationFishfoodEpp;
+  int? commodityID;
 
   AddPondCyclePayload({
     this.fishpondId,
@@ -21,6 +22,7 @@ class AddPondCyclePayload {
     this.srTarget,
     this.fishfoodJsonObject,
     this.estimationFishfoodEpp,
+    this.commodityID,
   });
 
   factory AddPondCyclePayload.fromJson(String str) =>
@@ -41,6 +43,7 @@ class AddPondCyclePayload {
             ? null
             : FishfoodJsonObject.fromMap(json['fishfood_json_object']),
         estimationFishfoodEpp: json['estimation_fishfood_epp'],
+        commodityID: json['commodity_id'],
       );
 
   AddPondCyclePayload copyWith({
@@ -53,6 +56,7 @@ class AddPondCyclePayload {
     int? srTarget,
     FishfoodJsonObject? fishfoodJsonObject,
     int? estimationFishfoodEpp,
+    int? commodityID,
   }) {
     return AddPondCyclePayload(
       fishpondId: fishpondId,
@@ -64,19 +68,21 @@ class AddPondCyclePayload {
       srTarget: srTarget,
       fishfoodJsonObject: fishfoodJsonObject,
       estimationFishfoodEpp: estimationFishfoodEpp,
+      commodityID: commodityID,
     );
   }
 
   Map<String, dynamic> toMap() => {
-        'fishpond_id': fishpondId.toString(),
+        'fishpond_id': fishpondId,
         'tebar_date': tebarDate ?? '',
-        'tebar_fish_total': tebarFishTotal.toString(),
-        'fishseed_id': fishseedId.toString(),
-        'tebar_bobot': tebarBobot.toString(),
-        'target_panen_bobot': targetPanenBobot.toString(),
-        'sr_target': srTarget.toString(),
+        'tebar_fish_total': tebarFishTotal,
+        'fishseed_id': fishseedId,
+        'tebar_bobot': tebarBobot,
+        'target_panen_bobot': targetPanenBobot,
+        'sr_target': srTarget,
         'fishfood_json_object': fishfoodJsonObject?.toMap() ?? '',
-        'estimation_fishfood_epp': estimationFishfoodEpp.toString(),
+        'estimation_fishfood_epp': estimationFishfoodEpp,
+        'commodity_id': commodityID,
       };
 }
 
@@ -167,7 +173,7 @@ class Finisher {
       );
 
   Map<String, dynamic> toMap() => {
-        'id': id.toString(),
+        'id': id,
         'name': name ?? '',
       };
 }

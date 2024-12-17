@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/logic/plafon_distribution_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_view.dart';
 
 class PlafonDistributionPage extends StatelessWidget {
@@ -10,12 +12,15 @@ class PlafonDistributionPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appDefaultAppBar(
-        context,
-        'Distribusi Plafon',
+    return BlocProvider(
+      create: (context) => PlafonDistributionCubit(),
+      child: Scaffold(
+        appBar: appDefaultAppBar(
+          context,
+          'Distribusi Plafon',
+        ),
+        body: const PlafonDistributionView(),
       ),
-      body: const PlafonDistributionView(),
     );
   }
 }

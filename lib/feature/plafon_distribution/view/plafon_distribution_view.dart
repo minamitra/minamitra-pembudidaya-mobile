@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lottie/lottie.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/logic/plafon_distribution_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/feed_tab/feed_tab_view.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
@@ -15,10 +20,21 @@ class PlafonDistributionView extends StatefulWidget {
 class _PlafonDistributionViewState extends State<PlafonDistributionView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final ScrollController pageController = ScrollController();
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
+    pageController.addListener(
+      () {
+        if (pageController.offset <=
+            (pageController.position.maxScrollExtent - 75.0)) {
+          context.read<PlafonDistributionCubit>().changeShowMore(true);
+        } else {
+          context.read<PlafonDistributionCubit>().changeShowMore(false);
+        }
+      },
+    );
     super.initState();
   }
 
@@ -265,19 +281,31 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
         child: Column(
           children: [
             summaryItem(
-              'Biaya Pakan',
+              'Pakan',
               '50%',
               'Rp 100.000',
             ),
             const SizedBox(height: 18.0),
             summaryItem(
-              'Biaya Pakan',
+              'Perlakuan',
               '50%',
               'Rp 100.000',
             ),
             const SizedBox(height: 18.0),
             summaryItem(
-              'Biaya Pakan',
+              'Bibit/Benih',
+              '50%',
+              'Rp 100.000',
+            ),
+            const SizedBox(height: 18.0),
+            summaryItem(
+              'Pembelian',
+              '50%',
+              'Rp 100.000',
+            ),
+            const SizedBox(height: 18.0),
+            summaryItem(
+              'Lainnya',
               '50%',
               'Rp 100.000',
             ),
@@ -288,7 +316,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
 
     Widget historyData() {
       return Container(
-        height: MediaQuery.of(context).size.height * 0.45,
+        height: MediaQuery.of(context).size.height * 0.55,
         width: double.infinity,
         margin: const EdgeInsets.symmetric(horizontal: 18.0),
         child: Column(
@@ -298,6 +326,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
               decoration: BoxDecoration(color: AppColor.neutral[50]),
               child: TabBar(
                 controller: _tabController,
+                tabAlignment: TabAlignment.start,
                 dividerColor: Colors.white,
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorColor: AppColor.primary,
@@ -309,11 +338,14 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
                     appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
                 unselectedLabelStyle:
                     appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
-                labelPadding: const EdgeInsets.all(0),
-                isScrollable: false,
+                labelPadding: const EdgeInsets.symmetric(horizontal: 18.0),
+                isScrollable: true,
                 tabs: const [
                   Tab(text: 'Pakan'),
                   Tab(text: 'Perlakuan'),
+                  Tab(text: 'Bibit/Benih'),
+                  Tab(text: 'Pembelian'),
+                  Tab(text: 'Lainnya'),
                 ],
               ),
             ),
@@ -321,6 +353,9 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
               child: TabBarView(
                 controller: _tabController,
                 children: const [
+                  FeedTabView(),
+                  FeedTabView(),
+                  FeedTabView(),
                   FeedTabView(),
                   FeedTabView(),
                 ],
@@ -333,6 +368,7 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
 
     Widget distributionBody() {
       return ListView(
+        controller: pageController,
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
         children: [
@@ -349,10 +385,63 @@ class _PlafonDistributionViewState extends State<PlafonDistributionView>
       );
     }
 
-    return Column(
+    Widget showMore() {
+      return BlocBuilder<PlafonDistributionCubit, PlafonDistributionState>(
+        builder: (context, state) {
+          return AppAnimatedSize(
+            isShow: state.showingShowMore,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: InkWell(
+                onTap: () {
+                  pageController.animateTo(
+                    pageController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12.0,
+                    vertical: 8.0,
+                  ),
+                  margin: const EdgeInsets.only(bottom: 18.0),
+                  decoration: BoxDecoration(
+                    color: AppColor.white.withOpacity(0.75),
+                    borderRadius: BorderRadius.circular(100.0),
+                    border: Border.all(color: AppColor.primary[500]!),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Lottie.asset(
+                        AppAssets.downLottie,
+                        height: 24.0,
+                      ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        'Lihat lebih banyak',
+                        textAlign: TextAlign.start,
+                        style: appTextTheme(context).titleSmall?.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: AppColor.primary[500],
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    }
+
+    return Stack(
       children: [
-        filterDateSection(),
-        Expanded(child: distributionBody()),
+        // filterDateSection(),
+        distributionBody(),
+        showMore(),
       ],
     );
   }

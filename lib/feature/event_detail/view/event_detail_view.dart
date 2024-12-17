@@ -4,7 +4,9 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/event_detail/repositories/event_type.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/event_qr/view/event_qr_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class EventDetailView extends StatefulWidget {
@@ -264,7 +266,14 @@ class _EventDetailViewState extends State<EventDetailView> {
               : widget.eventType == EventType.upcoming
                   ? AppPrimaryOutlineFullButton(
                       'Tampilkan QR',
-                      () {},
+                      () {
+                        Navigator.of(context).push(
+                          AppTransition.pushTransition(
+                            const EventQrPage(),
+                            EventQrPage.routeSettings(),
+                          ),
+                        );
+                      },
                       prefixIcon: Icon(
                         Icons.qr_code,
                       ),

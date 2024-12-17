@@ -15,15 +15,20 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/banner_detail/view/banner_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/event/view/event_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/fish_market/view/fish_market_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/logic/home_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/information_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/literacy_information/views/literacy_information_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/promo/view/promo_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/qr_scan/view/qr_scan_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/qr_scan_summary/view/qr_scan_summary_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/referral/view/referral_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/views/transaction_history_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/voucher/view/voucher_page.dart';
@@ -174,7 +179,16 @@ class _HomeViewState extends State<HomeView> {
                     itemCount: state.bannerResponse?.data?.length,
                     itemBuilder: (context, index, realIndex) {
                       return InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(context).push(
+                            AppTransition.pushTransition(
+                              BannerDetailPage(
+                                state.bannerResponse!.data![index],
+                              ),
+                              BannerDetailPage.routeSettings,
+                            ),
+                          );
+                        },
                         child: Image.network(
                           state.bannerResponse?.data?[index].imageUrl ?? '',
                           fit: BoxFit.cover,
@@ -509,8 +523,6 @@ class _HomeViewState extends State<HomeView> {
               ),
           ],
         );
-
-        return const SizedBox();
       },
     );
   }
@@ -525,26 +537,38 @@ class _HomeViewState extends State<HomeView> {
             case 'Promo 3M':
               Navigator.of(context).push(
                 AppTransition.pushTransition(
-                  const CommingSoonPage(
-                    'Promo 3M',
-                    customTitle: 'Promo 3M Akan Segera Hadir',
-                    customImage: AppAssets.commingSoonPromoImage,
-                  ),
-                  CommingSoonPage.route(),
+                  const PromoPage(),
+                  PromoPage.route,
                 ),
               );
+              // Navigator.of(context).push(
+              //   AppTransition.pushTransition(
+              //     const CommingSoonPage(
+              //       'Promo 3M',
+              //       customTitle: 'Promo 3M Akan Segera Hadir',
+              //       customImage: AppAssets.commingSoonPromoImage,
+              //     ),
+              //     CommingSoonPage.route(),
+              //   ),
+              // );
               break;
             case 'Pasar Ikan':
               Navigator.of(context).push(
                 AppTransition.pushTransition(
-                  const CommingSoonPage(
-                    'Pasar Ikan',
-                    customTitle: 'Pasar Ikan Akan Segera Hadir',
-                    customImage: AppAssets.commingSoonFishStoreImage,
-                  ),
-                  CommingSoonPage.route(),
+                  const FishMarketPage(),
+                  FishMarketPage.routeSettings,
                 ),
               );
+              // Navigator.of(context).push(
+              //   AppTransition.pushTransition(
+              //     const CommingSoonPage(
+              //       'Pasar Ikan',
+              //       customTitle: 'Pasar Ikan Akan Segera Hadir',
+              //       customImage: AppAssets.commingSoonFishStoreImage,
+              //     ),
+              //     CommingSoonPage.route(),
+              //   ),
+              // );
               break;
             case 'Acara 3M':
               Navigator.of(context).push(
@@ -964,7 +988,7 @@ class _HomeViewState extends State<HomeView> {
                                   .titleSmall
                                   ?.copyWith(fontWeight: FontWeight.w700),
                             ),
-                            const SizedBox(height: 12.0),
+                            const SizedBox(height: 8.0),
                             Text(
                               informationDummyList[index].description,
                               style: appTextTheme(context).labelLarge,
@@ -981,7 +1005,14 @@ class _HomeViewState extends State<HomeView> {
             ),
             const SizedBox(height: 8.0),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).push(
+                  AppTransition.pushTransition(
+                    const LiteracyInformationPage(),
+                    LiteracyInformationPage.settings,
+                  ),
+                );
+              },
               child: Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(

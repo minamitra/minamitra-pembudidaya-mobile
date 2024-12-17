@@ -29,4 +29,10 @@ class FeedEndpoint {
       path: 'mitra/fishseed/add-kiloan',
     );
   }
+
+  Uri getCommodity() {
+    return createUrl(
+      path: 'mitra/commodity/data',
+    );
+  }
 }

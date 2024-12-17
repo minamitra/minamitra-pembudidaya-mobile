@@ -17,8 +17,13 @@ import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class CheckoutPage extends StatelessWidget {
   final ProductsResponseData data;
+  final bool isProductPromo;
 
-  const CheckoutPage(this.data, {super.key});
+  const CheckoutPage(
+    this.data, {
+    this.isProductPromo = false,
+    super.key,
+  });
 
   static const RouteSettings route = RouteSettings(name: '/checkout-page');
 
@@ -65,7 +70,10 @@ class CheckoutPage extends StatelessWidget {
             'Checkout',
           ),
           backgroundColor: AppColor.neutral[100],
-          body: CheckoutView(data),
+          body: CheckoutView(
+            data,
+            isProductPromo,
+          ),
         ),
       ),
     );

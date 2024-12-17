@@ -1,6 +1,7 @@
 class AppAssets {
   static const String imagePath = 'assets/images';
   static const String iconPath = 'assets/icons';
+  static const String lottiePath = 'assets/lottie';
 
   // General
   static const String appIcon = '';
@@ -37,6 +38,13 @@ class AppAssets {
   static const String fisherManImage = '$imagePath/fisherman-image.png';
   static const String rocketImage = '$imagePath/rocket-image.png';
   static const String newFishIcon = '$iconPath/new-fish-icon.png';
+
+  // Lottie
+  static const String downLottie = '$lottiePath/down-lottie.json';
+  static const String waitingPaymentLottie =
+      '$lottiePath/waiting-payment-lottie.json';
+  static const String waitingPaymentLottieNew =
+      '$lottiePath/waiting-payment-lottie-new.json';
 
   // Dashboard
   static const String homeIcon = '$iconPath/home-icon.png';
@@ -203,4 +211,18 @@ class AppAssets {
       '$imagePath/voucher-ticket-card-image.png';
   static const String voucherBannerDummyImage =
       '$imagePath/voucher-banner-dummy-image.png';
+
+  // Bill
+  static const String aScoreBillIcon = '$iconPath/a-score-bill-icon.png';
+  static const String rocketBillMenuIcon =
+      '$iconPath/rocket-bill-menu-icon.png';
+  static const String paymentMehtodCashBillIcon =
+      '$iconPath/payment-mehtod-cash-bill-icon.png';
+  static const String paymentMehtodTransferBillIcon =
+      '$iconPath/payment-mehtod-transfer-bill-icon.png';
+  static const String flyMoneyBillImage = '$imagePath/fly-money-bill-image.png';
+  static const String moneyBillIcon = '$iconPath/money-bill-icon.png';
+  static const String moneyCoinBillIcon = '$iconPath/money-coin-bill-icon.png';
+  static const String notesBillIcon = '$iconPath/notes-bill-icon.png';
+  static const String scoreABillIcon = '$iconPath/score-a-bill-icon.png';
 }

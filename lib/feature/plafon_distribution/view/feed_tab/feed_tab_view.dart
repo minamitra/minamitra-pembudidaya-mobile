@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -54,7 +55,8 @@ class FeedTabView extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 18.0),
       child: ListView(
-        physics: const BouncingScrollPhysics(),
+        shrinkWrap: true,
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
           feedTabItem(
             'Pakan Pagi',

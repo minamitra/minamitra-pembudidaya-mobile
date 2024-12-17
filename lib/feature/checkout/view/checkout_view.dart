@@ -23,8 +23,13 @@ import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class CheckoutView extends StatefulWidget {
   final ProductsResponseData data;
+  final bool isProductPromo;
 
-  const CheckoutView(this.data, {super.key});
+  const CheckoutView(
+    this.data,
+    this.isProductPromo, {
+    super.key,
+  });
 
   @override
   State<CheckoutView> createState() => _CheckoutViewState();
@@ -450,74 +455,77 @@ class _CheckoutViewState extends State<CheckoutView> {
                             ),
                       ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.of(context)
-                            .push(
-                          AppTransition.pushTransition(
-                            const ProductsPage(isPick: true),
-                            ProductsPage.routeSettings(),
+                    if (!widget.isProductPromo)
+                      InkWell(
+                        onTap: () {
+                          Navigator.of(context)
+                              .push(
+                            AppTransition.pushTransition(
+                              const ProductsPage(isPick: true),
+                              ProductsPage.routeSettings(),
+                            ),
+                          )
+                              .then(
+                            (value) {
+                              setState(
+                                () {
+                                  if (value != null) {
+                                    int index = state.listProduct.indexWhere(
+                                      (element) => element.id == value.id,
+                                    );
+                                    index == -1
+                                        ? context
+                                            .read<CheckoutCubit>()
+                                            .onAddedProduct(value)
+                                        : {
+                                            if (state.listProduct[index]
+                                                    .quantity! >
+                                                ((double.tryParse(
+                                                          state
+                                                              .listProduct[
+                                                                  index]
+                                                              .stock
+                                                              .toString(),
+                                                        ) ??
+                                                        1) -
+                                                    1))
+                                              {
+                                                AppTopSnackBar(context)
+                                                    .showDanger(
+                                                  'Maaf stok tidak mencukupi',
+                                                ),
+                                              }
+                                            else
+                                              {
+                                                context
+                                                    .read<CheckoutCubit>()
+                                                    .onIncreamentItem(index),
+                                              },
+                                          };
+                                  }
+                                },
+                              );
+                            },
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 8.0,
                           ),
-                        )
-                            .then(
-                          (value) {
-                            setState(
-                              () {
-                                if (value != null) {
-                                  int index = state.listProduct.indexWhere(
-                                    (element) => element.id == value.id,
-                                  );
-                                  index == -1
-                                      ? context
-                                          .read<CheckoutCubit>()
-                                          .onAddedProduct(value)
-                                      : {
-                                          if (state.listProduct[index]
-                                                  .quantity! >
-                                              ((double.tryParse(
-                                                        state.listProduct[index]
-                                                            .stock
-                                                            .toString(),
-                                                      ) ??
-                                                      1) -
-                                                  1))
-                                            {
-                                              AppTopSnackBar(context)
-                                                  .showDanger(
-                                                'Maaf stok tidak mencukupi',
-                                              ),
-                                            }
-                                          else
-                                            {
-                                              context
-                                                  .read<CheckoutCubit>()
-                                                  .onIncreamentItem(index),
-                                            },
-                                        };
-                                }
-                              },
-                            );
-                          },
-                        );
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 8.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColor.primary[600],
-                          borderRadius: BorderRadius.circular(100.0),
-                        ),
-                        child: Text(
-                          '+ Tambah',
-                          style: appTextTheme(context).bodySmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
+                          decoration: BoxDecoration(
+                            color: AppColor.primary[600],
+                            borderRadius: BorderRadius.circular(100.0),
+                          ),
+                          child: Text(
+                            '+ Tambah',
+                            style: appTextTheme(context).bodySmall?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
                 const SizedBox(height: 18.0),

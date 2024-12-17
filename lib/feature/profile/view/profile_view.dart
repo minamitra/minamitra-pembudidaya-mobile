@@ -14,6 +14,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/view/address_member_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/bill_payment/view/bill_payment_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/call_center/view/call_center_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/change_password/view/change_password_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
@@ -48,11 +49,35 @@ class _ProfileViewState extends State<ProfileView> {
       return BlocBuilder<UserCubit, UserState>(
         builder: (context, state) {
           return state.status.isLoading
-              ? const AppShimmer(
-                  65,
-                  double.infinity,
-                  8.0,
-                  margin: EdgeInsets.symmetric(horizontal: 18.0),
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Row(
+                    children: [
+                      AppShimmer(
+                        60.0,
+                        60.0,
+                        1000.0,
+                      ),
+                      SizedBox(width: 18.0),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AppShimmer(
+                            12.0,
+                            60.0,
+                            18.0,
+                          ),
+                          SizedBox(height: 4),
+                          AppShimmer(
+                            12.0,
+                            120.0,
+                            18.0,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 )
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
@@ -86,11 +111,21 @@ class _ProfileViewState extends State<ProfileView> {
                                 ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            "No KTA - | ${state.userData?.mobilephone ?? "-"}",
-                            style: appTextTheme(context).bodySmall?.copyWith(
-                                  color: AppColor.neutral[400],
-                                ),
+                          Row(
+                            children: [
+                              Image.asset(
+                                AppAssets.goldV2Icon,
+                                height: 14.0,
+                              ),
+                              const SizedBox(width: 8.0),
+                              Text(
+                                'Gold Member',
+                                style:
+                                    appTextTheme(context).bodySmall?.copyWith(
+                                          color: AppColor.neutral[400],
+                                        ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -233,10 +268,12 @@ class _ProfileViewState extends State<ProfileView> {
             const SizedBox(height: 18.0),
             InkWell(
               onTap: () {
-                Navigator.of(context).push(AppTransition.pushTransition(
-                  const PlafonDistributionPage(),
-                  PlafonDistributionPage.routeSettings,
-                ),);
+                Navigator.of(context).push(
+                  AppTransition.pushTransition(
+                    const PlafonDistributionPage(),
+                    PlafonDistributionPage.routeSettings,
+                  ),
+                );
               },
               child: Center(
                 child: Text(
@@ -263,6 +300,14 @@ class _ProfileViewState extends State<ProfileView> {
         child: Stack(
           alignment: Alignment.bottomRight,
           children: [
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Image.asset(
+                AppAssets.circleBackdropImage,
+                height: 78.0,
+                fit: BoxFit.fill,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 14.0,
@@ -308,19 +353,18 @@ class _ProfileViewState extends State<ProfileView> {
                     width: 98.0,
                     child: AppWhiteButton(
                       'Bayar',
-                      () {},
+                      () {
+                        Navigator.of(context).push(
+                          AppTransition.pushTransition(
+                            const BillPaymentPage(),
+                            BillPaymentPage.routeSettings,
+                          ),
+                        );
+                      },
                       height: 32.0,
                     ),
                   ),
                 ],
-              ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Image.asset(
-                AppAssets.circleBackdropImage,
-                height: 78.0,
-                fit: BoxFit.fill,
               ),
             ),
           ],
@@ -392,30 +436,36 @@ class _ProfileViewState extends State<ProfileView> {
           'Informasi Pribadi',
           'Informasi akun milikmu',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const ProfileMemberPage(),
-              ProfileMemberPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const ProfileMemberPage(),
+                ProfileMemberPage.routeSettings,
+              ),
+            );
           },
         ),
         actionMenu(
           'Alamat Saya',
           'Daftar alamat saya',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const AddressMemberPage(),
-              AddressMemberPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const AddressMemberPage(),
+                AddressMemberPage.routeSettings,
+              ),
+            );
           },
         ),
         actionMenu(
           'Ganti Password',
           'Update password akunmu',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const ChangePasswordPage(),
-              ChangePasswordPage.routeSettings(),
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const ChangePasswordPage(),
+                ChangePasswordPage.routeSettings(),
+              ),
+            );
           },
         ),
         const SizedBox(height: 18.0),
@@ -425,20 +475,24 @@ class _ProfileViewState extends State<ProfileView> {
           'Pengaturan Rekening',
           'Alamat rekening untuk penarikan saldo',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const CommingSoonPage('Pengaturan Rekening'),
-              CommingSoonPage.route(),
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const CommingSoonPage('Pengaturan Rekening'),
+                CommingSoonPage.route(),
+              ),
+            );
           },
         ),
         actionMenu(
           'Informasi Point',
           'Informasi Poin milikmu',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const PointV2Page(),
-              PointV2Page.route(),
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const PointV2Page(),
+                PointV2Page.route(),
+              ),
+            );
           },
         ),
         const SizedBox(height: 18.0),
@@ -448,50 +502,60 @@ class _ProfileViewState extends State<ProfileView> {
           'Tentang Kami',
           'Informasi mengenai Mitra3M',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const AboutPage(),
-              AboutPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const AboutPage(),
+                AboutPage.routeSettings,
+              ),
+            );
           },
         ),
         actionMenu(
           'FAQ',
           'Informasi mengenai Mitra3M',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const FaqPage(),
-              FaqPage.routeSettings(),
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const FaqPage(),
+                FaqPage.routeSettings(),
+              ),
+            );
           },
         ),
         actionMenu(
           'Hubungi Pusat Bantuan',
           'Hubungi untuk informasi lebih lanjut',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const CallCenterPage(),
-              CallCenterPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const CallCenterPage(),
+                CallCenterPage.routeSettings,
+              ),
+            );
           },
         ),
         actionMenu(
           'Syarat dan Ketentuan',
           'Informasi mengenai Syarat dan Ketentuan',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const TermConditionPage(),
-              TermConditionPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const TermConditionPage(),
+                TermConditionPage.routeSettings,
+              ),
+            );
           },
         ),
         actionMenu(
           'Kebijakan Privasi',
           'Informasi mengenai Kebijakan Privasi',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const PrivacyPolicyPage(),
-              PrivacyPolicyPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const PrivacyPolicyPage(),
+                PrivacyPolicyPage.routeSettings,
+              ),
+            );
           },
         ),
         const SizedBox(height: 18.0),
@@ -501,10 +565,12 @@ class _ProfileViewState extends State<ProfileView> {
           'Undang Teman',
           'Dapatkan hadiah poin',
           onTap: () {
-            Navigator.of(context).push(AppTransition.pushTransition(
-              const ReferralPage(),
-              ReferralPage.routeSettings,
-            ),);
+            Navigator.of(context).push(
+              AppTransition.pushTransition(
+                const ReferralPage(),
+                ReferralPage.routeSettings,
+              ),
+            );
           },
         ),
         actionMenu(

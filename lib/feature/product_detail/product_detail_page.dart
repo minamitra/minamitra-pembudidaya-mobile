@@ -5,8 +5,13 @@ import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/produ
 
 class ProductDetailPage extends StatelessWidget {
   final ProductsResponseData data;
+  final bool isProductPromo;
 
-  const ProductDetailPage(this.data, {super.key});
+  const ProductDetailPage(
+    this.data, {
+    this.isProductPromo = false,
+    super.key,
+  });
 
   static RouteSettings routeSettings() =>
       const RouteSettings(name: '/products-detail');
@@ -15,7 +20,10 @@ class ProductDetailPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.neutral[50],
-      body: ProductDetailView(data),
+      body: ProductDetailView(
+        data,
+        isProductPromo,
+      ),
     );
   }
 }
