@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/history_balance_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/logic/transaction_history_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_history/repositories/transaction_history_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -14,12 +19,14 @@ class TransactionHistoryView extends StatefulWidget {
 }
 
 class _TransactionHistoryViewState extends State<TransactionHistoryView> {
-  Widget cardItem(TransactionHistoryItem data) {
+  Widget cardItem(HistoryBalanceResponseData data) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Image.asset(
-          data.icon,
+          data.category?.contains('Pengajuan') ?? false
+              ? AppAssets.walletOutlineIcon
+              : AppAssets.qrCodeIcon,
           width: 24,
           height: 24,
         ),
@@ -29,13 +36,13 @@ class _TransactionHistoryViewState extends State<TransactionHistoryView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                data.title,
+                data.category.handlingEmptyString(),
                 textAlign: TextAlign.start,
                 style: appTextTheme(context).titleSmall,
               ),
               const SizedBox(height: 4),
               Text(
-                data.description,
+                data.desc.handlingEmptyString(),
                 textAlign: TextAlign.start,
                 style: appTextTheme(context).bodySmall?.copyWith(
                       color: AppColor.neutral[500],
@@ -45,16 +52,16 @@ class _TransactionHistoryViewState extends State<TransactionHistoryView> {
           ),
         ),
         const SizedBox(width: 16),
-        data.status == TransactionHistoryStatus.income
+        data.type == 'in'
             ? Text(
-                '+${appConvertCurrency(data.amount)}',
+                '+${appConvertCurrency((data.nominal ?? 0).toDouble())}',
                 style: appTextTheme(context).titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColor.secondary,
                     ),
               )
             : Text(
-                '-${appConvertCurrency(data.amount)}',
+                '-${appConvertCurrency((data.nominal ?? 0).toDouble())}',
                 style: appTextTheme(context).titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColor.accent,
@@ -64,12 +71,12 @@ class _TransactionHistoryViewState extends State<TransactionHistoryView> {
     );
   }
 
-  Widget cardOfDate(TransactionHistory data) {
+  Widget cardOfDate(List<HistoryBalanceResponseData> data) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          AppConvertDateTime().dmyName(data.date),
+          AppConvertDateTime().dmyName(data.first.dateTime ?? DateTime.now()),
           textAlign: TextAlign.start,
           style: appTextTheme(context).bodySmall?.copyWith(
                 color: AppColor.neutral[500],
@@ -84,9 +91,9 @@ class _TransactionHistoryViewState extends State<TransactionHistoryView> {
             color: AppColor.neutral[100],
           ),
           physics: const NeverScrollableScrollPhysics(),
-          itemCount: data.items.length,
+          itemCount: data.length,
           itemBuilder: (context, index) {
-            return cardItem(data.items[index]);
+            return cardItem(data[index]);
           },
         ),
       ],
@@ -95,25 +102,38 @@ class _TransactionHistoryViewState extends State<TransactionHistoryView> {
 
   @override
   Widget build(BuildContext context) {
-    return listTransactionHistoryDummy.isEmpty
-        ? const Center(
-            child: AppEmptyData(
-              'Oops, Belum Ada Riwayat Transaksi',
-              isCenter: true,
-            ),
-          )
-        : ListView.separated(
-            padding: const EdgeInsets.all(16),
-            shrinkWrap: true,
-            separatorBuilder: (context, index) => Divider(
-              height: 32,
-              thickness: 1,
-              color: AppColor.neutral[100],
-            ),
-            itemCount: listTransactionHistoryDummy.length,
-            itemBuilder: (context, index) {
-              return cardOfDate(listTransactionHistoryDummy[index]);
-            },
+    return BlocBuilder<TransactionHistoryCubit, TransactionHistoryState>(
+      builder: (context, state) {
+        if (state.status == GlobalState.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
+        }
+
+        return state.historyBalance?.data?.isEmpty ?? true
+            ? const Center(
+                child: AppEmptyData(
+                  'Oops, Belum Ada Riwayat Transaksi',
+                  isCenter: true,
+                ),
+              )
+            : ListView.separated(
+                padding: const EdgeInsets.all(16),
+                shrinkWrap: true,
+                separatorBuilder: (context, index) => Divider(
+                  height: 32,
+                  thickness: 1,
+                  color: AppColor.neutral[100],
+                ),
+                itemCount: state.dataFormated?.keys.length ?? 0,
+                itemBuilder: (context, index) {
+                  return cardOfDate(
+                    state.dataFormated![
+                        state.dataFormated?.keys.elementAt(index)]!,
+                  );
+                },
+              );
+      },
+    );
   }
 }

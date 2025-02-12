@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/faq/logic/faq_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq/repositories/faq_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/faq_detail/views/faq_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -46,13 +51,18 @@ class _FaqViewState extends State<FaqView> {
     );
   }
 
-  Widget itemCard(String text) {
+  Widget itemCard(
+    String id,
+    String text,
+  ) {
     return InkWell(
       onTap: () {
-        Navigator.of(context).push(AppTransition.pushTransition(
-          FaqDetailPage(text),
-          FaqDetailPage.routeSettings(),
-        ),);
+        Navigator.of(context).push(
+          AppTransition.pushTransition(
+            FaqDetailPage(id, text),
+            FaqDetailPage.routeSettings(),
+          ),
+        );
       },
       child: AppDefaultCard(
         isShadow: false,
@@ -77,14 +87,40 @@ class _FaqViewState extends State<FaqView> {
   }
 
   Widget listCard() {
-    return Expanded(
-      child: ListView.separated(
-        itemCount: listFaqDummy.length,
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        itemBuilder: (context, index) {
-          return itemCard(listFaqDummy[index]);
-        },
-      ),
+    return BlocBuilder<FaqCubit, FaqState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return Expanded(
+            child: ListView.builder(
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return const AppShimmer(
+                  75.0,
+                  double.infinity,
+                  8.0,
+                  margin: EdgeInsets.symmetric(vertical: 8.0),
+                );
+              },
+            ),
+          );
+        }
+
+        return Expanded(
+          child: ListView.separated(
+            itemCount: state.faqListResponse?.data?.length ?? 0,
+            separatorBuilder: (context, index) => const SizedBox(height: 16),
+            itemBuilder: (context, index) {
+              return itemCard(
+                state.faqListResponse?.data?[index].id.handlingEmptyString() ??
+                    '',
+                state.faqListResponse?.data?[index].question
+                        .handlingEmptyString() ??
+                    '',
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -94,8 +130,8 @@ class _FaqViewState extends State<FaqView> {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         children: [
-          const SizedBox(height: 16),
-          searchField(),
+          // const SizedBox(height: 16),
+          // searchField(),
           const SizedBox(height: 16),
           listCard(),
           const SizedBox(height: 16),

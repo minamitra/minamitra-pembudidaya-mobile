@@ -14,4 +14,8 @@ class ProfileEndpoint {
   Uri postUpdatePassword() {
     return createUrl(path: '/mitra/profile/update-password');
   }
+
+  Uri requestMember() {
+    return createUrl(path: '/mitra/profile/request-member');
+  }
 }

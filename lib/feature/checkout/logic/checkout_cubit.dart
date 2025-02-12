@@ -1,10 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/balance_response.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/balance/balance_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/bank/bank_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/delivery_address/delivery_address_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/transaction/transaction_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/address_member/repositories/member_address_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/checkout_body.dart';
@@ -18,18 +21,29 @@ class CheckoutCubit extends Cubit<CheckoutState> {
     this.deliveryAddressService,
     this.bankService,
     this.transactionService,
+    this.balanceService,
   ) : super(const CheckoutState());
 
   final DeliveryAddressService deliveryAddressService;
   final BankService bankService;
   final TransactionService transactionService;
+  final BalanceService balanceService;
 
   Future<void> init(ProductsResponseData initData) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       final devliveryAddressData = await deliveryAddressService.getAddresses();
       final banks = await bankService.getBanks();
+      final balance = await balanceService.balance();
       final List<SelectedPayment> recommedationPayment = [
+        SelectedPayment(
+          id: '0',
+          imageAsset: AppAssets.walletSquareIcon,
+          name: 'Dompet3M',
+          paymentMethod: 'Dompet3M',
+          description:
+              'Sisa saldo: ${appConvertCurrency(balance.data.data?.totalSaldoRemaining ?? 0.0)}',
+        ),
         const SelectedPayment(
           id: '0',
           imageAsset: AppAssets.cashSquareIcon,
@@ -56,6 +70,7 @@ class CheckoutCubit extends Cubit<CheckoutState> {
           recommendationsPaymentData: recommedationPayment,
           selectedAddress:
               (findPrimaryAddress?.id == null) ? null : findPrimaryAddress,
+          balanceResponse: balance.data,
         ),
       );
     } on AppException catch (e) {

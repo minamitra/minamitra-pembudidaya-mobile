@@ -114,7 +114,7 @@ class ActivityActivitiesPage extends StatelessWidget {
                   switch (state.index) {
                     case 0:
                       if ((tebarDate ?? DateTime.now())
-                          .isAfter(DateTime.now())) {
+                          .isAfter(state.selectedDate ?? DateTime.now())) {
                         AppTopSnackBar(context).showInfo(
                           'Belum waktunya melakukan kegiatan\nTebar awal pada ${AppConvertDateTime().dmyName((tebarDate ?? DateTime.now()))}',
                         );

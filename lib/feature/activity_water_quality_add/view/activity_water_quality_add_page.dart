@@ -7,6 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.da
 import 'package:minamitra_pembudidaya_mobile/core/logic/multi_image/multi_image_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/activity_water_quality/activity_water_quality_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/public/public_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/water_quality_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/logics/activity_water_quality_add_cubit.dart';
@@ -46,7 +47,8 @@ class ActivityWaterQualityAddPage extends StatelessWidget {
           create: (context) => ActivityWaterQualityAddCubit(
             ActivityWaterQualityServiceImpl.create(),
             CdnServiceImpl.create(),
-          ),
+            PublicServiceImpl.create(),
+          )..init(),
         ),
       ],
       child: Scaffold(

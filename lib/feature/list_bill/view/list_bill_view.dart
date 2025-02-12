@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/bill_detail/view/bill_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/list_bill/logic/list_bill_cubit.dart';
@@ -41,16 +46,16 @@ class _ListBillViewState extends State<ListBillView> {
 
   Color badgeBorderColor(String status) {
     switch (status) {
-      case 'Menunggu':
+      case 'Jatuh Tempo':
         return AppColor.accent;
       case 'Diproses':
         return const Color(0xFF0EA5E9);
-      case 'Dikirim':
+      case 'Tagihan Terbayar':
         return const Color(0xFF0EA5E9);
-      case 'Berjalan':
+      case 'Tagihan Aktif':
         return AppColor.green[500]!;
       case 'Dibatalkan':
-      case 'Ditolak':
+      case 'Tagihan Telat':
         return AppColor.red[600]!;
       default:
         return AppColor.accent;
@@ -59,19 +64,19 @@ class _ListBillViewState extends State<ListBillView> {
 
   Color badgeColor(String status) {
     switch (status) {
-      case 'Menunggu':
-        return AppColor.accent;
+      case 'Jatuh Tempo':
+        return AppColor.accent[50]!;
       case 'Diproses':
         return const Color(0xFF0EA5E9);
-      case 'Dikirim':
-        return const Color(0xFF0EA5E9);
-      case 'Berjalan':
+      case 'Tagihan Terbayar':
+        return const Color(0xFF0EA5E9).withOpacity(0.1);
+      case 'Tagihan Aktif':
         return AppColor.green[50]!;
       case 'Dibatalkan':
-      case 'Ditolak':
-        return AppColor.red[600]!;
+      case 'Tagihan Telat':
+        return AppColor.red[50]!;
       default:
-        return AppColor.accent;
+        return AppColor.accent[50]!;
     }
   }
 
@@ -170,6 +175,9 @@ class _ListBillViewState extends State<ListBillView> {
     Widget billItem(
       String title,
       String status,
+      String dueDate,
+      String billTotal,
+      String billRemaining,
     ) {
       return Container(
         decoration: BoxDecoration(
@@ -241,13 +249,13 @@ class _ListBillViewState extends State<ListBillView> {
               child: Row(
                 children: [
                   Expanded(
-                    child: billItemData('Jatuh Tempo', '12 Des 2024'),
+                    child: billItemData('Jatuh Tempo', dueDate),
                   ),
                   Expanded(
-                    child: billItemData('Total Tagihan', 'Rp 12.000.000'),
+                    child: billItemData('Total Tagihan', billTotal),
                   ),
                   Expanded(
-                    child: billItemData('Kekurangan Bayar', 'Rp 1.5000.000'),
+                    child: billItemData('Kekurangan Bayar', billRemaining),
                   ),
                 ],
               ),
@@ -258,35 +266,81 @@ class _ListBillViewState extends State<ListBillView> {
     }
 
     Widget listBillItem() {
-      return ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        itemCount: 10,
-        shrinkWrap: true,
-        physics: const AlwaysScrollableScrollPhysics(),
-        separatorBuilder: (context, index) {
-          return const SizedBox(height: 18.0);
-        },
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: index == 0
-                ? EdgeInsets.only(top: widget.isHistoryTransaction ? 18.0 : 0)
-                : EdgeInsets.zero,
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  AppTransition.pushTransition(
-                    BillDetailPage(
-                      isHistoryTransaction: widget.isHistoryTransaction,
-                    ),
-                    BillDetailPage.routeSettings(),
-                  ),
-                );
-              },
-              child: billItem(
-                'Kolam $index',
-                'Berjalan',
+      return BlocBuilder<ListBillCubit, ListBillState>(
+        builder: (context, state) {
+          if (state.status.isLoaded &&
+              (state.billResponse?.data?.isEmpty ?? true)) {
+            return const Center(
+              child: AppEmptyData(
+                'Tidak ada tagihan',
+                descriptions: 'Tidak ada tagihan yang tersedia/ditemukan',
+                isCenter: true,
               ),
-            ),
+            );
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            itemCount: state.status.isLoading
+                ? 10
+                : state.billResponse?.data?.length ?? 0,
+            shrinkWrap: true,
+            physics: const AlwaysScrollableScrollPhysics(),
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 18.0);
+            },
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: index == 0
+                    ? EdgeInsets.only(
+                        top: widget.isHistoryTransaction ? 18.0 : 0,
+                      )
+                    : EdgeInsets.zero,
+                child: state.status.isLoading
+                    ? const AppShimmer(
+                        120,
+                        double.infinity,
+                        8.0,
+                      )
+                    : InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            AppTransition.pushTransition(
+                              BillDetailPage(
+                                isHistoryTransaction:
+                                    widget.isHistoryTransaction,
+                                billResponseData:
+                                    state.billResponse!.data![index],
+                              ),
+                              BillDetailPage.routeSettings(),
+                            ),
+                          );
+                        },
+                        child: billItem(
+                          state.billResponse?.data?[index].fishpondName
+                                  .handlingEmptyString() ??
+                              '-',
+                          state.billResponse?.data?[index].paymentStatus
+                                  .handlingEmptyString() ??
+                              'Tagihan Aktif',
+                          AppConvertDateTime().dmyName(
+                            state.billResponse?.data?[index].dueDate ??
+                                DateTime.now(),
+                          ),
+                          appConvertCurrency(
+                            state.billResponse?.data?[index].invoiceNominal
+                                    ?.toDouble() ??
+                                0.0,
+                          ),
+                          appConvertCurrency(
+                            state.billResponse?.data?[index].remainingNominal
+                                    ?.toDouble() ??
+                                0.0,
+                          ),
+                        ),
+                      ),
+              );
+            },
           );
         },
       );

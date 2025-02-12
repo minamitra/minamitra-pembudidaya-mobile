@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class FishMarketDetailView extends StatefulWidget {
   const FishMarketDetailView({super.key});
@@ -186,6 +187,7 @@ class _FishMarketDetailViewState extends State<FishMarketDetailView> {
     return ListView(
       children: [
         header(),
+        WidgetFeatureOnProgressComponent(),
         body(),
       ],
     );

@@ -120,7 +120,7 @@ class _BannerDetailPageState extends State<BannerDetailPage> {
                   color: AppColor.black,
                 ),
           ),
-          const SizedBox(height: 12.0),
+          const SizedBox(height: 6.0),
           Row(
             children: [
               Text(
@@ -188,8 +188,8 @@ class _BannerDetailPageState extends State<BannerDetailPage> {
                     }
                   },
                   child: Text(
-                    widget.data.linkUrl.handlingEmptyString(),
-                    textAlign: TextAlign.start,
+                    'Lihat selengkapnya',
+                    textAlign: TextAlign.end,
                     style: appTextTheme(context).bodySmall?.copyWith(
                           decoration: TextDecoration.underline,
                           decorationColor: AppColor.primary[600],

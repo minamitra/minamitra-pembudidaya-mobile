@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:lottie/lottie.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
@@ -919,15 +922,91 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               },
             ),
           const SizedBox(height: 16.0),
-          if ((widget.data.status == 'Diproses' ||
-                  widget.data.status == 'Dikirim') &&
+          if (widget.data.status == 'Dikirim' &&
               widget.data.paymentStatus == 'Pembayaran Selesai')
             AppPrimaryFullButton(
-              'Selesaikan Pesanan',
+              'Konfirmasi Pesanan',
               () {
-                context
-                    .read<TransactionDetailCubit>()
-                    .completeTransaction(widget.data.id ?? '0');
+                showModalBottomSheet(
+                  context: context,
+                  builder: (bottomSheetContext) {
+                    return AppBottomSheet(
+                      '',
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView(
+                                children: [
+                                  Lottie.asset(
+                                    AppAssets.askConfirmationLottie,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.26,
+                                    fit: BoxFit.contain,
+                                    reverse: false,
+                                    repeat: true,
+                                  ),
+                                  const SizedBox(height: 18.0),
+                                  Text(
+                                    'Selesaikan dan konfirmasi pesanan',
+                                    textAlign: TextAlign.center,
+                                    style: appTextTheme(context)
+                                        .titleLarge
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                          color: AppColor.black,
+                                          fontSize: 20.0,
+                                        ),
+                                  ),
+                                  const SizedBox(height: 8.0),
+                                  Text(
+                                    'Apakah anda yakin ingin menyelesaikan pesanan dan mengkonfirmasi bahwa pesanan telah sampai?',
+                                    textAlign: TextAlign.center,
+                                    style: appTextTheme(context)
+                                        .bodySmall
+                                        ?.copyWith(color: AppColor.black),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: AppPrimaryOutlineFullButton(
+                                    'Tidak',
+                                    () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 18.0),
+                                Expanded(
+                                  child: AppPrimaryFullButton(
+                                    'Ya',
+                                    () {
+                                      Navigator.of(context).pop(true);
+                                    },
+                                    height: 56,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16.0),
+                          ],
+                        ),
+                      ),
+                      isNeedAppBar: false,
+                      height: MediaQuery.of(context).size.height * 0.6,
+                    );
+                  },
+                ).then((value) {
+                  if (value == true) {
+                    context
+                        .read<TransactionDetailCubit>()
+                        .completeTransaction(widget.data.id ?? '0');
+                  }
+                });
               },
             ),
         ],
@@ -935,7 +1014,10 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
     );
   }
 
-  Widget proofAttachment() {
+  Widget proofAttachment(bool isPayWith3M) {
+    if (isPayWith3M) {
+      return const SizedBox();
+    }
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -1014,7 +1096,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
         const SizedBox(height: 16.0),
         feeDetail(context),
         const SizedBox(height: 16.0),
-        if (widget.data.paymentStatus != 'Belum Terbayar') proofAttachment(),
+        if (widget.data.paymentStatus != 'Belum Terbayar')
+          proofAttachment(widget.data.paymentMethod == 'Dompet3M'),
         const SizedBox(height: 32.0),
         button(context),
         const SizedBox(height: 32.0),

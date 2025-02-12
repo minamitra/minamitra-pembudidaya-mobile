@@ -3,12 +3,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_refresher.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/view/history_point_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon_entity.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/logic/point_mission_v2_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/logic/point_v2_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/repositories/point_configuration_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/section/point_exchange.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/section/point_mission.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
@@ -90,24 +95,60 @@ class _PointV2ViewState extends State<PointV2View> {
   ];
 
   List<String> tocPoint = [
-    'Untuk dapat melakukan penukaran poin, minimal perlu mencapai level gold atau 3000 poin',
     '1 Poin = Rp 100',
-    'Minimal penukaran poin ke saldo atau tarik tunai adalah 250 poin atau Rp 25,000',
+    'Minimal penukaran poin ke saldo atau tarik tunai adalah 10 poin atau Rp 1,000',
     'Maksimal penukaran poin ke saldo atau tarik tunai adalah 10,000 poin Rp 1,000,000',
     'Akumulasi penukaran poin ke saldo atau tarik tunai adalah 10,000 poin atau Rp 1,000,000 per hari',
   ];
 
-  Future showPointInfo() {
+  Future showPointInfo(PointConfigurationResponse pointConfigruation) {
     return showModalBottomSheet(
       context: context,
       builder: (bottomSheetContext) {
+        String generateIcon(String name) {
+          switch (name) {
+            case 'Bronze':
+              return AppAssets.bronzeV2Icon;
+            case 'Silver':
+              return AppAssets.silverV2Icon;
+            case 'Gold':
+              return AppAssets.goldV2Icon;
+            case 'Platinum':
+              return AppAssets.platinumV2Icon;
+            case 'Diamond':
+              return AppAssets.diamondV2Icon;
+            default:
+              return AppAssets.bronzeV2Icon;
+          }
+        }
+
+        String generateIconDesc(
+          String name,
+          int minPoint,
+        ) {
+          switch (name) {
+            case 'Bronze':
+              return 'Selesaikan aktivitas untuk mendapatkan poin dan membuka level Bronze.';
+            case 'Silver':
+              return 'Kumpulkan $minPoint poin untuk mendapatkan lencana Silver.';
+            case 'Gold':
+              return 'Kumpulkan $minPoint poin untuk mendapatkan lencana Gold.';
+            case 'Platinum':
+              return 'Kumpulkan $minPoint poin untuk mendapatkan lencana Platinum.';
+            case 'Diamond':
+              return 'Kumpulkan $minPoint poin untuk mendapatkan lencana Diamond.';
+            default:
+              return 'Selesaikan $minPoint poin untuk membuka level.';
+          }
+        }
+
         return AppBottomSheet(
           'List Member Level',
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             children: [
               ...List.generate(
-                listPointInfo.length,
+                pointConfigruation.data?.length ?? 0,
                 (index) {
                   return Column(
                     children: [
@@ -116,7 +157,11 @@ class _PointV2ViewState extends State<PointV2View> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Image.asset(
-                            listPointInfo[index].icon,
+                            generateIcon(
+                              pointConfigruation.data?[index].name
+                                      .handlingEmptyString() ??
+                                  '-',
+                            ),
                             height: 28.0,
                             width: 28.0,
                             fit: BoxFit.cover,
@@ -127,7 +172,9 @@ class _PointV2ViewState extends State<PointV2View> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  listPointInfo[index].name,
+                                  pointConfigruation.data?[index].name
+                                          .handlingEmptyString() ??
+                                      '-',
                                   style: appTextTheme(context)
                                       .titleMedium
                                       ?.copyWith(
@@ -136,7 +183,13 @@ class _PointV2ViewState extends State<PointV2View> {
                                 ),
                                 const SizedBox(height: 8.0),
                                 Text(
-                                  listPointInfo[index].description ?? '-',
+                                  generateIconDesc(
+                                    pointConfigruation.data?[index].name
+                                            .handlingEmptyString() ??
+                                        '-',
+                                    pointConfigruation.data?[index].minPoin ??
+                                        0,
+                                  ),
                                   style:
                                       appTextTheme(context).bodySmall?.copyWith(
                                             color: AppColor.neutral[400],
@@ -178,7 +231,7 @@ class _PointV2ViewState extends State<PointV2View> {
           const SizedBox(width: 18.0),
           Expanded(
             child: Text(
-              'Infromasi Poin',
+              'Informasi Poin',
               style: appTextTheme(context)
                   .headlineSmall
                   ?.copyWith(color: AppColor.white),
@@ -220,172 +273,330 @@ class _PointV2ViewState extends State<PointV2View> {
     }
 
     Widget headerPointView() {
-      return Container(
-        margin: const EdgeInsets.symmetric(vertical: 18.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              AppAssets.bronzeV2Icon,
-              height: 64.0,
-              fit: BoxFit.cover,
-            ),
-            const SizedBox(height: 12.0),
-            Row(
+      String generateIcon(String name) {
+        switch (name) {
+          case 'Bronze':
+            return AppAssets.bronzeV2Icon;
+          case 'Silver':
+            return AppAssets.silverV2Icon;
+          case 'Gold':
+            return AppAssets.goldV2Icon;
+          case 'Platinum':
+            return AppAssets.platinumV2Icon;
+          case 'Diamond':
+            return AppAssets.diamondV2Icon;
+          default:
+            return AppAssets.bronzeV2Icon;
+        }
+      }
+
+      return BlocBuilder<PointMissionV2Cubit, PointMissionV2State>(
+        builder: (context, state) {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 18.0),
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                state.status.isLoading
+                    ? const AppShimmer(64.0, 64.0, 8.0)
+                    : Image.asset(
+                        generateIcon(
+                          state.pointBalance?.data?.levelName
+                                  .handlingEmptyString() ??
+                              '-',
+                        ),
+                        height: 64.0,
+                        fit: BoxFit.cover,
+                      ),
+                const SizedBox(height: 12.0),
+                state.status.isLoading
+                    ? const AppShimmer(22.0, 60.0, 8.0)
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            state.pointBalance?.data?.levelName
+                                    .handlingEmptyString() ??
+                                '-',
+                            style: appTextTheme(context).titleMedium?.copyWith(
+                                  color: AppColor.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                          ),
+                          const SizedBox(width: 4.0),
+                          InkWell(
+                            onTap: () {
+                              showPointInfo(state.pointConfigruation!);
+                            },
+                            child: const Icon(
+                              Icons.info_outline,
+                              color: AppColor.white,
+                              size: 18.0,
+                            ),
+                          ),
+                        ],
+                      ),
+                const SizedBox(height: 6.0),
+                state.status.isLoading
+                    ? const AppShimmer(14.0, 125.0, 8.0)
+                    : Text(
+                        'Total perolehan poin : ${state.pointBalance?.data?.totalPoin}',
+                        style: appTextTheme(context)
+                            .labelLarge
+                            ?.copyWith(color: AppColor.white),
+                      ),
+              ],
+            ),
+          );
+        },
+      );
+    }
+
+    Widget headerPointInfoItem(
+      String asset,
+      String title,
+      String value,
+    ) {
+      return Row(
+        children: [
+          Image.asset(
+            asset,
+            width: 24.0,
+            height: 24.0,
+            fit: BoxFit.contain,
+          ),
+          const SizedBox(width: 12.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Text(
-                  '7100 Poin',
-                  style: appTextTheme(context).titleMedium?.copyWith(
+                  title,
+                  textAlign: TextAlign.start,
+                  style: appTextTheme(context).titleSmall?.copyWith(
                         color: AppColor.white,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                       ),
                 ),
-                const SizedBox(width: 4.0),
-                InkWell(
-                  onTap: () {
-                    showPointInfo();
-                  },
-                  child: const Icon(
-                    Icons.info_outline,
-                    color: AppColor.white,
-                    size: 18.0,
-                  ),
+                const SizedBox(height: 4.0),
+                Text(
+                  value,
+                  textAlign: TextAlign.start,
+                  style: appTextTheme(context)
+                      .labelLarge
+                      ?.copyWith(color: AppColor.primary[300]),
                 ),
               ],
             ),
-            const SizedBox(height: 8.0),
-            Text(
-              'Platinum',
-              style: appTextTheme(context)
-                  .labelLarge
-                  ?.copyWith(color: AppColor.white),
-            ),
-          ],
-        ),
+          ),
+        ],
       );
     }
 
     Widget headerPointInfo() {
-      return InkWell(
-        onTap: () {
-          showPointInfo();
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 8.0,
-            vertical: 16.0,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8.0),
-            color: AppColor.primary[500],
-            border: Border.all(
-              color: AppColor.primary[300]!,
-              width: 1.0,
-            ),
-          ),
-          child: Column(
+      return BlocBuilder<PointMissionV2Cubit, PointMissionV2State>(
+        builder: (context, state) {
+          return Stack(
+            alignment: Alignment.topCenter,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+              Container(
+                height: 78.0,
+                padding: const EdgeInsets.only(
+                  bottom: 18.0,
+                  left: 18.0,
+                  right: 18.0,
+                  top: 16.0,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColor.primary[700]!.withOpacity(0.55),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    topRight: Radius.circular(8.0),
+                  ),
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ...List.generate(
-                      listLevel.length,
-                      (index) {
-                        return Expanded(
-                          child: SizedBox(
-                            child: Center(
-                              child: Image.asset(
-                                listLevel[index].icon,
-                                height: 28.0,
-                                width: 28.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
+                    Expanded(
+                      child: headerPointInfoItem(
+                        AppAssets.pointStarIcon,
+                        state.pointBalance?.data?.totalPoinUsed.toString() ??
+                            '-',
+                        'Poin Digunakan',
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 28.0,
+                      child: VerticalDivider(thickness: 1.2),
+                    ),
+                    const SizedBox(width: 18.0),
+                    Expanded(
+                      child: headerPointInfoItem(
+                        AppAssets.pointStar2Icon,
+                        state.pointBalance?.data?.totalPoinRemaining
+                                .toString() ??
+                            '-',
+                        'Poin Tersisa',
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 16.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SizedBox(
-                  height: 16.0,
-                  width: double.infinity,
-                  child: Stack(
-                    alignment: Alignment.center,
+              InkWell(
+                onTap: () {
+                  if (state.status.isLoaded) {
+                    showPointInfo(state.pointConfigruation!);
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 68.0),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 16.0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      topRight: Radius.circular(8.0),
+                    ),
+                    color: AppColor.primary[500],
+                    border: Border.all(
+                      color: AppColor.primary[300]!,
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Column(
                     children: [
-                      LinearPercentIndicator(
-                        // padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                        animation: true,
-                        lineHeight: 8.0,
-                        animationDuration: 1000,
-                        percent: 0.4,
-                        barRadius: const Radius.circular(8.0),
-                        progressColor: AppColor.accent[900],
-                        backgroundColor: AppColor.neutral[100],
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ...List.generate(
+                              listLevel.length,
+                              (index) {
+                                return Expanded(
+                                  child: SizedBox(
+                                    child: Center(
+                                      child: Image.asset(
+                                        listLevel[index].icon,
+                                        height: 28.0,
+                                        width: 28.0,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ...List.generate(
-                            listLevel.length,
-                            (index) {
-                              return Image.asset(
-                                AppAssets.circleActiveIcon,
-                                width: 16.0,
-                                height: 16.0,
-                              );
-                            },
+                      const SizedBox(height: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: SizedBox(
+                          height: 16.0,
+                          width: double.infinity,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              state.status.isLoading
+                                  ? const AppShimmer(
+                                      55.0,
+                                      double.infinity,
+                                      8.0,
+                                    )
+                                  : LinearPercentIndicator(
+                                      animation: true,
+                                      lineHeight: 8.0,
+                                      animationDuration: 1000,
+                                      percent: (state.pointBalance?.data
+                                                          ?.totalPoin ??
+                                                      0) /
+                                                  800 >
+                                              1
+                                          ? 1
+                                          : (state.pointBalance?.data
+                                                      ?.totalPoin ??
+                                                  0) /
+                                              800,
+                                      barRadius: const Radius.circular(8.0),
+                                      progressColor: AppColor.accent[900],
+                                      backgroundColor: AppColor.neutral[100],
+                                    ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ...List.generate(
+                                    listLevel.length,
+                                    (index) {
+                                      return Image.asset(
+                                        AppAssets.circleActiveIcon,
+                                        width: 16.0,
+                                        height: 16.0,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
+                      ),
+                      const SizedBox(height: 16.0),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: state.status.isLoading
+                            ? const SizedBox(height: 18.0)
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ...List.generate(
+                                    state.pointConfigruation?.data?.length ?? 0,
+                                    (index) {
+                                      return SizedBox(
+                                        width: 28.0,
+                                        child: Text(
+                                          state.pointConfigruation?.data?[index]
+                                                  .minPoin
+                                                  .toString() ??
+                                              '-',
+                                          textAlign: TextAlign.start,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: appTextTheme(context)
+                                              .titleSmall
+                                              ?.copyWith(
+                                                fontWeight: FontWeight.w500,
+                                                color: AppColor.white,
+                                              ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
                       ),
                     ],
                   ),
                 ),
               ),
-              const SizedBox(height: 16.0),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ...List.generate(
-                      listLevel.length,
-                      (index) {
-                        return Expanded(
-                          child: Text(
-                            listLevel[index].name,
-                            textAlign: TextAlign.center,
-                            style: appTextTheme(context).titleSmall?.copyWith(
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColor.white,
-                                ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
             ],
-          ),
-        ),
+          );
+        },
       );
     }
 
     Widget header() {
       return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16.0,
-          vertical: 24.0,
+        padding: const EdgeInsets.only(
+          left: 16.0,
+          right: 16.0,
+          top: 24.0,
         ),
         // height: MediaQuery.sizeOf(context).height * 0.35,
         decoration: const BoxDecoration(
@@ -516,7 +727,9 @@ class _PointV2ViewState extends State<PointV2View> {
       key: formKey,
       child: AppRefresher(
         offset: 55.0,
-        onRefresh: () {},
+        onRefresh: () {
+          context.read<PointMissionV2Cubit>().init();
+        },
         child: ListView(
           children: [
             header(),

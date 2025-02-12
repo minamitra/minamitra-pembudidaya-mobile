@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
@@ -125,7 +126,7 @@ class _ActivityCycleAddHarvestViewState
       controller: sizeController,
       labelText: 'Ukuran Ikan',
       hintText: '0',
-      inputType: TextInputType.number,
+      inputType: TextInputType.phone,
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
@@ -143,6 +144,10 @@ class _ActivityCycleAddHarvestViewState
               ),
         ),
       ),
+      inputFormatters: [
+        DecimalInputFormatter(decimalRange: 2),
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+      ],
     );
   }
 
@@ -151,7 +156,7 @@ class _ActivityCycleAddHarvestViewState
       controller: totalController,
       labelText: 'Total Panen',
       hintText: '0',
-      inputType: TextInputType.number,
+      inputType: TextInputType.phone,
       isMandatory: true,
       validator: (String? value) {
         if (value!.isEmpty) {
@@ -169,6 +174,10 @@ class _ActivityCycleAddHarvestViewState
               ),
         ),
       ),
+      inputFormatters: [
+        DecimalInputFormatter(decimalRange: 2),
+        FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+      ],
     );
   }
 
@@ -546,8 +555,9 @@ class _ActivityCycleAddHarvestViewState
                     context.read<ActivityCycleAddHarvestCubit>().doneHarvest(
                           id: widget.id,
                           harvestDate: harvestDate!,
-                          harvestFishWeight: int.parse(sizeController.text),
-                          totalHarvestActual: int.parse(totalController.text),
+                          harvestFishWeight: double.parse(sizeController.text),
+                          totalHarvestActual:
+                              double.parse(totalController.text),
                           harvestNotes: noteController.text,
                           images: context
                                   .read<ActivityCyclePictureCubit>()
@@ -571,8 +581,8 @@ class _ActivityCycleAddHarvestViewState
                 context.read<ActivityCycleAddHarvestCubit>().createHarvest(
                       id: widget.id,
                       harvestDate: harvestDate!,
-                      harvestFishWeight: int.parse(sizeController.text),
-                      totalHarvestActual: int.parse(totalController.text),
+                      harvestFishWeight: double.parse(sizeController.text),
+                      totalHarvestActual: double.parse(totalController.text),
                       harvestNotes: noteController.text,
                       images: context
                               .read<ActivityCyclePictureCubit>()

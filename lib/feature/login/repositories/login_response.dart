@@ -35,6 +35,10 @@ class UserData {
   final String? email;
   final String? mobilephone;
   final String? imageUrl;
+  final String? type;
+  final String? level;
+  final int? totalPoin;
+  final String? status;
 
   UserData({
     this.id,
@@ -42,6 +46,10 @@ class UserData {
     this.email,
     this.mobilephone,
     this.imageUrl,
+    this.type,
+    this.level,
+    this.totalPoin,
+    this.status,
   });
 
   factory UserData.fromJson(String str) => UserData.fromMap(json.decode(str));
@@ -54,7 +62,17 @@ class UserData {
         email: json['email'],
         mobilephone: json['mobilephone'],
         imageUrl: json['image_url'],
+        type: json['type'],
+        level: json['level'],
+        totalPoin: json['total_poin'],
+        status:
+            json['status'], // 'submission','processed','rejected','approved'
       );
+
+  bool isSubmission() => status?.toLowerCase() == 'submission';
+  bool isProcessed() => status?.toLowerCase() == 'processed';
+  bool isRejected() => status?.toLowerCase() == 'rejected';
+  bool isApproved() => status?.toLowerCase() == 'approved';
 
   Map<String, dynamic> toMap() => {
         'id': id,
@@ -62,5 +80,9 @@ class UserData {
         'email': email,
         'mobilephone': mobilephone,
         'image_url': imageUrl,
+        'type': type,
+        'level': level,
+        'total_poin': totalPoin,
+        'status': status,
       };
 }

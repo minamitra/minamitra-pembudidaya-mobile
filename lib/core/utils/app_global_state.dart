@@ -9,6 +9,7 @@ enum GlobalState {
   successSubmit,
   onUpdating,
   loadMore,
+  failed,
 }
 
 extension GlobalStateExtension on GlobalState {

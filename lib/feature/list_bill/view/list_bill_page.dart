@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/bill/bill_service.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/list_bill/logic/list_bill_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/list_bill/view/list_bill_view.dart';
 
@@ -18,11 +19,12 @@ class ListBillPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ListBillCubit(),
+      create: (context) =>
+          ListBillCubit(BillServiceImpl.create())..init(isHistoryTransaction),
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          'Rincian Tagihan',
+          isHistoryTransaction ? 'Riwayat Tagihan' : 'Rincian Tagihan',
         ),
         body: ListBillView(isHistoryTransaction: isHistoryTransaction),
       ),

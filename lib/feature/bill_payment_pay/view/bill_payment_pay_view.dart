@@ -7,6 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/bill_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
@@ -19,7 +20,14 @@ import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/selec
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class BillPaymentPayView extends StatefulWidget {
-  const BillPaymentPayView({super.key});
+  const BillPaymentPayView({
+    super.key,
+    required this.totalBill,
+    required this.billResponseData,
+  });
+
+  final int totalBill;
+  final BillResponseData billResponseData;
 
   @override
   State<BillPaymentPayView> createState() => _BillPaymentPayViewState();
@@ -307,7 +315,7 @@ class _BillPaymentPayViewState extends State<BillPaymentPayView> {
                 ?.copyWith(color: AppColor.neutral[500]),
           ),
           Text(
-            'Rp 12.500.000',
+            appConvertCurrency(widget.totalBill.toDouble()),
             style: appTextTheme(context)
                 .titleSmall
                 ?.copyWith(color: AppColor.primary[500]),
@@ -330,10 +338,18 @@ class _BillPaymentPayViewState extends State<BillPaymentPayView> {
                     .showDanger('Pilih metode pembayaran terlebih dahulu');
                 return;
               }
+              if (int.parse(nominalController.text.unFormatedCurrency()) >
+                  widget.totalBill) {
+                AppTopSnackBar(context)
+                    .showDanger('Nominal pembayaran melebihi tagihan');
+                return;
+              }
               Navigator.of(context).push(
                 AppTransition.pushTransition(
                   BillPaymentConfirmationPayedPage(
                     context.read<BillPaymentPayCubit>().state.selectedPayment!,
+                    int.parse(nominalController.text.unFormatedCurrency()),
+                    widget.billResponseData,
                   ),
                   BillPaymentConfirmationPayedPage.routeSettings(),
                 ),

@@ -267,12 +267,19 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           ),
           Row(
             children: [
-              Image.asset(
-                AppAssets.minamitraLogo,
-                width: 38,
-                height: 38,
-                fit: BoxFit.cover,
-              ),
+              (widget.data.supplierImageUrl?.isEmpty ?? true)
+                  ? Image.asset(
+                      AppAssets.minamitraLogo,
+                      width: 38,
+                      height: 38,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      widget.data.supplierImageUrl ?? '',
+                      width: 38.0,
+                      height: 38.0,
+                      fit: BoxFit.cover,
+                    ),
               const SizedBox(width: 16.0),
               Expanded(
                 child: Text(

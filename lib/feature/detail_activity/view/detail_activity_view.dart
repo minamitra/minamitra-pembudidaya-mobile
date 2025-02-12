@@ -578,6 +578,7 @@ class _DetailActivityViewState extends State<DetailActivityView> {
         child: Row(
           children: [
             Expanded(
+              flex: 7,
               child: Text(
                 title,
                 maxLines: 2,
@@ -587,14 +588,18 @@ class _DetailActivityViewState extends State<DetailActivityView> {
               ),
             ),
             const SizedBox(width: 8.0),
-            Text(
-              value,
-              textAlign: TextAlign.end,
-              maxLines: 1,
-              style: appTextTheme(context).bodySmall?.copyWith(
-                    color: AppColor.neutral[800],
-                    fontWeight: FontWeight.w500,
-                  ),
+            Expanded(
+              flex: 4,
+              child: Text(
+                value,
+                textAlign: TextAlign.end,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: appTextTheme(context).bodySmall?.copyWith(
+                      color: AppColor.neutral[800],
+                      fontWeight: FontWeight.w500,
+                    ),
+              ),
             ),
           ],
         ),

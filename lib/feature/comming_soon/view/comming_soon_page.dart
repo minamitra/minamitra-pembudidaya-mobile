@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_view.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class CommingSoonPage extends StatelessWidget {
   const CommingSoonPage(
@@ -26,10 +27,12 @@ class CommingSoonPage extends StatelessWidget {
         context,
         pageTitle,
       ),
-      body: CommingSoonView(
-        customImage: customImage,
-        customTitle: customTitle,
-        customDescription: customDescription,
+      body: WidgetFeatureOnProgress(
+        child: CommingSoonView(
+          customImage: customImage,
+          customTitle: customTitle,
+          customDescription: customDescription,
+        ),
       ),
     );
   }

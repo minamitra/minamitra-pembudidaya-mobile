@@ -146,6 +146,14 @@ class _ResumeViewState extends State<ResumeView> {
                       fcrValue: state.resumeSummary?.nilaiFcrKeseluruhan
                               .handlingEmptyString() ??
                           '-',
+                      growthValue: state
+                              .resumeSummary?.pertumbuhanIkanKeseluruhan
+                              .handlingEmptyString() ??
+                          '-',
+                      productivityValue: state
+                              .resumeSummary?.produktivitasKeseluruhan
+                              .handlingEmptyString() ??
+                          '-',
                     ).length,
                     itemBuilder: (context, index) {
                       return Padding(
@@ -166,6 +174,14 @@ class _ResumeViewState extends State<ResumeView> {
                                               ?.nilaiFcrKeseluruhan
                                               .handlingEmptyString() ??
                                           '-',
+                                      growthValue: state.resumeSummary
+                                              ?.pertumbuhanIkanKeseluruhan
+                                              .handlingEmptyString() ??
+                                          '-',
+                                      productivityValue: state.resumeSummary
+                                              ?.produktivitasKeseluruhan
+                                              .handlingEmptyString() ??
+                                          '-',
                                     ).length -
                                     1 ==
                                 index
@@ -184,6 +200,14 @@ class _ResumeViewState extends State<ResumeView> {
                                     .handlingEmptyString() ??
                                 '-',
                             fcrValue: state.resumeSummary?.nilaiFcrKeseluruhan
+                                    .handlingEmptyString() ??
+                                '-',
+                            growthValue: state
+                                    .resumeSummary?.pertumbuhanIkanKeseluruhan
+                                    .handlingEmptyString() ??
+                                '-',
+                            productivityValue: state
+                                    .resumeSummary?.produktivitasKeseluruhan
                                     .handlingEmptyString() ??
                                 '-',
                           )[index],

@@ -38,6 +38,10 @@ class AppAssets {
   static const String fisherManImage = '$imagePath/fisherman-image.png';
   static const String rocketImage = '$imagePath/rocket-image.png';
   static const String newFishIcon = '$iconPath/new-fish-icon.png';
+  static const String askConfirmationGif =
+      '$imagePath/ask-confirmation-gif.gif';
+  static const String askProfileCheckImage =
+      '$imagePath/ask-profile-check-image.png';
 
   // Lottie
   static const String downLottie = '$lottiePath/down-lottie.json';
@@ -45,6 +49,8 @@ class AppAssets {
       '$lottiePath/waiting-payment-lottie.json';
   static const String waitingPaymentLottieNew =
       '$lottiePath/waiting-payment-lottie-new.json';
+  static const String askConfirmationLottie =
+      '$lottiePath/ask-confirmation-lottie-2.json';
 
   // Dashboard
   static const String homeIcon = '$iconPath/home-icon.png';
@@ -168,6 +174,8 @@ class AppAssets {
   static const String diamondV2Icon = '$iconPath/diamond-v2-icon.png';
   static const String championV2Icon = '$iconPath/champion-v2-icon.png';
   static const String pointGainIcon = '$iconPath/point-gain-icon.png';
+  static const String pointStarIcon = '$iconPath/point-star-icon.png';
+  static const String pointStar2Icon = '$iconPath/point-star-2-icon.png';
 
   // FAQ
   static const String questionIcon = '$iconPath/question-icon.png';
@@ -225,4 +233,6 @@ class AppAssets {
   static const String moneyCoinBillIcon = '$iconPath/money-coin-bill-icon.png';
   static const String notesBillIcon = '$iconPath/notes-bill-icon.png';
   static const String scoreABillIcon = '$iconPath/score-a-bill-icon.png';
+  static const String scoreBBillIcon = '$iconPath/score-b-bill-icon.png';
+  static const String scoreCBillIcon = '$iconPath/score-c-bill-icon.png';
 }

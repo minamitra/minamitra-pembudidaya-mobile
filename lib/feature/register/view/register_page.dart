@@ -60,7 +60,9 @@ class RegisterPage extends StatelessWidget {
           }
         },
         child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+          ),
           body: const RegisterView(),
         ),
       ),

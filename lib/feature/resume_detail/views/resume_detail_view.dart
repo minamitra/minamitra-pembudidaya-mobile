@@ -122,7 +122,7 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
           ),
           itemValueText(
             'Total densitas',
-            '${widget.data.densitas?.toStringAsFixed(2)}/m\u00b2',
+            '${widget.data.densitas?.toStringAsFixed(2)} ekor/m\u00b2',
           ),
           Divider(
             height: 32.0,
@@ -418,26 +418,6 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                       'Kirteria hasil panen',
                       widget.data.kriteriaHasilPanen.handlingEmptyString(),
                     ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 1,
-                      color: AppColor.neutral[200],
-                    ),
-                    itemValueText(
-                      'Pertumbuhan ikan',
-                      widget.data.pertumbuhanIkanKeseluruhan
-                          .handlingEmptyString(),
-                    ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 1,
-                      color: AppColor.neutral[200],
-                    ),
-                    itemValueText(
-                      'Produktivitas',
-                      widget.data.produktivitasKeseluruhan
-                          .handlingEmptyString(),
-                    ),
                   ],
                 ),
               ),
@@ -497,6 +477,26 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                     itemValueText(
                       'Nilai FCR',
                       widget.data.nilaiFcrKeseluruhan.handlingEmptyString(),
+                    ),
+                    Divider(
+                      height: 32.0,
+                      thickness: 1,
+                      color: AppColor.neutral[200],
+                    ),
+                    itemValueText(
+                      'Pertumbuhan ikan',
+                      widget.data.pertumbuhanIkanKeseluruhan
+                          .handlingEmptyString(),
+                    ),
+                    Divider(
+                      height: 32.0,
+                      thickness: 1,
+                      color: AppColor.neutral[200],
+                    ),
+                    itemValueText(
+                      'Produktivitas',
+                      widget.data.produktivitasKeseluruhan
+                          .handlingEmptyString(),
                     ),
                   ],
                 ),
@@ -722,7 +722,7 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                 child: Column(
                   children: [
                     itemValueText(
-                      'Tangagal panen',
+                      'Tanggal panen',
                       widget.data.actualPanenDate == null
                           ? '-'
                           : AppConvertDateTime().dmyName(
@@ -736,7 +736,7 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                     ),
                     itemValueText(
                       'Total panen',
-                      '${widget.data.totalPanen?.toStringAsFixed(2)} Kg',
+                      '${double.parse(widget.data.totalTonasePanen ?? "0.0").toStringAsFixed(2)} Kg',
                     ),
                     Divider(
                       height: 32.0,
@@ -764,6 +764,15 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                     itemValueText(
                       'Jumlah ikan akhir',
                       '${widget.data.jumlahIkanAkhir?.toStringAsFixed(0)} ekor',
+                    ),
+                    Divider(
+                      height: 32.0,
+                      thickness: 1,
+                      color: AppColor.neutral[200],
+                    ),
+                    itemValueText(
+                      'SR',
+                      '${widget.data.sr?.toStringAsFixed(2)} %',
                     ),
                     Divider(
                       height: 32.0,
@@ -894,14 +903,14 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
         buildDefaultColumnChart(),
         const SizedBox(height: 24.0),
         cycleSection(),
-        const SizedBox(height: 24.0),
-        harvestInfoSection(),
-        const SizedBox(height: 24.0),
-        cultivationAssessmentSection(),
+        // const SizedBox(height: 24.0),
+        // harvestInfoSection(),
         const SizedBox(height: 24.0),
         feedSection(),
         const SizedBox(height: 24.0),
         cultivationResultsSection(),
+        const SizedBox(height: 24.0),
+        cultivationAssessmentSection(),
         const SizedBox(height: 24.0),
         companionNotesSection(),
         const SizedBox(height: 18.0),

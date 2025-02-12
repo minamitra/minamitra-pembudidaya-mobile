@@ -6,11 +6,14 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/limit_bill/limit_bill/limit_bill_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class LimitBillView extends StatefulWidget {
-  const LimitBillView({super.key});
+  const LimitBillView(this.currentLimit, {super.key});
+
+  final int currentLimit;
 
   @override
   State<LimitBillView> createState() => _LimitBillViewState();
@@ -131,7 +134,7 @@ class _LimitBillViewState extends State<LimitBillView> {
                 ),
                 const SizedBox(height: 4.0),
                 Text(
-                  'Rp 20.000.000',
+                  appConvertCurrency(widget.currentLimit.toDouble()),
                   textAlign: TextAlign.start,
                   style: appTextTheme(context)
                       .titleMedium
@@ -312,6 +315,7 @@ class _LimitBillViewState extends State<LimitBillView> {
               duration: const Duration(milliseconds: 2600),
               infinite: true,
               from: 6.0,
+              curve: Curves.linear,
               child: Image.asset(
                 AppAssets.flyMoneyBillImage,
                 height: 220.0,

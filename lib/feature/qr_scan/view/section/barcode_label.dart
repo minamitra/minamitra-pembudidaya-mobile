@@ -20,7 +20,7 @@ class ScannedBarcodeLabel extends StatelessWidget {
       children: [
         SizedBox(height: MediaQuery.sizeOf(context).height * 0.2),
         Image.asset(
-          AppAssets.logoIcon,
+          AppAssets.newLogoIcon2,
           height: 55.0,
         ),
         const SizedBox(height: 16.0),

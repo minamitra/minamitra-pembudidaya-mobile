@@ -5,6 +5,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class VoucherDetailView extends StatefulWidget {
   const VoucherDetailView({super.key});
@@ -233,6 +234,7 @@ class _VoucherDetailViewState extends State<VoucherDetailView> {
           child: ListView(
             children: [
               header(),
+              WidgetFeatureOnProgressComponent(),
               body(),
             ],
           ),

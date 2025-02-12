@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_shadow.dart';
@@ -6,6 +7,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/fish_market_detail/view/fish_market_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/fish_market_specific/view/fish_market_specific_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/search_sub_district/view/search_sub_district_view.dart';
 
 class FishMarketView extends StatefulWidget {
   const FishMarketView({super.key});
@@ -18,33 +20,36 @@ class _FishMarketViewState extends State<FishMarketView> {
   @override
   Widget build(BuildContext context) {
     Widget location() {
-      return Container(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 12.0,
-          vertical: 18.0,
-        ),
-        color: AppColor.primary[700],
-        child: Row(
-          children: [
-            Icon(
-              Icons.location_on,
-              color: AppColor.primary[400],
-            ),
-            const SizedBox(width: 16.0),
-            Expanded(
-              child: Text(
-                'Sumatera Selatan',
-                style: appTextTheme(context)
-                    .titleSmall
-                    ?.copyWith(color: AppColor.primary[100]),
+      return showSearchWidget(
+        context: context,
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 12.0,
+            vertical: 18.0,
+          ),
+          color: AppColor.primary[700],
+          child: Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                color: AppColor.primary[400],
               ),
-            ),
-            const SizedBox(width: 12.0),
-            Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: AppColor.primary[400],
-            ),
-          ],
+              const SizedBox(width: 16.0),
+              Expanded(
+                child: Text(
+                  'Sumatera Selatan',
+                  style: appTextTheme(context)
+                      .titleSmall
+                      ?.copyWith(color: AppColor.primary[100]),
+                ),
+              ),
+              const SizedBox(width: 12.0),
+              Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: AppColor.primary[400],
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -67,6 +72,12 @@ class _FishMarketViewState extends State<FishMarketView> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
                   color: AppColor.primary,
+                  image: const DecorationImage(
+                    image: NetworkImage(
+                      'https://www.worldanimalprotection.ca/cdn-cgi/image/width=1280,format=auto/siteassets/shutterstock_1899421132.jpg',
+                    ),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               const SizedBox(height: 8.0),

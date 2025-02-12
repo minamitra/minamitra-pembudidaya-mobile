@@ -3,11 +3,23 @@ import 'package:lottie/lottie.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/bill_payment/view/bill_payment_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/selected_payment.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class WaitingPaymentPage extends StatelessWidget {
-  const WaitingPaymentPage({super.key});
+  const WaitingPaymentPage(
+    this.selectedPayment,
+    this.notes,
+    this.nominal, {
+    super.key,
+  });
+
+  final SelectedPayment selectedPayment;
+  final String notes;
+  final int nominal;
 
   static RouteSettings routeSettings() {
     return const RouteSettings(name: '/waiting-payment-page');
@@ -94,13 +106,29 @@ class WaitingPaymentPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 36.0),
-                bodyItem('Tanggal, Waktu', '11 Des 2024, 19:00'),
+                bodyItem(
+                  'Tanggal, Waktu',
+                  AppConvertDateTime().dmyNamehhmm(DateTime.now()),
+                ),
                 const SizedBox(height: 18.0),
-                bodyItem('Metode Pembayaran', 'Transfer'),
+                bodyItem(
+                  'Metode Pembayaran',
+                  selectedPayment.paymentMethod == 'Tunai'
+                      ? 'Tunai'
+                      : 'Transfer',
+                ),
                 const SizedBox(height: 18.0),
-                bodyItem('Penerima', 'Mitra 3M'),
+                bodyItem(
+                  'Penerima',
+                  selectedPayment.paymentMethod == 'Tunai'
+                      ? 'Mitra 3M'
+                      : selectedPayment.accountName ?? 'Mitra 3M',
+                ),
                 const SizedBox(height: 18.0),
-                bodyItem('Catatan', 'Transfer tagihan kolam 1 Desember 2024'),
+                bodyItem(
+                  'Catatan',
+                  notes.handlingEmptyString(),
+                ),
                 const SizedBox(height: 36.0),
                 Container(
                   padding: const EdgeInsets.all(18.0),
@@ -119,7 +147,7 @@ class WaitingPaymentPage extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          'Rp 100.000',
+                          appConvertCurrency(nominal.toDouble()),
                           textAlign: TextAlign.end,
                           style: appTextTheme(context).titleSmall?.copyWith(
                                 color: AppColor.primary[600],

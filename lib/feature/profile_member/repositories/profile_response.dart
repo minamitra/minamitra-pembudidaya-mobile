@@ -44,6 +44,9 @@ class ProfileResponseData {
   String? addressVillageId;
   String? addressVillageName;
   String? farmingGroup;
+  String? type;
+  String? level;
+  int? totalPoin;
 
   ProfileResponseData({
     this.id,
@@ -72,6 +75,9 @@ class ProfileResponseData {
     this.addressVillageId,
     this.addressVillageName,
     this.farmingGroup,
+    this.type,
+    this.level,
+    this.totalPoin,
   });
 
   factory ProfileResponseData.fromJson(String str) =>
@@ -111,5 +117,8 @@ class ProfileResponseData {
         addressVillageId: json['address_village_id'],
         addressVillageName: json['address_village_name'],
         farmingGroup: json['farming_group'],
+        type: json['type'],
+        level: json['level'],
+        totalPoin: json['total_poin'],
       );
 }

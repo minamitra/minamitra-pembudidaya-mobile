@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
@@ -9,20 +10,29 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/bill_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/bill_payment/view/bill_payment_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/bill_payment_confirmation_payed/logic/bill_payment_confirmation_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/selected_payment.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/view/waiting_payment_page.dart';
 
 class BillPaymentConfirmationPayedView extends StatefulWidget {
-  const BillPaymentConfirmationPayedView(this.selectedPayment, {super.key});
+  const BillPaymentConfirmationPayedView(
+    this.selectedPayment,
+    this.totalBillPayed,
+    this.billResponseData, {
+    super.key,
+  });
 
   final SelectedPayment selectedPayment;
+  final int totalBillPayed;
+  final BillResponseData billResponseData;
 
   @override
   State<BillPaymentConfirmationPayedView> createState() =>
@@ -206,7 +216,7 @@ class _BillPaymentConfirmationPayedViewState
             ],
             transferBankItem(
               title: 'Total Bayar',
-              value: 'Rp 100.000',
+              value: appConvertCurrency(widget.totalBillPayed.toDouble()),
             ),
           ],
         ),
@@ -223,13 +233,13 @@ class _BillPaymentConfirmationPayedViewState
             uploadPaymentProof(
               context,
               (image, notes) {
-                Navigator.of(context).pushAndRemoveUntil(
-                  AppTransition.pushAndRemoveUntilTransition(
-                    const WaitingPaymentPage(),
-                    WaitingPaymentPage.routeSettings(),
-                  ),
-                  ModalRoute.withName(BillPaymentPage.routeSettings.name!),
-                );
+                context.read<BillPaymentConfirmationCubit>().payBill(
+                      billResponseData: widget.billResponseData,
+                      selectedPayment: widget.selectedPayment,
+                      totalBillPayed: widget.totalBillPayed,
+                      image: image,
+                      notes: notes,
+                    );
               },
             ),
           ),

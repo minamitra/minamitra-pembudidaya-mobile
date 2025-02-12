@@ -9,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dar
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/balance_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
@@ -735,6 +736,8 @@ class _CheckoutViewState extends State<CheckoutView> {
       SelectedPayment? selectedPayment,
       List<SelectedPayment> listRecommendationsPaymentData,
       List<SelectedPayment> listBankData,
+      BalanceResponse? balanceResponse,
+      double totalItemPrice,
     ) {
       return () {
         showModalBottomSheet(
@@ -815,11 +818,26 @@ class _CheckoutViewState extends State<CheckoutView> {
                         'Konfirmasi',
                         () {
                           if (tempSelectedPayment != null) {
-                            context
-                                .read<CheckoutCubit>()
-                                .onChangeSelectedPayment(
-                                  tempSelectedPayment!,
-                                );
+                            if (tempSelectedPayment?.name == 'Dompet3M') {
+                              if (totalItemPrice >
+                                  (balanceResponse?.data?.totalSaldoRemaining ??
+                                      0)) {
+                                AppTopSnackBar(context)
+                                    .showDanger('Saldo tidak mencukupi');
+                              } else {
+                                context
+                                    .read<CheckoutCubit>()
+                                    .onChangeSelectedPayment(
+                                      tempSelectedPayment!,
+                                    );
+                              }
+                            } else {
+                              context
+                                  .read<CheckoutCubit>()
+                                  .onChangeSelectedPayment(
+                                    tempSelectedPayment!,
+                                  );
+                            }
                           }
                           Navigator.of(context).pop();
                         },
@@ -839,12 +857,21 @@ class _CheckoutViewState extends State<CheckoutView> {
     Widget paymentMethod() {
       return BlocBuilder<CheckoutCubit, CheckoutState>(
         builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              120.0,
+              double.infinity,
+              0.0,
+            );
+          }
           return InkWell(
             onTap: paymentShowModal(
               context,
               state.selectedPayment,
               state.recommendationsPaymentData,
               state.bankData,
+              state.balanceResponse,
+              state.totalItemPrice,
             ),
             child: Container(
               color: AppColor.white,

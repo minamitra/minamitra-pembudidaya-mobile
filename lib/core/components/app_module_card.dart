@@ -30,7 +30,7 @@ class AppModuleCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: 10.0,
+          vertical: 8.0,
           horizontal: 6.0,
         ),
         width: width,

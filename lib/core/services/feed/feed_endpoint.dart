@@ -8,6 +8,8 @@ class FeedEndpoint {
       path: 'mitra/fishfood/data',
       queryParameters: {
         'type': type,
+        'pagination_bool': 'false',
+        'sort': 'name',
       },
     );
   }
@@ -19,6 +21,7 @@ class FeedEndpoint {
       path: 'mitra/fishseed/data',
       queryParameters: {
         'pagination_bool': 'false',
+        'sort': 'name',
         if (createdBy != null) 'create_by_type': createdBy,
       },
     );
@@ -33,6 +36,10 @@ class FeedEndpoint {
   Uri getCommodity() {
     return createUrl(
       path: 'mitra/commodity/data',
+      queryParameters: {
+        'sort': 'name',
+        'pagination_bool': 'false',
+      },
     );
   }
 }

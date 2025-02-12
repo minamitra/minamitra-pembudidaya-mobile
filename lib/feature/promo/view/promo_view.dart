@@ -26,15 +26,15 @@ class _PromoViewState extends State<PromoView> {
     Widget itemProduct(ProductsResponseData data) {
       return InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            AppTransition.pushTransition(
-              ProductDetailPage(
-                data,
-                isProductPromo: true,
-              ),
-              ProductDetailPage.routeSettings(),
-            ),
-          );
+          // Navigator.of(context).push(
+          //   AppTransition.pushTransition(
+          //     ProductDetailPage(
+          //       data,
+          //       isProductPromo: true,
+          //     ),
+          //     ProductDetailPage.routeSettings(),
+          //   ),
+          // );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -48,8 +48,8 @@ class _LoginViewState extends State<LoginView> {
           child: Align(
             alignment: Alignment.center,
             child: Image.asset(
-              AppAssets.logoIcon,
-              height: 56.0,
+              AppAssets.newLogoIcon2,
+              height: 28.0,
             ),
           ),
         ),
@@ -157,10 +157,12 @@ class _LoginViewState extends State<LoginView> {
                 () {
                   if (formKey.currentState!.validate()) {
                     SystemChannels.textInput.invokeMethod('TextInput.hide');
-                    context.read<LoginCubit>().login(LoginRequest(
-                          username: emailController.text,
-                          password: passwordController.text,
-                        ),);
+                    context.read<LoginCubit>().login(
+                          LoginRequest(
+                            username: emailController.text,
+                            password: passwordController.text,
+                          ),
+                        );
                     return;
                   }
                 },
@@ -183,10 +185,12 @@ class _LoginViewState extends State<LoginView> {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context).push(AppTransition.pushTransition(
-                const RegisterPage(),
-                RegisterPage.routeSettings,
-              ),);
+              Navigator.of(context).push(
+                AppTransition.pushTransition(
+                  const RegisterPage(),
+                  RegisterPage.routeSettings,
+                ),
+              );
             },
             child: Text(
               'Daftar',

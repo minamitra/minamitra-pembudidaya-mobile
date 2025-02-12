@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/fish_market_specific/view/fish_market_specific_view.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class FishMarketSpecificPage extends StatelessWidget {
   const FishMarketSpecificPage({super.key});
@@ -15,7 +16,7 @@ class FishMarketSpecificPage extends StatelessWidget {
         context,
         'Pasar X',
       ),
-      body: FishMarketSpecificView(),
+      body: WidgetFeatureOnProgress(child: FishMarketSpecificView()),
     );
   }
 }

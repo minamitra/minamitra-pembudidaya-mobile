@@ -5,8 +5,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/balance/balance_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/bill/bill_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/home/home_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/literacy_information/literacy_information_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/point/point_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pond/pond_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/profile/profile_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
@@ -23,12 +28,17 @@ class HomePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => HomeCubit(HomeServiceImpl.create())..init(),
+          create: (context) => HomeCubit(
+            HomeServiceImpl.create(),
+            BalanceServiceImpl.create(),
+            LiteracyInformationServiceImpl.create(),
+            PointServiceImpl.create(),
+          )..init(),
         ),
-        BlocProvider<ActivityCubit>(
-          create: (context) =>
-              ActivityCubit(PondServiceImpl.create())..init(limit: '1'),
-        ),
+        // BlocProvider<ActivityCubit>(
+        //   create: (context) =>
+        //       ActivityCubit(PondServiceImpl.create())..init(limit: '1'),
+        // ),
       ],
       child: MultiBlocListener(
         listeners: [
@@ -36,7 +46,6 @@ class HomePage extends StatelessWidget {
             listener: (context, state) {
               if (state.status.isError) {
                 if (state.errorMessage == 'TOKEN_EXPIRED') {
-                  log('token expired execute');
                   RepositoryProvider.of<AuthenticationRepository>(context)
                       .logout();
                 } else {
@@ -45,18 +54,18 @@ class HomePage extends StatelessWidget {
               }
             },
           ),
-          BlocListener<ActivityCubit, ActivityState>(
-            listener: (context, state) {
-              if (state.status.isError) {
-                if (state.errorMessage == 'TOKEN_EXPIRED') {
-                  RepositoryProvider.of<AuthenticationRepository>(context)
-                      .logout();
-                } else {
-                  AppTopSnackBar(context).showDanger(state.errorMessage);
-                }
-              }
-            },
-          ),
+          // BlocListener<ActivityCubit, ActivityState>(
+          //   listener: (context, state) {
+          //     if (state.status.isError) {
+          //       if (state.errorMessage == 'TOKEN_EXPIRED') {
+          //         RepositoryProvider.of<AuthenticationRepository>(context)
+          //             .logout();
+          //       } else {
+          //         AppTopSnackBar(context).showDanger(state.errorMessage);
+          //       }
+          //     }
+          //   },
+          // ),
         ],
         child: Scaffold(
           appBar: appDefaultAppBar(

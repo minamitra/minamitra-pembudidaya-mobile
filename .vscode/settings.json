@@ -1,17 +1,13 @@
 {
-  "dart.flutterSdkPath": ".fvm/versions/3.22.1",
+  "dart.flutterSdkPath": ".fvm/versions/3.22.0",
   "search.exclude": {
     "**/.fvm": true
   },
   "files.watcherExclude": {
     "**/.fvm": true
   },
-  "editor.rulers": [
-      
-  ],
+  "editor.rulers": [],
   "[dart]": {
-        "editor.rulers": [
-
-    ],
-    },
+    "editor.rulers": []
+  }
 }

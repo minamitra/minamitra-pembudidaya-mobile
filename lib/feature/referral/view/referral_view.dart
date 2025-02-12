@@ -26,7 +26,7 @@ class _ReferralViewState extends State<ReferralView> {
         ),
         const SizedBox(height: 18.0),
         Text(
-          'Undang teman dapat koin',
+          'Undang teman untuk gabung',
           textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
@@ -35,7 +35,7 @@ class _ReferralViewState extends State<ReferralView> {
         ),
         const SizedBox(height: 8.0),
         Text(
-          'Untuk setiap teman yang bergabung melalui undangan, kamu mendapatkan 10 koin',
+          'Share aplikasi Mitra3M ini ke teman temanmu dan bantu kami untuk lebih meningkatan aplikasi ini',
           textAlign: TextAlign.center,
           style: Theme.of(context)
               .textTheme
@@ -43,65 +43,65 @@ class _ReferralViewState extends State<ReferralView> {
               ?.copyWith(color: AppColor.neutral[500]),
         ),
         const SizedBox(height: 36.0),
-        Text(
-          'Kode Unik Kamu',
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleSmall,
-        ),
+        // Text(
+        //   'Kode Unik Kamu',
+        //   textAlign: TextAlign.center,
+        //   style: Theme.of(context).textTheme.titleSmall,
+        // ),
         const SizedBox(height: 18.0),
-        DottedBorder(
-          color: AppColor.primary[500]!,
-          radius: const Radius.circular(8.0),
-          borderType: BorderType.RRect,
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 18.0,
-              vertical: 12.0,
-            ),
-            color: const Color(0xffF8FAFC),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'ABC1234',
-                    style: appTextTheme(context)
-                        .titleMedium
-                        ?.copyWith(color: AppColor.primary[900]),
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    Clipboard.setData(const ClipboardData(text: 'ABC1234'))
-                        .then((_) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Referral berhasil disalin'),
-                        ),
-                      );
-                    });
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 16.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColor.primary[600],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Text(
-                      'Salin',
-                      style: appTextTheme(context).titleSmall?.copyWith(
-                            color: AppColor.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        // DottedBorder(
+        //   color: AppColor.primary[500]!,
+        //   radius: const Radius.circular(8.0),
+        //   borderType: BorderType.RRect,
+        //   child: Container(
+        //     padding: const EdgeInsets.symmetric(
+        //       horizontal: 18.0,
+        //       vertical: 12.0,
+        //     ),
+        //     color: const Color(0xffF8FAFC),
+        //     child: Row(
+        //       children: [
+        //         Expanded(
+        //           child: Text(
+        //             'ABC1234',
+        //             style: appTextTheme(context)
+        //                 .titleMedium
+        //                 ?.copyWith(color: AppColor.primary[900]),
+        //           ),
+        //         ),
+        //         InkWell(
+        //           onTap: () {
+        //             Clipboard.setData(const ClipboardData(text: 'ABC1234'))
+        //                 .then((_) {
+        //               ScaffoldMessenger.of(context).showSnackBar(
+        //                 const SnackBar(
+        //                   content: Text('Referral berhasil disalin'),
+        //                 ),
+        //               );
+        //             });
+        //           },
+        //           child: Container(
+        //             padding: const EdgeInsets.symmetric(
+        //               vertical: 8.0,
+        //               horizontal: 16.0,
+        //             ),
+        //             decoration: BoxDecoration(
+        //               color: AppColor.primary[600],
+        //               borderRadius: BorderRadius.circular(8.0),
+        //             ),
+        //             child: Text(
+        //               'Salin',
+        //               style: appTextTheme(context).titleSmall?.copyWith(
+        //                     color: AppColor.white,
+        //                     fontWeight: FontWeight.w500,
+        //                   ),
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
         const SizedBox(height: 18.0),
       ];
     }
@@ -240,7 +240,7 @@ class _ReferralViewState extends State<ReferralView> {
           'Bagikan',
           () {
             Share.share(
-              'Yuk ikut gabung Mitra3M \nPakai kode berikut ini untuk dapatkan keuntungan menarik lainnya :\nABC1234\nhttps://commander.mitra3m.id/ ',
+              'Yuk ikut gabung Mitra3M \nDapatkan fitur budidaya lengkap, pendanaan serta fitur fitur menarik lainnya seputar budidaya ikan.\nSegera download aplikasi Mitra3M, kunjungi kami di https://solusi3m.com/ ',
             );
           },
           prefixIcon: const Icon(
@@ -261,8 +261,8 @@ class _ReferralViewState extends State<ReferralView> {
             padding: const EdgeInsets.symmetric(horizontal: 18.0),
             children: [
               ...header(),
-              ...guide(),
-              ...statistic(),
+              // ...guide(),
+              // ...statistic(),
             ],
           ),
         ),

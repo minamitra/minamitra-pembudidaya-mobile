@@ -31,22 +31,25 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       sellerNotesController: TextEditingController(),
       sellTotalPriceController: TextEditingController(),
     );
-    emit(state.copyWith(
-      status: GlobalState.loaded,
-      buyerData: data != null ? data.buyerJsonArray : [initData],
-    ),);
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        buyerData: data != null ? data.buyerJsonArray : [initData],
+      ),
+    );
   }
 
   void onChnageBuyerType(int index, bool isBuyerFrom3m) {
     emit(state.copyWith(status: GlobalState.onUpdating));
     final List<BuyerData> buyerData = state.buyerData;
     buyerData[index] = buyerData[index].copyWith(
-        isBuyerFrom3m: isBuyerFrom3m,
-        buyerID: null,
-        buyerName: '',
-        sellRequest: 0,
-        sellUnitPrice: 0,
-        sellerNotes: '',);
+      isBuyerFrom3m: isBuyerFrom3m,
+      buyerID: null,
+      buyerName: '',
+      sellRequest: 0,
+      sellUnitPrice: 0,
+      sellerNotes: '',
+    );
     emit(state.copyWith(buyerData: buyerData, status: GlobalState.loaded));
   }
 
@@ -85,17 +88,19 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       sellerNotesController: TextEditingController(),
       sellTotalPriceController: TextEditingController(),
     );
-    emit(state.copyWith(
-      status: GlobalState.loaded,
-      buyerData: [...state.buyerData, initData],
-    ),);
+    emit(
+      state.copyWith(
+        status: GlobalState.loaded,
+        buyerData: [...state.buyerData, initData],
+      ),
+    );
   }
 
   void createHarvest({
     required String id,
     required DateTime harvestDate,
-    required int harvestFishWeight,
-    required int totalHarvestActual,
+    required double harvestFishWeight,
+    required double totalHarvestActual,
     required String harvestNotes,
     required List<String> images,
   }) async {
@@ -103,26 +108,32 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     // Validate every data
     for (var element in state.buyerData) {
       if (element.buyerName.isEmpty) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Nama pembeli tidak boleh kosong',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Nama pembeli tidak boleh kosong',
+          ),
+        );
         return;
       }
 
       if (element.sellRequest == 0) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Jumlah permintaan tidak boleh kosong',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Jumlah permintaan tidak boleh kosong',
+          ),
+        );
         return;
       }
 
       if (element.sellUnitPrice == 0) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Harga satuan tidak boleh kosong',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Harga satuan tidak boleh kosong',
+          ),
+        );
         return;
       }
 
@@ -130,10 +141,12 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     }
 
     if (totalSellHarvestFromBuyer > totalHarvestActual) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: 'Total penjualan tidak boleh melebihi total panen',
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: 'Total penjualan tidak boleh melebihi total panen',
+        ),
+      );
       return;
     }
 
@@ -142,8 +155,8 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       HarvestBody body = HarvestBody(
         id: int.parse(id),
         actualPanenDate: harvestDate.toIso8601String(),
-        actualPanenBobot: harvestFishWeight.toDouble(),
-        actualPanenTonase: totalHarvestActual.toDouble(),
+        actualPanenBobot: harvestFishWeight,
+        actualPanenTonase: totalHarvestActual,
         panenNote: harvestNotes,
         panenAttachmentJsonArray: images,
         buyerJsonArray: state.buyerData,
@@ -153,50 +166,60 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
   Future<void> doneHarvest({
     required String id,
     required DateTime harvestDate,
-    required int harvestFishWeight,
-    required int totalHarvestActual,
+    required double harvestFishWeight,
+    required double totalHarvestActual,
     required String harvestNotes,
     required List<String> images,
   }) async {
     double totalSellHarvestFromBuyer = 0;
     for (var element in state.buyerData) {
       if (element.buyerName.isEmpty) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Nama pembeli tidak boleh kosong',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Nama pembeli tidak boleh kosong',
+          ),
+        );
         return;
       }
 
       if (element.sellRequest == 0) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Jumlah permintaan tidak boleh kosong',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Jumlah permintaan tidak boleh kosong',
+          ),
+        );
         return;
       }
 
       if (element.sellUnitPrice == 0) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Harga satuan tidak boleh kosong',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Harga satuan tidak boleh kosong',
+          ),
+        );
         return;
       }
 
@@ -204,10 +227,12 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
     }
 
     if (totalSellHarvestFromBuyer > totalHarvestActual) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: 'Total penjualan tidak boleh melebihi total panen',
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: 'Total penjualan tidak boleh melebihi total panen',
+        ),
+      );
       return;
     }
 
@@ -216,8 +241,8 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       HarvestBody body = HarvestBody(
         id: int.parse(id),
         actualPanenDate: harvestDate.toIso8601String(),
-        actualPanenBobot: harvestFishWeight.toDouble(),
-        actualPanenTonase: totalHarvestActual.toDouble(),
+        actualPanenBobot: harvestFishWeight,
+        actualPanenTonase: totalHarvestActual,
         panenNote: harvestNotes,
         panenAttachmentJsonArray: images,
         buyerJsonArray: state.buyerData,
@@ -228,16 +253,20 @@ class ActivityCycleAddHarvestCubit extends Cubit<ActivityCycleAddHarvestState> {
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

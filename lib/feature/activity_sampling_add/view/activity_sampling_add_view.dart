@@ -269,6 +269,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
                               final document = await pickDocumentImage(
                                 bottomSheetContext,
                                 ImageSource.camera,
+                                typeValidations: ['jpg', 'jpeg', 'png', 'img'],
                               );
                               if (document != null) {
                                 await document.readAsBytes().then((image) {
@@ -283,6 +284,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
                               final document = await pickDocumentImage(
                                 bottomSheetContext,
                                 ImageSource.gallery,
+                                typeValidations: ['jpg', 'jpeg', 'png', 'img'],
                               );
                               if (document != null) {
                                 await document.readAsBytes().then((image) {
@@ -308,7 +310,7 @@ class _ActivitySamplingAddViewState extends State<ActivitySamplingAddView> {
           ),
           const SizedBox(height: 8.0),
           Text(
-            'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
+            'Unggah file .jpg, .jpeg, .png, .img ukuran maks 2MB',
             style: appTextTheme(context).labelLarge?.copyWith(
                   color: AppColor.neutral[500],
                 ),

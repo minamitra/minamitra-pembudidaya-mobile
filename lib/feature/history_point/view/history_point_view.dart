@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/logic/history_point_cubit.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/history_point_detail/view/history_point_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/widget_badges.dart';
 
 class HistoryPointView extends StatefulWidget {
   const HistoryPointView({super.key});
@@ -23,11 +25,46 @@ class _HistoryPointViewState extends State<HistoryPointView> {
   final TextEditingController searchController = TextEditingController();
 
   List<String> listFilter = [
-    'Semua',
+    'Selesai',
     'Tarik Tunai',
     'Konversi Saldo',
-    'Aktivitas',
+    // 'Aktivitas',
   ];
+
+  String generateIcon(String title) {
+    if (title.contains('Konversi Saldo')) {
+      return AppAssets.walletWhiteIcon;
+    }
+    if (title.contains('Tarik Tunai')) {
+      return AppAssets.withdrawalIcon;
+    }
+    return AppAssets.activityIcon;
+  }
+
+  Color generateColor(String title) {
+    if (title.contains('Konversi Saldo')) {
+      return AppColor.primary[500]!;
+    }
+    if (title.contains('Tarik Tunai')) {
+      return AppColor.green[500]!;
+    }
+    return AppColor.secondary[900]!;
+  }
+
+  StatusBadge generateStatus(String status) {
+    switch (status) {
+      case 'Pengajuan':
+        return StatusBadge.orange;
+      case 'Diproses':
+        return StatusBadge.orange;
+      case 'Selesai':
+        return StatusBadge.green;
+      case 'Ditolak':
+        return StatusBadge.red;
+      default:
+        return StatusBadge.orange;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +150,8 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                         ),
                         selected: state.selectedFilter == listFilter[index],
                         onSelected: (value) {
-                          if (state.status.isLoading) {
+                          if (state.status.isLoading ||
+                              state.selectedFilter == listFilter[index]) {
                             return;
                           }
                           context
@@ -147,21 +185,27 @@ class _HistoryPointViewState extends State<HistoryPointView> {
       required String title,
       required String dateTime,
       required int point,
+      required String? icon,
+      required Color? iconColor,
       String? balance,
+      String? status,
     }) {
       return Container(
         padding: const EdgeInsets.all(18.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               padding: const EdgeInsets.all(8.0),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColor.primary[500],
+                color: iconColor ?? AppColor.primary[500]!,
               ),
-              child: const Icon(
-                Icons.wallet,
-                color: AppColor.white,
+              child: Image.asset(
+                icon ?? AppAssets.activityIcon,
+                width: 24.0,
+                height: 24.0,
+                fit: BoxFit.contain,
               ),
             ),
             const SizedBox(width: 12.0),
@@ -169,11 +213,25 @@ class _HistoryPointViewState extends State<HistoryPointView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: appTextTheme(context)
-                        .titleSmall
-                        ?.copyWith(fontWeight: FontWeight.w700),
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: appTextTheme(context)
+                              .titleSmall
+                              ?.copyWith(fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      if (status != null) const SizedBox(width: 8.0),
+                      if (status != null)
+                        AppBadges(
+                          status: generateStatus(status),
+                          text: status,
+                        ),
+                    ],
                   ),
                   const SizedBox(height: 10.0),
                   Text(
@@ -185,34 +243,36 @@ class _HistoryPointViewState extends State<HistoryPointView> {
                 ],
               ),
             ),
-            balance != null
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        " ${point <= 0 ? "-" : "+"} $point poin",
-                        style: appTextTheme(context)
-                            .titleSmall
-                            ?.copyWith(color: AppColor.accent[900]),
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        '+ Rp 50,000',
-                        style: appTextTheme(context)
-                            .titleSmall
-                            ?.copyWith(color: AppColor.secondary[900]),
-                      ),
-                    ],
-                  )
-                : const SizedBox(),
+            Column(
+              crossAxisAlignment: balance != null
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
+              mainAxisAlignment: balance != null
+                  ? MainAxisAlignment.spaceAround
+                  : MainAxisAlignment.start,
+              children: [
+                Text(
+                  " ${point <= 0 ? "" : "+"} $point poin",
+                  style: appTextTheme(context)
+                      .titleSmall
+                      ?.copyWith(color: AppColor.accent[900]),
+                ),
+                if (balance != null) const SizedBox(height: 10.0),
+                if (balance != null)
+                  Text(
+                    balance,
+                    style: appTextTheme(context)
+                        .titleSmall
+                        ?.copyWith(color: AppColor.secondary[900]),
+                  ),
+              ],
+            ),
           ],
         ),
       );
     }
 
     Widget listHistory() {
-      // If data is empty
-
       return BlocBuilder<HistoryPointCubit, HistoryPointState>(
         builder: (context, state) {
           if (state.status.isLoading) {
@@ -233,42 +293,170 @@ class _HistoryPointViewState extends State<HistoryPointView> {
               },
             );
           }
-          // return const Center(
-          //   child: AppEmptyData(
-          //     "Oops, Belum Ada Riwayat",
-          //     isCenter: true,
-          //     descriptions:
-          //         "Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ",
-          //   ),
-          // );
 
-          return ListView.separated(
-            shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: 10,
-            separatorBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 18.0),
-                child: AppDividerSmall(),
-              );
-            },
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    AppTransition.pushTransition(
-                      const HistoryPointDetailPage(),
-                      HistoryPointDetailPage.route,
-                    ),
+          return BlocBuilder<HistoryPointCubit, HistoryPointState>(
+            builder: (context, state) {
+              if (state.selectedFilter == 'Selesai') {
+                if (state.pointHistoryResponse?.data?.isEmpty ?? true) {
+                  return const AppEmptyData(
+                    'Oops, Belum Ada Riwayat',
+                    descriptions:
+                        'Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ',
+                    isCenter: true,
                   );
-                },
-                child: listHistoryItem(
-                  title: 'Tarik Tunai',
-                  dateTime: '12 Januari 2021',
-                  point: 100,
-                  balance: '+ Rp 50,000',
-                ),
-              );
+                }
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: state.pointHistoryResponse?.data?.length ?? 0,
+                  separatorBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: AppDividerSmall(),
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {
+                        // Navigator.of(context).push(
+                        //   AppTransition.pushTransition(
+                        //     const HistoryPointDetailPage(),
+                        //     HistoryPointDetailPage.route,
+                        //   ),
+                        // );
+                      },
+                      child: listHistoryItem(
+                        title: state.pointHistoryResponse?.data?[index].desc
+                                .handlingEmptyString() ??
+                            '-',
+                        dateTime: AppConvertDateTime().dmyNamehhmm(
+                          state.pointHistoryResponse?.data?[index].datetime ??
+                              DateTime.now(),
+                        ),
+                        point: state.pointHistoryResponse?.data?[index].type ==
+                                'in'
+                            ? (state.pointHistoryResponse?.data?[index].poin ??
+                                0)
+                            : ((state.pointHistoryResponse?.data?[index].poin ??
+                                    0) *
+                                -1),
+                        balance: state
+                                    .pointHistoryResponse?.data?[index].type ==
+                                'out'
+                            ? '+ ${appConvertCurrency((state.pointHistoryResponse?.data?[index].poin ?? 0) * 100)}'
+                            : null,
+                        icon: generateIcon(
+                          state.pointHistoryResponse?.data?[index].desc
+                                  .handlingEmptyString() ??
+                              '-',
+                        ),
+                        iconColor: generateColor(
+                          state.pointHistoryResponse?.data?[index].desc
+                                  .handlingEmptyString() ??
+                              '-',
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+
+              if (state.selectedFilter == 'Tarik Tunai') {
+                if (state.withdrawalData?.data?.isEmpty ?? true) {
+                  return const AppEmptyData(
+                    'Oops, Belum Ada Riwayat',
+                    descriptions:
+                        'Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ',
+                    isCenter: true,
+                  );
+                }
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: state.withdrawalData?.data?.length ?? 0,
+                  separatorBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: AppDividerSmall(),
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {},
+                      child: listHistoryItem(
+                        title: state.withdrawalData?.data?[index].type
+                                .handlingEmptyString() ??
+                            '-',
+                        dateTime: AppConvertDateTime().dmyNamehhmm(
+                          state.withdrawalData?.data?[index].createDatetime ??
+                              DateTime.now(),
+                        ),
+                        point:
+                            ((state.withdrawalData?.data?[index].nominalPoin ??
+                                    0) *
+                                -1),
+                        balance:
+                            '+ ${appConvertCurrency((state.withdrawalData?.data?[index].nominalRp ?? 0).toDouble())}',
+                        icon: AppAssets.withdrawalIcon,
+                        iconColor: AppColor.green[500],
+                        status: state.withdrawalData?.data?[index].status
+                            .handlingEmptyString(),
+                      ),
+                    );
+                  },
+                );
+              }
+
+              if (state.selectedFilter == 'Konversi Saldo') {
+                if (state.convertBalanceData?.data?.isEmpty ?? true) {
+                  return const AppEmptyData(
+                    'Oops, Belum Ada Riwayat',
+                    descriptions:
+                        'Tunggu apa lagi? Selesaikan aktivitas dan kumpulkan poin untuk ditukarkan ',
+                    isCenter: true,
+                  );
+                }
+
+                return ListView.separated(
+                  shrinkWrap: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  itemCount: state.convertBalanceData?.data?.length ?? 0,
+                  separatorBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                      child: AppDividerSmall(),
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return InkWell(
+                      onTap: () {},
+                      child: listHistoryItem(
+                        title: state.convertBalanceData?.data?[index].type
+                                .handlingEmptyString() ??
+                            '-',
+                        dateTime: AppConvertDateTime().dmyNamehhmm(
+                          state.convertBalanceData?.data?[index]
+                                  .createDatetime ??
+                              DateTime.now(),
+                        ),
+                        point: ((state.convertBalanceData?.data?[index]
+                                    .nominalPoin ??
+                                0) *
+                            -1),
+                        balance:
+                            '+ ${appConvertCurrency((state.convertBalanceData?.data?[index].nominalRp ?? 0).toDouble())}',
+                        icon: AppAssets.walletWhiteIcon,
+                        iconColor: AppColor.primary[500],
+                        status: state.convertBalanceData?.data?[index].status,
+                      ),
+                    );
+                  },
+                );
+              }
+
+              return const SizedBox();
             },
           );
         },

@@ -6,12 +6,19 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 part 'point_v2_state.dart';
 
 class PointV2Cubit extends Cubit<PointV2State> {
-  PointV2Cubit(this.service) : super(const PointV2State());
-
-  final PointService service;
+  PointV2Cubit() : super(const PointV2State());
 
   void onChangeGridExchangeValue(int index) {
     emit(state.copyWith(status: GlobalState.onUpdating));
+    if (index == state.selectedGridExchange) {
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          selectedGridExchange: -1,
+        ),
+      );
+      return;
+    }
     emit(
       state.copyWith(
         status: GlobalState.loaded,

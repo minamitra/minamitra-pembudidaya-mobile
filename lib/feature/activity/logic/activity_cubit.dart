@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:equatable/equatable.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/meta_response.dart';

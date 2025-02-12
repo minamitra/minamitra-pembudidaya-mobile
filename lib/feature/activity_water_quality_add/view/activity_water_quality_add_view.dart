@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +9,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_card.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_image_picker.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/multi_image/multi_image_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/pick_image_services/pick_image_service.dart';
@@ -17,6 +17,7 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_image.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/water_quality_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/logics/activity_water_quality_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_water_quality_add/repositories/add_water_quality_payload.dart';
@@ -411,62 +412,88 @@ class _ActivityWaterQualityAddViewState
     }
 
     Widget waterColor() {
-      return AppValidatorTextField(
-        controller: waterColorController,
-        isMandatory: true,
-        withUpperLabel: true,
-        readOnly: true,
-        labelText: 'Warna Air',
-        hintText: 'Pilih Air',
-        suffixWidget: const Padding(
-          padding: EdgeInsets.only(right: 18.0),
-          child: Icon(Icons.arrow_drop_down_rounded),
-        ),
-        suffixConstraints: const BoxConstraints(),
-        validator: (value) {
-          if (value?.isEmpty ?? true) {
-            return 'Warna air tidak boleh kosong';
+      return BlocBuilder<ActivityWaterQualityAddCubit,
+          ActivityWaterQualityAddState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              55.0,
+              double.infinity,
+              8.0,
+            );
           }
-          return null;
+
+          return AppValidatorTextField(
+            controller: waterColorController,
+            isMandatory: true,
+            withUpperLabel: true,
+            readOnly: true,
+            labelText: 'Warna Air',
+            hintText: 'Pilih Air',
+            suffixWidget: const Padding(
+              padding: EdgeInsets.only(right: 18.0),
+              child: Icon(Icons.arrow_drop_down_rounded),
+            ),
+            suffixConstraints: const BoxConstraints(),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Warna air tidak boleh kosong';
+              }
+              return null;
+            },
+            onTap: appBottomSheetShowModal(
+              context,
+              'Pilih warna air',
+              state.waterColor.map((element) => element.name ?? '').toList(),
+              (value) {
+                waterColorController.text = value;
+              },
+            ),
+          );
         },
-        onTap: appBottomSheetShowModal(
-          context,
-          'Pilih warna air',
-          ['Cokelat', 'Biru', 'Bening'],
-          (value) {
-            waterColorController.text = value;
-          },
-        ),
       );
     }
 
     Widget weather() {
-      return AppValidatorTextField(
-        controller: weatherController,
-        isMandatory: true,
-        withUpperLabel: true,
-        readOnly: true,
-        labelText: 'Cuaca',
-        hintText: 'Pilih cuaca',
-        suffixWidget: const Padding(
-          padding: EdgeInsets.only(right: 18.0),
-          child: Icon(Icons.arrow_drop_down_rounded),
-        ),
-        suffixConstraints: const BoxConstraints(),
-        validator: (value) {
-          if (value?.isEmpty ?? true) {
-            return 'Cuaca tidak boleh kosong';
+      return BlocBuilder<ActivityWaterQualityAddCubit,
+          ActivityWaterQualityAddState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              55.0,
+              double.infinity,
+              8.0,
+            );
           }
-          return null;
+
+          return AppValidatorTextField(
+            controller: weatherController,
+            isMandatory: true,
+            withUpperLabel: true,
+            readOnly: true,
+            labelText: 'Cuaca',
+            hintText: 'Pilih cuaca',
+            suffixWidget: const Padding(
+              padding: EdgeInsets.only(right: 18.0),
+              child: Icon(Icons.arrow_drop_down_rounded),
+            ),
+            suffixConstraints: const BoxConstraints(),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Cuaca tidak boleh kosong';
+              }
+              return null;
+            },
+            onTap: appBottomSheetShowModal(
+              context,
+              'Pilih cuaca',
+              state.waterWeather.map((element) => element.name ?? '').toList(),
+              (value) {
+                weatherController.text = value;
+              },
+            ),
+          );
         },
-        onTap: appBottomSheetShowModal(
-          context,
-          'Pilih cuaca',
-          ['Mendung', 'Badai', 'Cerah'],
-          (value) {
-            weatherController.text = value;
-          },
-        ),
       );
     }
 
@@ -518,6 +545,7 @@ class _ActivityWaterQualityAddViewState
                               final document = await pickDocumentImage(
                                 bottomSheetContext,
                                 ImageSource.camera,
+                                typeValidations: ['jpg', 'jpeg', 'png', 'img'],
                               );
                               if (document != null) {
                                 await document.readAsBytes().then((image) {
@@ -532,6 +560,7 @@ class _ActivityWaterQualityAddViewState
                               final document = await pickDocumentImage(
                                 bottomSheetContext,
                                 ImageSource.gallery,
+                                typeValidations: ['jpg', 'jpeg', 'png', 'img'],
                               );
                               if (document != null) {
                                 await document.readAsBytes().then((image) {
@@ -557,7 +586,7 @@ class _ActivityWaterQualityAddViewState
           ),
           const SizedBox(height: 8.0),
           Text(
-            'Unggah file .jpg, .jpeg, .png, .img, .pdf, .doc, ukuran maks 2MB',
+            'Unggah file .jpg, .jpeg, .png, .img ukuran maks 2MB',
             style: appTextTheme(context).labelLarge?.copyWith(
                   color: AppColor.neutral[500],
                 ),

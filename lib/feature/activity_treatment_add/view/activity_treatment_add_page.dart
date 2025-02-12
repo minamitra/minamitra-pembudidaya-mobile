@@ -52,7 +52,7 @@ class ActivityTreatmentAddPage extends StatelessWidget {
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          isEdit ? 'Edit Perlakuan' : 'Tambah Perlakuaan',
+          isEdit ? 'Edit Perlakuan' : 'Tambah Perlakuan',
         ),
         body:
             BlocConsumer<ActivityTreatmentAddCubit, ActivityTreatmentAddState>(

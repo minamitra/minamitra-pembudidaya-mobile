@@ -93,6 +93,8 @@ dependencies:
   animate_do: ^3.3.4
   confetti: ^0.8.0
   url_launcher: ^6.3.1
+  firebase_app_check: ^0.2.2
+  text_scroll: ^0.2.0
 
 dev_dependencies:
   flutter_test:

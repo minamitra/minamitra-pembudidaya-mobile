@@ -13,7 +13,10 @@ import 'package:minamitra_pembudidaya_mobile/feature/add_pond/repositories/villa
 abstract class RefService {
   Future<BaseResponse<ProvinceResponse>> province();
   Future<BaseResponse<DistrictResponse>> district(String provinceId);
-  Future<BaseResponse<SubDistrictResponse>> subDistrict(String districtId);
+  Future<BaseResponse<SubDistrictResponse>> subDistrict(
+    String? districtId, {
+    String? search,
+  });
   Future<BaseResponse<VillageResponse>> village(String subDistrictId);
 }
 
@@ -38,7 +41,6 @@ class RefServiceImpl implements RefService {
 
   @override
   Future<BaseResponse<DistrictResponse>> district(String provinceID) async {
-    log('provinceID running');
     final uri = endpoint.getDistrict(provinceID);
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
@@ -61,8 +63,13 @@ class RefServiceImpl implements RefService {
 
   @override
   Future<BaseResponse<SubDistrictResponse>> subDistrict(
-      String districtID,) async {
-    final uri = endpoint.getSubDistrict(districtID);
+    String? districtID, {
+    String? search,
+  }) async {
+    final uri = endpoint.getSubDistrict(
+      districtID,
+      search: search,
+    );
     final header = await headerProvider.headers;
     final response = await httpClient.get(uri, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);

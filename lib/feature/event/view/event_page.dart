@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/event/view/event_view.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/event_history/view/event_history_page.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class EventPage extends StatelessWidget {
   const EventPage({super.key});
@@ -34,7 +35,7 @@ class EventPage extends StatelessWidget {
           const SizedBox(width: 18.0),
         ],
       ),
-      body: EventView(),
+      body: WidgetFeatureOnProgress(child: EventView()),
     );
   }
 }

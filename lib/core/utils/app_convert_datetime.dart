@@ -31,6 +31,10 @@ class AppConvertDateTime {
     return DateFormat('dd MMMM yyyy', countryCode).format(dateTime);
   }
 
+  String dmyNamehhmm(DateTime dateTime) {
+    return DateFormat('dd MMM yyyy, HH:mm', countryCode).format(dateTime);
+  }
+
   String ddmmyyyyhhmm(DateTime dateTime) {
     return DateFormat('dd-MM-yyyy HH:mm', countryCode).format(dateTime);
   }

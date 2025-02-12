@@ -5,6 +5,9 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/authentication/authentication_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/bill/bill_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/plafon_distribution/plafon_distribution_service.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/point/point_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile/logic/profile_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile/view/profile_view.dart';
@@ -23,7 +26,12 @@ class ProfilePage extends StatelessWidget {
         SimpleFontelicoProgressDialog(context: context);
 
     return BlocProvider(
-      create: (context) => ProfileCubit(AuthenticationServiceImpl.create()),
+      create: (context) => ProfileCubit(
+        AuthenticationServiceImpl.create(),
+        BillServiceImpl.create(),
+        PlafonDistributionServiceImpl.create(),
+        PointServiceImpl.create(),
+      )..init(),
       child: BlocListener<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state.status.isError) {

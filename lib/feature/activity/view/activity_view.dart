@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
@@ -21,7 +19,6 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity/repositories/chart
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/view/add_bulk_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_pond/view/add_pond_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/view/detail_activity_page.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/resume_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -36,6 +33,7 @@ class _ActivityViewState extends State<ActivityView> {
   final TextEditingController pondController = TextEditingController();
   final PageController pageController = PageController(initialPage: 0);
   final AppLazyLoad _lazyLoad = AppLazyLoad();
+  final ScrollController headerHorizontalController = ScrollController();
 
   int page = 0;
 
@@ -454,191 +452,6 @@ class _ActivityViewState extends State<ActivityView> {
       );
     }
 
-    // Widget headerDataItem({
-    //   required IconData icon,
-    //   Color? iconColor,
-    //   required String title,
-    //   required String value,
-    //   String? description,
-    // }) {
-    //   return Container(
-    //     padding: const EdgeInsets.symmetric(
-    //       horizontal: 12.0,
-    //       vertical: 18.0,
-    //     ),
-    //     decoration: BoxDecoration(
-    //       color: Colors.white,
-    //       borderRadius: BorderRadius.circular(8.0),
-    //     ),
-    //     child: Column(
-    //       crossAxisAlignment: CrossAxisAlignment.start,
-    //       children: [
-    //         Row(
-    //           children: [
-    //             Icon(
-    //               icon,
-    //               color: iconColor,
-    //             ),
-    //             const SizedBox(width: 8.0),
-    //             Expanded(
-    //               child: Text(
-    //                 title,
-    //                 maxLines: 1,
-    //                 style: appTextTheme(context).labelLarge?.copyWith(
-    //                       color: AppColor.neutral[600],
-    //                     ),
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //         const SizedBox(height: 12.0),
-    //         Text(
-    //           value,
-    //           maxLines: 1,
-    //           style: appTextTheme(context).headlineSmall?.copyWith(
-    //                 color: AppColor.neutral[600],
-    //               ),
-    //         ),
-    //         if (description != null) const SizedBox(height: 12.0),
-    //         if (description != null)
-    //           Text(
-    //             description,
-    //             maxLines: 1,
-    //             style: appTextTheme(context).labelLarge?.copyWith(
-    //                   color: AppColor.neutral[500],
-    //                 ),
-    //           ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    // Widget firstData() {
-    //   return Padding(
-    //     padding: const EdgeInsets.symmetric(horizontal: 18.0),
-    //     child: Column(
-    //       children: [
-    //         Row(
-    //           children: [
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.monitor_weight,
-    //                 iconColor: AppColor.secondary[800],
-    //                 title: "Biomasa",
-    //                 value: "1.234,56 Kg",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //             const SizedBox(width: 12.0),
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.shopping_bag_rounded,
-    //                 iconColor: AppColor.red[400],
-    //                 title: "Pakan",
-    //                 value: "15.2 Kg",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //         const SizedBox(height: 12.0),
-    //         Row(
-    //           children: [
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.pie_chart_sharp,
-    //                 iconColor: AppColor.accent[700],
-    //                 title: "Estimasi SR (%)",
-    //                 value: "84,5 %",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //             const SizedBox(width: 12.0),
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.bar_chart_rounded,
-    //                 iconColor: AppColor.green[400],
-    //                 title: "Estimasi Jual (Rp)",
-    //                 value: "12,34 Jt",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    // Widget secondData() {
-    //   return Padding(
-    //     padding: const EdgeInsets.symmetric(horizontal: 18.0),
-    //     child: Column(
-    //       children: [
-    //         Row(
-    //           children: [
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.monitor_weight,
-    //                 iconColor: AppColor.secondary[800],
-    //                 title: "Biomasa",
-    //                 value: "1.234,56 Kg",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //             const SizedBox(width: 12.0),
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.shopping_bag_rounded,
-    //                 iconColor: AppColor.red[400],
-    //                 title: "Pakan",
-    //                 value: "15.2 Kg",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //         const SizedBox(height: 12.0),
-    //         Row(
-    //           children: [
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.pie_chart_sharp,
-    //                 iconColor: AppColor.accent[700],
-    //                 title: "Estimasi SR (%)",
-    //                 value: "84,5 %",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //             const SizedBox(width: 12.0),
-    //             Expanded(
-    //               child: headerDataItem(
-    //                 icon: Icons.bar_chart_rounded,
-    //                 iconColor: AppColor.green[400],
-    //                 title: "Estimasi Jual (Rp)",
-    //                 value: "12,34 Jt",
-    //                 description: "dari 3 kolam aktif",
-    //               ),
-    //             ),
-    //           ],
-    //         ),
-    //       ],
-    //     ),
-    //   );
-    // }
-
-    // Widget scrollIndicator() {
-    //   return AnimatedSmoothIndicator(
-    //     activeIndex: page,
-    //     count: 2,
-    //     effect: const ExpandingDotsEffect(
-    //       dotHeight: 7,
-    //       dotWidth: 7,
-    //       activeDotColor: AppColor.white,
-    //     ),
-    //   );
-    // }
-
     Widget headerItemData({
       required String title,
       required String value,
@@ -766,7 +579,22 @@ class _ActivityViewState extends State<ActivityView> {
                         ),
                 ),
                 const SizedBox(height: 18.0),
-                BlocBuilder<ResumeActivityCubit, ResumeActivityState>(
+                BlocConsumer<ResumeActivityCubit, ResumeActivityState>(
+                  listener: (context, resumeState) async {
+                    if (resumeState.status.isLoaded) {
+                      await Future.delayed(const Duration(milliseconds: 400));
+                      await headerHorizontalController.animateTo(
+                        80.0,
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.linear,
+                      );
+                      await headerHorizontalController.animateTo(
+                        -80.0,
+                        duration: const Duration(milliseconds: 600),
+                        curve: Curves.linear,
+                      );
+                    }
+                  },
                   builder: (context, resumeState) {
                     if (resumeState.status.isLoading) {
                       return const AppShimmer(
@@ -780,6 +608,7 @@ class _ActivityViewState extends State<ActivityView> {
                     return SizedBox(
                       height: 258.0,
                       child: ListView.builder(
+                        controller: headerHorizontalController,
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
                         physics: const AlwaysScrollableScrollPhysics(),
@@ -860,60 +689,6 @@ class _ActivityViewState extends State<ActivityView> {
           );
         },
       );
-      // ! Notes : Old data
-      // return Container(
-      //   color: AppColor.primary[800],
-      //   child: Column(
-      //     children: [
-      //       Padding(
-      //         padding: const EdgeInsets.symmetric(horizontal: 18.0),
-      //         child: AppValidatorTextField(
-      //           controller: pondController,
-      //           isMandatory: false,
-      //           withUpperLabel: false,
-      //           readOnly: true,
-      //           hintText: "Semua kolam",
-      //           suffixWidget: const Padding(
-      //             padding: EdgeInsets.only(right: 18.0),
-      //             child: Icon(Icons.arrow_drop_down_rounded),
-      //           ),
-      //           suffixConstraints: const BoxConstraints(),
-      //           validator: (value) {
-      //             return null;
-      //           },
-      //           onTap: bottomSheetShowModal(
-      //             context,
-      //             "Pilih Kolam",
-      //             ["Kolam 1", "Kolam 2", "Kolam 3"],
-      //           ),
-      //         ),
-      //       ),
-      //       const SizedBox(height: 18.0),
-      //       SizedBox(
-      //         height: MediaQuery.sizeOf(context).height * 0.35,
-      //         width: double.infinity,
-      //         child: PageView(
-      //           onPageChanged: (value) {
-      //             setState(() {
-      //               page = value;
-      //             });
-      //           },
-      //           controller: pageController,
-      //           physics: AlwaysScrollableScrollPhysics(),
-      //           allowImplicitScrolling: true,
-      //           pageSnapping: true,
-      //           children: [
-      //             firstData(),
-      //             secondData(),
-      //           ],
-      //         ),
-      //       ),
-      //       const SizedBox(height: 18.0),
-      //       scrollIndicator(),
-      //       const SizedBox(height: 18.0),
-      //     ],
-      //   ),
-      // );
     }
 
     Widget addPond() {

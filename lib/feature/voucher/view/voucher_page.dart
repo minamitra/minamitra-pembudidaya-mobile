@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/voucher/view/voucher_view.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class VoucherPage extends StatelessWidget {
   const VoucherPage({super.key});
@@ -18,7 +19,7 @@ class VoucherPage extends StatelessWidget {
         'Voucher 3M',
       ),
       backgroundColor: AppColor.neutral[50],
-      body: const VoucherView(),
+      body: WidgetFeatureOnProgress(child: const VoucherView()),
     );
   }
 }

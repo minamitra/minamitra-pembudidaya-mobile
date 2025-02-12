@@ -22,13 +22,18 @@ class RefEndpoint {
     );
   }
 
-  Uri getSubDistrict(String districtId) {
+  Uri getSubDistrict(
+    String? districtId, {
+    String? search,
+  }) {
     return createUrl(
-        path: 'public-access/ref_address/subdistrict/data',
-        queryParameters: {
-          'pagination_bool': 'false',
-          'city_id': districtId,
-        },);
+      path: 'public-access/ref_address/subdistrict/data',
+      queryParameters: {
+        'pagination_bool': 'false',
+        if (districtId != null) 'city_id': districtId,
+        if (search != null) 'search': search,
+      },
+    );
   }
 
   Uri getVillage(String subDistrictId) {

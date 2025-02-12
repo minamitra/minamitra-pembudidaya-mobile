@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
@@ -30,23 +32,29 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(state.copyWith(status: GlobalState.successSubmit));
       } else {
         emit(state.copyWith(status: GlobalState.hideDialogLoading));
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Gagal mendaftar',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Gagal mendaftar',
+          ),
+        );
       }
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

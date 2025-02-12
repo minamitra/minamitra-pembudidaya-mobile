@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,10 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.da
 import 'package:minamitra_pembudidaya_mobile/core/logic/active/active_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/active/secondary_active_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/privacy_policy/views/privacy_policy_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/register/logic/register_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/term_condition/views/term_condition_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class RegisterView extends StatefulWidget {
@@ -168,6 +172,15 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   TextSpan(
                     text: 'Syarat & Ketentuan ',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(
+                          AppTransition.pushTransition(
+                            const TermConditionPage(),
+                            TermConditionPage.routeSettings,
+                          ),
+                        );
+                      },
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.primary[600],
                           fontWeight: FontWeight.w500,
@@ -181,6 +194,15 @@ class _RegisterViewState extends State<RegisterView> {
                   ),
                   TextSpan(
                     text: 'Kebijakan Privasi ',
+                    recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        Navigator.of(context).push(
+                          AppTransition.pushTransition(
+                            const PrivacyPolicyPage(),
+                            PrivacyPolicyPage.routeSettings,
+                          ),
+                        );
+                      },
                     style: appTextTheme(context).bodyMedium?.copyWith(
                           color: AppColor.primary[600],
                           fontWeight: FontWeight.w500,

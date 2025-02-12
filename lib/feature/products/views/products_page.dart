@@ -12,7 +12,7 @@ class ProductsPage extends StatelessWidget {
   const ProductsPage({this.isPick = false, super.key});
 
   static RouteSettings routeSettings() =>
-      const RouteSettings(name: '/products');
+      const RouteSettings(name: '/products-page');
 
   @override
   Widget build(BuildContext context) {

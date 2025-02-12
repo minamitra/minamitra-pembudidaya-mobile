@@ -15,6 +15,7 @@ abstract class ProfileService {
     String oldPassword,
     String newPassword,
   );
+  Future<BaseResponse<MetaResponse>> requestMember();
 }
 
 class ProfileServiceImpl implements ProfileService {
@@ -77,5 +78,21 @@ class ProfileServiceImpl implements ProfileService {
     );
     final MetaResponse meta = MetaResponse.fromJson(repsonse.body);
     return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<MetaResponse>> requestMember() async {
+    final url = endpoint.requestMember();
+    final header = await headerProvider.headers;
+    final response = await httpClient.post(
+      url,
+      header,
+      json.encode({}),
+    );
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    return BaseResponse(
+      meta: metaResponse,
+      data: metaResponse,
+    );
   }
 }

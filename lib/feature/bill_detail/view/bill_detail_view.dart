@@ -4,8 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dotted_line.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/bill_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/bill_detail/logic/bill_detail_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/bill_payment_pay/view/bill_payment_pay_page.dart';
@@ -16,31 +22,32 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 class BillDetailView extends StatefulWidget {
   const BillDetailView({
     required this.isHistoryTransaction,
+    required this.billResponseData,
     super.key,
   });
 
   final bool isHistoryTransaction;
+  final BillResponseData billResponseData;
 
   @override
   State<BillDetailView> createState() => _BillDetailViewState();
 }
 
 class _BillDetailViewState extends State<BillDetailView> {
-  int totalCredit = 111111111;
   final ScrollController scrollController = ScrollController();
 
   Color badgeBorderColor(String status) {
-    switch (status) {
-      case 'Menunggu':
+    switch (status.toLowerCase()) {
+      case 'menunggu':
         return AppColor.accent;
-      case 'Diproses':
+      case 'diproses':
         return const Color(0xFF0EA5E9);
-      case 'Dikirim':
+      case 'dikirim':
         return const Color(0xFF0EA5E9);
-      case 'Berjalan':
+      case 'disetujui':
         return AppColor.green[500]!;
-      case 'Dibatalkan':
-      case 'Ditolak':
+      case 'dibatalkan':
+      case 'ditolak':
         return AppColor.red[600]!;
       default:
         return AppColor.accent;
@@ -48,30 +55,25 @@ class _BillDetailViewState extends State<BillDetailView> {
   }
 
   Color badgeColor(String status) {
-    switch (status) {
-      case 'Menunggu':
+    switch (status.toLowerCase()) {
+      case 'menunggu':
         return AppColor.accent[50]!;
-      case 'Diproses':
+      case 'diproses':
         return const Color(0xFF0EA5E9);
-      case 'Dikirim':
+      case 'dikirim':
         return const Color(0xFF0EA5E9);
-      case 'Berjalan':
+      case 'disetujui':
         return AppColor.green[50]!;
-      case 'Dibatalkan':
-      case 'Ditolak':
-        return AppColor.red[600]!;
+      case 'dibatalkan':
+      case 'ditolak':
+        return AppColor.red[50]!;
       default:
-        return AppColor.accent;
+        return AppColor.accent[50]!;
     }
   }
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      setState(() {
-        totalCredit = 10000000;
-      });
-    });
     scrollController.addListener(
       () {
         if (scrollController.offset >
@@ -106,105 +108,156 @@ class _BillDetailViewState extends State<BillDetailView> {
     }
 
     Widget billCard() {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 18.0),
-        padding: const EdgeInsets.all(18.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: AppColor.white,
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF5D72D8).withOpacity(0.1),
-              blurRadius: 24.0,
-              offset: const Offset(0, 8.0),
+      return BlocBuilder<BillDetailCubit, BillDetailState>(
+        builder: (context, state) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 18.0),
+            padding: const EdgeInsets.all(18.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: AppColor.white,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF5D72D8).withOpacity(0.1),
+                  blurRadius: 24.0,
+                  offset: const Offset(0, 8.0),
+                ),
+              ],
             ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Row(
+                  children: [
+                    Text(
+                      'Total Penggunaan Distribusi',
+                      textAlign: TextAlign.start,
+                      style: appTextTheme(context)
+                          .labelLarge
+                          ?.copyWith(color: AppColor.neutral[400]),
+                    ),
+                    const SizedBox(width: 8.0),
+                    state.status.isLoading
+                        ? const AppShimmer(
+                            18.0,
+                            120.0,
+                            4.0,
+                          )
+                        : AnimatedFlipCounter(
+                            value: state.status.isOnUpdating
+                                ? state.dummyCount
+                                : state.plafonUseSummary?.data?.totalCostUsed ??
+                                    0,
+                            prefix: 'Rp ',
+                            thousandSeparator: '.',
+                            duration: const Duration(milliseconds: 600),
+                            textStyle: appTextTheme(context)
+                                .labelLarge
+                                ?.copyWith(fontWeight: FontWeight.w700),
+                          ),
+                  ],
+                ),
+                const SizedBox(height: 8.0),
+                state.status.isLoading
+                    ? const AppShimmer(
+                        16.0,
+                        double.infinity,
+                        100.0,
+                      )
+                    : LinearPercentIndicator(
+                        padding: const EdgeInsets.all(0),
+                        animation: true,
+                        lineHeight: 12.0,
+                        animationDuration: 1000,
+                        percent: ((state.plafonUseSummary?.data
+                                            ?.percentageCostUsed ??
+                                        0) /
+                                    100) <
+                                1
+                            ? ((state.plafonUseSummary?.data
+                                        ?.percentageCostUsed ??
+                                    0) /
+                                100)
+                            : 1,
+                        barRadius: const Radius.circular(8.0),
+                        progressColor: AppColor.accent[900],
+                        backgroundColor: AppColor.neutral[100],
+                      ),
+                const SizedBox(height: 8.0),
                 Text(
-                  'Sisa Limit',
+                  'Dari total pendanaan ${appConvertCurrency((widget.billResponseData.invoiceNominal ?? 0).toDouble())}',
+                  textAlign: TextAlign.start,
+                  style: appTextTheme(context)
+                      .labelSmall
+                      ?.copyWith(color: AppColor.neutral[500]),
+                ),
+                const SizedBox(height: 18.0),
+                const AppDottedLine(),
+                const SizedBox(height: 18.0),
+                Text(
+                  'Tagihan Kolam ${widget.billResponseData.fishpondName}',
                   textAlign: TextAlign.start,
                   style: appTextTheme(context)
                       .labelLarge
                       ?.copyWith(color: AppColor.neutral[400]),
                 ),
-                const SizedBox(width: 8.0),
-                AnimatedFlipCounter(
-                  value: totalCredit,
-                  prefix: 'Rp ',
-                  thousandSeparator: '.',
-                  duration: const Duration(milliseconds: 600),
-                  textStyle: appTextTheme(context)
+                const SizedBox(height: 10.0),
+                state.status.isLoading
+                    ? const AppShimmer(
+                        18.0,
+                        120.0,
+                        4.0,
+                      )
+                    : AnimatedFlipCounter(
+                        value: state.status.isOnUpdating
+                            ? state.dummyCount
+                            : widget.billResponseData.invoiceNominal ?? 0,
+                        prefix: 'Rp ',
+                        thousandSeparator: '.',
+                        duration: const Duration(milliseconds: 800),
+                        textStyle: appTextTheme(context).headlineSmall,
+                      ),
+                const SizedBox(height: 10.0),
+                Text(
+                  'Jatuh Tempo ${AppConvertDateTime().dmyName(widget.billResponseData.dueDate ?? DateTime.now())}',
+                  textAlign: TextAlign.start,
+                  style: appTextTheme(context)
                       .labelLarge
-                      ?.copyWith(fontWeight: FontWeight.w700),
+                      ?.copyWith(color: AppColor.neutral[400]),
                 ),
+                if (!widget.isHistoryTransaction) const SizedBox(height: 18.0),
+                if (!widget.isHistoryTransaction)
+                  state.status.isLoading
+                      ? const AppShimmer(
+                          55.0,
+                          double.infinity,
+                          8.0,
+                        )
+                      : AppPrimaryFullButton(
+                          'Bayar Sekarang',
+                          () {
+                            Navigator.of(context)
+                                .push(
+                              AppTransition.pushTransition(
+                                BillPaymentPayPage(
+                                  widget.billResponseData.invoiceNominal ?? 0,
+                                  widget.billResponseData,
+                                ),
+                                BillPaymentPayPage.routeSettings(),
+                              ),
+                            )
+                                .then(
+                              (value) {
+                                context.read<BillDetailCubit>().refresh();
+                              },
+                            );
+                          },
+                        ),
               ],
             ),
-            const SizedBox(height: 8.0),
-            LinearPercentIndicator(
-              padding: const EdgeInsets.all(0),
-              animation: true,
-              lineHeight: 12.0,
-              animationDuration: 1000,
-              percent: 0.80,
-              barRadius: const Radius.circular(8.0),
-              progressColor: AppColor.accent[900],
-              backgroundColor: AppColor.neutral[100],
-            ),
-            const SizedBox(height: 8.0),
-            Text(
-              'Dari total pendanaan Rp 12.500.000',
-              textAlign: TextAlign.start,
-              style: appTextTheme(context)
-                  .labelSmall
-                  ?.copyWith(color: AppColor.neutral[500]),
-            ),
-            const SizedBox(height: 18.0),
-            const AppDottedLine(),
-            const SizedBox(height: 18.0),
-            Text(
-              'Tagihan Kolam X',
-              textAlign: TextAlign.start,
-              style: appTextTheme(context)
-                  .labelLarge
-                  ?.copyWith(color: AppColor.neutral[400]),
-            ),
-            const SizedBox(height: 10.0),
-            AnimatedFlipCounter(
-              value: totalCredit,
-              prefix: 'Rp ',
-              thousandSeparator: '.',
-              duration: const Duration(milliseconds: 800),
-              textStyle: appTextTheme(context).headlineSmall,
-            ),
-            const SizedBox(height: 10.0),
-            Text(
-              'Jatuh Tempo 15 Februari 2024',
-              textAlign: TextAlign.start,
-              style: appTextTheme(context)
-                  .labelLarge
-                  ?.copyWith(color: AppColor.neutral[400]),
-            ),
-            if (!widget.isHistoryTransaction) const SizedBox(height: 18.0),
-            if (!widget.isHistoryTransaction)
-              AppPrimaryFullButton(
-                'Bayar Sekarang',
-                () {
-                  Navigator.of(context).push(
-                    AppTransition.pushTransition(
-                      const BillPaymentPayPage(),
-                      BillPaymentPayPage.routeSettings(),
-                    ),
-                  );
-                },
-              ),
-          ],
-        ),
+          );
+        },
       );
     }
 
@@ -249,63 +302,83 @@ class _BillDetailViewState extends State<BillDetailView> {
     }
 
     Widget transaction() {
-      return Container(
-        padding: const EdgeInsets.all(18.0),
-        margin: const EdgeInsets.symmetric(horizontal: 18.0),
-        decoration: BoxDecoration(
-          color: AppColor.neutral[50],
-          borderRadius: BorderRadius.circular(8.0),
-          border: Border.all(color: AppColor.neutral[200]!),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            transactionItem(
-              'Pakan',
-              'Rp 2.440.000',
-              percentage: '30%',
+      return BlocBuilder<BillDetailCubit, BillDetailState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return AppShimmer(
+              MediaQuery.sizeOf(context).height * 0.3,
+              double.infinity,
+              8.0,
+              margin: const EdgeInsets.symmetric(horizontal: 18.0),
+            );
+          }
+
+          return Container(
+            padding: const EdgeInsets.all(18.0),
+            margin: const EdgeInsets.symmetric(horizontal: 18.0),
+            decoration: BoxDecoration(
+              color: AppColor.neutral[50],
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: AppColor.neutral[200]!),
             ),
-            const SizedBox(height: 18.0),
-            transactionItem(
-              'Perlakuan',
-              'Rp 1.525.000',
-              percentage: '20%',
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                transactionItem(
+                  'Pakan',
+                  appConvertCurrency(
+                    (state.plafonUseSummary?.data!.feedingCost?.costNominal ??
+                            0.0)
+                        .toDouble(),
+                  ),
+                  percentage:
+                      '${state.plafonUseSummary?.data!.feedingCost?.percentage} %',
+                ),
+                const SizedBox(height: 18.0),
+                transactionItem(
+                  'Perlakuan',
+                  appConvertCurrency(
+                    (state.plafonUseSummary?.data!.treatmentCost?.costNominal ??
+                            0.0)
+                        .toDouble(),
+                  ),
+                  percentage:
+                      '${state.plafonUseSummary?.data!.treatmentCost?.percentage} %',
+                ),
+                const SizedBox(height: 18.0),
+                transactionItem(
+                  'Bibit/Benih',
+                  appConvertCurrency(
+                    (state.plafonUseSummary?.data!.seedCost?.costNominal ?? 0.0)
+                        .toDouble(),
+                  ),
+                  percentage:
+                      '${state.plafonUseSummary?.data!.seedCost?.percentage} %',
+                ),
+                const SizedBox(height: 18.0),
+                AppDottedLine(color: AppColor.neutral[200]),
+                const SizedBox(height: 18.0),
+                transactionItem(
+                  'Lainnya',
+                  appConvertCurrency(
+                    (state.plafonUseSummary?.data!.otherCost?.costNominal ??
+                            0.0)
+                        .toDouble(),
+                  ),
+                  percentage:
+                      '${state.plafonUseSummary?.data!.otherCost?.percentage} %',
+                  titleStyle: appTextTheme(context)
+                      .bodySmall
+                      ?.copyWith(fontWeight: FontWeight.w500),
+                  valueStyle: appTextTheme(context)
+                      .titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
-            const SizedBox(height: 18.0),
-            transactionItem(
-              'Bibit/Benih',
-              'Rp 915.000',
-              percentage: '15%',
-            ),
-            const SizedBox(height: 18.0),
-            transactionItem(
-              'Pembelian',
-              'Rp 610.000',
-              percentage: '10%',
-            ),
-            const SizedBox(height: 18.0),
-            transactionItem(
-              'Lainnya',
-              'Rp 915.000',
-              percentage: '10%',
-            ),
-            const SizedBox(height: 18.0),
-            AppDottedLine(color: AppColor.neutral[200]),
-            const SizedBox(height: 18.0),
-            transactionItem(
-              'Lainnya',
-              'Rp 915.000',
-              percentage: '10%',
-              titleStyle: appTextTheme(context)
-                  .bodySmall
-                  ?.copyWith(fontWeight: FontWeight.w500),
-              valueStyle: appTextTheme(context)
-                  .titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w700),
-            ),
-          ],
-        ),
+          );
+        },
       );
     }
 
@@ -391,20 +464,42 @@ class _BillDetailViewState extends State<BillDetailView> {
     }
 
     Widget historyBillPayment() {
-      return ListView.separated(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        itemCount: 10,
-        separatorBuilder: (context, index) {
-          return AppDividerSmall();
-        },
-        itemBuilder: (context, index) {
-          return historyBillPayedItem(
-            isTransferMethod: false,
-            value: 'Rp 10.000.000',
-            status: 'Menunggu',
-            date: '19 Sep 2024, 15:30',
+      return BlocBuilder<BillDetailCubit, BillDetailState>(
+        builder: (context, state) {
+          return ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            itemCount: state.status.isLoading
+                ? 5
+                : state.listBillPayed?.data?.length ?? 0,
+            separatorBuilder: (context, index) {
+              return AppDividerSmall();
+            },
+            itemBuilder: (context, index) {
+              if (state.status.isLoading) {
+                return const AppShimmer(
+                  100.0,
+                  double.infinity,
+                  8.0,
+                );
+              }
+
+              return historyBillPayedItem(
+                isTransferMethod:
+                    state.listBillPayed?.data?[index].method == 'Tunai'
+                        ? false
+                        : true,
+                value: appConvertCurrency(
+                  (state.listBillPayed?.data?[index].nominal ?? 0).toDouble(),
+                ),
+                status: state.listBillPayed?.data?[index].status ?? '',
+                date: AppConvertDateTime().dmyNamehhmm(
+                  state.listBillPayed?.data?[index].createDatetime ??
+                      DateTime.now(),
+                ),
+              );
+            },
           );
         },
       );
@@ -430,23 +525,41 @@ class _BillDetailViewState extends State<BillDetailView> {
                           ?.copyWith(fontWeight: FontWeight.w700),
                     ),
                   ),
-                  InkWell(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        AppTransition.pushTransition(
-                          const TransactionBillDetailPage(),
-                          TransactionBillDetailPage.routeSettings,
+                  BlocBuilder<BillDetailCubit, BillDetailState>(
+                    builder: (context, state) {
+                      if (state.status.isLoading) {
+                        return const AppShimmer(
+                          18.0,
+                          75.0,
+                          4.0,
+                        );
+                      }
+
+                      return InkWell(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            AppTransition.pushTransition(
+                              TransactionBillDetailPage(
+                                plafonUseSummary: state.plafonUseSummary,
+                                plafonFeedUse: state.plafonFeedUse,
+                                plafonTreatmentUse: state.plafonTreatmentUse,
+                                plafonSeedUse: state.plafonSeedUse,
+                                plafonAnotherUse: state.plafonAnotherUse,
+                              ),
+                              TransactionBillDetailPage.routeSettings,
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Lihat Detail',
+                          textAlign: TextAlign.start,
+                          style: appTextTheme(context).titleSmall?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: AppColor.secondary[900],
+                              ),
                         ),
                       );
                     },
-                    child: Text(
-                      'Lihat Detail',
-                      textAlign: TextAlign.start,
-                      style: appTextTheme(context).titleSmall?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: AppColor.secondary[900],
-                          ),
-                    ),
                   ),
                 ],
               ),
@@ -518,7 +631,7 @@ class _BillDetailViewState extends State<BillDetailView> {
                       ),
                       const SizedBox(width: 18.0),
                       Text(
-                        'Tagihan Kolam X',
+                        'Tagihan Kolam ${widget.billResponseData.fishpondName}',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context)
                             .headlineSmall

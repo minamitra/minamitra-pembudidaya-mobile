@@ -23,7 +23,7 @@ class _SplashViewState extends State<SplashView> {
       backgroundColor: AppColor.primary[800],
       body: Center(
         child: Image.asset(
-          AppAssets.logoIcon,
+          AppAssets.newLogoIcon2,
           height: 48.0,
         ),
       ),

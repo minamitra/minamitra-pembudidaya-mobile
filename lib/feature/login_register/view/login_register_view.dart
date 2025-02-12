@@ -51,8 +51,8 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
                           child: Align(
                             alignment: Alignment.topCenter,
                             child: Image.asset(
-                              AppAssets.logoIcon,
-                              height: 56.0,
+                              AppAssets.newLogoIcon2,
+                              height: 28.0,
                             ),
                           ),
                         ),
@@ -73,6 +73,7 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
                 child: Image.asset(
                   AppAssets.fisherManImage,
                   width: double.infinity,
+                  height: MediaQuery.sizeOf(context).height / 3.2,
                 ),
               ),
             ),
@@ -109,10 +110,12 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
               child: AppPrimaryFullButton(
                 'Masuk',
                 () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const LoginPage(),
-                    LoginPage.route,
-                  ),);
+                  Navigator.of(context).push(
+                    AppTransition.pushTransition(
+                      const LoginPage(),
+                      LoginPage.route,
+                    ),
+                  );
                 },
               ),
             ),
@@ -122,10 +125,12 @@ class _LoginRegisterViewState extends State<LoginRegisterView> {
               child: AppPrimaryOutlineFullButton(
                 'Daftar',
                 () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    const RegisterPage(),
-                    RegisterPage.routeSettings,
-                  ),);
+                  Navigator.of(context).push(
+                    AppTransition.pushTransition(
+                      const RegisterPage(),
+                      RegisterPage.routeSettings,
+                    ),
+                  );
                 },
               ),
             ),

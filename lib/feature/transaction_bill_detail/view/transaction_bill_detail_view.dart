@@ -1,10 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
+import 'package:minamitra_pembudidaya_mobile/core/repositories/plafon_distribution_summary_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/repositories/detail_another_use_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/repositories/detail_feed_use_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/repositories/detail_seed_use_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/repositories/detail_treatment_use_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class TransactionBillDetailView extends StatefulWidget {
-  const TransactionBillDetailView({super.key});
+  const TransactionBillDetailView({
+    super.key,
+    this.plafonUseSummary,
+    this.plafonFeedUse,
+    this.plafonTreatmentUse,
+    this.plafonSeedUse,
+    this.plafonAnotherUse,
+  });
+
+  final PlafonDistributionSummaryResponse? plafonUseSummary;
+  final DetailFeedUseResponse? plafonFeedUse;
+  final DetailTreatmentUseResponse? plafonTreatmentUse;
+  final DetailSeedUseResponse? plafonSeedUse;
+  final DetailAnotherUseResponse? plafonAnotherUse;
 
   @override
   State<TransactionBillDetailView> createState() =>
@@ -17,7 +38,7 @@ class _TransactionBillDetailViewState extends State<TransactionBillDetailView>
 
   @override
   void initState() {
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     super.initState();
   }
 
@@ -63,32 +84,39 @@ class _TransactionBillDetailViewState extends State<TransactionBillDetailView>
           children: [
             summaryItem(
               'Pakan',
-              '50%',
-              'Rp 100.000',
+              '${widget.plafonUseSummary?.data!.feedingCost?.percentage} %',
+              appConvertCurrency(
+                (widget.plafonUseSummary?.data!.feedingCost?.costNominal ?? 0.0)
+                    .toDouble(),
+              ),
             ),
             const SizedBox(height: 18.0),
             summaryItem(
               'Perlakuan',
-              '50%',
-              'Rp 100.000',
+              '${widget.plafonUseSummary?.data!.treatmentCost?.percentage} %',
+              appConvertCurrency(
+                (widget.plafonUseSummary?.data!.treatmentCost?.costNominal ??
+                        0.0)
+                    .toDouble(),
+              ),
             ),
             const SizedBox(height: 18.0),
             summaryItem(
               'Bibit/Benih',
-              '50%',
-              'Rp 100.000',
-            ),
-            const SizedBox(height: 18.0),
-            summaryItem(
-              'Pembelian',
-              '50%',
-              'Rp 100.000',
+              '${widget.plafonUseSummary?.data!.seedCost?.percentage} %',
+              appConvertCurrency(
+                (widget.plafonUseSummary?.data!.seedCost?.costNominal ?? 0.0)
+                    .toDouble(),
+              ),
             ),
             const SizedBox(height: 18.0),
             summaryItem(
               'Lainnya',
-              '50%',
-              'Rp 100.000',
+              '${widget.plafonUseSummary?.data!.otherCost?.percentage} %',
+              appConvertCurrency(
+                (widget.plafonUseSummary?.data!.otherCost?.costNominal ?? 0.0)
+                    .toDouble(),
+              ),
             ),
           ],
         ),
@@ -138,48 +166,6 @@ class _TransactionBillDetailViewState extends State<TransactionBillDetailView>
       );
     }
 
-    Widget feedTabView() {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: ListView(
-          shrinkWrap: true,
-          physics: const AlwaysScrollableScrollPhysics(),
-          children: [
-            feedTabItem(
-              'Pakan Pagi',
-              '05-08-2024 17:00 WIB',
-              '- Rp 100.000',
-            ),
-            feedTabItem(
-              'Pakan Pagi',
-              '05-08-2024 17:00 WIB',
-              '- Rp 100.000',
-            ),
-            feedTabItem(
-              'Pakan Pagi',
-              '05-08-2024 17:00 WIB',
-              '- Rp 100.000',
-            ),
-            feedTabItem(
-              'Pakan Pagi',
-              '05-08-2024 17:00 WIB',
-              '- Rp 100.000',
-            ),
-            feedTabItem(
-              'Pakan Pagi',
-              '05-08-2024 17:00 WIB',
-              '- Rp 100.000',
-            ),
-            feedTabItem(
-              'Pakan Pagi',
-              '05-08-2024 17:00 WIB',
-              '- Rp 100.000',
-            ),
-          ],
-        ),
-      );
-    }
-
     Widget historyData() {
       return Container(
         width: double.infinity,
@@ -209,7 +195,6 @@ class _TransactionBillDetailViewState extends State<TransactionBillDetailView>
                   Tab(text: 'Pakan'),
                   Tab(text: 'Perlakuan'),
                   Tab(text: 'Bibit/Benih'),
-                  Tab(text: 'Pembelian'),
                   Tab(text: 'Lainnya'),
                 ],
               ),
@@ -218,11 +203,123 @@ class _TransactionBillDetailViewState extends State<TransactionBillDetailView>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  feedTabView(),
-                  feedTabView(),
-                  feedTabView(),
-                  feedTabView(),
-                  feedTabView(),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: widget.plafonFeedUse?.data?.isEmpty ?? true
+                        ? const AppEmptyData(
+                            'Tidak ada data',
+                            isCenter: true,
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: widget.plafonFeedUse?.data?.length,
+                            itemBuilder: (context, index) {
+                              return feedTabItem(
+                                widget.plafonFeedUse?.data?[index]
+                                        .fishfoodName ??
+                                    '-',
+                                AppConvertDateTime().dmyName(
+                                  widget.plafonFeedUse?.data?[index].datetime ??
+                                      DateTime.now(),
+                                ),
+                                appConvertCurrency(
+                                  (widget.plafonFeedUse?.data?[index]
+                                              .fishfoodPrice ??
+                                          0)
+                                      .toDouble(),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: widget.plafonTreatmentUse?.data?.isEmpty ?? true
+                        ? const AppEmptyData(
+                            'Tidak ada data',
+                            isCenter: true,
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: widget.plafonTreatmentUse?.data?.length,
+                            itemBuilder: (context, index) {
+                              return feedTabItem(
+                                widget.plafonTreatmentUse?.data?[index].name ??
+                                    '-',
+                                AppConvertDateTime().dmyName(
+                                  widget.plafonTreatmentUse?.data?[index]
+                                          .datetime ??
+                                      DateTime.now(),
+                                ),
+                                appConvertCurrency(
+                                  (widget.plafonTreatmentUse?.data?[index]
+                                              .cost ??
+                                          0)
+                                      .toDouble(),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: widget.plafonSeedUse?.data?.isEmpty ?? true
+                        ? const AppEmptyData(
+                            'Tidak ada data',
+                            isCenter: true,
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: widget.plafonSeedUse?.data?.length,
+                            itemBuilder: (context, index) {
+                              return feedTabItem(
+                                widget.plafonSeedUse?.data?[index]
+                                        .fishseedName ??
+                                    '-',
+                                AppConvertDateTime().dmyName(
+                                  widget.plafonSeedUse?.data?[index]
+                                          .tebarDate ??
+                                      DateTime.now(),
+                                ),
+                                appConvertCurrency(
+                                  (widget.plafonSeedUse?.data?[index].cost ?? 0)
+                                      .toDouble(),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 18.0),
+                    child: widget.plafonAnotherUse?.data?.isEmpty ?? true
+                        ? const AppEmptyData(
+                            'Tidak ada data',
+                            isCenter: true,
+                          )
+                        : ListView.builder(
+                            shrinkWrap: true,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: widget.plafonAnotherUse?.data?.length,
+                            itemBuilder: (context, index) {
+                              return feedTabItem(
+                                widget.plafonAnotherUse?.data?[index].type ??
+                                    '-',
+                                AppConvertDateTime().dmyName(
+                                  widget.plafonAnotherUse?.data?[index].date ??
+                                      DateTime.now(),
+                                ),
+                                appConvertCurrency(
+                                  (widget.plafonAnotherUse?.data?[index].cost ??
+                                          0)
+                                      .toDouble(),
+                                ),
+                              );
+                            },
+                          ),
+                  ),
                 ],
               ),
             ),

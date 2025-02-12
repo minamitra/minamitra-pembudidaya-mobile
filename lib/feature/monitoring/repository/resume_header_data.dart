@@ -54,11 +54,30 @@ List<ResumeHeaderData> listActivtyHeaderDataDummy2(
       ),
     ];
 
+List<ResumeHeaderData> listActivtyHeaderDataDummy3(
+  String growthValue,
+  String productivityValue,
+) =>
+    [
+      ResumeHeaderData(
+        title: 'Pertumbuhan Ikan',
+        value: growthValue,
+        imageAsset: AppAssets.overviewHppPerTailIcon,
+      ),
+      ResumeHeaderData(
+        title: 'Produktivitas',
+        value: productivityValue,
+        imageAsset: AppAssets.overviewHppPerTailIcon,
+      ),
+    ];
+
 List<ResumeHeaderDataWrapped> resumeHeaderDataWrapped({
   required String harvestResult,
   required String eppValue,
   required String srValue,
   required String fcrValue,
+  required String growthValue,
+  required String productivityValue,
 }) =>
     [
       ResumeHeaderDataWrapped(
@@ -71,6 +90,12 @@ List<ResumeHeaderDataWrapped> resumeHeaderDataWrapped({
         listActivtyHeaderDataDummy: listActivtyHeaderDataDummy2(
           srValue,
           fcrValue,
+        ),
+      ),
+      ResumeHeaderDataWrapped(
+        listActivtyHeaderDataDummy: listActivtyHeaderDataDummy3(
+          growthValue,
+          productivityValue,
         ),
       ),
     ];

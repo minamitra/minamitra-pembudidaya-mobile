@@ -11,6 +11,7 @@ class CheckoutState extends Equatable {
     this.selectedPayment,
     this.listProduct = const [],
     this.totalItemPrice = 0,
+    this.balanceResponse,
   });
 
   final GlobalState status;
@@ -22,6 +23,7 @@ class CheckoutState extends Equatable {
   final SelectedPayment? selectedPayment;
   final List<ProductsResponseData> listProduct;
   final double totalItemPrice;
+  final BalanceResponse? balanceResponse;
 
   CheckoutState copyWith({
     GlobalState? status,
@@ -33,6 +35,7 @@ class CheckoutState extends Equatable {
     SelectedPayment? selectedPayment,
     List<ProductsResponseData>? listProduct,
     double? totalItemPrice,
+    BalanceResponse? balanceResponse,
   }) {
     return CheckoutState(
       status: status ?? this.status,
@@ -45,6 +48,7 @@ class CheckoutState extends Equatable {
       selectedPayment: selectedPayment ?? this.selectedPayment,
       listProduct: listProduct ?? this.listProduct,
       totalItemPrice: totalItemPrice ?? this.totalItemPrice,
+      balanceResponse: balanceResponse ?? this.balanceResponse,
     );
   }
 
@@ -59,5 +63,6 @@ class CheckoutState extends Equatable {
         selectedPayment,
         listProduct,
         totalItemPrice,
+        balanceResponse,
       ];
 }

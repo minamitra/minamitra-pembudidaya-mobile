@@ -3,6 +3,7 @@
 /// @create date 2024-03-24 14:22:33
 /// @modify date 2024-03-24 14:22:33
 library;
+
 import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
@@ -66,10 +67,11 @@ class AppHttpClient implements HttpClient {
 
   // final AppCrashlytic _crashlytic;
 
-  AppHttpClient(this._client,
+  AppHttpClient(
+    this._client,
 
-      // this._crashlytic,
-      );
+    // this._crashlytic,
+  );
 
   @override
   Future<http.Response> delete(
@@ -338,11 +340,13 @@ class AppHttpClient implements HttpClient {
     request.headers.addAll(headers);
     if (fields != null) request.fields.addAll(fields);
     files.forEach((key, value) {
-      request.files.add(http.MultipartFile.fromBytes(
-        key,
-        value.readAsBytesSync(),
-        filename: value.path.split('/').last,
-      ),);
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          key,
+          value.readAsBytesSync(),
+          filename: value.path.split('/').last,
+        ),
+      );
     });
 
     final streamedResponse = await request.send();
@@ -380,9 +384,10 @@ class AppHttpClient implements HttpClient {
   }
 
   factory AppHttpClient.create() {
-    return AppHttpClient(http.Client(),
-        // AppCrashlyticImpl(),
-        );
+    return AppHttpClient(
+      http.Client(),
+      // AppCrashlyticImpl(),
+    );
   }
 
   // @override

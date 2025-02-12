@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/faq_detail/logic/faq_detail_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class FaqDetailView extends StatelessWidget {
@@ -61,23 +65,23 @@ class FaqDetailView extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam faucibus nisl mi, non iaculis ipsum maximus sit amet. Nullam aliquam diam et commodo consectetur. Fusce et mi euismod, imperdiet ligula id, posuere leo. Vivamus placerat libero sit amet condimentum sagittis. Cras sed consectetur ante. Ut eu sapien ut elit euismod interdum eu vel eros. Suspendisse elit urna, vulputate in venenatis id, dapibus cursus erat. Nullam nec mattis felis.',
-          textAlign: TextAlign.start,
-          style: appTextTheme(context).bodySmall,
+        BlocBuilder<FaqDetailCubit, FaqDetailState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.5,
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }
+
+            return Text(
+              state.faqDetailData?.answer.handlingEmptyString() ?? '-',
+              textAlign: TextAlign.start,
+              style: appTextTheme(context).bodySmall,
+            );
+          },
         ),
         const SizedBox(height: 16),
-        Text(
-          'Vestibulum commodo pulvinar tortor. Aenean maximus purus a metus mollis, sed porta purus imperdiet. Sed aliquet dolor sed mauris semper, in aliquet mauris aliquet. Nam luctus urna vel mauris pulvinar, ac vulputate ipsum posuere. Curabitur eget vehicula massa. Sed augue mauris, gravida a pharetra quis, rutrum ut eros. Quisque ornare congue odio a pulvinar. Aliquam malesuada augue non ultrices facilisis.',
-          textAlign: TextAlign.start,
-          style: appTextTheme(context).bodySmall,
-        ),
-        const SizedBox(height: 16),
-        Text(
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam faucibus nisl mi, non iaculis ipsum maximus sit amet. Nullam aliquam diam et commodo consectetur. Fusce et mi euismod, imperdiet ligula id, posuere leo. Vivamus placerat libero sit amet condimentum sagittis. Cras sed consectetur ante. Ut eu sapien ut elit euismod interdum eu vel eros. Suspendisse elit urna, vulputate in venenatis id, dapibus cursus erat. Nullam nec mattis felis.',
-          textAlign: TextAlign.start,
-          style: appTextTheme(context).bodySmall,
-        ),
       ],
     );
   }

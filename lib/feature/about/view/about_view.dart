@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/about/logic/about_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AboutView extends StatefulWidget {
@@ -109,13 +114,27 @@ Dengan Mitra3M, kami ingin mempermudah proses ini dan membantu peternak meningka
       padding: const EdgeInsets.symmetric(horizontal: 18.0),
       children: [
         const SizedBox(height: 18.0),
-        aboutMitra3M(),
-        const SizedBox(height: 36.0),
-        ...ourTeam(),
-        const SizedBox(height: 36.0),
-        ...vision(),
-        const SizedBox(height: 36.0),
-        ...mission(),
+        BlocBuilder<AboutCubit, AboutState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return SizedBox(
+                height: MediaQuery.of(context).size.height * 0.75,
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }
+            return HtmlWidget(
+              state.aboutUsResponse?.data?.value.handlingEmptyString() ?? '',
+              textStyle: appTextTheme(context).titleSmall,
+            );
+          },
+        ),
+        // aboutMitra3M(),
+        // const SizedBox(height: 36.0),
+        // ...ourTeam(),
+        // const SizedBox(height: 36.0),
+        // ...vision(),
+        // const SizedBox(height: 36.0),
+        // ...mission(),
         const SizedBox(height: 18.0),
       ],
     );

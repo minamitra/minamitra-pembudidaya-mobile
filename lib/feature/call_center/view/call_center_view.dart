@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_encode.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/call_center/logic/call_center_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -63,17 +68,21 @@ class _CallCenterViewState extends State<CallCenterView> {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 icon,
                 color: AppColor.primary[500],
               ),
               const SizedBox(width: 18.0),
-              Text(
-                text,
-                style: appTextTheme(context)
-                    .titleMedium
-                    ?.copyWith(color: AppColor.primary[900]),
+              Expanded(
+                child: Text(
+                  text,
+                  maxLines: 3,
+                  style: appTextTheme(context)
+                      .titleMedium
+                      ?.copyWith(color: AppColor.primary[900]),
+                ),
               ),
             ],
           ),
@@ -81,18 +90,39 @@ class _CallCenterViewState extends State<CallCenterView> {
       );
     }
 
-    List<Widget> callCenterActionItems() {
+    List<Widget> callCenterActionItems(CallCenterState state) {
+      if (state.status.isLoading) {
+        return [
+          const AppShimmer(
+            65.0,
+            double.infinity,
+            8.0,
+          ),
+          const SizedBox(height: 18.0),
+          const AppShimmer(
+            65.0,
+            double.infinity,
+            8.0,
+          ),
+        ];
+      }
+      String cleanNumber =
+          state.waNumber?.data?.value?.replaceAll(RegExp(r'[^0-9]'), '') ?? '';
+      List<String> splitter = cleanNumber.split('');
+      splitter.removeAt(0);
+      String withoutZero = splitter.join('');
+
       return [
         callCenterItem(
           Icons.phone_in_talk_rounded,
-          '0852-2711-1102 (WhatsApp)',
+          '$cleanNumber (WhatsApp)',
           () async {
             if (!await launchUrl(
-              Uri.parse('https://wa.me/+6285227111102'),
+              Uri.parse('https://wa.me/+62$withoutZero'),
             )) {
               AppTopSnackBar(context).showDanger('Gagal memuat data');
               throw Exception(
-                'Could not launch https://wa.me/+6285227111102',
+                'Could not launch https://wa.me/+62$withoutZero',
               );
             }
           },
@@ -100,54 +130,78 @@ class _CallCenterViewState extends State<CallCenterView> {
         const SizedBox(height: 18.0),
         callCenterItem(
           Icons.mail_rounded,
-          'kminamitramandiri@gmail.com',
+          state.email?.data?.value.handlingEmptyString() ?? '-',
           () async {
             Uri emailLaunchUri = Uri(
               scheme: 'mailto',
-              path: 'kminamitramandiri@gmail.com',
+              path: state.email?.data?.value.handlingEmptyString() ?? '-',
               query: encodeQueryParameters(<String, String>{
-                'subject': 'Hallo admin, saya ingin bertanya',
+                'subject': 'Hallo admin Mitra 3M, saya ingin bertanya',
               }),
             );
             await launchUrl(emailLaunchUri);
           },
         ),
+        const SizedBox(height: 18.0),
+        callCenterItem(
+          Icons.location_on_rounded,
+          state.location?.data?.value.handlingEmptyString() ?? '-',
+          () async {},
+        ),
       ];
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-      child: Column(
-        children: [
-          const SizedBox(height: 18.0),
-          ...header(),
-          const SizedBox(height: 36.0),
-          ...callCenterActionItems(),
-          const Spacer(),
-          AppPrimaryFullButton(
-            'Hubungi Admin',
-            () async {
-              final Uri launchUri = Uri(
-                scheme: 'tel',
-                path: '085227111102',
-              );
+    Widget callButton(CallCenterState state) {
+      if (state.status.isLoading) {
+        return const AppShimmer(
+          55.0,
+          double.infinity,
+          8.0,
+        );
+      }
 
-              if (!_hasCallSupport) {
-                AppTopSnackBar(context)
-                    .showDanger('Perangkat tidak mendukung\npanggilan telepon');
-                return;
-              }
+      String cleanNumber =
+          state.waNumber?.data?.value?.replaceAll(RegExp(r'[^0-9]'), '') ?? '';
+      return AppPrimaryFullButton(
+        'Hubungi Admin',
+        () async {
+          final Uri launchUri = Uri(
+            scheme: 'tel',
+            path: cleanNumber,
+          );
 
-              await launchUrl(launchUri);
-            },
-            prefixIcon: const Icon(
-              Icons.chat_rounded,
-              color: AppColor.white,
-            ),
+          if (!_hasCallSupport) {
+            AppTopSnackBar(context)
+                .showDanger('Perangkat tidak mendukung\npanggilan telepon');
+            return;
+          }
+
+          await launchUrl(launchUri);
+        },
+        prefixIcon: const Icon(
+          Icons.chat_rounded,
+          color: AppColor.white,
+        ),
+      );
+    }
+
+    return BlocBuilder<CallCenterCubit, CallCenterState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 18.0),
+              ...header(),
+              const SizedBox(height: 36.0),
+              ...callCenterActionItems(state),
+              const Spacer(),
+              callButton(state),
+              const SizedBox(height: 18.0),
+            ],
           ),
-          const SizedBox(height: 18.0),
-        ],
-      ),
+        );
+      },
     );
   }
 }

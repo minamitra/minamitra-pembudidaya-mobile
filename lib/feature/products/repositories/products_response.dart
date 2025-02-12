@@ -43,6 +43,7 @@ class ProductsResponseData {
   String? imageUrl;
   bool? activeBool;
   int? quantity;
+  String? supplierImageUrl;
 
   ProductsResponseData({
     this.id,
@@ -67,6 +68,7 @@ class ProductsResponseData {
     this.imageUrl,
     this.activeBool,
     this.quantity = 1,
+    this.supplierImageUrl,
   });
 
   factory ProductsResponseData.fromJson(String str) =>
@@ -95,6 +97,7 @@ class ProductsResponseData {
         note: json['note'],
         imageUrl: json['image_url'],
         activeBool: json['active_bool'],
+        supplierImageUrl: json['supplier_image_url'],
       );
 
   ProductsResponseData copyWith({

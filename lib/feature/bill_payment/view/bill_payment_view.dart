@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/bill_payment/logic/bill_payment_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/limit_bill/view/limit_bill_page.dart';
@@ -21,16 +25,16 @@ class BillPaymentView extends StatefulWidget {
 }
 
 class _BillPaymentViewState extends State<BillPaymentView> {
-  int totalCredit = 111111111;
+  // int totalCredit = 111111111;
   final ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 100), () {
-      setState(() {
-        totalCredit = 10000000;
-      });
-    });
+    // Future.delayed(const Duration(milliseconds: 100), () {
+    //   setState(() {
+    //     totalCredit = 10000000;
+    //   });
+    // });
 
     scrollController.addListener(
       () {
@@ -49,149 +53,189 @@ class _BillPaymentViewState extends State<BillPaymentView> {
   @override
   Widget build(BuildContext context) {
     Widget header() {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        height: 325.0,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF00317E),
-              Color(0XFF002155),
-            ],
-          ),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: kToolbarHeight - 18.0),
-            Row(
+      return BlocBuilder<BillPaymentCubit, BillPaymentState>(
+        builder: (context, state) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0),
+            height: 325.0,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF00317E),
+                  Color(0XFF002155),
+                ],
+              ),
+            ),
+            child: Column(
               children: [
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: AppColor.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                const Expanded(child: SizedBox()),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12.0,
-                    vertical: 4.0,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColor.white,
-                    borderRadius: BorderRadius.circular(100.0),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Image.asset(
-                        AppAssets.aScoreBillIcon,
-                        height: 20.0,
+                const SizedBox(height: kToolbarHeight - 18.0),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.arrow_back,
+                        color: AppColor.white,
                       ),
-                      const SizedBox(width: 6.0),
-                      Text(
-                        'Skor A',
-                        textAlign: TextAlign.start,
-                        style: appTextTheme(context).labelSmall?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: AppColor.primary[700],
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const Expanded(child: SizedBox()),
+                    state.status.isLoading
+                        ? const AppShimmer(
+                            35.0,
+                            100.0,
+                            100.0,
+                          )
+                        : Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12.0,
+                              vertical: 4.0,
                             ),
-                      ),
-                    ],
-                  ),
+                            decoration: BoxDecoration(
+                              color: AppColor.white,
+                              borderRadius: BorderRadius.circular(100.0),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Image.asset(
+                                  AppAssets.aScoreBillIcon,
+                                  height: 20.0,
+                                ),
+                                const SizedBox(width: 6.0),
+                                Text(
+                                  'Skor A',
+                                  textAlign: TextAlign.start,
+                                  style: appTextTheme(context)
+                                      .labelSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        color: AppColor.primary[700],
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ),
+                  ],
                 ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Total Penggunaan Biaya Distribusi',
+                  textAlign: TextAlign.center,
+                  style: appTextTheme(context).bodySmall?.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: AppColor.white,
+                      ),
+                ),
+                const SizedBox(height: 12.0),
+                state.status.isLoading
+                    ? const AppShimmer(32.0, 150.0, 8.0)
+                    : AnimatedFlipCounter(
+                        value: state.status.isOnUpdating
+                            ? state.dummyCount
+                            : state.plafonSummaryResponse?.data?.totalCost ?? 0,
+                        prefix: 'Rp ',
+                        thousandSeparator: '.',
+                        duration: const Duration(milliseconds: 600),
+                        textStyle: appTextTheme(context)
+                            .displaySmall
+                            ?.copyWith(color: AppColor.white),
+                      ),
+                const SizedBox(height: 12.0),
+                state.status.isLoading
+                    ? const AppShimmer(18.0, 100.0, 8.0)
+                    : AnimatedFlipCounter(
+                        value: state.status.isOnUpdating
+                            ? state.dummyCount
+                            : state.plafonSummaryResponse?.data?.totalPlafon ??
+                                0,
+                        prefix: 'dari Rp ',
+                        thousandSeparator: '.',
+                        duration: const Duration(milliseconds: 800),
+                        textStyle: appTextTheme(context)
+                            .bodyMedium
+                            ?.copyWith(color: AppColor.primary[300]),
+                      ),
               ],
             ),
-            const SizedBox(height: 16.0),
-            Text(
-              'Total Kredit Tersedia',
-              textAlign: TextAlign.center,
-              style: appTextTheme(context).bodySmall?.copyWith(
-                    fontWeight: FontWeight.w400,
-                    color: AppColor.white,
-                  ),
-            ),
-            const SizedBox(height: 12.0),
-            AnimatedFlipCounter(
-              value: totalCredit,
-              prefix: 'Rp ',
-              thousandSeparator: '.',
-              duration: const Duration(milliseconds: 600),
-              textStyle: appTextTheme(context)
-                  .displaySmall
-                  ?.copyWith(color: AppColor.white),
-            ),
-            const SizedBox(height: 12.0),
-            AnimatedFlipCounter(
-              value: totalCredit,
-              prefix: 'dari Rp ',
-              thousandSeparator: '.',
-              duration: const Duration(milliseconds: 1000),
-              textStyle: appTextTheme(context)
-                  .bodyMedium
-                  ?.copyWith(color: AppColor.primary[300]),
-            ),
-          ],
-        ),
+          );
+        },
       );
     }
 
     Widget billCard() {
-      return Container(
-        margin: const EdgeInsets.symmetric(horizontal: 18.0),
-        padding: const EdgeInsets.all(18.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: AppColor.white,
-          border: Border.all(color: AppColor.neutral[200]!),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Total Tagihan',
-              textAlign: TextAlign.start,
-              style: appTextTheme(context)
-                  .titleSmall
-                  ?.copyWith(fontWeight: FontWeight.w500),
+      return BlocBuilder<BillPaymentCubit, BillPaymentState>(
+        builder: (context, state) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 18.0),
+            padding: const EdgeInsets.all(18.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.0),
+              color: AppColor.white,
+              border: Border.all(color: AppColor.neutral[200]!),
             ),
-            const SizedBox(height: 10.0),
-            Text(
-              'Rp 2.500.000',
-              textAlign: TextAlign.start,
-              style: appTextTheme(context).bodyLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: AppColor.primary[600],
-                  ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Total Tagihan',
+                  textAlign: TextAlign.start,
+                  style: appTextTheme(context)
+                      .titleSmall
+                      ?.copyWith(fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 10.0),
+                state.status.isLoading
+                    ? const AppShimmer(22.0, 120.0, 8.0)
+                    : AnimatedFlipCounter(
+                        value: state.status.isOnUpdating
+                            ? state.dummyCount
+                            : state.billSummaryResponse?.data?.totalInvoice ??
+                                0,
+                        prefix: 'Rp ',
+                        thousandSeparator: '.',
+                        duration: const Duration(milliseconds: 1000),
+                        textStyle: appTextTheme(context).bodyLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                              color: AppColor.primary[600],
+                            ),
+                      ),
+                const SizedBox(height: 10.0),
+                state.status.isLoading
+                    ? const AppShimmer(18.0, 180.0, 8.0)
+                    : Text(
+                        'Jatuh tempo terdekat: ${(state.billSummaryResponse?.data?.nearestDueDate == null) ? '-' : AppConvertDateTime().dmyName(state.billSummaryResponse?.data?.nearestDueDate ?? DateTime.now())}',
+                        textAlign: TextAlign.start,
+                        style: appTextTheme(context)
+                            .labelLarge
+                            ?.copyWith(color: AppColor.neutral[400]),
+                      ),
+                const SizedBox(height: 18.0),
+                AppPrimaryFullButton(
+                  'Bayar Tagihan',
+                  () {
+                    Navigator.of(context)
+                        .push(
+                      AppTransition.pushTransition(
+                        const ListBillPage(),
+                        ListBillPage.routeSettings(),
+                      ),
+                    )
+                        .then(
+                      (value) {
+                        context.read<BillPaymentCubit>().init();
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 10.0),
-            Text(
-              'Jatuh tempo terdekat: 15 Februari 2024',
-              textAlign: TextAlign.start,
-              style: appTextTheme(context)
-                  .labelLarge
-                  ?.copyWith(color: AppColor.neutral[400]),
-            ),
-            const SizedBox(height: 18.0),
-            AppPrimaryFullButton(
-              'Bayar Tagihan',
-              () {
-                Navigator.of(context).push(
-                  AppTransition.pushTransition(
-                    const ListBillPage(),
-                    ListBillPage.routeSettings(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
+          );
+        },
       );
     }
 
@@ -326,11 +370,17 @@ class _BillPaymentViewState extends State<BillPaymentView> {
               children: [
                 billMenu(
                   onTap: () {
-                    Navigator.of(context).push(
+                    Navigator.of(context)
+                        .push(
                       AppTransition.pushTransition(
                         const ListBillPage(),
                         ListBillPage.routeSettings(),
                       ),
+                    )
+                        .then(
+                      (value) {
+                        context.read<BillPaymentCubit>().init();
+                      },
                     );
                   },
                   icon: Icons.receipt_outlined,
@@ -370,7 +420,15 @@ class _BillPaymentViewState extends State<BillPaymentView> {
                   () {
                     Navigator.of(context).push(
                       AppTransition.pushTransition(
-                        const LimitBillPage(),
+                        LimitBillPage(
+                          context
+                                  .read<BillPaymentCubit>()
+                                  .state
+                                  .plafonSummaryResponse
+                                  ?.data
+                                  ?.totalPlafon ??
+                              0,
+                        ),
                         LimitBillPage.routeSettings,
                       ),
                     );
@@ -393,7 +451,15 @@ class _BillPaymentViewState extends State<BillPaymentView> {
                   () {
                     Navigator.of(context).push(
                       AppTransition.pushTransition(
-                        const ScoreCreditBillInfoPage(),
+                        ScoreCreditBillInfoPage(
+                          context
+                                  .read<BillPaymentCubit>()
+                                  .state
+                                  .billSummaryResponse
+                                  ?.data
+                                  ?.memberCreditScore ??
+                              '-',
+                        ),
                         ScoreCreditBillInfoPage.routeSettings,
                       ),
                     );
@@ -433,34 +499,42 @@ class _BillPaymentViewState extends State<BillPaymentView> {
                         },
                       ),
                       const Expanded(child: SizedBox()),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12.0,
-                          vertical: 4.0,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColor.white,
-                          borderRadius: BorderRadius.circular(100.0),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              AppAssets.aScoreBillIcon,
-                              height: 20.0,
-                            ),
-                            const SizedBox(width: 6.0),
-                            Text(
-                              'Skor A',
-                              textAlign: TextAlign.start,
-                              style: appTextTheme(context).labelSmall?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: AppColor.primary[700],
+                      state.status.isLoading
+                          ? const AppShimmer(
+                              30.0,
+                              80.0,
+                              100.0,
+                            )
+                          : Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12.0,
+                                vertical: 4.0,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColor.white,
+                                borderRadius: BorderRadius.circular(100.0),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Image.asset(
+                                    AppAssets.aScoreBillIcon,
+                                    height: 20.0,
                                   ),
+                                  const SizedBox(width: 6.0),
+                                  Text(
+                                    'Skor ${state.billSummaryResponse?.data?.memberCreditScore.handlingEmptyString() ?? '-'}',
+                                    textAlign: TextAlign.start,
+                                    style: appTextTheme(context)
+                                        .labelSmall
+                                        ?.copyWith(
+                                          fontWeight: FontWeight.w600,
+                                          color: AppColor.primary[700],
+                                        ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 );

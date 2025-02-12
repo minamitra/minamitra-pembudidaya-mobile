@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_dialog.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/balance/balance_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/bank/bank_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/delivery_address/delivery_address_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/transaction/transaction_service.dart';
@@ -11,7 +12,6 @@ import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/logic/checkout_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/checkout/view/checkout_view.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
@@ -37,6 +37,7 @@ class CheckoutPage extends StatelessWidget {
         DeliveryAddressServiceImpl.create(),
         BankServiceImpl.create(),
         TransactionServiceImpl.create(),
+        BalanceServiceImpl.create(),
       )..init(data),
       child: BlocListener<CheckoutCubit, CheckoutState>(
         listener: (context, state) {

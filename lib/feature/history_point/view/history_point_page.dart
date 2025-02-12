@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
+import 'package:minamitra_pembudidaya_mobile/core/services/point/point_service.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/logic/history_point_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/history_point/view/history_point_view.dart';
 
@@ -12,11 +13,11 @@ class HistoryPointPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => HistoryPointCubit(),
+      create: (context) => HistoryPointCubit(PointServiceImpl.create())..init(),
       child: Scaffold(
         appBar: appDefaultAppBar(
           context,
-          'Riwayat Point',
+          'Riwayat Poin',
         ),
         body: const HistoryPointView(),
       ),

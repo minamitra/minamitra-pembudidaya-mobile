@@ -8,6 +8,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/event_detail/repositories/event_type.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/event_qr/view/event_qr_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class EventDetailView extends StatefulWidget {
   const EventDetailView(this.eventType, {super.key});
@@ -288,6 +289,7 @@ class _EventDetailViewState extends State<EventDetailView> {
         ListView(
           children: [
             header(),
+            WidgetFeatureOnProgressComponent(),
             const SizedBox(height: 18.0),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),

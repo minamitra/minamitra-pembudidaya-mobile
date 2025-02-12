@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/notification/view/notification_view.dart';
+import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class NotificationPage extends StatelessWidget {
   const NotificationPage({super.key});
@@ -16,7 +17,7 @@ class NotificationPage extends StatelessWidget {
         context,
         'Notifikasi',
       ),
-      body: const NotificationView(),
+      body: WidgetFeatureOnProgress(child: const NotificationView()),
     );
   }
 }

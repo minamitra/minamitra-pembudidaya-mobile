@@ -4,7 +4,9 @@ import 'package:minamitra_pembudidaya_mobile/feature/score_credit_bill_info/logi
 import 'package:minamitra_pembudidaya_mobile/feature/score_credit_bill_info/view/score_credit_bill_info_view.dart';
 
 class ScoreCreditBillInfoPage extends StatelessWidget {
-  const ScoreCreditBillInfoPage({super.key});
+  const ScoreCreditBillInfoPage(this.score, {super.key});
+
+  final String score;
 
   static const RouteSettings routeSettings =
       RouteSettings(name: '/score-credit-bill-info-page');
@@ -14,7 +16,7 @@ class ScoreCreditBillInfoPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ScoreCreditBillInfoCubit(),
       child: Scaffold(
-        body: ScoreCreditBillInfoView(),
+        body: ScoreCreditBillInfoView(score),
       ),
     );
   }

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/logic/point_exchange_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/point_v2/logic/point_mission_v2_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/logic/point_v2_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -206,26 +213,26 @@ class _PointExchangeState extends State<PointExchange> {
                 children: [
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 250,
+                      isActive: state.selectedGridExchange == 250000,
                       title: '250 Poin',
                       value: 'Rp 25.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(250);
+                            .onChangeGridExchangeValue(250000);
                       },
                     ),
                   ),
                   const SizedBox(width: 18.0),
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 500,
+                      isActive: state.selectedGridExchange == 500000,
                       title: '500 Poin',
                       value: 'Rp 50.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(500);
+                            .onChangeGridExchangeValue(500000);
                       },
                     ),
                   ),
@@ -240,26 +247,26 @@ class _PointExchangeState extends State<PointExchange> {
                 children: [
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 1000,
+                      isActive: state.selectedGridExchange == 1000000,
                       title: '1000 Poin',
                       value: 'Rp 100.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(1000);
+                            .onChangeGridExchangeValue(1000000);
                       },
                     ),
                   ),
                   const SizedBox(width: 18.0),
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 2000,
+                      isActive: state.selectedGridExchange == 2000000,
                       title: '2000 Poin',
                       value: 'Rp 200.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(2000);
+                            .onChangeGridExchangeValue(2000000);
                       },
                     ),
                   ),
@@ -272,58 +279,138 @@ class _PointExchangeState extends State<PointExchange> {
     }
 
     Widget customExchangeValue() {
-      return AppValidatorTextField(
-        controller: customExchangeValueController,
-        hintText: '0',
-        labelText: 'Kustom Nominal',
-        inputType: TextInputType.phone,
-        isMandatory: true,
-        validator: (String? value) {
-          if (value?.isEmpty ?? true) {
-            return null;
-          }
-          return null;
-        },
-        suffixConstraints: const BoxConstraints(),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.only(left: 18.0),
-          child: Text(
-            'Rp ',
-            style: appTextTheme(context).bodySmall?.copyWith(
-                  fontWeight: FontWeight.w500,
+      return BlocBuilder<PointV2Cubit, PointV2State>(
+        builder: (context, state) {
+          return AppAnimatedSize(
+            isShow: state.selectedGridExchange == -1,
+            child: AppValidatorTextField(
+              controller: customExchangeValueController,
+              hintText: '0',
+              labelText: 'Jumlah lainnya',
+              inputType: TextInputType.phone,
+              isMandatory: true,
+              validator: (String? value) {
+                if (value?.isEmpty ?? true) {
+                  return null;
+                }
+                return null;
+              },
+              suffixConstraints: const BoxConstraints(),
+              prefixIcon: Padding(
+                padding: const EdgeInsets.only(left: 18.0),
+                child: Text(
+                  'Rp ',
+                  style: appTextTheme(context).bodySmall?.copyWith(
+                        fontWeight: FontWeight.w500,
+                      ),
                 ),
-          ),
-        ),
-        inputFormatters: [AppCurrencyFormatter.currency],
+              ),
+              inputFormatters: [AppCurrencyFormatter.currency],
+            ),
+          );
+        },
       );
     }
 
     Widget buttonExchange() {
-      return AppPrimaryFullButton(
-        'Submit',
-        () {
-          if (formKey.currentState!.validate()) {
-            context.read<PointV2Cubit>().onSubmitExchange();
-          }
-          null;
+      return BlocBuilder<PointV2Cubit, PointV2State>(
+        builder: (context, state) {
+          return BlocBuilder<PointMissionV2Cubit, PointMissionV2State>(
+            builder: (context, missionState) {
+              return missionState.status.isLoading
+                  ? const AppShimmer(
+                      55.0,
+                      double.infinity,
+                      8.0,
+                    )
+                  : AppPrimaryFullButton(
+                      'Submit',
+                      () {
+                        if (exchangeTypeController.text.isEmpty) {
+                          AppTopSnackBar(context)
+                              .showInfo('Pilih tipe penukaran');
+                          return;
+                        }
+                        if (formKey.currentState!.validate()) {
+                          if (state.selectedGridExchange == -1) {
+                            // Custom Nominal
+                            // int.parse(priceController.text.unFormatedCurrency())
+                            if (int.parse(
+                                  customExchangeValueController.text
+                                      .unFormatedCurrency(),
+                                ) <
+                                1000) {
+                              AppTopSnackBar(context)
+                                  .showInfo('Minimal penukaran Rp 1.000');
+                              return;
+                            }
+                            if (((missionState.pointBalance?.data?.totalPoin ??
+                                        0) *
+                                    100) <
+                                (int.parse(
+                                      customExchangeValueController.text
+                                          .unFormatedCurrency(),
+                                    ) /
+                                    100)) {
+                              AppTopSnackBar(context)
+                                  .showInfo('Poin tidak mencukupi');
+                              return;
+                            }
+                            context.read<PointExchangeCubit>().exchangePoint(
+                                  type: exchangeTypeController.text,
+                                  point: int.parse(
+                                        customExchangeValueController.text
+                                            .unFormatedCurrency(),
+                                      ) ~/
+                                      100,
+                                  nominalRP: int.parse(
+                                    customExchangeValueController.text
+                                        .unFormatedCurrency(),
+                                  ),
+                                );
+                          } else {
+                            // From Grid
+                            if (((missionState.pointBalance?.data?.totalPoin ??
+                                        0) *
+                                    100) <
+                                state.selectedGridExchange) {
+                              AppTopSnackBar(context)
+                                  .showInfo('Poin tidak mencukupi');
+                              return;
+                            }
+                            context.read<PointExchangeCubit>().exchangePoint(
+                                  type: exchangeTypeController.text,
+                                  point: state.selectedGridExchange ~/ 100,
+                                  nominalRP: state.selectedGridExchange,
+                                );
+                          }
+                        }
+                        null;
+                      },
+                    );
+            },
+          );
         },
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          typeExchange(),
-          const SizedBox(height: 18.0),
-          exchangeValue(),
-          const SizedBox(height: 18.0),
-          customExchangeValue(),
-          const SizedBox(height: 32.0),
-          buttonExchange(),
-          const SizedBox(height: 18.0),
-        ],
+    return Form(
+      key: formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            typeExchange(),
+            const SizedBox(height: 18.0),
+            exchangeValue(),
+            const SizedBox(height: 18.0),
+            customExchangeValue(),
+            const SizedBox(height: 32.0),
+            buttonExchange(),
+            const SizedBox(height: 18.0),
+          ],
+        ),
       ),
     );
   }

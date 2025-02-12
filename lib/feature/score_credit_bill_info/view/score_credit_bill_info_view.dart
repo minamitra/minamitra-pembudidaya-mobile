@@ -11,7 +11,9 @@ import 'package:minamitra_pembudidaya_mobile/feature/score_credit_bill_info/logi
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ScoreCreditBillInfoView extends StatefulWidget {
-  const ScoreCreditBillInfoView({super.key});
+  const ScoreCreditBillInfoView(this.score, {super.key});
+
+  final String score;
 
   @override
   State<ScoreCreditBillInfoView> createState() =>
@@ -258,6 +260,19 @@ class _ScoreCreditBillInfoViewState extends State<ScoreCreditBillInfoView> {
     }
 
     Widget body() {
+      String generateScoreIcon() {
+        switch (widget.score.toLowerCase()) {
+          case 'a':
+            return AppAssets.scoreABillIcon;
+          case 'b':
+            return AppAssets.scoreBBillIcon;
+          case 'c':
+            return AppAssets.scoreCBillIcon;
+          default:
+            return AppAssets.scoreCBillIcon;
+        }
+      }
+
       return ListView(
         shrinkWrap: true,
         physics: const AlwaysScrollableScrollPhysics(),
@@ -271,7 +286,7 @@ class _ScoreCreditBillInfoViewState extends State<ScoreCreditBillInfoView> {
               infinite: true,
               from: 6.0,
               child: Image.asset(
-                AppAssets.scoreABillIcon,
+                generateScoreIcon(),
                 height: 180.0,
               ),
             ),
