@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
-import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_top_snackbar.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/finance/finance_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/resume/resume_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/add_another_finance/view/add_another_finance_page.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/finance_detail/views/finance_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/finance_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/monitoring_cubit.dart';
@@ -22,12 +18,14 @@ class MonitoringPage extends StatelessWidget {
     this.pondID,
     this.pondCycleID, {
     required this.isCycleDone,
+    required this.tebarDate,
     super.key,
   });
 
   final String pondID;
   final String pondCycleID;
   final bool isCycleDone;
+  final DateTime tebarDate;
 
   static RouteSettings route = const RouteSettings(name: '/monitoring-page');
 
@@ -36,8 +34,10 @@ class MonitoringPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CultivationCubit(CycleServiceImpl.create())
-            ..init(
+          create: (context) => CultivationCubit(
+            CycleServiceImpl.create(),
+            tebarDate: tebarDate,
+          )..init(
               pondID,
               pondCycleID,
               'mbw',

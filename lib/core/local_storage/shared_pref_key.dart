@@ -9,4 +9,5 @@ class AppSharedPrefKey {
   static String userProfileKey = 'USER_PROFILE';
   static String loginResponseKey = 'LOGIN_RESPONSE';
   static String cloudTokenKey = '';
+  static String isHasNotificationKey = 'IS_HAS_NOTIFICATION';
 }

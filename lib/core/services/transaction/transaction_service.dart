@@ -25,6 +25,9 @@ abstract class TransactionService {
   Future<BaseResponse<DeliveryStatusResponse>> getDeliveryStatus({
     required String orderID,
   });
+  Future<BaseResponse<TransactionItemResponseData>> transactionDetail({
+    required String orderID,
+  });
 }
 
 class TransactionServiceImpl implements TransactionService {
@@ -151,6 +154,25 @@ class TransactionServiceImpl implements TransactionService {
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     final DeliveryStatusResponse data =
         DeliveryStatusResponse.fromMap(metaResponse.result!);
+    return BaseResponse(
+      meta: metaResponse,
+      data: data,
+    );
+  }
+
+  @override
+  Future<BaseResponse<TransactionItemResponseData>> transactionDetail({
+    required String orderID,
+  }) async {
+    final uri = endpoint.getTransactionDetail(orderID);
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(
+      uri,
+      header,
+    );
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    final TransactionItemResponseData data =
+        TransactionItemResponseData.fromMap(metaResponse.result!['data']);
     return BaseResponse(
       meta: metaResponse,
       data: data,

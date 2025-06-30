@@ -118,7 +118,7 @@ class OnGoingCycleFeedResponseData {
         targetPanenBobot: json['target_panen_bobot'],
         actualPanenBobot: json['actual_panen_bobot'],
         srTarget: json['sr_target'],
-        estimationFishfoodEpp: json['estimation_fishfood_epp'],
+        estimationFishfoodEpp: json['estimation_fishfood_epp'].toString(),
         estimationPanenDate: json['estimation_panen_date'] == null
             ? null
             : DateTime.parse(json['estimation_panen_date']),

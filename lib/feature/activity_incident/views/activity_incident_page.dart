@@ -31,12 +31,12 @@ class ActivityIncidentPage extends StatelessWidget {
         BlocProvider(
           create: (context) => IncidentDataCubit(
             ActivityIncidentServiceImpl.create(),
-          )..getIncidentData(),
+          )..getIncidentData(fishpondCycleID: fishpondcycleId),
         ),
         BlocProvider(
           create: (context) => IncidentHistoryCubit(
             ActivityIncidentServiceImpl.create(),
-          )..getIncidentHistory(),
+          )..getIncidentHistory(fishPondCycleID: fishpondcycleId),
         ),
       ],
       child: MultiBlocListener(
@@ -88,8 +88,12 @@ class ActivityIncidentPage extends StatelessWidget {
                   )
                       .then((value) {
                     if (value != null && value == 'refresh') {
-                      context.read<IncidentDataCubit>().getIncidentData();
-                      context.read<IncidentHistoryCubit>().getIncidentHistory();
+                      context
+                          .read<IncidentDataCubit>()
+                          .getIncidentData(fishpondCycleID: fishpondcycleId);
+                      context
+                          .read<IncidentHistoryCubit>()
+                          .getIncidentHistory(fishPondCycleID: fishpondcycleId);
                     }
                   });
                 },

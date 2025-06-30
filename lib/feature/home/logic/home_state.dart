@@ -9,6 +9,7 @@ class HomeState extends Equatable {
     this.literacyInformationResponse,
     this.pointBalance,
     this.pointConfigruation,
+    this.isHasNotification = false,
   });
 
   final GlobalState status;
@@ -18,6 +19,7 @@ class HomeState extends Equatable {
   final LiteracyInformationResponse? literacyInformationResponse;
   final PointBalanceResponse? pointBalance;
   final PointConfigurationResponse? pointConfigruation;
+  final bool isHasNotification;
 
   HomeState copyWith({
     GlobalState? status,
@@ -27,6 +29,7 @@ class HomeState extends Equatable {
     LiteracyInformationResponse? literacyInformationResponse,
     PointBalanceResponse? pointBalance,
     PointConfigurationResponse? pointConfigruation,
+    bool? isHasNotification,
   }) {
     return HomeState(
       status: status ?? this.status,
@@ -37,6 +40,7 @@ class HomeState extends Equatable {
           literacyInformationResponse ?? this.literacyInformationResponse,
       pointBalance: pointBalance ?? this.pointBalance,
       pointConfigruation: pointConfigruation ?? this.pointConfigruation,
+      isHasNotification: isHasNotification ?? this.isHasNotification,
     );
   }
 
@@ -49,5 +53,6 @@ class HomeState extends Equatable {
         literacyInformationResponse,
         pointBalance,
         pointConfigruation,
+        isHasNotification,
       ];
 }

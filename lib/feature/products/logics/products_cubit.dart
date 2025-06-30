@@ -15,24 +15,35 @@ class ProductsCubit extends Cubit<ProductsState> {
   void getProducts({
     String name = '',
     String categoryId = '',
+    String? limit,
   }) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      final response = await service.dataProducts(name, categoryId);
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        products: response.data.data,
-      ),);
+      final response = await service.dataProducts(
+        name,
+        categoryId,
+        limit: limit,
+      );
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          products: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

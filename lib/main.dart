@@ -19,13 +19,10 @@ import 'package:minamitra_pembudidaya_mobile/core/services/cloud_messaging/cloud
 import 'package:minamitra_pembudidaya_mobile/firebase_options.dart';
 
 @pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(
-  RemoteMessage message,
-  // AppCloudMessaging mainCloudMessaging,
-) async {
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  // mainCloudMessaging
-  //     .showFirebaseCloudNotificationWithFlutterNotification(message);
+  appCloudMessaging
+      .showFirebaseCloudNotificationWithFlutterNotification(message);
   // If you're going to use other Firebase services in the background, such as Firestore,
   // make sure you call `initializeApp` before using other Firebase services.
   debugPrint('Handling a background message: ${message.notification!.title}');
@@ -66,8 +63,8 @@ void main() async {
   // debugPrint('App Check Token: $appCheckToken');
   // await FirebaseMessaging.instance.setAutoInitEnabled(true);
   // FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   appCloudMessaging = AppCloudMessagingImpl.create();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(

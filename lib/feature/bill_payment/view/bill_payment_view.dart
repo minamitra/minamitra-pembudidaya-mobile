@@ -482,6 +482,26 @@ class _BillPaymentViewState extends State<BillPaymentView> {
             const SizedBox(height: kToolbarHeight - 18.0),
             BlocBuilder<BillPaymentCubit, BillPaymentState>(
               builder: (context, state) {
+                String getScoreName(String score) {
+                  switch (score.toLowerCase()) {
+                    case 'a':
+                    case 'kol 1':
+                      return 'Lancar';
+                    case 'b':
+                    case 'kol 2':
+                      return 'Dalam Perhatian';
+                    case 'kol 3':
+                      return 'Kurang Lancar';
+                    case 'c':
+                    case 'kol 4':
+                      return 'Diragukan';
+                    case 'kol 5':
+                      return 'Macet';
+                    default:
+                      return '-';
+                  }
+                }
+
                 return Container(
                   padding: const EdgeInsets.symmetric(horizontal: 18.0),
                   color: state.isShowingBackgroundAppBar
@@ -523,7 +543,12 @@ class _BillPaymentViewState extends State<BillPaymentView> {
                                   ),
                                   const SizedBox(width: 6.0),
                                   Text(
-                                    'Skor ${state.billSummaryResponse?.data?.memberCreditScore.handlingEmptyString() ?? '-'}',
+                                    getScoreName(
+                                      state.billSummaryResponse?.data
+                                              ?.memberCreditScore
+                                              .handlingEmptyString() ??
+                                          '-',
+                                    ),
                                     textAlign: TextAlign.start,
                                     style: appTextTheme(context)
                                         .labelSmall

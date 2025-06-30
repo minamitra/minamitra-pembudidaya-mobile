@@ -11,9 +11,11 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities/repositories/feed_activity_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/logic/activity_activities_add_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/add_fish_feed_body.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/view/add_new_feed_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityActivitiesAddView extends StatefulWidget {
@@ -50,6 +52,7 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
 
   List<String> listType = ['pagi', 'siang', 'sore', 'malam'];
   List<String> selectedTypeOfFeed = [];
+  bool isRecommendation = false;
 
   @override
   void initState() {
@@ -256,6 +259,9 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
             return null;
           },
           onChanged: (value) {
+            setState(() {
+              isRecommendation = false;
+            });
             context
                 .read<ActivityActivitiesAddCubit>()
                 .totalAmountFeedFromInitController
@@ -365,6 +371,9 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                   ),
                   InkWell(
                     onTap: () {
+                      setState(() {
+                        isRecommendation = true;
+                      });
                       context
                           .read<ActivityActivitiesAddCubit>()
                           .amountController
@@ -476,30 +485,46 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                 }
               });
             },
-            buttonWidget: const SizedBox(),
-            // ! Note : Currently disable.
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     Icon(
-            //       Icons.add,
-            //       color: AppColor.primary[600],
-            //     ),
-            //     const SizedBox(width: 8.0),
-            //     Text(
-            //       "Tambah Pakan Baru",
-            //       style: appTextTheme(context).titleSmall?.copyWith(
-            //             color: AppColor.primary[600],
-            //           ),
-            //     ),
-            //   ],
-            // ),
+            buttonWidget: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.add,
+                  color: AppColor.primary[600],
+                ),
+                const SizedBox(width: 8.0),
+                Text(
+                  'Tambah Pakan Baru',
+                  style: appTextTheme(context).titleSmall?.copyWith(
+                        color: AppColor.primary[600],
+                      ),
+                ),
+              ],
+            ),
             onTapButtonBottom: () {
               Navigator.of(context).pop();
-              // Navigator.of(context).push(AppTransition.pushTransition(
-              //   const AddNewFeedPage(),
-              //   AddNewFeedPage.routeSettings,
-              // ));
+              Navigator.of(context)
+                  .push(
+                AppTransition.pushTransition(
+                  AddNewFeedPage(
+                    int.parse(
+                      context.read<ActivityActivitiesAddCubit>().fishPondID ??
+                          '0',
+                    ),
+                    state.feedRecomendationResponse,
+                  ),
+                  AddNewFeedPage.routeSettings,
+                ),
+              )
+                  .then(
+                (value) {
+                  if (value != null && value is bool) {
+                    if (value) {
+                      context.read<ActivityActivitiesAddCubit>().refreshFeed();
+                    }
+                  }
+                },
+              );
             },
           ),
         );
@@ -696,13 +721,23 @@ class _ActivityActivitiesAddViewState extends State<ActivityActivitiesAddView> {
                         1,
                     recommendation: activityCubit
                         .state.feedRecomendationResponse?.data?.suggestFeed,
-                    actual: actualAmount * 1000,
-                    total: (double.tryParse(
-                              activityCubit
-                                  .totalAmountFeedFromInitController.text,
-                            ) ??
-                            0) *
-                        1000,
+                    actual: isRecommendation
+                        ? activityCubit
+                            .state.feedRecomendationResponse?.data?.suggestFeed
+                        : actualAmount * 1000,
+                    total: isRecommendation
+                        ? (activityCubit.state.feedRecomendationResponse?.data
+                                    ?.accumulationTotalFeedBefore ??
+                                0) +
+                            (activityCubit.state.feedRecomendationResponse?.data
+                                    ?.suggestFeed ??
+                                0)
+                        : (double.tryParse(
+                                  activityCubit
+                                      .totalAmountFeedFromInitController.text,
+                                ) ??
+                                0) *
+                            1000,
                     fishfoodId: activityCubit.state.fishFoodID,
                     note: noteController.text,
                     dataID: widget.editData?.id,

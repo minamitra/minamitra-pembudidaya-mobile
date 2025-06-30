@@ -91,6 +91,36 @@ class ActivityActivitiesAddCubit extends Cubit<ActivityActivitiesAddState> {
     }
   }
 
+  Future<void> refreshFeed() async {
+    emit(state.copyWith(status: GlobalState.loading));
+    try {
+      final fishFeedByCycleResponse = await service.getFeedDataByCycle(
+        fishPondCycleID ?? '0',
+        AppConvertDateTime().ymdDash(state.selectedDate ?? DateTime.now()),
+      );
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          feedDataByCycleResponse: fishFeedByCycleResponse.data,
+        ),
+      );
+    } on AppException catch (e) {
+      emit(
+        state.copyWith(
+          status: GlobalState.failed,
+          errorMessage: e.message,
+        ),
+      );
+    } catch (e) {
+      emit(
+        state.copyWith(
+          status: GlobalState.failed,
+          errorMessage: e.toString(),
+        ),
+      );
+    }
+  }
+
   Future<void> changeDateTime(DateTime dateTime) async {
     emit(
       state.copyWith(

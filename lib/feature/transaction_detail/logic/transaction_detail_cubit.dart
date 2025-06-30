@@ -6,6 +6,7 @@ import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart
 import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/transaction/transaction_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction/repositories/transaction_item_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/repositories/delivery_status_response.dart';
 
 part 'transaction_detail_state.dart';
@@ -18,11 +19,36 @@ class TransactionDetailCubit extends Cubit<TransactionDetailState> {
 
   final TransactionService service;
   final CdnService cdnService;
+  TransactionItemResponseData? data;
 
   Future<void> init(
     bool isNeedGetDeliveryStatus, {
     String orderID = '',
+    TransactionItemResponseData? data,
   }) async {
+    if (data != null) this.data = data;
+    if (data == null) {
+      emit(state.copyWith(status: GlobalState.loading));
+      try {
+        final response = await service.transactionDetail(orderID: orderID);
+        this.data = response.data;
+        emit(state.copyWith(status: GlobalState.loaded));
+      } on AppException catch (e) {
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: e.message,
+          ),
+        );
+      } catch (e) {
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: e.toString(),
+          ),
+        );
+      }
+    }
     if (isNeedGetDeliveryStatus) {
       await getDeliveryStatus(orderID);
     }

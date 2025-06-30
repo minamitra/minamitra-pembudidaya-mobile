@@ -48,4 +48,11 @@ class TransactionEndpoint {
       },
     );
   }
+
+  Uri getTransactionDetail(String orderID) {
+    return createUrl(
+      path: 'mitra/order/detail',
+      queryParameters: {'id': orderID},
+    );
+  }
 }

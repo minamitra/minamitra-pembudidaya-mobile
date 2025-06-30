@@ -87,4 +87,24 @@ class CycleEndpoint {
       },
     );
   }
+
+  Uri getCycleDetailParameter({
+    required String fishPondCycleID,
+    String? date,
+  }) {
+    return createUrl(
+      path: 'mitra/fishpondcycle/detail-parameter',
+      queryParameters: {
+        'fishpondcycle_id': fishPondCycleID,
+        if (date != null) 'date': date,
+      },
+    );
+  }
+
+  Uri getCommentDetail({required String id}) {
+    return createUrl(
+      path: 'mitra/assistant-note/detail',
+      queryParameters: {'id': id},
+    );
+  }
 }

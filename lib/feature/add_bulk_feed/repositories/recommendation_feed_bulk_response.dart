@@ -27,8 +27,9 @@ class RecommendationFeedBulk {
       RecommendationFeedBulk(
         data: json['data'] == null
             ? []
-            : List<RecommendationFeedBulkData>.from(json['data']!
-                .map((x) => RecommendationFeedBulkData.fromMap(x)),),
+            : List<RecommendationFeedBulkData>.from(
+                json['data']!.map((x) => RecommendationFeedBulkData.fromMap(x)),
+              ),
       );
 
   // Map<String, dynamic> toMap() => {
@@ -50,6 +51,7 @@ class RecommendationFeedBulkData {
   TextEditingController? fishFeedIDController;
   Fishfood? selectedFishfood;
   String? fishAge;
+  bool? isByRecommendation;
 
   RecommendationFeedBulkData({
     this.fishpondId,
@@ -64,6 +66,7 @@ class RecommendationFeedBulkData {
     this.fishFeedIDController,
     this.selectedFishfood,
     this.fishAge,
+    this.isByRecommendation = false,
   });
 
   factory RecommendationFeedBulkData.fromJson(String str) =>
@@ -84,7 +87,8 @@ class RecommendationFeedBulkData {
         fishfoods: json['fishfoods'] == null
             ? []
             : List<Fishfood>.from(
-                json['fishfoods']!.map((x) => Fishfood.fromMap(x)),),
+                json['fishfoods']!.map((x) => Fishfood.fromMap(x)),
+              ),
         fishpondName: json['fishpond_name'],
         fishAge: json['fish_age'].toString(),
       );
@@ -102,6 +106,7 @@ class RecommendationFeedBulkData {
     List<Fishfood>? fishfoods,
     Fishfood? selectedFishfood,
     String? fishAge,
+    bool? isByRecommendation,
   }) {
     return RecommendationFeedBulkData(
       fishpondId: fishpondId ?? this.fishpondId,
@@ -117,13 +122,16 @@ class RecommendationFeedBulkData {
       fishfoods: fishfoods ?? this.fishfoods,
       selectedFishfood: selectedFishfood ?? this.selectedFishfood,
       fishAge: fishAge ?? this.fishAge,
+      isByRecommendation: isByRecommendation ?? this.isByRecommendation,
     );
   }
 
   Map<String, dynamic> submitBulkMap() => {
         'fishpond_id': fishpondId,
         'recommendation': suggestFeed,
-        'actual': (feedAmount ?? 0) * 1000,
+        'actual': (isByRecommendation ?? false)
+            ? suggestFeed
+            : (feedAmount ?? 0) * 1000,
         'fishfood_id': selectedFishfood!.id,
         'note': 'Tidak ada catatan',
         // "mbw_by_fish_age": mbwByFishAge,

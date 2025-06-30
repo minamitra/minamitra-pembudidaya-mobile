@@ -43,4 +43,22 @@ class PublicEndpoint {
       },
     );
   }
+
+  Uri getUnit() {
+    return createUrl(
+      path: 'public-access/item-unit/data',
+      queryParameters: {
+        'pagination_bool': 'false',
+      },
+    );
+  }
+
+  Uri getSupplier() {
+    return createUrl(
+      path: 'public-access/supplier/data',
+      queryParameters: {
+        'pagination_bool': 'false',
+      },
+    );
+  }
 }

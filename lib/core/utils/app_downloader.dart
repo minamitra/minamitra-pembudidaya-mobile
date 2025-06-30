@@ -104,6 +104,9 @@ Future<bool> checkNotificationPermission() async {
     final notificationStatus = await Permission.notification.status;
     if (notificationStatus == PermissionStatus.granted) {
       return true;
+    } else if (notificationStatus == PermissionStatus.permanentlyDenied) {
+      openAppSettings();
+      return false;
     }
     return false;
   }

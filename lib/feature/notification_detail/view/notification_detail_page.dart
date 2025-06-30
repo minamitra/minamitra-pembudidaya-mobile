@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bar.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/notification_detail/view/notification_detail_view.dart';
-import 'package:minamitra_pembudidaya_mobile/widget/view/widget_on_progress_feature.dart';
 
 class NotificationDetailPage extends StatelessWidget {
   const NotificationDetailPage(
@@ -28,13 +27,11 @@ class NotificationDetailPage extends StatelessWidget {
         context,
         'Detail Notifikasi',
       ),
-      body: WidgetFeatureOnProgress(
-        child: NotificationDetailView(
-          title,
-          time,
-          description,
-          image: image,
-        ),
+      body: NotificationDetailView(
+        title,
+        time,
+        description,
+        image: image,
       ),
     );
   }

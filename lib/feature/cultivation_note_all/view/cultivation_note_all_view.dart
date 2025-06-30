@@ -108,17 +108,19 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                             builder: (bottomSheetContext) {
                               final TextEditingController companionController =
                                   TextEditingController(
-                                      text: context
-                                              .watch<CultivationNoteAllCubit>()
-                                              .companionName ??
-                                          '',);
+                                text: context
+                                        .watch<CultivationNoteAllCubit>()
+                                        .companionName ??
+                                    '',
+                              );
                               return AppBottomSheet(
                                 'Filter Data',
                                 height:
                                     MediaQuery.of(context).size.height * 0.35,
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 18.0,),
+                                    horizontal: 18.0,
+                                  ),
                                   child: Column(
                                     children: [
                                       Expanded(
@@ -161,8 +163,8 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                                                     .read<
                                                         CultivationNoteAllCubit>()
                                                     .filterByCompanionNmae(
-                                                        companionController
-                                                            .text,);
+                                                      companionController.text,
+                                                    );
                                                 Navigator.of(context).pop();
                                               },
                                             ),
@@ -195,30 +197,30 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 33.0,
-              width: double.infinity,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                children: [
-                  const SizedBox(width: 18.0),
-                  AppWidgetSecondaryChip(
-                    text: 'Semua',
-                    onTap: () {
-                      context.read<CultivationNoteAllCubit>().reset();
-                    },
-                  ),
-                  const SizedBox(width: 16.0),
-                  AppWidgetSecondaryChip(
-                    text: 'Belum Dibaca',
-                    onTap: () {},
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 18.0),
+            // SizedBox(
+            //   height: 33.0,
+            //   width: double.infinity,
+            //   child: ListView(
+            //     scrollDirection: Axis.horizontal,
+            //     shrinkWrap: true,
+            //     physics: const AlwaysScrollableScrollPhysics(),
+            //     children: [
+            //       const SizedBox(width: 18.0),
+            //       AppWidgetSecondaryChip(
+            //         text: 'Semua',
+            //         onTap: () {
+            //           context.read<CultivationNoteAllCubit>().reset();
+            //         },
+            //       ),
+            //       const SizedBox(width: 16.0),
+            //       AppWidgetSecondaryChip(
+            //         text: 'Belum Dibaca',
+            //         onTap: () {},
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(height: 18.0),
           ],
         ),
       );
@@ -229,8 +231,10 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
       required String companionName,
       required String dateTime,
       required String companionNotes,
+      bool isCommentReaded = false,
     }) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 18.0),
           Row(
@@ -275,23 +279,26 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  color: AppColor.secondary[50],
-                  border: Border.all(color: AppColor.secondary[900]!),
-                ),
-                child: Text(
-                  'Baru',
-                  maxLines: 5,
-                  style: appTextTheme(context).bodySmall?.copyWith(
-                        color: AppColor.secondary[900],
-                        fontWeight: FontWeight.w500,
-                      ),
+              Visibility(
+                visible: !isCommentReaded,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.0),
+                    color: AppColor.secondary[50],
+                    border: Border.all(color: AppColor.secondary[900]!),
+                  ),
+                  child: Text(
+                    'Baru',
+                    maxLines: 5,
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          color: AppColor.secondary[900],
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
                 ),
               ),
             ],
@@ -300,6 +307,7 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
           Text(
             companionNotes,
             maxLines: 5,
+            textAlign: TextAlign.left,
             style: appTextTheme(context).bodySmall,
           ),
           const SizedBox(height: 18.0),
@@ -345,10 +353,20 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  Navigator.of(context).push(AppTransition.pushTransition(
-                    CultivationNoteDetailPage(state.data![index]),
-                    CultivationNoteDetailPage.routeSettings,
-                  ),);
+                  Navigator.of(context)
+                      .push(
+                    AppTransition.pushTransition(
+                      CultivationNoteDetailPage(data: state.data![index]),
+                      CultivationNoteDetailPage.routeSettings,
+                    ),
+                  )
+                      .then(
+                    (value) {
+                      context
+                          .read<CultivationNoteAllCubit>()
+                          .refreshCommentReaded();
+                    },
+                  );
                 },
                 child: itemNote(
                   companionImage:
@@ -356,9 +374,13 @@ class _CultivationNoteAllViewState extends State<CultivationNoteAllView> {
                   companionName:
                       state.data![index].userName.handlingEmptyString(),
                   dateTime: AppConvertDateTime().edmy(
-                      state.data![index].createDatetime ?? DateTime.now(),),
+                    state.data![index].createDatetime ?? DateTime.now(),
+                  ),
                   companionNotes:
                       state.data![index].content.handlingEmptyString(),
+                  isCommentReaded: context
+                      .watch<CultivationNoteAllCubit>()
+                      .isCommentReaded(state.data?[index].id ?? ''),
                 ),
               );
             },

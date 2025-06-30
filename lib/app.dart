@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:minamitra_pembudidaya_mobile/core/authentications/authentication_repository.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/authentication/authentication_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/core/logic/user/user_cubit.dart';
-import 'package:minamitra_pembudidaya_mobile/core/services/cloud_messaging/cloud_messaging_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_theme.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/views/dashboard_page.dart';

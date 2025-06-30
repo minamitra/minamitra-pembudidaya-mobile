@@ -11,25 +11,34 @@ class IncidentDataCubit extends Cubit<IncidentDataState> {
   IncidentDataCubit(this.service) : super(const IncidentDataState());
 
   final ActivityIncidentService service;
+  String fishpondCycleID = '';
 
-  void getIncidentData() async {
+  void getIncidentData({String? fishpondCycleID}) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
-      final response = await service.dataIncident();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        incidents: response.data.data,
-      ),);
+      this.fishpondCycleID = fishpondCycleID ?? this.fishpondCycleID;
+      final response =
+          await service.dataIncident(fishpondCycleID: this.fishpondCycleID);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          incidents: response.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -37,21 +46,28 @@ class IncidentDataCubit extends Cubit<IncidentDataState> {
     emit(state.copyWith(status: GlobalState.loading));
     try {
       await service.deleteIncident(id);
-      final incidents = await service.dataIncident();
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        incidents: incidents.data.data,
-      ),);
+      final incidents =
+          await service.dataIncident(fishpondCycleID: fishpondCycleID);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          incidents: incidents.data.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

@@ -7,13 +7,18 @@ class ProductEndpoint {
     return createUrl(path: 'mitra/item-category/data');
   }
 
-  Uri dataProduct(String search, String categoryId) {
+  Uri dataProduct(
+    String search,
+    String categoryId, {
+    String? limit,
+  }) {
     return createUrl(
       path: 'mitra/item/data',
       queryParameters: {
         'name[lse]': search,
         'category_id': categoryId,
-        'pagination_bool': 'false',
+        if (limit == null) 'pagination_bool': 'false',
+        if (limit != null) 'limit': limit,
       },
     );
   }

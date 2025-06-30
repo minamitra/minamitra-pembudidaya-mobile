@@ -72,4 +72,8 @@ class FeedActivityEndpoint {
   Uri postBulkFeed() {
     return createUrl(path: 'mitra/activity-feeding/add-bulk');
   }
+
+  Uri postAddNewFeed() {
+    return createUrl(path: 'mitra/activity-feeding/add-fishfood');
+  }
 }

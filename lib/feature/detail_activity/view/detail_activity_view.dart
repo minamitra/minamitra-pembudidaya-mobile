@@ -228,6 +228,21 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                                 .handlingEmptyString()
                                 .toLowerCase() ==
                             'done',
+                        tebarDate: context
+                                .read<DetailActivityCubit>()
+                                .state
+                                .onGoingCycleFeedResponseData!
+                                .data!
+                                .isEmpty
+                            ? DateTime.now()
+                            : context
+                                    .read<DetailActivityCubit>()
+                                    .state
+                                    .onGoingCycleFeedResponseData!
+                                    .data!
+                                    .first
+                                    .tebarDate ??
+                                DateTime.now(),
                       ),
                       MonitoringPage.route,
                     ),
@@ -540,7 +555,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   child: headerInformationsItem(
                     (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                                 'done' ||
-                            state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                            (state.onGoingCycleFeedResponseData?.data
+                                    ?.isEmpty ??
+                                true))
                         ? '-'
                         : state.onGoingCycleFeedResponseData!.data![0]
                                 .tebarFishTotal ??
@@ -556,7 +573,9 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   child: headerInformationsItem(
                     (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                                 'done' ||
-                            state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                            (state.onGoingCycleFeedResponseData?.data
+                                    ?.isEmpty ??
+                                true))
                         ? '-'
                         : "${appConvert3Digits(double.parse(state.onGoingCycleFeedResponseData?.data?[0].fishfoodTotalSum.handleEmptyStringToZero() ?? "0") / 1000)} Kg",
                     'Total Pakan',
@@ -748,11 +767,13 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                     actionButton(
                       widget.pondData.lastFishpondcycleStatus
                           .handlingEmptyString(),
-                      state.onGoingCycleFeedResponseData!.data!.isEmpty
+                      (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true)
                           ? ''
                           : state.onGoingCycleFeedResponseData!.data![0].id!,
                       tebarDate:
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                                  true)
                               ? DateTime.now()
                               : state.onGoingCycleFeedResponseData!.data!.first
                                   .tebarDate,
@@ -794,7 +815,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Tanggal Tebar',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : AppConvertDateTime().dmyName(
                           state.onGoingCycleFeedResponseData!.data![0]
@@ -806,7 +828,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Ukuran Tebar',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : "${appConvert3Digits(double.tryParse(state.onGoingCycleFeedResponseData?.data?.first.tebarBobot.handleEmptyStringToZero() ?? "0") ?? 0.0)} gr/ekor",
                 ),
@@ -815,7 +838,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Asal Benih',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : state.onGoingCycleFeedResponseData!.data!.first
                               .fishseedName ??
@@ -826,7 +850,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Komoditas',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : state.onGoingCycleFeedResponseData!.data!.first
                               .commodityName ??
@@ -837,7 +862,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Target Bobot Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : '${double.parse(state.onGoingCycleFeedResponseData!.data!.first.targetPanenBobot.handleEmptyStringToZero()).toStringAsFixed(0)} gr/ekor',
                 ),
@@ -846,7 +872,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Estimasi Perkiraan Waktu Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : AppConvertDateTime().dmyName(
                           state.onGoingCycleFeedResponseData!.data!.first
@@ -859,7 +886,8 @@ class _DetailActivityViewState extends State<DetailActivityView> {
                   'Estimasi Perkiraan Tonase Panen',
                   (widget.pondData.lastFishpondcycleStatus?.toLowerCase() ==
                               'done' ||
-                          state.onGoingCycleFeedResponseData!.data!.isEmpty)
+                          (state.onGoingCycleFeedResponseData?.data?.isEmpty ??
+                              true))
                       ? '-'
                       : "${appConvert3Digits(double.parse(state.onGoingCycleFeedResponseData?.data?.first.estimationPanenTonase ?? "0.0"))} Kg",
                 ),

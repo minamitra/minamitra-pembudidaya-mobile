@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -268,7 +267,7 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
       Function(bool isShow) onTapShow,
       bool isShow,
       double recommendation,
-      Function(String)? onChangedFeedAmount,
+      Function(String, bool)? onChangedFeedAmount,
       Function(String) onChangedFeedGiven,
       List<String> listFeedType,
       TextEditingController fishFeedValuecontroller,
@@ -356,7 +355,10 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                     InkWell(
                       onTap: () {
-                        onChangedFeedAmount!(recommendation.toStringAsFixed(2));
+                        onChangedFeedAmount!(
+                          recommendation.toStringAsFixed(2),
+                          true,
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -422,13 +424,14 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                     ),
                   ),
                   onChanged: (value) {
-                    onChangedFeedAmount!(value);
+                    onChangedFeedAmount!(value, false);
                     fishFeedValuecontroller.text = value;
                   },
                   inputFormatters: [
                     DecimalInputFormatter(decimalRange: 2),
                     FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+\.?\d{0,2}'),),
+                      RegExp(r'^\d+\.?\d{0,2}'),
+                    ),
                   ],
                 ),
               ),
@@ -524,10 +527,11 @@ class _AddBulkFeedViewState extends State<AddBulkFeedView> {
                   (state.recommendationFeedBulk?.data?[index].suggestFeed ??
                           0.0) /
                       1000,
-                  (value) {
+                  (value, isByRecommendation) {
                     context.read<AddBulkFeedCubit>().onChangeFeedAmount(
                           index,
                           double.tryParse(value) ?? 0.0,
+                          isByRecommendation: isByRecommendation,
                         );
                   },
                   (value) {

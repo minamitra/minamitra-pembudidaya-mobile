@@ -393,13 +393,7 @@ class _TransactionCardState extends State<TransactionCard> {
         Navigator.of(context)
             .push(
           AppTransition.pushTransition(
-            TransactionDetailPage(
-              listProduct,
-              listAmountItem,
-              listAddress[0],
-              listMethodPayment[0],
-              widget.data,
-            ),
+            TransactionDetailPage(data: widget.data),
             TransactionDetailPage.routeSettings(),
           ),
         )

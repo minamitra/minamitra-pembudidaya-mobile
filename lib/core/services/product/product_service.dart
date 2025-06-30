@@ -9,7 +9,10 @@ import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/produ
 abstract class ProductService {
   Future<BaseResponse<ProductCategoryResponse>> categoryProduct();
   Future<BaseResponse<ProductsResponse>> dataProducts(
-      String search, String categoryId,);
+    String search,
+    String categoryId, {
+    String? limit,
+  });
 }
 
 class ProductServiceImpl implements ProductService {
@@ -44,8 +47,15 @@ class ProductServiceImpl implements ProductService {
 
   @override
   Future<BaseResponse<ProductsResponse>> dataProducts(
-      String search, String categoryId,) async {
-    final url = endpoint.dataProduct(search, categoryId);
+    String search,
+    String categoryId, {
+    String? limit,
+  }) async {
+    final url = endpoint.dataProduct(
+      search,
+      categoryId,
+      limit: limit,
+    );
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
