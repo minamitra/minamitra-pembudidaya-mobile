@@ -3,13 +3,14 @@ import 'dart:developer';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
+import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_key.dart';
+import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/balance_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/repositories/literacy_information_response.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/balance/balance_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/home/home_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/literacy_information/literacy_information_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/point/point_service.dart';
-import 'package:minamitra_pembudidaya_mobile/core/services/profile/profile_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/home_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/repositories/point_balance_response.dart';
@@ -29,6 +30,8 @@ class HomeCubit extends Cubit<HomeState> {
   final BalanceService balanceService;
   final LiteracyInformationService literacyInformationService;
   final PointService pointService;
+  final SharedPreferenceService sharedPreferenceService =
+      SharedPreferenceServiceImpl.create();
 
   void init() async {
     emit(state.copyWith(status: GlobalState.loading));
@@ -42,7 +45,10 @@ class HomeCubit extends Cubit<HomeState> {
       );
       final pointBalance = await pointService.pointBalance();
       final pointConfiguration = await pointService.pointConfiguration();
-
+      final isHasNotification =
+          await sharedPreferenceService.getSharedPreference(
+        AppSharedPrefKey.isHasNotificationKey,
+      );
       emit(
         state.copyWith(
           status: GlobalState.loaded,
@@ -51,6 +57,7 @@ class HomeCubit extends Cubit<HomeState> {
           literacyInformationResponse: literacyInformationResponse.data,
           pointBalance: pointBalance.data,
           pointConfigruation: pointConfiguration.data,
+          isHasNotification: (isHasNotification ?? 'false') == 'true',
         ),
       );
       emit(state.copyWith(status: GlobalState.onUpdating));
@@ -71,6 +78,24 @@ class HomeCubit extends Cubit<HomeState> {
           errorMessage: e.toString(),
         ),
       );
+    }
+  }
+
+  Future<void> refreshNotif() async {
+    emit(state.copyWith(status: GlobalState.onUpdating));
+    try {
+      final isHasNotification =
+          await sharedPreferenceService.getSharedPreference(
+        AppSharedPrefKey.isHasNotificationKey,
+      );
+      emit(
+        state.copyWith(
+          isHasNotification: (isHasNotification ?? 'false') == 'true',
+          status: GlobalState.loaded,
+        ),
+      );
+    } catch (e) {
+      log(e.toString());
     }
   }
 }

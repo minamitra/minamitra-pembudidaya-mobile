@@ -1,18 +1,18 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class CultivationNoteDetailView extends StatefulWidget {
-  const CultivationNoteDetailView(this.data, {super.key});
-
-  final CompanionNotesResponseData data;
+  const CultivationNoteDetailView({super.key});
 
   @override
   State<CultivationNoteDetailView> createState() =>
@@ -21,7 +21,15 @@ class CultivationNoteDetailView extends StatefulWidget {
 
 class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
   @override
+  void initState() {
+    super.initState();
+    context.read<CultivationCubit>().addCommentReaded();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final CultivationCubit cultivationCubit = context.read<CultivationCubit>();
+
     Widget header() {
       return Row(
         children: [
@@ -31,7 +39,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
               height: 36.0,
               width: 36.0,
               child: Image.network(
-                widget.data.userImageUrl ?? '',
+                cultivationCubit.data?.userImageUrl ?? '',
                 fit: BoxFit.cover,
                 errorBuilder: (
                   BuildContext context,
@@ -51,13 +59,14 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                widget.data.userName.handlingEmptyString(),
+                cultivationCubit.data?.userName.handlingEmptyString() ?? '',
                 style: appTextTheme(context).titleSmall,
               ),
               const SizedBox(height: 4.0),
               Text(
-                AppConvertDateTime()
-                    .edmy(widget.data.createDatetime ?? DateTime.now()),
+                AppConvertDateTime().edmy(
+                  cultivationCubit.data?.createDatetime ?? DateTime.now(),
+                ),
                 style: appTextTheme(context)
                     .labelLarge
                     ?.copyWith(color: AppColor.neutral[400]),
@@ -69,7 +78,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
     }
 
     List<Widget> attachment() {
-      return (widget.data.attachmentJsonArray?.isEmpty ?? true)
+      return (cultivationCubit.data?.attachmentJsonArray?.isEmpty ?? true)
           ? [
               const Padding(
                 padding: EdgeInsets.only(top: 50.0),
@@ -80,7 +89,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
               ),
             ]
           : List.generate(
-              widget.data.attachmentJsonArray?.length ?? 0,
+              cultivationCubit.data?.attachmentJsonArray?.length ?? 0,
               (index) {
                 return Container(
                   height: 150.0,
@@ -95,7 +104,9 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
                         showImageViewer(
                           context,
                           Image.network(
-                            widget.data.attachmentJsonArray?[index] ?? '',
+                            cultivationCubit
+                                    .data?.attachmentJsonArray?[index] ??
+                                '',
                           ).image,
                           immersive: false,
                           useSafeArea: true,
@@ -105,7 +116,7 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
                         );
                       },
                       child: Image.network(
-                        widget.data.attachmentJsonArray?[index],
+                        cultivationCubit.data?.attachmentJsonArray?[index],
                         errorBuilder: (
                           BuildContext context,
                           Object obj,
@@ -122,25 +133,35 @@ class _CultivationNoteDetailViewState extends State<CultivationNoteDetailView> {
             );
     }
 
-    return ListView(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-      children: [
-        const SizedBox(height: 18.0),
-        header(),
-        const SizedBox(height: 18.0),
-        // Text(
-        //   'PIC: Unknown',
-        //   style: appTextTheme(context).bodySmall,
-        // ),
-        // const SizedBox(height: 18.0),
-        AppDividerSmall(),
-        const SizedBox(height: 18.0),
-        Text(
-          widget.data.content.handlingEmptyString(),
-          style: appTextTheme(context).bodySmall,
-        ),
-        ...attachment(),
-      ],
+    return BlocBuilder<CultivationCubit, CultivationState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state.status == GlobalState.error) {
+          return AppEmptyData(
+            state.errorMessage,
+            isCenter: true,
+          );
+        }
+
+        return ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          children: [
+            const SizedBox(height: 18.0),
+            header(),
+            const SizedBox(height: 18.0),
+            AppDividerSmall(),
+            const SizedBox(height: 18.0),
+            Text(
+              cultivationCubit.data?.content.handlingEmptyString() ?? '',
+              style: appTextTheme(context).bodySmall,
+            ),
+            ...attachment(),
+          ],
+        );
+      },
     );
   }
 }

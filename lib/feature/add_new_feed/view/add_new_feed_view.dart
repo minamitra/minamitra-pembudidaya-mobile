@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_text_field.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/logic/add_new_feed_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class AddNewFeedView extends StatefulWidget {
@@ -13,23 +19,15 @@ class AddNewFeedView extends StatefulWidget {
 }
 
 class _AddNewFeedViewState extends State<AddNewFeedView> {
-  final TextEditingController newFeedTypeController = TextEditingController();
-  final TextEditingController newFeedNameController = TextEditingController();
-  final TextEditingController newFeedSizeController = TextEditingController();
-  final TextEditingController newFeedProteinController =
-      TextEditingController();
-  final TextEditingController newFeedEPPController = TextEditingController();
-  final TextEditingController newFeedPriceController = TextEditingController();
-  final TextEditingController newFeedUnitController = TextEditingController();
-  final TextEditingController newFeedSupplierController =
-      TextEditingController();
-  final TextEditingController newFeedNoteController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
+    final addNewFeedCubit = context.read<AddNewFeedCubit>();
+
     Widget newFeedType(BuildContext context) {
       return AppValidatorTextField(
-        controller: newFeedTypeController,
+        controller: addNewFeedCubit.newFeedTypeController,
         isMandatory: true,
         withUpperLabel: true,
         readOnly: true,
@@ -49,15 +47,17 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         onTap: appBottomSheetShowModal(
           context,
           'Pilih Jenis Pakan',
-          ['Starter', 'Grower', 'Finisher'],
-          (value) {},
+          ['starter1', 'starter2', 'starter3', 'grower', 'finisher'],
+          (value) {
+            addNewFeedCubit.setNewFeedType(value);
+          },
         ),
       );
     }
 
     Widget newFeedName() {
       return AppValidatorTextField(
-        controller: newFeedNameController,
+        controller: addNewFeedCubit.newFeedNameController,
         hintText: 'Masukkan Nama Pakan Baru',
         labelText: 'Nama Pakan Baru',
         isMandatory: true,
@@ -67,26 +67,16 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
           }
           return null;
         },
-        // suffixConstraints: const BoxConstraints(),
-        // suffixWidget: Padding(
-        //   padding: const EdgeInsets.only(right: 18.0),
-        //   child: Text(
-        //     "hari",
-        //     style: appTextTheme(context).bodySmall?.copyWith(
-        //           color: AppColor.neutral[500],
-        //           fontWeight: FontWeight.w500,
-        //         ),
-        //   ),
-        // ),
       );
     }
 
     Widget newFeedSize() {
       return AppValidatorTextField(
-        controller: newFeedSizeController,
+        controller: addNewFeedCubit.newFeedSizeController,
         hintText: 'Masukkan Ukuran Pakan Baru',
         labelText: 'Ukuran Pakan Baru',
         isMandatory: true,
+        inputType: TextInputType.phone,
         validator: (String? value) {
           if (value!.isEmpty) {
             return 'Ukuran Pakan tidak boleh kosong';
@@ -104,15 +94,20 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
                 ),
           ),
         ),
+        inputFormatters: [
+          DecimalInputFormatter(decimalRange: 2),
+          FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
+        ],
       );
     }
 
     Widget newFeedProtein() {
       return AppValidatorTextField(
-        controller: newFeedProteinController,
+        controller: addNewFeedCubit.newFeedProteinController,
         hintText: 'Masukkan Protein Pakan Baru',
         labelText: 'Protein Pakan Baru',
         isMandatory: true,
+        inputType: TextInputType.number,
         validator: (String? value) {
           if (value!.isEmpty) {
             return 'Protein Pakan tidak boleh kosong';
@@ -135,10 +130,11 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
 
     Widget newFeedEPP() {
       return AppValidatorTextField(
-        controller: newFeedEPPController,
+        controller: addNewFeedCubit.newFeedEPPController,
         hintText: 'Masukkan estimasi EPP Baru',
         labelText: 'Estimasi EPP Baru',
         isMandatory: true,
+        inputType: TextInputType.number,
         validator: (String? value) {
           if (value!.isEmpty) {
             return 'EPP Pakan tidak boleh kosong';
@@ -161,10 +157,11 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
 
     Widget newFeedPrice() {
       return AppValidatorTextField(
-        controller: newFeedPriceController,
-        hintText: '   0',
+        controller: addNewFeedCubit.newFeedPriceController,
+        hintText: '0',
         labelText: 'Harga Pakan Baru',
         isMandatory: true,
+        inputType: TextInputType.number,
         validator: (String? value) {
           if (value!.isEmpty) {
             return 'Harga Pakan tidak boleh kosong';
@@ -175,84 +172,110 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         prefixIcon: Padding(
           padding: const EdgeInsets.only(left: 18.0),
           child: Text(
-            'Rp',
+            'Rp ',
             style: appTextTheme(context).bodySmall?.copyWith(
                   color: AppColor.neutral[500],
                   fontWeight: FontWeight.w500,
                 ),
           ),
         ),
+        inputFormatters: [AppCurrencyFormatter.currency],
       );
     }
 
     Widget newFeedUnit(BuildContext context) {
-      return AppValidatorTextField(
-        controller: newFeedUnitController,
-        isMandatory: false,
-        withUpperLabel: true,
-        readOnly: true,
-        labelText: 'Satuan Pakan Baru',
-        hintText: 'Pilih Satuan Pakan',
-        suffixWidget: const Padding(
-          padding: EdgeInsets.only(right: 18.0),
-          child: Icon(Icons.arrow_drop_down_rounded),
-        ),
-        suffixConstraints: const BoxConstraints(),
-        validator: (value) {
-          if (value?.isEmpty ?? true) {
-            // return "Satuan Pakan tidak boleh kosong";
-            return null;
+      return BlocBuilder<AddNewFeedCubit, AddNewFeedState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              55.0,
+              double.infinity,
+              8.0,
+            );
           }
-          return null;
+
+          return AppValidatorTextField(
+            controller: addNewFeedCubit.newFeedUnitController,
+            isMandatory: false,
+            withUpperLabel: true,
+            readOnly: true,
+            labelText: 'Satuan Pakan Baru',
+            hintText: 'Pilih Satuan Pakan',
+            suffixWidget: const Padding(
+              padding: EdgeInsets.only(right: 18.0),
+              child: Icon(Icons.arrow_drop_down_rounded),
+            ),
+            suffixConstraints: const BoxConstraints(),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return 'Satuan Pakan tidak boleh kosong';
+              }
+              return null;
+            },
+            onTap: appBottomSheetShowModal(
+              context,
+              'Pilih Satuan Pakan',
+              state.unitList.map((e) => e.name ?? '').toList(),
+              (value) {
+                addNewFeedCubit.setNewFeedUnit(value);
+              },
+            ),
+          );
         },
-        onTap: appBottomSheetShowModal(
-          context,
-          'Pilih Satuan Pakan',
-          ['gram', 'Kilogram', 'Ton'],
-          (value) {},
-        ),
       );
     }
 
     Widget newFeedSupplier(BuildContext context) {
-      return AppValidatorTextField(
-        controller: newFeedSupplierController,
-        isMandatory: false,
-        withUpperLabel: true,
-        readOnly: true,
-        labelText: 'Supplier Pakan Baru',
-        hintText: 'Pilih Supplier Pakan',
-        suffixWidget: const Padding(
-          padding: EdgeInsets.only(right: 18.0),
-          child: Icon(Icons.arrow_drop_down_rounded),
-        ),
-        suffixConstraints: const BoxConstraints(),
-        validator: (value) {
-          if (value?.isEmpty ?? true) {
-            // return "Supplier Pakan tidak boleh kosong";
-            return null;
+      return BlocBuilder<AddNewFeedCubit, AddNewFeedState>(
+        builder: (context, state) {
+          if (state.status.isLoading) {
+            return const AppShimmer(
+              55.0,
+              double.infinity,
+              8.0,
+            );
           }
-          return null;
+
+          return AppValidatorTextField(
+            controller: addNewFeedCubit.newFeedSupplierController,
+            isMandatory: false,
+            withUpperLabel: true,
+            readOnly: true,
+            labelText: 'Supplier Pakan Baru',
+            hintText: 'Pilih Supplier Pakan',
+            suffixWidget: const Padding(
+              padding: EdgeInsets.only(right: 18.0),
+              child: Icon(Icons.arrow_drop_down_rounded),
+            ),
+            suffixConstraints: const BoxConstraints(),
+            validator: (value) {
+              if (value?.isEmpty ?? true) {
+                return null;
+              }
+              return null;
+            },
+            onTap: appBottomSheetShowModal(
+              context,
+              'Pilih Supplier Pakan',
+              state.supplierList.map((e) => e.name ?? '').toList(),
+              (value) {
+                addNewFeedCubit.setNewFeedSupplier(value);
+              },
+            ),
+          );
         },
-        onTap: appBottomSheetShowModal(
-          context,
-          'Pilih Supplier Pakan',
-          ['Mina', 'Mitra', 'Mandiri', 'lainnya'],
-          (value) {},
-        ),
       );
     }
 
     Widget newFeedNote() {
       return AppValidatorTextField(
-        controller: newFeedNoteController,
+        controller: addNewFeedCubit.newFeedNoteController,
         hintText: 'Masukan keterangan pakan ...',
         labelText: 'Keterangan Pakan Baru',
         maxLines: 3,
         isMandatory: false,
         validator: (String? value) {
           if (value!.isEmpty) {
-            // return "Catatan tidak boleh kosong";
             return null;
           }
           return null;
@@ -302,18 +325,26 @@ class _AddNewFeedViewState extends State<AddNewFeedView> {
         ),
         child: AppPrimaryFullButton(
           'Simpan',
-          () {},
+          () {
+            if (!(_formKey.currentState?.validate() ?? false)) {
+              return;
+            }
+            addNewFeedCubit.process();
+          },
         ),
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 18.0),
-      child: Column(
-        children: [
-          Expanded(child: body()),
-          button(),
-        ],
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Column(
+          children: [
+            Expanded(child: body()),
+            button(),
+          ],
+        ),
       ),
     );
   }

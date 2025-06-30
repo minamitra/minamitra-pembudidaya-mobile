@@ -1,11 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/notification/logic/notification_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/notification/repositories/notification_list_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/notification_detail/view/notification_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
@@ -112,28 +117,44 @@ class _NotificationViewState extends State<NotificationView> {
       );
     }
 
-    return ListView.separated(
-      separatorBuilder: (context, index) => AppDividerSmall(),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return itemCard(
-          'Pemberitahuan Penting',
-          '12 Agustus 2021',
-          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          isRead: index % 2 == 0,
-          image: index & 2 == 0 ? AppAssets.dummyNotificationImage : null,
-          onTap: () {
-            Navigator.of(context).push(
-              AppTransition.pushTransition(
-                NotificationDetailPage(
-                  'Pemberitahuan Penting',
-                  '12 Agustus 2021',
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                  image:
-                      index & 2 == 0 ? AppAssets.dummyNotificationImage : null,
+    return BlocBuilder<NotificationCubit, NotificationState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return ListView.separated(
+            itemCount: 10,
+            separatorBuilder: (context, index) => const SizedBox(height: 24.0),
+            itemBuilder: (context, index) {
+              return AppShimmer(
+                180.0,
+                double.infinity,
+                12.0,
+                margin: EdgeInsets.only(
+                  top: index == 0 ? 8.0 : 0.0,
+                  left: 16.0,
+                  right: 16.0,
                 ),
-                NotificationDetailPage.routeSettings(),
-              ),
+              );
+            },
+          );
+        }
+
+        return ListView.separated(
+          separatorBuilder: (context, index) => AppDividerSmall(),
+          itemCount: state.notificationListResponse?.data?.length ?? 0,
+          itemBuilder: (context, index) {
+            final notification = state.notificationListResponse?.data?[index];
+            return itemCard(
+              notification?.title ?? '-',
+              AppConvertDateTime()
+                  .dmyNamehhmm(notification?.createDatetime ?? DateTime.now()),
+              notification?.message ?? '-',
+              isRead: notification?.isReadBool ?? false,
+              image: null,
+              onTap: () {
+                context.read<NotificationCubit>().readNotification(
+                      notification ?? NotificationListResponseData(),
+                    );
+              },
             );
           },
         );

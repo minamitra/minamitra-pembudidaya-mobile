@@ -11,6 +11,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/rep
 import 'package:minamitra_pembudidaya_mobile/feature/activity_activities_add/repositories/feer_recomendation_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/repositories/recommendation_feed_bulk_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/add_bulk_feed/repositories/save_bulk_body.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/add_new_feed/repositories/add_new_feed_body.dart';
 
 abstract class FeedActivityService {
   Future<BaseResponse<FeedActivityResponse>> getData(
@@ -35,6 +36,7 @@ abstract class FeedActivityService {
     String date,
   );
   Future<BaseResponse<bool>> saveFeedBulkData(SaveBulkBody saveBulkBody);
+  Future<BaseResponse<bool>> addNewFeed(AddNewFeedBody body);
 }
 
 class FeedActivityServiceImpl implements FeedActivityService {
@@ -152,5 +154,18 @@ class FeedActivityServiceImpl implements FeedActivityService {
     );
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: metaResponse, data: true);
+  }
+
+  @override
+  Future<BaseResponse<bool>> addNewFeed(AddNewFeedBody body) async {
+    final uri = endpoint.postAddNewFeed();
+    final header = await headerProvider.headers;
+    final response = await httpClient.post(
+      uri,
+      header,
+      body.toJson(),
+    );
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    return BaseResponse(meta: metaResponse, data: metaResponse.status == 200);
   }
 }

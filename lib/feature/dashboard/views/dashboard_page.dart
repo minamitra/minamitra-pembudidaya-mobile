@@ -39,7 +39,6 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     appCloudMessaging.setFirebaseCloudMessagingHandler(context);
   }

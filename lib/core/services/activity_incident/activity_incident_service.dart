@@ -9,11 +9,18 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/repos
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_add/repositories/update_incicent_payload.dart';
 
 abstract class ActivityIncidentService {
-  Future<BaseResponse<IncidentResponse>> dataIncident();
-  Future<BaseResponse<IncidentResponse>> historyIncident();
+  Future<BaseResponse<IncidentResponse>> dataIncident({
+    required String fishpondCycleID,
+  });
+  Future<BaseResponse<IncidentResponse>> historyIncident({
+    required String fishpondCycleID,
+  });
   Future<BaseResponse<bool>> addIncident(AddIncidentPayload payload);
   Future<BaseResponse<bool>> deleteIncident(String id);
   Future<BaseResponse<bool>> updateIncident(UpdateIncidentPayload payload);
+  Future<BaseResponse<IncidentResponseData>> dataIncidentDetail({
+    required String incidentID,
+  });
 }
 
 class ActivityIncidentServiceImpl implements ActivityIncidentService {
@@ -36,8 +43,13 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
   }
 
   @override
-  Future<BaseResponse<IncidentResponse>> dataIncident() async {
-    final url = endpoint.dataIncident('waiting,processed');
+  Future<BaseResponse<IncidentResponse>> dataIncident({
+    required String fishpondCycleID,
+  }) async {
+    final url = endpoint.dataIncident(
+      'waiting,processed',
+      fishpondCycleID,
+    );
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -47,8 +59,13 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
   }
 
   @override
-  Future<BaseResponse<IncidentResponse>> historyIncident() async {
-    final url = endpoint.dataIncident('rejected,done,failed,canceled');
+  Future<BaseResponse<IncidentResponse>> historyIncident({
+    required String fishpondCycleID,
+  }) async {
+    final url = endpoint.dataIncident(
+      'rejected,done,failed,canceled',
+      fishpondCycleID,
+    );
     final header = await headerProvider.headers;
     final response = await httpClient.get(url, header);
     final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
@@ -85,7 +102,8 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
 
   @override
   Future<BaseResponse<bool>> updateIncident(
-      UpdateIncidentPayload payload,) async {
+    UpdateIncidentPayload payload,
+  ) async {
     final url = endpoint.updateIncident();
     final header = await headerProvider.headers;
     final response = await httpClient.post(
@@ -95,5 +113,18 @@ class ActivityIncidentServiceImpl implements ActivityIncidentService {
     );
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     return BaseResponse(meta: meta, data: true);
+  }
+
+  @override
+  Future<BaseResponse<IncidentResponseData>> dataIncidentDetail({
+    required String incidentID,
+  }) async {
+    final url = endpoint.dataIncidentDetail(incidentID);
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(url, header);
+    final MetaResponse metaResponse = MetaResponse.fromJson(response.body);
+    final IncidentResponseData incidentResponse =
+        IncidentResponseData.fromMap(metaResponse.result!['data']);
+    return BaseResponse(meta: metaResponse, data: incidentResponse);
   }
 }

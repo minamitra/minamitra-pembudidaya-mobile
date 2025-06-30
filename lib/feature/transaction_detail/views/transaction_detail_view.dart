@@ -22,28 +22,14 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_string.dart'
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_money_formatter.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/adress_data.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/components/upload_payment_proof.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/method_payment_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/repositories/transaction_item_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/logic/transaction_detail_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/views/detail_delivery/detail_delivery_page.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class TransactionDetailView extends StatefulWidget {
-  final List<ProductsResponseData> listProduct;
-  final List<int> listAmountItem;
-  final Address address;
-  final MethodPaymentData methodPayment;
-  final TransactionItemResponseData data;
-
-  const TransactionDetailView(
-    this.listProduct,
-    this.listAmountItem,
-    this.address,
-    this.methodPayment,
-    this.data, {
+  const TransactionDetailView({
     super.key,
   });
 
@@ -55,8 +41,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   final TextEditingController noteController = TextEditingController();
   List<Uint8List> listImage = [];
 
-  String badgesText() {
-    switch (widget.data.status) {
+  String badgesText(TransactionDetailCubit transactionDetailCubit) {
+    switch (transactionDetailCubit.data?.status) {
       case 'Menunggu':
         return 'Menunggu Konfirmasi Pesanan';
       case 'Diproses':
@@ -73,8 +59,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
     }
   }
 
-  Color badgeColor() {
-    switch (widget.data.status) {
+  Color badgeColor(TransactionDetailCubit transactionDetailCubit) {
+    switch (transactionDetailCubit.data?.status) {
       case 'Menunggu':
         return AppColor.accent;
       case 'Diproses':
@@ -92,12 +78,14 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget statusBar(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Column(
       children: [
-        if ((widget.data.status == 'Menunggu' ||
-                widget.data.status == 'Diproses' ||
-                widget.data.status == 'Dikirim') &&
-            widget.data.paymentStatus == 'Belum Terbayar')
+        if ((transactionDetailCubit.data?.status == 'Menunggu' ||
+                transactionDetailCubit.data?.status == 'Diproses' ||
+                transactionDetailCubit.data?.status == 'Dikirim') &&
+            transactionDetailCubit.data?.paymentStatus == 'Belum Terbayar')
           Container(
             padding: const EdgeInsets.symmetric(
               vertical: 10.0,
@@ -133,9 +121,11 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                         ),
                         TextSpan(
                           text: '${AppConvertDateTime().dmyName(
-                            widget.data.paymentDueDatetime ?? DateTime.now(),
+                            transactionDetailCubit.data?.paymentDueDatetime ??
+                                DateTime.now(),
                           )} ${AppConvertDateTime().jm24(
-                            widget.data.paymentDueDatetime ?? DateTime.now(),
+                            transactionDetailCubit.data?.paymentDueDatetime ??
+                                DateTime.now(),
                           )}',
                           style: appTextTheme(context)
                               .labelLarge
@@ -148,10 +138,11 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               ],
             ),
           ),
-        if ((widget.data.status == 'Menunggu' ||
-                widget.data.status == 'Diproses' ||
-                widget.data.status == 'Dikirim') &&
-            widget.data.paymentStatus == 'Menunggu Verifikasi Pembayaran')
+        if ((transactionDetailCubit.data?.status == 'Menunggu' ||
+                transactionDetailCubit.data?.status == 'Diproses' ||
+                transactionDetailCubit.data?.status == 'Dikirim') &&
+            transactionDetailCubit.data?.paymentStatus ==
+                'Menunggu Verifikasi Pembayaran')
           Container(
             padding: const EdgeInsets.symmetric(
               vertical: 10.0,
@@ -190,11 +181,11 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           margin: const EdgeInsets.symmetric(horizontal: 16.0),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: badgeColor(),
+            color: badgeColor(transactionDetailCubit),
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Text(
-            badgesText(),
+            badgesText(transactionDetailCubit),
             textAlign: TextAlign.center,
             style: appTextTheme(context).bodySmall?.copyWith(
                   fontWeight: FontWeight.w500,
@@ -273,6 +264,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget paymentMethod(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -292,15 +285,17 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(8.0),
-                child: widget.data.paymentMethod == 'Transfer'
+                child: transactionDetailCubit.data?.paymentMethod == 'Transfer'
                     ? Image.network(
-                        widget.data.paymentTransferBankImageUrl ?? '',
+                        transactionDetailCubit
+                                .data?.paymentTransferBankImageUrl ??
+                            '',
                         width: 40,
                         height: 40,
                         fit: BoxFit.cover,
                       )
                     : Image.asset(
-                        widget.methodPayment.icon,
+                        AppAssets.walletSquareIcon,
                         width: 40,
                         height: 40,
                         fit: BoxFit.cover,
@@ -312,10 +307,13 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.data.paymentMethod == 'Transfer'
-                          ? widget.data.paymentTransferBankName
-                              .handlingEmptyString()
-                          : widget.data.paymentMethod.handlingEmptyString(),
+                      transactionDetailCubit.data?.paymentMethod == 'Transfer'
+                          ? transactionDetailCubit.data?.paymentTransferBankName
+                                  .handlingEmptyString() ??
+                              ''
+                          : transactionDetailCubit.data?.paymentMethod
+                                  .handlingEmptyString() ??
+                              '',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).bodySmall?.copyWith(
                             fontWeight: FontWeight.w600,
@@ -323,9 +321,11 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                           ),
                     ),
                     Text(
-                      widget.data.paymentMethod == 'Transfer'
-                          ? widget.data.paymentTransferBankAccountName
-                              .handlingEmptyString()
+                      transactionDetailCubit.data?.paymentMethod == 'Transfer'
+                          ? transactionDetailCubit
+                                  .data?.paymentTransferBankAccountName
+                                  .handlingEmptyString() ??
+                              ''
                           : '',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).bodySmall?.copyWith(
@@ -338,18 +338,20 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               ),
             ],
           ),
-          if (widget.data.paymentMethod == 'Transfer') ...[
+          if (transactionDetailCubit.data?.paymentMethod == 'Transfer') ...[
             const SizedBox(height: 18.0),
             transferBankItem(
               title: 'Rekening tujuan',
-              value: widget.data.paymentTransferBankAccountNumber
-                  .handlingEmptyString(),
+              value: transactionDetailCubit
+                      .data?.paymentTransferBankAccountNumber
+                      .handlingEmptyString() ??
+                  '',
             ),
             const SizedBox(height: 18.0),
             transferBankItem(
               title: 'Total transfer',
               value: AppCurrencyFormatter.format(
-                double.parse(widget.data.grandTotal ?? '0'),
+                double.parse(transactionDetailCubit.data?.grandTotal ?? '0'),
               ),
             ),
           ],
@@ -359,6 +361,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget addressWidget(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -368,7 +372,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.data.status == 'Dikirim'
+                transactionDetailCubit.data?.status == 'Dikirim'
                     ? 'Informasi Pengiriman'
                     : 'Alamat Pesanan',
                 textAlign: TextAlign.start,
@@ -377,7 +381,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                       color: AppColor.black,
                     ),
               ),
-              if (widget.data.status == 'Dikirim')
+              if (transactionDetailCubit.data?.status == 'Dikirim')
                 BlocBuilder<TransactionDetailCubit, TransactionDetailState>(
                   builder: (context, state) {
                     if (state.status.isLoading) {
@@ -390,10 +394,16 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
 
                     return InkWell(
                       onTap: () {
+                        if (state.deliveryStatus == null) {
+                          return;
+                        }
+
                         Navigator.of(context).push(
                           AppTransition.pushTransition(
                             DetailDeliveryPage(
-                              widget.data.number.handlingEmptyString(),
+                              transactionDetailCubit.data?.number
+                                      .handlingEmptyString() ??
+                                  '',
                               state.deliveryStatus!,
                             ),
                             DetailDeliveryPage.routeSettings(),
@@ -496,7 +506,9 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.data.deliveryAddressTitle.handlingEmptyString(),
+                        transactionDetailCubit.data?.deliveryAddressTitle
+                                .handlingEmptyString() ??
+                            '',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w700,
@@ -504,7 +516,9 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                             ),
                       ),
                       Text(
-                        widget.data.deliveryAddressName.handlingEmptyString(),
+                        transactionDetailCubit.data?.deliveryAddressName
+                                .handlingEmptyString() ??
+                            '',
                         textAlign: TextAlign.start,
                         style: appTextTheme(context).bodySmall?.copyWith(
                               fontWeight: FontWeight.w400,
@@ -593,6 +607,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget orderItems(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -613,7 +629,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: widget.data.orderDetails?.length ?? 0,
+            itemCount: transactionDetailCubit.data?.orderDetails?.length ?? 0,
             separatorBuilder: (context, index) => const Padding(
               padding: EdgeInsets.symmetric(vertical: 18.0),
               child: AppDottedLine(),
@@ -621,7 +637,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
             itemBuilder: (context, index) {
               return productItem(
                 context,
-                widget.data.orderDetails![index],
+                transactionDetailCubit.data?.orderDetails?[index] ??
+                    OrderDetail(),
               );
             },
           ),
@@ -659,6 +676,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget orderDetail(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -677,19 +696,19 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           rowText(
             context,
             'No Pesanan',
-            widget.data.number.handlingEmptyString(),
+            transactionDetailCubit.data?.number.handlingEmptyString() ?? '',
           ),
           const SizedBox(height: 12.0),
           rowText(
             context,
             'Tanggal Pesanan',
-            '${AppConvertDateTime().dmyName(widget.data.datetime ?? DateTime.now())} ${AppConvertDateTime().jm24(widget.data.datetime ?? DateTime.now())}',
+            '${AppConvertDateTime().dmyName(transactionDetailCubit.data?.datetime ?? DateTime.now())} ${AppConvertDateTime().jm24(transactionDetailCubit.data?.datetime ?? DateTime.now())}',
           ),
           const SizedBox(height: 12.0),
           rowText(
             context,
             'Atas Nama',
-            widget.data.memberName.handlingEmptyString(),
+            transactionDetailCubit.data?.memberName.handlingEmptyString() ?? '',
           ),
         ],
       ),
@@ -697,6 +716,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget feeDetail(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Container(
       color: AppColor.white,
       padding: const EdgeInsets.all(16.0),
@@ -715,7 +736,9 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           rowText(
             context,
             'Harga',
-            appConvertCurrency(double.parse(widget.data.grandTotal ?? '0')),
+            appConvertCurrency(
+              double.parse(transactionDetailCubit.data?.grandTotal ?? '0'),
+            ),
           ),
           // const SizedBox(height: 12.0),
           // rowText(
@@ -738,7 +761,8 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                     ),
               ),
               Text(
-                appConvertCurrency(double.parse(widget.data.grandTotal ?? '0')),
+                appConvertCurrency(double.parse(
+                    transactionDetailCubit.data?.grandTotal ?? '0')),
                 textAlign: TextAlign.end,
                 style: appTextTheme(context).titleMedium?.copyWith(
                       fontWeight: FontWeight.w700,
@@ -880,21 +904,23 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
   }
 
   Widget button(BuildContext context) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
-          if ((widget.data.status == 'Menunggu' ||
-                  widget.data.status == 'Diproses' ||
-                  widget.data.status == 'Dikirim') &&
-              widget.data.paymentStatus == 'Belum Terbayar')
+          if ((transactionDetailCubit.data?.status == 'Menunggu' ||
+                  transactionDetailCubit.data?.status == 'Diproses' ||
+                  transactionDetailCubit.data?.status == 'Dikirim') &&
+              transactionDetailCubit.data?.paymentStatus == 'Belum Terbayar')
             AppPrimaryFullButton(
               'Saya Sudah Bayar',
               uploadPaymentProof(
                 context,
                 (file, notes) {
                   context.read<TransactionDetailCubit>().uploadPaymentProof(
-                        widget.data.id ?? '0',
+                        transactionDetailCubit.data?.id ?? '0',
                         file,
                         notes,
                       );
@@ -902,7 +928,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               ),
             ),
           const SizedBox(height: 16.0),
-          if (widget.data.status == 'Menunggu')
+          if (transactionDetailCubit.data?.status == 'Menunggu')
             AppPrimaryOutlineFullButton(
               'Batalkan Pesanan',
               () {
@@ -913,7 +939,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                   onTapDelete: () {
                     context
                         .read<TransactionDetailCubit>()
-                        .cancelOrder(widget.data.id ?? '0');
+                        .cancelOrder(transactionDetailCubit.data?.id ?? '0');
                     Navigator.of(context).pop();
                   },
                   buttonTitle: 'Iya, Batalkan',
@@ -922,8 +948,9 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               },
             ),
           const SizedBox(height: 16.0),
-          if (widget.data.status == 'Dikirim' &&
-              widget.data.paymentStatus == 'Pembayaran Selesai')
+          if (transactionDetailCubit.data?.status == 'Dikirim' &&
+              transactionDetailCubit.data?.paymentStatus ==
+                  'Pembayaran Selesai')
             AppPrimaryFullButton(
               'Konfirmasi Pesanan',
               () {
@@ -1002,9 +1029,9 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
                   },
                 ).then((value) {
                   if (value == true) {
-                    context
-                        .read<TransactionDetailCubit>()
-                        .completeTransaction(widget.data.id ?? '0');
+                    context.read<TransactionDetailCubit>().completeTransaction(
+                          transactionDetailCubit.data?.id ?? '0',
+                        );
                   }
                 });
               },
@@ -1014,7 +1041,12 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
     );
   }
 
-  Widget proofAttachment(bool isPayWith3M) {
+  Widget proofAttachment(
+    BuildContext context,
+    bool isPayWith3M,
+  ) {
+    final transactionDetailCubit =
+        BlocProvider.of<TransactionDetailCubit>(context);
     if (isPayWith3M) {
       return const SizedBox();
     }
@@ -1035,10 +1067,14 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
           const SizedBox(height: 16.0),
           InkWell(
             onTap: () {
-              if (widget.data.paymentProofImageUrl?.isNotEmpty ?? false) {
+              if (transactionDetailCubit
+                      .data?.paymentProofImageUrl?.isNotEmpty ??
+                  false) {
                 showImageViewer(
                   context,
-                  Image.network(widget.data.paymentProofImageUrl!).image,
+                  Image.network(
+                    transactionDetailCubit.data?.paymentProofImageUrl ?? '',
+                  ).image,
                   immersive: false,
                   useSafeArea: true,
                   swipeDismissible: true,
@@ -1048,7 +1084,7 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
               }
             },
             child: Image.network(
-              widget.data.paymentProofImageUrl ?? '',
+              transactionDetailCubit.data?.paymentProofImageUrl ?? '',
               height: MediaQuery.sizeOf(context).height * 0.25,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -1081,27 +1117,45 @@ class _TransactionDetailViewState extends State<TransactionDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const SizedBox(height: 16.0),
-        statusBar(context),
-        const SizedBox(height: 16.0),
-        paymentMethod(context),
-        const SizedBox(height: 16.0),
-        addressWidget(context),
-        const SizedBox(height: 16.0),
-        orderItems(context),
-        const SizedBox(height: 16.0),
-        orderDetail(context),
-        const SizedBox(height: 16.0),
-        feeDetail(context),
-        const SizedBox(height: 16.0),
-        if (widget.data.paymentStatus != 'Belum Terbayar')
-          proofAttachment(widget.data.paymentMethod == 'Dompet3M'),
-        const SizedBox(height: 32.0),
-        button(context),
-        const SizedBox(height: 32.0),
-      ],
+    final TransactionDetailCubit transactionDetailCubit =
+        context.read<TransactionDetailCubit>();
+
+    return BlocBuilder<TransactionDetailCubit, TransactionDetailState>(
+      builder: (context, state) {
+        if (state.status.isLoading || state.status.isInitial) {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: AppColor.primary,
+            ),
+          );
+        }
+
+        return ListView(
+          children: [
+            const SizedBox(height: 16.0),
+            statusBar(context),
+            const SizedBox(height: 16.0),
+            paymentMethod(context),
+            const SizedBox(height: 16.0),
+            addressWidget(context),
+            const SizedBox(height: 16.0),
+            orderItems(context),
+            const SizedBox(height: 16.0),
+            orderDetail(context),
+            const SizedBox(height: 16.0),
+            feeDetail(context),
+            const SizedBox(height: 16.0),
+            if (transactionDetailCubit.data?.paymentStatus != 'Belum Terbayar')
+              proofAttachment(
+                context,
+                transactionDetailCubit.data?.paymentMethod == 'Dompet3M',
+              ),
+            const SizedBox(height: 32.0),
+            button(context),
+            const SizedBox(height: 32.0),
+          ],
+        );
+      },
     );
   }
 }

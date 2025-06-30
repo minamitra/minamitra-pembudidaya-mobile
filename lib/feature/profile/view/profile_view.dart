@@ -829,6 +829,9 @@ class _ProfileViewState extends State<ProfileView> {
                     if (value == ActivityPage.routeSettings().name) {
                       context.read<DashboardBottomNavCubit>().changeIndex(2);
                     }
+                    if (value == 'changeBottomNav1') {
+                      context.read<DashboardBottomNavCubit>().changeIndex(1);
+                    }
                   },
                 );
               },

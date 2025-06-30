@@ -107,7 +107,7 @@ class _DetailIncomeViewState extends State<DetailIncomeView> {
                   ),
                 ),
                 Text(
-                  '${appConvertCurrency(data.sellRequest.toDouble())}/kg',
+                  '${appConvertCurrency(data.sellUnitPrice.toDouble())}/kg',
                   textAlign: TextAlign.start,
                   style: appTextTheme(context).titleSmall,
                 ),
@@ -126,7 +126,7 @@ class _DetailIncomeViewState extends State<DetailIncomeView> {
                   ),
                 ),
                 Text(
-                  'x ${data.sellUnitPrice}kg',
+                  'x ${data.sellRequest}kg',
                   textAlign: TextAlign.start,
                   style: appTextTheme(context).titleSmall,
                 ),

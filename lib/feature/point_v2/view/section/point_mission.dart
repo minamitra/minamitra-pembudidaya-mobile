@@ -376,41 +376,8 @@ class PointMission extends StatelessWidget {
                             .handlingEmptyString() ??
                         '-',
                     value: getValuePercentage(),
-                    valueDescription: ((state.missionPoint?.data
-                                            ?.limitedMission?[index].pointEnd ==
-                                        null
-                                    ? ((state
-                                                    .missionPoint
-                                                    ?.data
-                                                    ?.limitedMission?[index]
-                                                    .pointStart ??
-                                                0) >
-                                            0
-                                        ? 1
-                                        : 0)
-                                    : (state
-                                                    .missionPoint
-                                                    ?.data
-                                                    ?.limitedMission?[index]
-                                                    .pointStart ??
-                                                0) ==
-                                            0
-                                        ? 0
-                                        : ((state
-                                                    .missionPoint
-                                                    ?.data
-                                                    ?.limitedMission?[index]
-                                                    .pointStart ??
-                                                0) /
-                                            (state
-                                                    .missionPoint
-                                                    ?.data
-                                                    ?.limitedMission?[index]
-                                                    .pointEnd ??
-                                                0))) *
-                                100)
-                            .toString() +
-                        ' %',
+                    valueDescription:
+                        '${(state.missionPoint?.data?.limitedMission?[index].pointEnd == null ? ((state.missionPoint?.data?.limitedMission?[index].pointStart ?? 0) > 0 ? 1 : 0) : (state.missionPoint?.data?.limitedMission?[index].pointStart ?? 0) == 0 ? 0 : ((state.missionPoint?.data?.limitedMission?[index].pointStart ?? 0) / (state.missionPoint?.data?.limitedMission?[index].pointEnd ?? 0))) * 100} %',
                     buttonTitle: 'Pergi',
                     isCompleted: (state.missionPoint?.data
                                 ?.limitedMission?[index].status

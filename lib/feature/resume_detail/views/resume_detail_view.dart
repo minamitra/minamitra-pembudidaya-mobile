@@ -1,8 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_animated_size.dart';
+import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_shimmer.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
@@ -11,7 +10,6 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/view/cultivation_note_all_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/finance_detail/repositories/sample_data.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/resume_per_cycle_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/resume_detail/logic/resume_detail_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/sampling_resume_detail/views/sampling_resume_detail_page.dart';
@@ -34,7 +32,16 @@ class ResumeDetailView extends StatefulWidget {
   State<ResumeDetailView> createState() => _ResumeDetailViewState();
 }
 
-class _ResumeDetailViewState extends State<ResumeDetailView> {
+class _ResumeDetailViewState extends State<ResumeDetailView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    _tabController = TabController(length: 5, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget itemValueText(
@@ -272,11 +279,12 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
     Widget dropDownBackground({
       required Widget child,
       required bool isShow,
+      EdgeInsetsGeometry? padding,
     }) {
       return AppAnimatedSize(
         isShow: isShow,
         child: Container(
-          padding: const EdgeInsets.all(18.0),
+          padding: padding ?? const EdgeInsets.all(18.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8.0),
             color: AppColor.neutral[50],
@@ -510,22 +518,22 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
     Widget feedSection() {
       return BlocBuilder<ResumeDetailCubit, ResumeDetailState>(
         builder: (context, state) {
-          String starter1Feed = widget.data.pakan
+          List<Pakan> starter1Feed = widget.data.pakan
                       ?.where(
                         (data) =>
-                            data.fishfoodType?.toLowerCase() == 'starter1',
+                            data.fishfoodType?.toLowerCase() == 'starter1' &&
+                            data.fishfoodName != '-',
                       )
                       .isEmpty ??
                   true
-              ? '-'
+              ? []
               : widget.data.pakan
                       ?.where(
                         (data) =>
                             data.fishfoodType?.toLowerCase() == 'starter1',
                       )
-                      .map((data) => data.fishfoodName)
-                      .join(', ') ??
-                  '-';
+                      .toList() ??
+                  [];
           double starter1FeedTotal = widget.data.pakan
                   ?.where(
                     (data) => data.fishfoodType?.toLowerCase() == 'starter1',
@@ -534,22 +542,22 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                   .fold(0, (prev, element) => (prev ?? 0) + (element ?? 0)) ??
               0;
 
-          String starter2Feed = widget.data.pakan
+          List<Pakan> starter2Feed = widget.data.pakan
                       ?.where(
                         (data) =>
-                            data.fishfoodType?.toLowerCase() == 'starter2',
+                            data.fishfoodType?.toLowerCase() == 'starter2' &&
+                            data.fishfoodName != '-',
                       )
                       .isEmpty ??
                   true
-              ? '-'
+              ? []
               : widget.data.pakan
                       ?.where(
                         (data) =>
                             data.fishfoodType?.toLowerCase() == 'starter2',
                       )
-                      .map((data) => data.fishfoodName)
-                      .join(', ') ??
-                  '-';
+                      .toList() ??
+                  [];
           double starter2FeedTotal = widget.data.pakan
                   ?.where(
                     (data) => data.fishfoodType?.toLowerCase() == 'starter2',
@@ -558,22 +566,22 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                   .fold(0, (prev, element) => (prev ?? 0) + (element ?? 0)) ??
               0;
 
-          String starter3Feed = widget.data.pakan
+          List<Pakan> starter3Feed = widget.data.pakan
                       ?.where(
                         (data) =>
-                            data.fishfoodType?.toLowerCase() == 'starter3',
+                            data.fishfoodType?.toLowerCase() == 'starter3' &&
+                            data.fishfoodName != '-',
                       )
                       .isEmpty ??
                   true
-              ? '-'
+              ? []
               : widget.data.pakan
                       ?.where(
                         (data) =>
                             data.fishfoodType?.toLowerCase() == 'starter3',
                       )
-                      .map((data) => data.fishfoodName)
-                      .join(', ') ??
-                  '-';
+                      .toList() ??
+                  [];
           double starter3FeedTotal = widget.data.pakan
                   ?.where(
                     (data) => data.fishfoodType?.toLowerCase() == 'starter3',
@@ -582,20 +590,21 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                   .fold(0, (prev, element) => (prev ?? 0) + (element ?? 0)) ??
               0;
 
-          String growerFeed = widget.data.pakan
+          List<Pakan> growerFeed = widget.data.pakan
                       ?.where(
-                        (data) => data.fishfoodType?.toLowerCase() == 'grower',
+                        (data) =>
+                            data.fishfoodType?.toLowerCase() == 'grower' &&
+                            data.fishfoodName != '-',
                       )
                       .isEmpty ??
                   true
-              ? '-'
+              ? []
               : widget.data.pakan
                       ?.where(
                         (data) => data.fishfoodType?.toLowerCase() == 'grower',
                       )
-                      .map((data) => data.fishfoodName)
-                      .join(', ') ??
-                  '-';
+                      .toList() ??
+                  [];
           double growerFeedTotal = widget.data.pakan
                   ?.where(
                     (data) => data.fishfoodType?.toLowerCase() == 'grower',
@@ -604,22 +613,22 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                   .fold(0, (prev, element) => (prev ?? 0) + (element ?? 0)) ??
               0;
 
-          String finisherFeed = widget.data.pakan
+          List<Pakan> finisherFeed = widget.data.pakan
                       ?.where(
                         (data) =>
-                            data.fishfoodType?.toLowerCase() == 'finisher',
+                            data.fishfoodType?.toLowerCase() == 'finisher' &&
+                            data.fishfoodName != '-',
                       )
                       .isEmpty ??
                   true
-              ? '-'
+              ? []
               : widget.data.pakan
                       ?.where(
                         (data) =>
                             data.fishfoodType?.toLowerCase() == 'finisher',
                       )
-                      .map((data) => data.fishfoodName)
-                      .join(', ') ??
-                  '-';
+                      .toList() ??
+                  [];
           double finisherFeedTotal = widget.data.pakan
                   ?.where(
                     (data) => data.fishfoodType?.toLowerCase() == 'finisher',
@@ -627,6 +636,37 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
                   .map((data) => data.sumFeedingActual)
                   .fold(0, (prev, element) => (prev ?? 0) + (element ?? 0)) ??
               0;
+
+          Container tabBar() {
+            return Container(
+              height: 60,
+              width: double.infinity,
+              decoration: BoxDecoration(color: AppColor.neutral[50]),
+              child: TabBar(
+                controller: _tabController,
+                tabAlignment: TabAlignment.start,
+                isScrollable: true,
+                dividerColor: Colors.white,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorColor: AppColor.primary,
+                indicatorWeight: 2.5,
+                padding: EdgeInsets.zero,
+                labelColor: AppColor.primary,
+                unselectedLabelColor: AppColor.neutral[400],
+                labelStyle:
+                    appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
+                unselectedLabelStyle:
+                    appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
+                tabs: const [
+                  Tab(text: 'Starter 1'),
+                  Tab(text: 'Starter 2'),
+                  Tab(text: 'Starter 3'),
+                  Tab(text: 'Grower'),
+                  Tab(text: 'Finisher'),
+                ],
+              ),
+            );
+          }
 
           return Column(
             children: [
@@ -639,61 +679,197 @@ class _ResumeDetailViewState extends State<ResumeDetailView> {
               ),
               if (state.isShowingFeedSection) const SizedBox(height: 12.0),
               dropDownBackground(
+                padding: const EdgeInsets.all(0),
                 isShow: state.isShowingFeedSection,
-                child: Column(
-                  children: [
-                    itemValueText(
-                      'Starter 1',
-                      starter1Feed,
-                      descValue:
-                          'Total pakan: ${starter1FeedTotal.toStringAsFixed(2)}',
-                    ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 1,
-                      color: AppColor.neutral[200],
-                    ),
-                    itemValueText(
-                      'Starter 2',
-                      starter2Feed,
-                      descValue:
-                          'Total pakan: ${starter2FeedTotal.toStringAsFixed(2)}',
-                    ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 1,
-                      color: AppColor.neutral[200],
-                    ),
-                    itemValueText(
-                      'Starter 3',
-                      starter3Feed,
-                      descValue:
-                          'Total pakan: ${starter3FeedTotal.toStringAsFixed(2)}',
-                    ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 1,
-                      color: AppColor.neutral[200],
-                    ),
-                    itemValueText(
-                      'Grower',
-                      growerFeed,
-                      descValue:
-                          'Total pakan: ${growerFeedTotal.toStringAsFixed(2)}',
-                    ),
-                    Divider(
-                      height: 32.0,
-                      thickness: 1,
-                      color: AppColor.neutral[200],
-                    ),
-                    itemValueText(
-                      'Finisher',
-                      finisherFeed,
-                      descValue:
-                          'Total pakan: ${finisherFeedTotal.toStringAsFixed(2)}',
-                    ),
-                  ],
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.3,
+                  child: Column(
+                    children: [
+                      tabBar(),
+                      Expanded(
+                        child: TabBarView(
+                          controller: _tabController,
+                          children: [
+                            starter1Feed.isEmpty
+                                ? const AppEmptyData(
+                                    'Tidak ada data',
+                                    isCenter: true,
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount: starter1Feed.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          top: index == 0 ? 12.0 : 0.0,
+                                          bottom: 12.0,
+                                        ),
+                                        child: itemValueText(
+                                          starter1Feed[index].fishfoodName ??
+                                              '-',
+                                          '${starter1Feed[index].sumFeedingActual} Kg',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            starter2Feed.isEmpty
+                                ? const AppEmptyData(
+                                    'Tidak ada data',
+                                    isCenter: true,
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount: starter2Feed.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          top: index == 0 ? 12.0 : 0.0,
+                                          bottom: 12.0,
+                                        ),
+                                        child: itemValueText(
+                                          starter2Feed[index].fishfoodName ??
+                                              '-',
+                                          '${starter2Feed[index].sumFeedingActual} Kg',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            starter3Feed.isEmpty
+                                ? const AppEmptyData(
+                                    'Tidak ada data',
+                                    isCenter: true,
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount: starter3Feed.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          top: index == 0 ? 12.0 : 0.0,
+                                          bottom: 12.0,
+                                        ),
+                                        child: itemValueText(
+                                          starter3Feed[index].fishfoodName ??
+                                              '-',
+                                          '${starter3Feed[index].sumFeedingActual} Kg',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            growerFeed.isEmpty
+                                ? const AppEmptyData(
+                                    'Tidak ada data',
+                                    isCenter: true,
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount: growerFeed.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          top: index == 0 ? 12.0 : 0.0,
+                                          bottom: 12.0,
+                                        ),
+                                        child: itemValueText(
+                                          growerFeed[index].fishfoodName ?? '-',
+                                          '${growerFeed[index].sumFeedingActual} Kg',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                            finisherFeed.isEmpty
+                                ? const AppEmptyData(
+                                    'Tidak ada data',
+                                    isCenter: true,
+                                  )
+                                : ListView.builder(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    itemCount: finisherFeed.length,
+                                    itemBuilder: (context, index) {
+                                      return Padding(
+                                        padding: EdgeInsets.only(
+                                          top: index == 0 ? 12.0 : 0.0,
+                                          bottom: 12.0,
+                                        ),
+                                        child: itemValueText(
+                                          finisherFeed[index].fishfoodName ??
+                                              '-',
+                                          '${finisherFeed[index].sumFeedingActual} Kg',
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+
+                // Column(
+                //   children: [
+                //     itemValueText(
+                //       'Starter 1',
+                //       starter1Feed,
+                //       descValue:
+                //           'Total pakan: ${starter1FeedTotal.toStringAsFixed(2)}',
+                //     ),
+                //     Divider(
+                //       height: 32.0,
+                //       thickness: 1,
+                //       color: AppColor.neutral[200],
+                //     ),
+                //     itemValueText(
+                //       'Starter 2',
+                //       starter2Feed,
+                //       descValue:
+                //           'Total pakan: ${starter2FeedTotal.toStringAsFixed(2)}',
+                //     ),
+                //     Divider(
+                //       height: 32.0,
+                //       thickness: 1,
+                //       color: AppColor.neutral[200],
+                //     ),
+                //     itemValueText(
+                //       'Starter 3',
+                //       starter3Feed,
+                //       descValue:
+                //           'Total pakan: ${starter3FeedTotal.toStringAsFixed(2)}',
+                //     ),
+                //     Divider(
+                //       height: 32.0,
+                //       thickness: 1,
+                //       color: AppColor.neutral[200],
+                //     ),
+                //     itemValueText(
+                //       'Grower',
+                //       growerFeed,
+                //       descValue:
+                //           'Total pakan: ${growerFeedTotal.toStringAsFixed(2)}',
+                //     ),
+                //     Divider(
+                //       height: 32.0,
+                //       thickness: 1,
+                //       color: AppColor.neutral[200],
+                //     ),
+                //     itemValueText(
+                //       'Finisher',
+                //       finisherFeed,
+                //       descValue:
+                //           'Total pakan: ${finisherFeedTotal.toStringAsFixed(2)}',
+                //     ),
+                //   ],
+                // ),
               ),
             ],
           );

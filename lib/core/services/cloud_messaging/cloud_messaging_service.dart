@@ -1,14 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:minamitra_pembudidaya_mobile/core/injections/injection.dart';
 import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_key.dart';
 import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_service.dart';
-import 'package:minamitra_pembudidaya_mobile/main.dart';
+import 'package:minamitra_pembudidaya_mobile/core/network/header_provider.dart';
+import 'package:minamitra_pembudidaya_mobile/core/network/http_client.dart';
+
+import 'package:minamitra_pembudidaya_mobile/core/services/cloud_messaging/cloud_messaging_endpoint.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_downloader.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_detail/views/activity_incident_detail_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_detail/view/cultivation_note_detail_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/views/transaction_detail_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 abstract class AppCloudMessaging {
   Future<void> setupFirebaseCloudMessagingWithFlutterNotifications(
@@ -24,12 +34,26 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
   // static String? fcmToken; // Variable to store the FCM token
 
   final FirebaseMessaging firebaseMessaging;
+  final HttpClient httpClient;
+  final HeaderProvider headerProvider;
+  final CloudMessagingEndpoint endpoint;
+  final SharedPreferenceService sharedPreferenceService;
 
-  AppCloudMessagingImpl({required this.firebaseMessaging});
+  AppCloudMessagingImpl({
+    required this.firebaseMessaging,
+    required this.httpClient,
+    required this.headerProvider,
+    required this.endpoint,
+    required this.sharedPreferenceService,
+  });
 
   factory AppCloudMessagingImpl.create() {
     return AppCloudMessagingImpl(
       firebaseMessaging: FirebaseMessaging.instance,
+      httpClient: Injection.httpClient,
+      headerProvider: Injection.headerProvider,
+      endpoint: CloudMessagingEndpoint(),
+      sharedPreferenceService: SharedPreferenceServiceImpl.create(),
     );
   }
 
@@ -57,43 +81,6 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
     BuildContext context,
   ) async {
     await firebaseMessaging.setAutoInitEnabled(true);
-
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('ic_launcher');
-    DarwinInitializationSettings initializationSettingsDarwin =
-        const DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
-
-    InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin,
-    );
-
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse:
-          (NotificationResponse notificationResponse) {
-        switch (notificationResponse.notificationResponseType) {
-          case NotificationResponseType.selectedNotification:
-            selectNotificationStream.add(notificationResponse.payload);
-            if (notificationResponse.payload != null) {
-              final Map<String, dynamic> notificationData =
-                  json.decode(notificationResponse.payload!);
-              handleContainScreen(context, notificationData);
-            }
-            break;
-          case NotificationResponseType.selectedNotificationAction:
-            // if (notificationResponse.actionId == navigationActionId) {
-            //   selectNotificationStream.add(notificationResponse.payload);
-            // }
-            break;
-        }
-      },
-      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
-    );
 
     await _createNotificationChannel(
       flutterLocalNotificationsPlugin,
@@ -124,6 +111,12 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
         .resolvePlatformSpecificImplementation<
             IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions();
+
+    bool isGrantedNotif = await checkNotificationPermission();
+
+    if (!isGrantedNotif) {
+      await Permission.notification.request();
+    }
 
     // Requesting permission for notifications
     NotificationSettings settings = await firebaseMessaging.requestPermission(
@@ -156,7 +149,7 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
       importance: Importance.max,
       enableLights: true,
       playSound: true,
-      sound: RawResourceAndroidNotificationSound(sound),
+      // sound: RawResourceAndroidNotificationSound(sound),
     );
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
@@ -174,134 +167,129 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
     // Listening for incoming messages while the app is in the foreground
     streamNotificationTokenFirebase();
 
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('ic_launcher');
+    DarwinInitializationSettings initializationSettingsDarwin =
+        const DarwinInitializationSettings(
+      requestAlertPermission: true,
+      requestBadgePermission: true,
+      requestSoundPermission: true,
+    );
+
+    InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsDarwin,
+    );
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) {
+        switch (notificationResponse.notificationResponseType) {
+          case NotificationResponseType.selectedNotification:
+            selectNotificationStream.add(notificationResponse.payload);
+            if (notificationResponse.payload != null) {
+              final Map<String, dynamic> notificationData =
+                  json.decode(notificationResponse.payload!);
+              log('handleContainScreen from flutter local notification');
+              handleContainScreen(context, notificationData);
+            }
+            break;
+          case NotificationResponseType.selectedNotificationAction:
+            // if (notificationResponse.actionId == navigationActionId) {
+            //   selectNotificationStream.add(notificationResponse.payload);
+            // }
+            break;
+        }
+      },
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
+    );
+
     // Handling the initial message received when the app is launched from dead (killed state)
     // When the app is killed and a new notification arrives when user clicks on it
     // It gets the data to which screen to open
     firebaseMessaging.getInitialMessage().then((message) {
       if (message != null) {
-        log("run getInitialMessage");
+        sharedPreferenceService.setSharedPreference(
+          AppSharedPrefKey.isHasNotificationKey,
+          'true',
+        );
         showFirebaseCloudNotificationWithFlutterNotification(message);
       }
     });
 
     // Listening for incoming messages while the app is in the foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log("run onMessage");
+      sharedPreferenceService.setSharedPreference(
+        AppSharedPrefKey.isHasNotificationKey,
+        'true',
+      );
       showFirebaseCloudNotificationWithFlutterNotification(message);
     });
 
     // Handling a notification click event when the app is in the background
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      log("run onMessageOpenedApp");
       _handleNotificationClick(context, message);
     });
   }
 
-  void notificationNavigation(BuildContext context, String screen, String id) {
+  void notificationNavigation(
+    BuildContext context,
+    String route,
+    String id,
+  ) {
     if (kDebugMode) {
-      print('----- handleContainScreen $screen $id');
+      print('----- handleContainScreen $route $id');
     }
-    // switch (screen) {
-    //   case "hadist":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         HadithDetailPage(id),
-    //         HadithDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "kajian":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         KajianDetailPage(id),
-    //         KajianDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "tempat-kajian":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         KajianPlaceDetailPage(id),
-    //         KajianPlaceDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "event":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         EventDetailPage(id),
-    //         EventDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "ustadz":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         UstadzDetailPage(id),
-    //         UstadzDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "tahsin":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         TahsinMaterialDetailPage(id),
-    //         TahsinMaterialDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "book":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         BookReferenceDetailPage(id),
-    //         BookReferenceDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   case "mahfudzot":
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         AdviceDetailPage(id),
-    //         AdviceDetailPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    //   default:
-    //     Navigator.of(context).push(
-    //       AppTransition.pushTransition(
-    //         DashboardPage(),
-    //         DashboardPage.routeSettings(),
-    //       ),
-    //     );
-    //     break;
-    // }
+
+    try {
+      switch (route) {
+        case '/cultivation-note-detail-page':
+          Navigator.of(context).push(
+            AppTransition.pushTransition(
+              CultivationNoteDetailPage(id: id),
+              CultivationNoteDetailPage.routeSettings,
+            ),
+          );
+          break;
+        case '/transaction-detail':
+          Navigator.of(context).push(
+            AppTransition.pushTransition(
+              TransactionDetailPage(orderId: id),
+              TransactionDetailPage.routeSettings(),
+            ),
+          );
+          break;
+        case '/activity-incident-detail':
+          Navigator.of(context).push(
+            AppTransition.pushTransition(
+              ActivityIncidentDetailPage(incidentID: id),
+              ActivityIncidentDetailPage.routeSettings(),
+            ),
+          );
+        default:
+      }
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   void handleContainScreen(
     BuildContext context,
     Map<String, dynamic> notificationData,
   ) {
-    if (notificationData.containsKey('screen')) {
-      final String tempString = notificationData['screen'];
-      if (tempString.contains('?id=')) {
-        final List<String> tempStringList = tempString.split('?id=');
-        final String screen = tempStringList.first;
-        final String id = tempStringList.last;
-        notificationNavigation(context, screen, id);
-      } else {
-        // Navigator.of(context).push(
-        //   AppTransition.pushTransition(
-        //     DashboardPage(),
-        //     DashboardPage.routeSettings(),
-        //   ),
-        // );
-      }
+    log('handleContainScreen ${notificationData.toString()}');
+    if (notificationData.containsKey('route')) {
+      final String route = notificationData['route'];
+      final String id = notificationData['id'];
+      notificationNavigation(context, route, id);
     }
   }
 
   // Handling a notification click event by navigating to the specified screen
   void _handleNotificationClick(BuildContext context, RemoteMessage message) {
     final notificationData = message.data;
+    log('handle from on click firebase');
     handleContainScreen(context, notificationData);
   }
 
@@ -322,7 +310,7 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
                 'general', // To set dynamic sound. Please create contract API with BE about the channelID and create the channel id on this code
             message.data['channelName'] ?? 'General',
             channelDescription: message.data['channelDescription'],
-            // icon: 'launch_background',
+            icon: 'launch_background',
             importance: Importance.max,
             priority: Priority.high,
             enableLights: true,
@@ -360,13 +348,13 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
           fcmToken,
         );
         // sending token to API
-        // await subscribeFCMToken(fcmToken);
-        log('FCM token = $fcmToken');
+        log('FCM Token: $fcmToken');
+        await subscribeFCMToken(fcmToken);
       }
     } else {
-      log('FCM token = $token');
       // Sending token to API
-      // await subscribeFCMToken(token);
+      log('FCM Token: $token');
+      await subscribeFCMToken(token);
     }
   }
 
@@ -379,12 +367,22 @@ class AppCloudMessagingImpl implements AppCloudMessaging {
         fcmToken,
       );
       // sending token to API
-      // await subscribeFCMToken(fcmToken);
-      log('token = $fcmToken');
+      await subscribeFCMToken(fcmToken);
     }).onError((err) {
       // Error getting token.
-      log('token = $err');
     });
+  }
+
+  Future<void> subscribeFCMToken(String token) async {
+    final url = endpoint.postSendToken();
+    final header = await headerProvider.headers;
+    await httpClient.post(
+      url,
+      header,
+      json.encode(
+        {'fcm_token': token},
+      ),
+    );
   }
 }
 

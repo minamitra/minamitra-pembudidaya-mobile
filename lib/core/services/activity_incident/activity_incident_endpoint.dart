@@ -3,11 +3,15 @@ import 'package:minamitra_pembudidaya_mobile/core/network/url_builder.dart';
 class ActivityIncidentEndpoint {
   ActivityIncidentEndpoint();
 
-  Uri dataIncident(String status) {
+  Uri dataIncident(
+    String status,
+    String fishpondCycleID,
+  ) {
     return createUrl(
       path: 'mitra/incident-report/data',
       queryParameters: {
         'status[in]': status,
+        'fishpondcycle_id': fishpondCycleID,
       },
     );
   }
@@ -31,5 +35,12 @@ class ActivityIncidentEndpoint {
 
   Uri updateIncident() {
     return createUrl(path: 'mitra/incident-report/update');
+  }
+
+  Uri dataIncidentDetail(String incidentID) {
+    return createUrl(
+      path: 'mitra/incident-report/detail',
+      queryParameters: {'id': incidentID},
+    );
   }
 }

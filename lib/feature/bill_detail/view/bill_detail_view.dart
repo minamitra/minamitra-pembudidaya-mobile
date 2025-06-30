@@ -630,12 +630,16 @@ class _BillDetailViewState extends State<BillDetailView> {
                         },
                       ),
                       const SizedBox(width: 18.0),
-                      Text(
-                        'Tagihan Kolam ${widget.billResponseData.fishpondName}',
-                        textAlign: TextAlign.start,
-                        style: appTextTheme(context)
-                            .headlineSmall
-                            ?.copyWith(color: AppColor.white),
+                      Expanded(
+                        child: Text(
+                          'Tagihan ${widget.billResponseData.fishpondName}',
+                          textAlign: TextAlign.start,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: appTextTheme(context)
+                              .headlineSmall
+                              ?.copyWith(color: AppColor.white),
+                        ),
                       ),
                     ],
                   ),

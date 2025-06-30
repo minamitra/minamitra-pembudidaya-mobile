@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_divider.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
@@ -19,6 +21,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_all/view/cultivation_note_all_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/cultivation_note_detail/view/cultivation_note_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/logic/cultivation_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/detail_parameter_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 import 'package:minamitra_pembudidaya_mobile/widget/widget_chip.dart';
@@ -31,9 +34,31 @@ class CultivationView extends StatefulWidget {
   State<CultivationView> createState() => _CultivationViewState();
 }
 
-class _CultivationViewState extends State<CultivationView> {
+class _CultivationViewState extends State<CultivationView>
+    with SingleTickerProviderStateMixin {
   final TextEditingController parameterController = TextEditingController();
   AppDebounce debounce = AppDebounce(const Duration(milliseconds: 500));
+  late TabController _tabController;
+  final ScrollController outerController = ScrollController();
+  final ScrollController innerController = ScrollController();
+
+  bool innerAtBottom = false;
+  bool innerAtTop = true;
+
+  @override
+  void dispose() {
+    outerController.dispose();
+    innerController.dispose();
+    super.dispose();
+  }
+
+  void _scrollOuter(double offset) {
+    outerController.animateTo(
+      outerController.offset + offset,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
+  }
 
   List<String> dataBudidayDummy = [
     'MBW (Mean Body Weight) (gram)',
@@ -44,6 +69,23 @@ class _CultivationViewState extends State<CultivationView> {
     // "SR (Survival Rate) (%)",
     // "FCR (Feed Convertion Ratio)",
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    parameterController.text = dataBudidayDummy[0];
+    _tabController = TabController(length: 3, vsync: this);
+    innerController.addListener(() {
+      setState(() {
+        innerAtBottom = innerController.offset >=
+                innerController.position.maxScrollExtent &&
+            !innerController.position.outOfRange;
+        innerAtTop = innerController.offset <=
+                innerController.position.minScrollExtent &&
+            !innerController.position.outOfRange;
+      });
+    });
+  }
 
   TrackballBehavior defaultTrackballBehavior(
     String title,
@@ -253,12 +295,6 @@ class _CultivationViewState extends State<CultivationView> {
   //     );
   //   },
   // );
-
-  @override
-  void initState() {
-    parameterController.text = dataBudidayDummy[0];
-    super.initState();
-  }
 
   // final List<SalesData> chartData = [
   //   SalesData(2010, 35),
@@ -770,8 +806,10 @@ class _CultivationViewState extends State<CultivationView> {
       required String companionName,
       required String dateTime,
       required String companionNotes,
+      bool isReadedComment = false,
     }) {
       return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 18.0),
           Row(
@@ -816,22 +854,25 @@ class _CultivationViewState extends State<CultivationView> {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 8.0,
-                  vertical: 4.0,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
-                  color: AppColor.secondary[50],
-                  border: Border.all(color: AppColor.secondary[900]!),
-                ),
-                child: Text(
-                  'Baru',
-                  style: appTextTheme(context).bodySmall?.copyWith(
-                        color: AppColor.secondary[900],
-                        fontWeight: FontWeight.w500,
-                      ),
+              Visibility(
+                visible: !isReadedComment,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0,
+                    vertical: 4.0,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4.0),
+                    color: AppColor.secondary[50],
+                    border: Border.all(color: AppColor.secondary[900]!),
+                  ),
+                  child: Text(
+                    'Baru',
+                    style: appTextTheme(context).bodySmall?.copyWith(
+                          color: AppColor.secondary[900],
+                          fontWeight: FontWeight.w500,
+                        ),
+                  ),
                 ),
               ),
             ],
@@ -840,6 +881,7 @@ class _CultivationViewState extends State<CultivationView> {
           Text(
             companionNotes,
             maxLines: 2,
+            textAlign: TextAlign.left,
             style: appTextTheme(context).bodySmall,
           ),
           const SizedBox(height: 18.0),
@@ -870,7 +912,8 @@ class _CultivationViewState extends State<CultivationView> {
                       : AppWidgetSecondaryChip(
                           text: 'Lihat Semua',
                           onTap: () {
-                            Navigator.of(context).push(
+                            Navigator.of(context)
+                                .push(
                               AppTransition.pushTransition(
                                 CultivationNoteAllPage(
                                   context.read<CultivationCubit>().pondCycleID,
@@ -878,7 +921,12 @@ class _CultivationViewState extends State<CultivationView> {
                                 ),
                                 CultivationNoteAllPage.routeSettings,
                               ),
-                            );
+                            )
+                                .then((value) {
+                              context
+                                  .read<CultivationCubit>()
+                                  .refreshCommentReaded();
+                            });
                           },
                         ),
                 ],
@@ -923,13 +971,21 @@ class _CultivationViewState extends State<CultivationView> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      Navigator.of(context).push(
+                      Navigator.of(context)
+                          .push(
                         AppTransition.pushTransition(
                           CultivationNoteDetailPage(
-                            state.companionNotesData!.data![index],
+                            data: state.companionNotesData!.data![index],
                           ),
                           CultivationNoteDetailPage.routeSettings,
                         ),
+                      )
+                          .then(
+                        (value) {
+                          context
+                              .read<CultivationCubit>()
+                              .refreshCommentReaded();
+                        },
                       );
                     },
                     child: itemNote(
@@ -946,6 +1002,10 @@ class _CultivationViewState extends State<CultivationView> {
                       companionNotes: state
                           .companionNotesData!.data![index].content
                           .handlingEmptyString(),
+                      isReadedComment:
+                          context.read<CultivationCubit>().isCommentReaded(
+                                state.companionNotesData!.data![index].id ?? '',
+                              ),
                     ),
                   );
                 },
@@ -956,19 +1016,285 @@ class _CultivationViewState extends State<CultivationView> {
       );
     }
 
-    return ListView(
-      children: [
-        const SizedBox(height: 18),
-        parameter(),
-        const SizedBox(height: 18),
-        xSetter(),
-        lineChart(),
-        const SizedBox(height: 36),
-        AppDividerLarge(),
-        const SizedBox(height: 18),
-        notes(),
-        const SizedBox(height: 18),
-      ],
+    Widget parameterChart() {
+      Row itemValueText(
+        String title,
+        String value, {
+        String? descValue,
+      }) {
+        return Row(
+          children: [
+            Expanded(
+              child: Text(
+                title,
+                textAlign: TextAlign.start,
+                style: appTextTheme(context).titleSmall?.copyWith(
+                      fontWeight: FontWeight.w500,
+                      color: AppColor.neutral[500],
+                    ),
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    value,
+                    textAlign: TextAlign.end,
+                    style: appTextTheme(context).titleSmall,
+                  ),
+                  if (descValue != null) ...[
+                    const SizedBox(height: 4.0),
+                    Text(
+                      descValue,
+                      textAlign: TextAlign.end,
+                      style: appTextTheme(context)
+                          .labelLarge
+                          ?.copyWith(color: AppColor.primary[500]),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        );
+      }
+
+      ListView standartParams(List<Parameter>? parameters) {
+        return ListView.separated(
+          controller: innerController,
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          itemCount: parameters?.length ?? 0,
+          separatorBuilder: (context, index) => Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(top: index == 0 ? 18.0 : 0),
+              child: itemValueText(
+                parameters?[index].parameter.handlingEmptyString() ?? '-',
+                parameters?[index].standard?.toStringAsFixed(
+                          parameters[index].key?.toLowerCase() == 'day' ? 0 : 2,
+                        ) ??
+                    '0.0',
+              ),
+            );
+          },
+        );
+      }
+
+      ListView estimationParams(List<Parameter>? parameters) {
+        return ListView.separated(
+          controller: innerController,
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          itemCount: parameters?.length ?? 0,
+          separatorBuilder: (context, index) => Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(top: index == 0 ? 18.0 : 0),
+              child: itemValueText(
+                parameters?[index].parameter.handlingEmptyString() ?? '-',
+                parameters?[index].estimasi?.toStringAsFixed(
+                          parameters[index].key?.toLowerCase() == 'day' ? 0 : 2,
+                        ) ??
+                    '0.0',
+              ),
+            );
+          },
+        );
+      }
+
+      ListView actualParams(List<Parameter>? parameters) {
+        return ListView.separated(
+          controller: innerController,
+          padding: const EdgeInsets.symmetric(horizontal: 18.0),
+          itemCount: parameters?.length ?? 0,
+          separatorBuilder: (context, index) => Divider(
+            height: 32.0,
+            thickness: 1,
+            color: AppColor.neutral[100],
+          ),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(top: index == 0 ? 18.0 : 0),
+              child: itemValueText(
+                parameters?[index].parameter.handlingEmptyString() ?? '-',
+                parameters?[index].aktual?.toStringAsFixed(
+                          parameters[index].key?.toLowerCase() == 'day' ? 0 : 2,
+                        ) ??
+                    '0.0',
+              ),
+            );
+          },
+        );
+      }
+
+      return SizedBox(
+        height: MediaQuery.sizeOf(context).height * 0.375,
+        child: Column(
+          children: [
+            Container(
+              height: 60,
+              decoration: BoxDecoration(color: AppColor.neutral[50]),
+              child: TabBar(
+                controller: _tabController,
+                dividerColor: Colors.white,
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorColor: AppColor.primary,
+                indicatorWeight: 2.5,
+                padding: EdgeInsets.zero,
+                labelColor: AppColor.primary,
+                unselectedLabelColor: AppColor.neutral[400],
+                labelStyle:
+                    appTextTheme(context).titleMedium?.copyWith(fontSize: 14.0),
+                unselectedLabelStyle:
+                    appTextTheme(context).bodySmall?.copyWith(fontSize: 14.0),
+                labelPadding: const EdgeInsets.all(0),
+                tabs: const [
+                  Tab(text: 'Standard'),
+                  Tab(text: 'Estimasi'),
+                  Tab(text: 'Aktual'),
+                ],
+              ),
+            ),
+            BlocBuilder<CultivationCubit, CultivationState>(
+              builder: (context, state) {
+                if (state.status.isLoading ||
+                    state.status.isShowDialogLoading) {
+                  return Expanded(
+                    child: ListView.builder(
+                      controller: innerController,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return const AppShimmer(
+                          38.0,
+                          double.infinity,
+                          6.0,
+                          margin: EdgeInsets.symmetric(
+                            vertical: 8.0,
+                            horizontal: 18.0,
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                }
+
+                return Expanded(
+                  child: TabBarView(
+                    controller: _tabController,
+                    children: [
+                      standartParams(
+                        state.detailParameterResponse?.data?.parameters,
+                      ),
+                      estimationParams(
+                        state.detailParameterResponse?.data?.parameters,
+                      ),
+                      actualParams(
+                        state.detailParameterResponse?.data?.parameters,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget searchParamByDateField() {
+      return BlocBuilder<CultivationCubit, CultivationState>(
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: AppValidatorTextField(
+              controller: context.read<CultivationCubit>().dateController,
+              withUpperLabel: false,
+              hintText: 'Cari berdasar tanggal ...',
+              suffixWidget:
+                  context.read<CultivationCubit>().selectedDate == null
+                      ? const Icon(
+                          Icons.date_range_outlined,
+                          color: AppColor.primary,
+                        )
+                      : InkWell(
+                          onTap: () {
+                            context.read<CultivationCubit>().onChangeDate(
+                                  DateTime.now(),
+                                  isClearDate: true,
+                                );
+                          },
+                          child: const Icon(
+                            Icons.cancel_outlined,
+                            color: AppColor.primary,
+                          ),
+                        ),
+              readOnly: true,
+              onTap: () {
+                DatePicker.showDatePicker(
+                  currentTime: context.read<CultivationCubit>().selectedDate ??
+                      DateTime.now(),
+                  minTime: context.read<CultivationCubit>().tebarDate,
+                  maxTime: DateTime.now(),
+                  context,
+                  showTitleActions: true,
+                  onChanged: (date) {},
+                  onConfirm: (date) {
+                    context.read<CultivationCubit>().onChangeDate(date);
+                  },
+                  locale: LocaleType.id,
+                );
+              },
+              onChanged: (value) {},
+            ),
+          );
+        },
+      );
+    }
+
+    return NotificationListener<UserScrollNotification>(
+      onNotification: (notification) {
+        if (notification.direction == ScrollDirection.reverse &&
+            innerAtBottom) {
+          // User is scrolling down and inner list is at bottom
+          _scrollOuter(MediaQuery.sizeOf(context).height * 0.3);
+          innerAtBottom = !innerAtBottom;
+          return true;
+        } else if (notification.direction == ScrollDirection.forward &&
+            innerAtTop) {
+          // User is scrolling up and inner list is at top
+          _scrollOuter(-(MediaQuery.sizeOf(context).height * 0.3));
+          innerAtTop = !innerAtTop;
+          return true;
+        }
+        return false;
+      },
+      child: ListView(
+        controller: outerController,
+        // shrinkWrap: true,
+        children: [
+          const SizedBox(height: 18),
+          parameter(),
+          const SizedBox(height: 18),
+          xSetter(),
+          lineChart(),
+          const SizedBox(height: 36),
+          AppDividerLarge(),
+          searchParamByDateField(),
+          parameterChart(),
+          AppDividerLarge(),
+          const SizedBox(height: 18),
+          notes(),
+          const SizedBox(height: 18),
+        ],
+      ),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
+import 'package:minamitra_pembudidaya_mobile/core/local_storage/shared_pref_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/services/cycle/cycle_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
@@ -18,6 +19,51 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
   String? startDate;
   String? endDate;
   String? companionName;
+  SharedPreferenceService sharedPreferenceService =
+      SharedPreferenceServiceImpl.create();
+
+  bool isCommentReaded(String id) {
+    return state.commentReaded?.contains(id) ?? false;
+  }
+
+  void addCommentReaded(String id) async {
+    final List<String> commentReaded =
+        await sharedPreferenceService.getSharedPreference('commentReaded').then(
+      (String? value) {
+        if (value != null) {
+          return value.split(',');
+        }
+        return [];
+      },
+    );
+    bool isHasReaded = commentReaded.contains(id);
+    if (!isHasReaded) {
+      commentReaded.add(id);
+      await sharedPreferenceService.setSharedPreference(
+        'commentReaded',
+        commentReaded.join(','),
+      );
+    }
+  }
+
+  void refreshCommentReaded() async {
+    emit(state.copyWith(status: GlobalState.loading));
+    final List<String> commentReaded =
+        await sharedPreferenceService.getSharedPreference('commentReaded').then(
+      (String? value) {
+        if (value != null) {
+          return value.split(',');
+        }
+        return [];
+      },
+    );
+    emit(
+      state.copyWith(
+        commentReaded: commentReaded,
+        status: GlobalState.loaded,
+      ),
+    );
+  }
 
   Future<void> init(
     String pondCycleID,
@@ -25,6 +71,16 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
   ) async {
     emit(state.copyWith(status: GlobalState.loading));
     try {
+      final List<String> commentReaded = await sharedPreferenceService
+          .getSharedPreference('commentReaded')
+          .then(
+        (String? value) {
+          if (value != null) {
+            return value.split(',');
+          }
+          return [];
+        },
+      );
       this.pondCycleID = pondCycleID;
       List<String> companionName =
           data?.map((value) => value.userName ?? '').toList() ?? [];
@@ -34,6 +90,7 @@ class CultivationNoteAllCubit extends Cubit<CultivationNoteAllState> {
           status: GlobalState.loaded,
           data: data,
           companionName: companionName,
+          commentReaded: commentReaded,
         ),
       );
     } catch (e) {

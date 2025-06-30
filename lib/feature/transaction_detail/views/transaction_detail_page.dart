@@ -9,27 +9,18 @@ import 'package:minamitra_pembudidaya_mobile/core/services/cdn/cdn_service.dart'
 import 'package:minamitra_pembudidaya_mobile/core/services/transaction/transaction_service.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/checkout/repositories/adress_data.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/products/repositories/products_response.dart';
-import 'package:minamitra_pembudidaya_mobile/feature/transaction/entities/method_payment_data.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction/repositories/transaction_item_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/logic/transaction_detail_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/transaction_detail/views/transaction_detail_view.dart';
 import 'package:simple_fontellico_progress_dialog/simple_fontico_loading.dart';
 
 class TransactionDetailPage extends StatelessWidget {
-  final List<ProductsResponseData> listProduct;
-  final List<int> listAmountItem;
-  final Address address;
-  final MethodPaymentData methodPayment;
-  final TransactionItemResponseData data;
+  final TransactionItemResponseData? data;
+  final String? orderId;
 
-  const TransactionDetailPage(
-    this.listProduct,
-    this.listAmountItem,
-    this.address,
-    this.methodPayment,
-    this.data, {
+  const TransactionDetailPage({
+    this.data,
+    this.orderId,
     super.key,
   });
 
@@ -46,8 +37,10 @@ class TransactionDetailPage extends StatelessWidget {
         TransactionServiceImpl.create(),
         CdnServiceImpl.create(),
       )..init(
-          data.status == 'Dikirim' || data.status == 'Selesai',
-          orderID: data.id.toString(),
+          data == null
+              ? true
+              : data?.status == 'Dikirim' || data?.status == 'Selesai',
+          orderID: data == null ? (orderId ?? '') : (data?.id.toString() ?? ''),
         ),
       child: BlocListener<TransactionDetailCubit, TransactionDetailState>(
         listener: (context, state) {
@@ -84,13 +77,7 @@ class TransactionDetailPage extends StatelessWidget {
                 create: (context) => MultiImageCubit(),
               ),
             ],
-            child: TransactionDetailView(
-              listProduct,
-              listAmountItem,
-              address,
-              methodPayment,
-              data,
-            ),
+            child: TransactionDetailView(),
           ),
         ),
       ),

@@ -25,6 +25,7 @@ import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/about/logic/about_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/about/view/about_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity/logic/activity_cubit.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity/view/activity_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/banner_detail/view/banner_detail_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/comming_soon/view/comming_soon_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/dashboard/logic/dashboard_cubit.dart';
@@ -36,7 +37,10 @@ import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/name_icon
 import 'package:minamitra_pembudidaya_mobile/feature/home/repositories/promo_dummy.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/literacy_information/views/literacy_information_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/literacy_information_detail/view/literacy_information_detail_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/plafon_distribution/view/plafon_distribution_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/point_v2/view/point_v2_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/product_detail/product_detail_page.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/products/logics/products_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/products/views/products_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/profile_member/view/profile_member_page.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/promo/view/promo_page.dart';
@@ -281,7 +285,7 @@ class _HomeViewState extends State<HomeView> {
                                                           ?.isRejected() ??
                                                       false)
                                               ? 'Anda belum terdaftar sebagai anggota'
-                                              : 'Sisa plafon anda',
+                                              : 'Sisa saldo anda',
                                           style:
                                               AppTextStyle.blackExtraSmallText,
                                         ),
@@ -312,41 +316,54 @@ class _HomeViewState extends State<HomeView> {
                                     'member' &&
                                 (userState.userData?.isApproved() ??
                                     false)) ...[
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).push(
-                                    AppTransition.pushTransition(
-                                      const QrScanPage(),
-                                      QrScanPage.route(),
-                                    ),
-                                  );
-                                },
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      decoration: BoxDecoration(
-                                        color: AppColor.primary,
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: Image.asset(
-                                        AppAssets.scanIcon,
-                                        height: 20.0,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4.0),
-                                    Text(
-                                      'Bayar',
-                                      style: AppTextStyle.blackExtraSmallText,
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              // InkWell(
+                              //   onTap: () {
+                              //     Navigator.of(context).push(
+                              //       AppTransition.pushTransition(
+                              //         const QrScanPage(),
+                              //         QrScanPage.route(),
+                              //       ),
+                              //     );
+                              //   },
+                              //   child: Column(
+                              //     children: [
+                              //       Container(
+                              //         padding: const EdgeInsets.all(8.0),
+                              //         decoration: BoxDecoration(
+                              //           color: AppColor.primary,
+                              //           borderRadius:
+                              //               BorderRadius.circular(10.0),
+                              //         ),
+                              //         child: Image.asset(
+                              //           AppAssets.scanIcon,
+                              //           height: 20.0,
+                              //           fit: BoxFit.cover,
+                              //         ),
+                              //       ),
+                              //       const SizedBox(height: 4.0),
+                              //       Text(
+                              //         'Bayar',
+                              //         style: AppTextStyle.blackExtraSmallText,
+                              //       ),
+                              //     ],
+                              //   ),
+                              // ),
                               const SizedBox(width: 12.0),
                               InkWell(
                                 onTap: () {
+                                  if ((userState.userData?.isSubmission() ??
+                                          false) ||
+                                      (userState.userData?.isProcessed() ??
+                                          false) ||
+                                      (userState.userData?.isRejected() ??
+                                          false) ||
+                                      userState.userData?.type?.toLowerCase() !=
+                                          'member') {
+                                    AppTopSnackBar(context).showInfo(
+                                      'Maaf akun anda belum\nterdaftar sebagai anggota',
+                                    );
+                                    return;
+                                  }
                                   Navigator.of(context).push(
                                     AppTransition.pushTransition(
                                       const TransactionHistoryPage(),
@@ -377,6 +394,7 @@ class _HomeViewState extends State<HomeView> {
                                   ],
                                 ),
                               ),
+                              const SizedBox(width: 8.0),
                             ],
                           ],
                         ),
@@ -421,12 +439,25 @@ class _HomeViewState extends State<HomeView> {
                             );
                             return;
                           }
-                          Navigator.of(context).push(
+                          Navigator.of(context)
+                              .push(
                             AppTransition.pushTransition(
                               const PointV2Page(),
                               PointV2Page.route(),
                             ),
-                          );
+                          )
+                              .then((value) {
+                            if (value == ActivityPage.routeSettings().name) {
+                              context
+                                  .read<DashboardBottomNavCubit>()
+                                  .changeIndex(2);
+                            }
+                            if (value == 'changeBottomNav1') {
+                              context
+                                  .read<DashboardBottomNavCubit>()
+                                  .changeIndex(1);
+                            }
+                          });
                         },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -883,28 +914,28 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget menu() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: GridView.builder(
-        padding: const EdgeInsets.only(),
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisSpacing: 4,
-          mainAxisSpacing: 4,
-          crossAxisCount: 4,
-          childAspectRatio: 0.8,
-        ),
-        itemCount: listMenu.length,
-        itemBuilder: (context, index) {
-          return moduleContainer(
-            listMenu[index],
-          );
-        },
-      ),
-    );
-  }
+  // Widget menu() {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 16.0),
+  //     child: GridView.builder(
+  //       padding: const EdgeInsets.only(),
+  //       physics: const NeverScrollableScrollPhysics(),
+  //       shrinkWrap: true,
+  //       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //         crossAxisSpacing: 4,
+  //         mainAxisSpacing: 4,
+  //         crossAxisCount: 4,
+  //         childAspectRatio: 0.8,
+  //       ),
+  //       itemCount: listMenu.length,
+  //       itemBuilder: (context, index) {
+  //         return moduleContainer(
+  //           listMenu[index],
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
 
   Widget voucher({
     required EdgeInsetsGeometry margin,
@@ -995,113 +1026,113 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  List<Widget> voucherSection() {
-    return [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 18.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Voucher 3M',
-                    style: appTextTheme(context).titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
-                  ),
-                  const SizedBox(height: 8.0),
-                  Text(
-                    'Segera pakai sebelum kehabisan !',
-                    style: appTextTheme(context).labelLarge?.copyWith(
-                          color: AppColor.neutral[500],
-                        ),
-                  ),
-                ],
-              ),
-            ),
-            AppWidgetSecondaryChip(
-              text: 'Lihat Semua',
-              onTap: () {
-                Navigator.of(context).push(
-                  AppTransition.pushTransition(
-                    const VoucherPage(),
-                    VoucherPage.routeSettings(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(height: 18.0),
-      BlocListener<UserCubit, UserState>(
-        listener: (context, state) async {
-          if (state.status.isLoaded) {
-            await Future.delayed(const Duration(milliseconds: 500));
-            await controller.animateTo(
-              64.0,
-              duration: const Duration(milliseconds: 550),
-              curve: Curves.linear,
-            );
-            await controller.animateTo(
-              -64.0,
-              duration: const Duration(milliseconds: 550),
-              curve: Curves.linear,
-            );
-          }
-        },
-        child: SizedBox(
-          height: 150.0,
-          child: ListView.builder(
-            controller: controller,
-            scrollDirection: Axis.horizontal,
-            shrinkWrap: true,
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: 3,
-            itemBuilder: (context, index) {
-              return InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    AppTransition.pushTransition(
-                      const VoucherDetailPage(),
-                      VoucherDetailPage.routeSettings(),
-                    ),
-                  );
-                },
-                child: voucher(
-                  margin: EdgeInsets.only(
-                    left: 18.0,
-                    right: index == 2 ? 18.0 : 0,
-                  ),
-                  backgroundColor: ((index + 1) % 2 == 0)
-                      ? AppColor.primary[500]!
-                      : AppColor.primary[900]!,
-                  image: ((index + 1) % 2 == 0)
-                      ? AppAssets.voucherTicketIcon
-                      : AppAssets.voucherBoxIcon,
-                  textColor: ((index + 1) % 2 == 0)
-                      ? AppColor.primary[100]!
-                      : AppColor.primary[200]!,
-                  dividerColor: ((index + 1) % 2 == 0)
-                      ? AppColor.primary[400]!
-                      : AppColor.primary[700]!,
-                  title: ((index + 1) % 2 == 0)
-                      ? 'Voucher Diskon 20%'
-                      : 'Diskon 50%',
-                  description: ((index + 1) % 2 == 0)
-                      ? 'Untuk setiap pembelian paket pakan diatas 100k di mitra terdekat'
-                      : 'Untuk setiap pembelian paket pakan diatas 100k di mitra terdekat',
-                  date: '1 Sep - 1 Nov 2024',
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    ];
-  }
+  // List<Widget> voucherSection() {
+  //   return [
+  //     Padding(
+  //       padding: const EdgeInsets.symmetric(horizontal: 18.0),
+  //       child: Row(
+  //         children: [
+  //           Expanded(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   'Voucher 3M',
+  //                   style: appTextTheme(context).titleMedium?.copyWith(
+  //                         fontWeight: FontWeight.w700,
+  //                       ),
+  //                 ),
+  //                 const SizedBox(height: 8.0),
+  //                 Text(
+  //                   'Segera pakai sebelum kehabisan !',
+  //                   style: appTextTheme(context).labelLarge?.copyWith(
+  //                         color: AppColor.neutral[500],
+  //                       ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //           AppWidgetSecondaryChip(
+  //             text: 'Lihat Semua',
+  //             onTap: () {
+  //               Navigator.of(context).push(
+  //                 AppTransition.pushTransition(
+  //                   const VoucherPage(),
+  //                   VoucherPage.routeSettings(),
+  //                 ),
+  //               );
+  //             },
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //     const SizedBox(height: 18.0),
+  //     BlocListener<UserCubit, UserState>(
+  //       listener: (context, state) async {
+  //         if (state.status.isLoaded) {
+  //           await Future.delayed(const Duration(milliseconds: 500));
+  //           await controller.animateTo(
+  //             64.0,
+  //             duration: const Duration(milliseconds: 550),
+  //             curve: Curves.linear,
+  //           );
+  //           await controller.animateTo(
+  //             -64.0,
+  //             duration: const Duration(milliseconds: 550),
+  //             curve: Curves.linear,
+  //           );
+  //         }
+  //       },
+  //       child: SizedBox(
+  //         height: 150.0,
+  //         child: ListView.builder(
+  //           controller: controller,
+  //           scrollDirection: Axis.horizontal,
+  //           shrinkWrap: true,
+  //           physics: const AlwaysScrollableScrollPhysics(),
+  //           itemCount: 3,
+  //           itemBuilder: (context, index) {
+  //             return InkWell(
+  //               onTap: () {
+  //                 Navigator.of(context).push(
+  //                   AppTransition.pushTransition(
+  //                     const VoucherDetailPage(),
+  //                     VoucherDetailPage.routeSettings(),
+  //                   ),
+  //                 );
+  //               },
+  //               child: voucher(
+  //                 margin: EdgeInsets.only(
+  //                   left: 18.0,
+  //                   right: index == 2 ? 18.0 : 0,
+  //                 ),
+  //                 backgroundColor: ((index + 1) % 2 == 0)
+  //                     ? AppColor.primary[500]!
+  //                     : AppColor.primary[900]!,
+  //                 image: ((index + 1) % 2 == 0)
+  //                     ? AppAssets.voucherTicketIcon
+  //                     : AppAssets.voucherBoxIcon,
+  //                 textColor: ((index + 1) % 2 == 0)
+  //                     ? AppColor.primary[100]!
+  //                     : AppColor.primary[200]!,
+  //                 dividerColor: ((index + 1) % 2 == 0)
+  //                     ? AppColor.primary[400]!
+  //                     : AppColor.primary[700]!,
+  //                 title: ((index + 1) % 2 == 0)
+  //                     ? 'Voucher Diskon 20%'
+  //                     : 'Diskon 50%',
+  //                 description: ((index + 1) % 2 == 0)
+  //                     ? 'Untuk setiap pembelian paket pakan diatas 100k di mitra terdekat'
+  //                     : 'Untuk setiap pembelian paket pakan diatas 100k di mitra terdekat',
+  //                 date: '1 Sep - 1 Nov 2024',
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   ];
+  // }
 
   Widget referral() {
     return InkWell(
@@ -1440,6 +1471,218 @@ class _HomeViewState extends State<HomeView> {
     ];
   }
 
+  List<Widget> shortShop() {
+    return [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Belanja',
+                    style: appTextTheme(context).titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                  ),
+                  const SizedBox(height: 8.0),
+                  Text(
+                    'Cari kebutuhan budidayamu',
+                    style: appTextTheme(context).labelLarge?.copyWith(
+                          color: AppColor.neutral[500],
+                        ),
+                  ),
+                ],
+              ),
+            ),
+            AppWidgetSecondaryChip(
+              text: 'Lihat Semua',
+              onTap: () {
+                Navigator.of(context).push(
+                  AppTransition.pushTransition(
+                    const ProductsPage(),
+                    ProductsPage.routeSettings(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+      const SizedBox(height: 18.0),
+      BlocConsumer<ProductsCubit, ProductsState>(
+        listener: (context, state) async {
+          if (state.status.isLoaded) {
+            await Future.delayed(const Duration(milliseconds: 500));
+            await controller.animateTo(
+              64.0,
+              duration: const Duration(milliseconds: 550),
+              curve: Curves.linear,
+            );
+            await controller.animateTo(
+              -64.0,
+              duration: const Duration(milliseconds: 550),
+              curve: Curves.linear,
+            );
+          }
+        },
+        builder: (context, state) {
+          return SizedBox(
+            height: 235.0,
+            child: state.status.isLoading
+                ? ListView.builder(
+                    controller: controller,
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    itemCount: 5,
+                    itemBuilder: (context, index) {
+                      return AppShimmer(
+                        235.0,
+                        MediaQuery.of(context).size.width * 0.45,
+                        8.0,
+                        margin: const EdgeInsets.only(
+                          left: 18.0,
+                          right: 18.0,
+                        ),
+                      );
+                    },
+                  )
+                : state.products.isEmpty
+                    ? const Center(
+                        child: Text('Tidak ada produk'),
+                      )
+                    : ListView.builder(
+                        controller: controller,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: state.products.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: 18.0,
+                              right:
+                                  state.products.length - 1 == index ? 18.0 : 0,
+                            ),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context)
+                                    .push(
+                                  AppTransition.pushTransition(
+                                    ProductDetailPage(state.products[index]),
+                                    ProductDetailPage.routeSettings(),
+                                  ),
+                                )
+                                    .then((value) {
+                                  if (value == 'changeBottomNav1') {
+                                    context
+                                        .read<DashboardBottomNavCubit>()
+                                        .changeIndex(1);
+                                  }
+                                });
+                              },
+                              child: SizedBox(
+                                height: 235.0,
+                                width: MediaQuery.of(context).size.width * 0.45,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(
+                                      height: 131.0,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.45,
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: Image.network(
+                                          state.products[index].imageUrl ?? '',
+                                          fit: BoxFit.cover,
+                                          height: 131.0,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          loadingBuilder: (
+                                            context,
+                                            child,
+                                            loadingProgress,
+                                          ) {
+                                            if (loadingProgress == null) {
+                                              return child;
+                                            }
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          },
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Container(
+                                              color: AppColor.neutral[200],
+                                              child: Icon(
+                                                Icons.error,
+                                                color: AppColor.neutral[500],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 8.0),
+                                    Text(
+                                      state.products[index].categoryName ?? '-',
+                                      style: appTextTheme(context)
+                                          .labelLarge
+                                          ?.copyWith(
+                                            color: AppColor.neutral[400],
+                                          ),
+                                    ),
+                                    const SizedBox(height: 6.0),
+                                    Text(
+                                      state.products[index].name ?? '-',
+                                      maxLines: 2,
+                                      style: appTextTheme(context)
+                                          .labelLarge
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 12.0),
+                                    Text(
+                                      state.products[index].sellPrice == null
+                                          ? '-'
+                                          : appConvertCurrency(
+                                              double.parse(
+                                                state
+                                                    .products[index].sellPrice!,
+                                              ),
+                                            ),
+                                      maxLines: 2,
+                                      style: appTextTheme(context)
+                                          .bodyMedium
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: AppColor.accent,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+          );
+        },
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppRefresher(
@@ -1447,6 +1690,7 @@ class _HomeViewState extends State<HomeView> {
         context.read<HomeCubit>().init();
         // context.read<ActivityCubit>().init(limit: '1');
         context.read<UserCubit>().refreshUser();
+        context.read<ProductsCubit>().getProducts(limit: '5');
       },
       child: ListView(
         children: [
@@ -1455,10 +1699,11 @@ class _HomeViewState extends State<HomeView> {
           levelCard(),
           poinCard(),
           const SizedBox(height: 10.0),
-          menu(),
+          // menu(),
           const SizedBox(height: 10.0),
-          ...voucherSection(),
-          const SizedBox(height: 18.0),
+          // ...voucherSection(),
+          ...shortShop(),
+          const SizedBox(height: 12.0),
           referral(),
           // const SizedBox(height: 18.0),
           // ...promo(),

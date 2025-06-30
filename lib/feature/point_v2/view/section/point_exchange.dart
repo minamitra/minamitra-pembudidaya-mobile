@@ -213,26 +213,26 @@ class _PointExchangeState extends State<PointExchange> {
                 children: [
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 250000,
+                      isActive: state.selectedGridExchange == 25000,
                       title: '250 Poin',
                       value: 'Rp 25.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(250000);
+                            .onChangeGridExchangeValue(25000);
                       },
                     ),
                   ),
                   const SizedBox(width: 18.0),
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 500000,
+                      isActive: state.selectedGridExchange == 50000,
                       title: '500 Poin',
                       value: 'Rp 50.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(500000);
+                            .onChangeGridExchangeValue(50000);
                       },
                     ),
                   ),
@@ -247,26 +247,26 @@ class _PointExchangeState extends State<PointExchange> {
                 children: [
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 1000000,
+                      isActive: state.selectedGridExchange == 100000,
                       title: '1000 Poin',
                       value: 'Rp 100.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(1000000);
+                            .onChangeGridExchangeValue(100000);
                       },
                     ),
                   ),
                   const SizedBox(width: 18.0),
                   Expanded(
                     child: exchangeGridItem(
-                      isActive: state.selectedGridExchange == 2000000,
+                      isActive: state.selectedGridExchange == 200000,
                       title: '2000 Poin',
                       value: 'Rp 200.000',
                       onTap: () {
                         context
                             .read<PointV2Cubit>()
-                            .onChangeGridExchangeValue(2000000);
+                            .onChangeGridExchangeValue(200000);
                       },
                     ),
                   ),
@@ -344,14 +344,14 @@ class _PointExchangeState extends State<PointExchange> {
                                   .showInfo('Minimal penukaran Rp 1.000');
                               return;
                             }
-                            if (((missionState.pointBalance?.data?.totalPoin ??
+                            if (((missionState.pointBalance?.data
+                                            ?.totalPoinRemaining ??
                                         0) *
                                     100) <
                                 (int.parse(
-                                      customExchangeValueController.text
-                                          .unFormatedCurrency(),
-                                    ) /
-                                    100)) {
+                                  customExchangeValueController.text
+                                      .unFormatedCurrency(),
+                                ))) {
                               AppTopSnackBar(context)
                                   .showInfo('Poin tidak mencukupi');
                               return;
@@ -370,7 +370,8 @@ class _PointExchangeState extends State<PointExchange> {
                                 );
                           } else {
                             // From Grid
-                            if (((missionState.pointBalance?.data?.totalPoin ??
+                            if (((missionState.pointBalance?.data
+                                            ?.totalPoinRemaining ??
                                         0) *
                                     100) <
                                 state.selectedGridExchange) {

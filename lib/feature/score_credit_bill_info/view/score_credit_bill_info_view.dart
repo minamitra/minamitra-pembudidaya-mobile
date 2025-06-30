@@ -263,10 +263,15 @@ class _ScoreCreditBillInfoViewState extends State<ScoreCreditBillInfoView> {
       String generateScoreIcon() {
         switch (widget.score.toLowerCase()) {
           case 'a':
+          case 'kol 1':
             return AppAssets.scoreABillIcon;
           case 'b':
+          case 'kol 2':
+          case 'kol 3':
             return AppAssets.scoreBBillIcon;
           case 'c':
+          case 'kol 4':
+          case 'kol 5':
             return AppAssets.scoreCBillIcon;
           default:
             return AppAssets.scoreCBillIcon;

@@ -27,23 +27,29 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       );
       this.pondID = pondID;
       log(response.data.data?.length.toString() ?? 'error');
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        recommendationFeedBulk: response.data,
-        pickedDate: DateTime.now(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          recommendationFeedBulk: response.data,
+          pickedDate: DateTime.now(),
+        ),
+      );
     } on AppException catch (e) {
       log(e.toString());
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       log(e.toString());
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -54,21 +60,27 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
         pondID ?? '',
         AppConvertDateTime().ymdDash(date),
       );
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        recommendationFeedBulk: response.data,
-        pickedDate: date,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          recommendationFeedBulk: response.data,
+          pickedDate: date,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -80,29 +92,35 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
     final List<RecommendationFeedBulkData> data =
         state.recommendationFeedBulk!.data!;
     data[index] = data[index].copyWith(isShow: isShow);
-    emit(state.copyWith(
-      recommendationFeedBulk:
-          state.recommendationFeedBulk!.copyWith(data: data),
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        recommendationFeedBulk:
+            state.recommendationFeedBulk!.copyWith(data: data),
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   void onChangeFeedAmount(
     int index,
-    double feedAmount,
-  ) {
+    double feedAmount, {
+    bool isByRecommendation = false,
+  }) {
     emit(state.copyWith(status: GlobalState.onUpdating));
     final List<RecommendationFeedBulkData> data =
         state.recommendationFeedBulk!.data!;
     data[index].feedValuecontroller!.text = feedAmount.toString();
     data[index] = data[index].copyWith(
       feedAmount: feedAmount,
+      isByRecommendation: isByRecommendation,
     );
-    emit(state.copyWith(
-      recommendationFeedBulk:
-          state.recommendationFeedBulk!.copyWith(data: data),
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        recommendationFeedBulk:
+            state.recommendationFeedBulk!.copyWith(data: data),
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   void onChangeFeedName(
@@ -119,11 +137,13 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
     data[index] = data[index].copyWith(
       selectedFishfood: feed,
     );
-    emit(state.copyWith(
-      recommendationFeedBulk:
-          state.recommendationFeedBulk!.copyWith(data: data),
-      status: GlobalState.loaded,
-    ),);
+    emit(
+      state.copyWith(
+        recommendationFeedBulk:
+            state.recommendationFeedBulk!.copyWith(data: data),
+        status: GlobalState.loaded,
+      ),
+    );
   }
 
   Future<void> saveFeed({
@@ -133,37 +153,46 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
     emit(state.copyWith(status: GlobalState.showDialogLoading));
     try {
       // Cleaning data
-      final List<RecommendationFeedBulkData> bulkDataCleaning = state
-          .recommendationFeedBulk!.data!
-          .where((element) =>
-              (element.feedAmount ?? 0) > 0 || element.selectedFishfood != null,)
-          .toList();
+      final List<RecommendationFeedBulkData> bulkDataCleaning =
+          state.recommendationFeedBulk!.data!
+              .where(
+                (element) =>
+                    (element.feedAmount ?? 0) > 0 ||
+                    element.selectedFishfood != null,
+              )
+              .toList();
       for (var element in bulkDataCleaning) {
         log(element.feedAmount.toString());
         if ((element.feedAmount ?? 0) < 0) {
           emit(state.copyWith(status: GlobalState.hideDialogLoading));
-          emit(state.copyWith(
-            status: GlobalState.error,
-            errorMessage:
-                'Jumlah pakan di kolam ${element.fishpondName} tidak boleh kurang dari 0',
-          ),);
+          emit(
+            state.copyWith(
+              status: GlobalState.error,
+              errorMessage:
+                  'Jumlah pakan di kolam ${element.fishpondName} tidak boleh kurang dari 0',
+            ),
+          );
           return;
         }
         if (element.selectedFishfood == null) {
           emit(state.copyWith(status: GlobalState.hideDialogLoading));
-          emit(state.copyWith(
-            status: GlobalState.error,
-            errorMessage:
-                'Silahkan pilih jenis pakan untuk ${element.fishpondName}',
-          ),);
+          emit(
+            state.copyWith(
+              status: GlobalState.error,
+              errorMessage:
+                  'Silahkan pilih jenis pakan untuk ${element.fishpondName}',
+            ),
+          );
           return;
         }
       }
       if (bulkDataCleaning.isEmpty) {
-        emit(state.copyWith(
-          status: GlobalState.error,
-          errorMessage: 'Tidak ada data yang disimpan',
-        ),);
+        emit(
+          state.copyWith(
+            status: GlobalState.error,
+            errorMessage: 'Tidak ada data yang disimpan',
+          ),
+        );
         return;
       }
       // final int getHourTime = type.getHourTime();
@@ -175,22 +204,28 @@ class AddBulkFeedCubit extends Cubit<AddBulkFeedState> {
       );
       await service.saveFeedBulkData(saveBulkBody);
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.successSubmit,
-        errorMessage: 'Berhasil menyimpan data',
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.successSubmit,
+          errorMessage: 'Berhasil menyimpan data',
+        ),
+      );
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

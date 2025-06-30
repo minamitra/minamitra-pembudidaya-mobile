@@ -1,15 +1,17 @@
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/components/app_button.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/repositories/incident_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/activity_incident_detail/logic/activity_incident_detail_cubit.dart';
 import 'package:minamitra_pembudidaya_mobile/main.dart';
 
 class ActivityIncidentDetailView extends StatefulWidget {
-  final IncidentResponseData incident;
-  const ActivityIncidentDetailView(this.incident, {super.key});
+  const ActivityIncidentDetailView({super.key});
 
   @override
   State<ActivityIncidentDetailView> createState() =>
@@ -20,6 +22,9 @@ class _ActivityIncidentDetailViewState
     extends State<ActivityIncidentDetailView> {
   @override
   Widget build(BuildContext context) {
+    final activityIncidentDetailCubit =
+        context.read<ActivityIncidentDetailCubit>();
+
     Widget columnText(String title, String value) {
       return Column(
         mainAxisSize: MainAxisSize.min,
@@ -55,7 +60,8 @@ class _ActivityIncidentDetailViewState
                 ),
           ),
           const SizedBox(height: 8.0),
-          widget.incident.attachmentJsonArray!.isEmpty
+          activityIncidentDetailCubit.incident?.attachmentJsonArray?.isEmpty ??
+                  true
               ? Text(
                   '-',
                   textAlign: TextAlign.center,
@@ -68,7 +74,9 @@ class _ActivityIncidentDetailViewState
                   child: ListView.separated(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: widget.incident.attachmentJsonArray!.length,
+                    itemCount: activityIncidentDetailCubit
+                            .incident?.attachmentJsonArray?.length ??
+                        0,
                     separatorBuilder: (context, index) =>
                         const SizedBox(width: 8.0),
                     itemBuilder: (context, index) {
@@ -77,7 +85,9 @@ class _ActivityIncidentDetailViewState
                           showImageViewer(
                             context,
                             Image.network(
-                              widget.incident.attachmentJsonArray?[index] ?? '',
+                              activityIncidentDetailCubit
+                                      .incident?.attachmentJsonArray?[index] ??
+                                  '',
                             ).image,
                             immersive: false,
                             useSafeArea: true,
@@ -91,7 +101,9 @@ class _ActivityIncidentDetailViewState
                           child: AspectRatio(
                             aspectRatio: 3 / 2,
                             child: Image.network(
-                              widget.incident.attachmentJsonArray![index],
+                              activityIncidentDetailCubit
+                                      .incident?.attachmentJsonArray?[index] ??
+                                  '',
                               fit: BoxFit.cover,
                             ),
                           ),
@@ -110,12 +122,15 @@ class _ActivityIncidentDetailViewState
         padding: const EdgeInsets.all(12.0),
         width: double.infinity,
         decoration: BoxDecoration(
-          color: incidentStatusColor(widget.incident.status!),
+          color: incidentStatusColor(
+            activityIncidentDetailCubit.incident?.status ??
+                IncidentStatus.waiting,
+          ),
           borderRadius: BorderRadius.circular(8.0),
         ),
         alignment: Alignment.center,
         child: Text(
-          'Status Laporan ${incidentStatusToString(widget.incident.status!)}',
+          'Status Laporan ${incidentStatusToString(activityIncidentDetailCubit.incident?.status)}',
           textAlign: TextAlign.start,
           style: appTextTheme(context).titleSmall?.copyWith(
                 color: AppColor.white,
@@ -136,7 +151,10 @@ class _ActivityIncidentDetailViewState
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                columnText('Judul Laporan', widget.incident.incident ?? '-'),
+                columnText(
+                  'Judul Laporan',
+                  activityIncidentDetailCubit.incident?.incident ?? '-',
+                ),
                 Divider(
                   height: 32.0,
                   thickness: 1,
@@ -144,9 +162,10 @@ class _ActivityIncidentDetailViewState
                 ),
                 columnText(
                   'Tanggal',
-                  widget.incident.datetime != null
-                      ? AppConvertDateTime()
-                          .ddmmyyyyhhmm(widget.incident.datetime!)
+                  activityIncidentDetailCubit.incident?.datetime != null
+                      ? AppConvertDateTime().ddmmyyyyhhmm(
+                          activityIncidentDetailCubit.incident!.datetime!,
+                        )
                       : '-',
                 ),
                 Divider(
@@ -154,7 +173,10 @@ class _ActivityIncidentDetailViewState
                   thickness: 1,
                   color: AppColor.neutral[100],
                 ),
-                columnText('Catatan', widget.incident.note ?? '-'),
+                columnText(
+                  'Catatan',
+                  activityIncidentDetailCubit.incident?.note ?? '-',
+                ),
                 Divider(
                   height: 32.0,
                   thickness: 1,
@@ -211,12 +233,25 @@ class _ActivityIncidentDetailViewState
       );
     }
 
-    return Stack(
-      alignment: Alignment.bottomCenter,
-      children: [
-        body(),
-        // button(),
-      ],
+    return BlocBuilder<ActivityIncidentDetailCubit,
+        ActivityIncidentDetailState>(
+      builder: (context, state) {
+        if (state.status.isLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+
+        return body();
+
+        // Stack(
+        //   alignment: Alignment.bottomCenter,
+        //   children: [
+        //     ,
+        //     // button(),
+        //   ],
+        // );
+      },
     );
   }
 }

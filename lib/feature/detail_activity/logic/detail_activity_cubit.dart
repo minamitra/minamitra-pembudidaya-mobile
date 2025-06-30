@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:minamitra_pembudidaya_mobile/core/exceptions/app_exceptions.dart';
@@ -32,20 +34,28 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
         fishpondID: pondID,
         lastPondCycleID: lastPondCycleID,
       );
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        onGoingCycleFeedResponseData: response.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          onGoingCycleFeedResponseData: response.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      log('Error: ${e.toString()}');
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      log('Error: ${e.toString()}');
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -56,20 +66,26 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
         fishpondID: pondID,
         lastPondCycleID: lastPondCycleID,
       );
-      emit(state.copyWith(
-        status: GlobalState.loaded,
-        onGoingCycleFeedResponseData: response.data,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.loaded,
+          onGoingCycleFeedResponseData: response.data,
+        ),
+      );
     } on AppException catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -81,16 +97,20 @@ class DetailActivityCubit extends Cubit<DetailActivityState> {
       emit(state.copyWith(status: GlobalState.successSubmit));
     } on AppException catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.message,
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.message,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(status: GlobalState.hideDialogLoading));
-      emit(state.copyWith(
-        status: GlobalState.error,
-        errorMessage: e.toString(),
-      ),);
+      emit(
+        state.copyWith(
+          status: GlobalState.error,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:minamitra_pembudidaya_mobile/core/components/app_bottom_sheet.da
 import 'package:minamitra_pembudidaya_mobile/core/components/app_empty_data.dart';
 import 'package:minamitra_pembudidaya_mobile/core/themes/app_color.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_assets.dart';
+import 'package:minamitra_pembudidaya_mobile/core/utils/app_convert_datetime.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_global_state.dart';
 import 'package:minamitra_pembudidaya_mobile/core/utils/app_transition.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/activity_incident/logics/incident_history_cubit.dart';
@@ -25,7 +26,7 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
         Navigator.of(context)
             .push(
           AppTransition.pushTransition(
-            ActivityIncidentDetailPage(incident),
+            ActivityIncidentDetailPage(incident: incident),
             ActivityIncidentDetailPage.routeSettings(),
           ),
         )
@@ -57,7 +58,8 @@ class _IncidentHistoryViewState extends State<IncidentHistoryView> {
                     const SizedBox(height: 8.0),
                     Text(
                       incident.datetime != null
-                          ? incident.datetime.toString()
+                          ? AppConvertDateTime()
+                              .ddmmyyyyhhmm(incident.datetime ?? DateTime.now())
                           : '-',
                       textAlign: TextAlign.start,
                       style: appTextTheme(context).labelLarge?.copyWith(

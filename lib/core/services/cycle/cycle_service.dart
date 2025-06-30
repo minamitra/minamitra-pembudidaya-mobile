@@ -10,6 +10,7 @@ import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle/repositories
 import 'package:minamitra_pembudidaya_mobile/feature/activity_cycle_add_harvest/repositories/harvest_body.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/detail_activity/repositories/ongoing_cycle_feed_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/companion_notes_response.dart';
+import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/detail_parameter_response.dart';
 import 'package:minamitra_pembudidaya_mobile/feature/monitoring/repository/graph_response.dart';
 
 abstract class CycleService {
@@ -36,6 +37,13 @@ abstract class CycleService {
   });
   Future<BaseResponse<FeedCycleHistoryResponseData>> getCycleDetail({
     required String fishPondCycleID,
+  });
+  Future<BaseResponse<DetailParameterResponse>> getDetailParameter({
+    required String pondCycleID,
+    String? date,
+  });
+  Future<BaseResponse<CompanionNotesResponseData>> getCommentDetail({
+    required String id,
   });
 }
 
@@ -176,6 +184,36 @@ class CycleServiceImpl implements CycleService {
     final MetaResponse meta = MetaResponse.fromJson(response.body);
     final FeedCycleHistoryResponseData data =
         FeedCycleHistoryResponseData.fromMap(meta.result!['data']);
+    return BaseResponse(meta: meta, data: data);
+  }
+
+  @override
+  Future<BaseResponse<DetailParameterResponse>> getDetailParameter({
+    required String pondCycleID,
+    String? date,
+  }) async {
+    final uri = endpoint.getCycleDetailParameter(
+      fishPondCycleID: pondCycleID,
+      date: date,
+    );
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(uri, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final DetailParameterResponse data =
+        DetailParameterResponse.fromMap(meta.result!);
+    return BaseResponse(meta: meta, data: data);
+  }
+
+  @override
+  Future<BaseResponse<CompanionNotesResponseData>> getCommentDetail({
+    required String id,
+  }) async {
+    final uri = endpoint.getCommentDetail(id: id);
+    final header = await headerProvider.headers;
+    final response = await httpClient.get(uri, header);
+    final MetaResponse meta = MetaResponse.fromJson(response.body);
+    final CompanionNotesResponseData data =
+        CompanionNotesResponseData.fromMap(meta.result!['data']);
     return BaseResponse(meta: meta, data: data);
   }
 }

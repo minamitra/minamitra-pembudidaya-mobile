@@ -9,7 +9,7 @@ class FeedEndpoint {
       queryParameters: {
         'type': type,
         'pagination_bool': 'false',
-        'sort': 'name',
+        'sort': 'fishfood_name',
       },
     );
   }
