@@ -685,7 +685,72 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             );
           },
         ),
-        const SizedBox(height: 18.0),
+        const SizedBox(height: 12.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return state.recommendStarter1 == null
+                ? const SizedBox()
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: AppColor.accent[50],
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: AppColor.accent[900]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: AppColor.accent[900],
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            'Saran Pakan: ${state.recommendStarter1!.name}',
+                            maxLines: 2,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            addPondThirdStepCubit.pakanStarter1Controller.text =
+                                state.recommendStarter1!.name ?? '';
+                            selectedPakanStarter1 = [
+                              state.recommendStarter1!.name ?? '',
+                            ];
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: AppColor.accent[900],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              'Terapkan',
+                              style: appTextTheme(context).titleSmall?.copyWith(
+                                    color: AppColor.white,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
+        const SizedBox(height: 12.0),
         BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
           builder: (context, state) {
             if (state.status.isLoading) {
@@ -732,7 +797,72 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             );
           },
         ),
-        const SizedBox(height: 18.0),
+        const SizedBox(height: 12.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return state.recommendStarter2 == null
+                ? const SizedBox()
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: AppColor.accent[50],
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: AppColor.accent[900]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: AppColor.accent[900],
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            'Saran Pakan: ${state.recommendStarter2!.name}',
+                            maxLines: 2,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            addPondThirdStepCubit.pakanStarter2Controller.text =
+                                state.recommendStarter2!.name ?? '';
+                            selectedPakanStarter2 = [
+                              state.recommendStarter2!.name ?? '',
+                            ];
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: AppColor.accent[900],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              'Terapkan',
+                              style: appTextTheme(context).titleSmall?.copyWith(
+                                    color: AppColor.white,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
+        const SizedBox(height: 12.0),
         BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
           builder: (context, state) {
             if (state.status.isLoading) {
@@ -779,7 +909,72 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             );
           },
         ),
-        const SizedBox(height: 18.0),
+        const SizedBox(height: 12.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return state.recommendStarter3 == null
+                ? const SizedBox()
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: AppColor.accent[50],
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: AppColor.accent[900]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: AppColor.accent[900],
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            'Saran Pakan: ${state.recommendStarter3!.name}',
+                            maxLines: 2,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            addPondThirdStepCubit.pakanStarter3Controller.text =
+                                state.recommendStarter3!.name ?? '';
+                            selectedPakanStarter3 = [
+                              state.recommendStarter3!.name ?? '',
+                            ];
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: AppColor.accent[900],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              'Terapkan',
+                              style: appTextTheme(context).titleSmall?.copyWith(
+                                    color: AppColor.white,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
+        const SizedBox(height: 12.0),
         BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
           builder: (context, state) {
             if (state.status.isLoading) {
@@ -826,7 +1021,72 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             );
           },
         ),
-        const SizedBox(height: 18.0),
+        const SizedBox(height: 12.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return state.recommendGrower == null
+                ? const SizedBox()
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: AppColor.accent[50],
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: AppColor.accent[900]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: AppColor.accent[900],
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            'Saran Pakan: ${state.recommendGrower!.name}',
+                            maxLines: 2,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            addPondThirdStepCubit.pakanGrowerController.text =
+                                state.recommendGrower!.name ?? '';
+                            selectedPakanGrower = [
+                              state.recommendGrower!.name ?? '',
+                            ];
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: AppColor.accent[900],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              'Terapkan',
+                              style: appTextTheme(context).titleSmall?.copyWith(
+                                    color: AppColor.white,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
+        const SizedBox(height: 12.0),
         BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
           builder: (context, state) {
             if (state.status.isLoading) {
@@ -873,6 +1133,72 @@ class _AddPondThirdStepViewState extends State<AddPondThirdStepView> {
             );
           },
         ),
+        const SizedBox(height: 12.0),
+        BlocBuilder<AddPondThirdStepCubit, AddPondThirdStepState>(
+          builder: (context, state) {
+            if (state.status.isLoading) {
+              return const AppShimmer(
+                45.0,
+                double.infinity,
+                8,
+              );
+            }
+
+            return state.recommendFinisher == null
+                ? const SizedBox()
+                : Container(
+                    margin: const EdgeInsets.only(bottom: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      color: AppColor.accent[50],
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(color: AppColor.accent[900]!),
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.error,
+                          color: AppColor.accent[900],
+                          size: 20.0,
+                        ),
+                        const SizedBox(width: 8.0),
+                        Expanded(
+                          child: Text(
+                            'Saran Pakan: ${state.recommendFinisher!.name}',
+                            maxLines: 2,
+                            style: appTextTheme(context).titleSmall?.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            addPondThirdStepCubit.pakanFinisherController.text =
+                                state.recommendFinisher!.name ?? '';
+                            selectedPakanFinisher = [
+                              state.recommendFinisher!.name ?? '',
+                            ];
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8.0),
+                            decoration: BoxDecoration(
+                              color: AppColor.accent[900],
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: Text(
+                              'Terapkan',
+                              style: appTextTheme(context).titleSmall?.copyWith(
+                                    color: AppColor.white,
+                                  ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+          },
+        ),
+        const SizedBox(height: 12.0),
       ];
     }
 

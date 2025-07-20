@@ -11,6 +11,11 @@ class AddPondThirdStepState extends Equatable {
     this.feedFinisherData,
     this.seedResponse,
     this.commodityData = const [],
+    this.recommendStarter1,
+    this.recommendStarter2,
+    this.recommendStarter3,
+    this.recommendGrower,
+    this.recommendFinisher,
   });
 
   final GlobalState status;
@@ -22,6 +27,11 @@ class AddPondThirdStepState extends Equatable {
   final FeedFinisherResponse? feedFinisherData;
   final SeedResponse? seedResponse;
   final List<CommodityResponseData> commodityData;
+  final FeedStarterResponseData? recommendStarter1;
+  final FeedStarterResponseData? recommendStarter2;
+  final FeedStarterResponseData? recommendStarter3;
+  final FeedGrowerResponseData? recommendGrower;
+  final FeedFinisherResponseData? recommendFinisher;
 
   AddPondThirdStepState copyWith({
     GlobalState? status,
@@ -33,6 +43,11 @@ class AddPondThirdStepState extends Equatable {
     FeedFinisherResponse? feedFinisherData,
     SeedResponse? seedResponse,
     List<CommodityResponseData>? commodityData,
+    FeedStarterResponseData? recommendStarter1,
+    FeedStarterResponseData? recommendStarter2,
+    FeedStarterResponseData? recommendStarter3,
+    FeedGrowerResponseData? recommendGrower,
+    FeedFinisherResponseData? recommendFinisher,
   }) {
     return AddPondThirdStepState(
       status: status ?? this.status,
@@ -44,6 +59,11 @@ class AddPondThirdStepState extends Equatable {
       feedFinisherData: feedFinisherData ?? this.feedFinisherData,
       seedResponse: seedResponse ?? this.seedResponse,
       commodityData: commodityData ?? this.commodityData,
+      recommendStarter1: recommendStarter1 ?? this.recommendStarter1,
+      recommendStarter2: recommendStarter2 ?? this.recommendStarter2,
+      recommendStarter3: recommendStarter3 ?? this.recommendStarter3,
+      recommendGrower: recommendGrower ?? this.recommendGrower,
+      recommendFinisher: recommendFinisher ?? this.recommendFinisher,
     );
   }
 
@@ -58,5 +78,10 @@ class AddPondThirdStepState extends Equatable {
         feedFinisherData,
         seedResponse,
         commodityData,
+        recommendStarter1,
+        recommendStarter2,
+        recommendStarter3,
+        recommendGrower,
+        recommendFinisher,
       ];
 }
