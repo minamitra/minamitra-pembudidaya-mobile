@@ -1,0 +1,68 @@
+{
+  "data": [
+    {
+      "id": "13",
+      "type": "starter1",
+      "name": "Prima Feed PF500",
+      "weight": "1.00",
+      "protein_percent": "39",
+      "epp_estimation_percent": "100.00",
+      "price": "21500",
+      "unit_id": "2",
+      "unit_name": "Kg",
+      "supplier_id": "5",
+      "supplier_name": "KOPERASI PRODUSEN MINA MITRA MANDIRI",
+      "supplier_image_url": "",
+      "note": "Pakan ini diformulasikan khusus untuk benih ikan.",
+      "active_bool": true
+    },
+    {
+      "id": "14",
+      "type": "starter1",
+      "name": "Prima Feed PF800",
+      "weight": "1.00",
+      "protein_percent": "39",
+      "epp_estimation_percent": "100.00",
+      "price": "19200",
+      "unit_id": "2",
+      "unit_name": "Kg",
+      "supplier_id": "5",
+      "supplier_name": "KOPERASI PRODUSEN MINA MITRA MANDIRI",
+      "supplier_image_url": "",
+      "note": "Pakan ini diformulasikan khusus untuk benih ikan.",
+      "active_bool": true
+    },
+    {
+      "id": "15",
+      "type": "starter1",
+      "name": "Prima Feed PF1000",
+      "weight": "1.00",
+      "protein_percent": "39",
+      "epp_estimation_percent": "100.00",
+      "price": "18250",
+      "unit_id": "2",
+      "unit_name": "Kg",
+      "supplier_id": "5",
+      "supplier_name": "KOPERASI PRODUSEN MINA MITRA MANDIRI",
+      "supplier_image_url": "",
+      "note": "Pakan ini diformulasikan khusus untuk benih ikan.",
+      "active_bool": true
+    },
+    {
+      "id": "44",
+      "type": "starter1",
+      "name": "Haida HDMA1 0,8",
+      "weight": "1.00",
+      "protein_percent": "35",
+      "epp_estimation_percent": "100.00",
+      "price": "15500",
+      "unit_id": "2",
+      "unit_name": "Kg",
+      "supplier_id": "9",
+      "supplier_name": "PT HAIDA BIOTECHNOLOGY INDONESIA",
+      "supplier_image_url": "https://cdn.mitra3m.id/2025/01/image/logo+haida-1736683742.jpeg",
+      "note": "Pakan Haida HDMA1 merupakan pakan ikan bibit terapung memiliki kandungan protein 35%. Diformulasikan dengan nutrisi yang lengkap, pakan berkualitas ini dapat membantu mengoptimalkan pertumbuhan ikan mas/patin Anda. Pakan ini cocok digunakan untuk fase starter. Kemasan : 1 sak 20 Kg.",
+      "active_bool": true
+    }
+  ]
+}
